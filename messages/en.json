@@ -6,7 +6,21 @@
     "close": "Close",
     "cancel": "Cancel",
     "save": "Save",
-    "search": "Search"
+    "search": "Search",
+    "pagination": {
+      "range": "{first}–{last} of {total}",
+      "previous": "Previous page",
+      "next": "Next page"
+    },
+    "weekdays": {
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat",
+      "7": "Sun"
+    }
   },
   "nav": {
     "label": "Main navigation",
@@ -178,11 +192,6 @@
       "body": "The lead is hidden from the board and the list. Its timeline is kept.",
       "done": "Lead archived"
     },
-    "pagination": {
-      "range": "{first}–{last} of {total}",
-      "previous": "Previous page",
-      "next": "Next page"
-    },
     "dnd": {
       "instructions": "Press Space to pick up a lead. Use the left and right arrow keys to choose a column, then press Space to drop it. Press Escape to cancel.",
       "pickedUp": "Picked up {name}.",
@@ -202,6 +211,113 @@
       "noteRequired": "Write the note.",
       "moveNotAllowed": "This lead cannot be moved there.",
       "notFound": "This lead no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "teachers": {
+    "newTeacher": "New teacher",
+    "editTeacher": "Edit teacher",
+    "searchPlaceholder": "Name or phone",
+    "noMatches": "No teachers match this search.",
+    "clearSearch": "Clear search",
+    "inactive": "Not working",
+    "contacts": "Contacts",
+    "noGroups": "No groups yet.",
+    "lessonsThisMonth": "Lessons this month",
+    "noLessons": "No lessons this month.",
+    "tabs": {
+      "overview": "Overview",
+      "pay": "Pay"
+    },
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "subjects": "Subjects",
+      "groups": "Groups",
+      "lessonsThisMonth": "Lessons this month",
+      "payType": "Pay type",
+      "hiredOn": "Hired on",
+      "notes": "Notes",
+      "isActive": "Works at the centre"
+    },
+    "form": {
+      "created": "Teacher added",
+      "saved": "Teacher saved",
+      "subjectsHint": "Separate subjects with commas."
+    },
+    "actions": {
+      "edit": "Edit",
+      "archive": "Archive",
+      "more": "More actions"
+    },
+    "payType": {
+      "fixed_monthly": "Fixed monthly salary",
+      "percent_of_revenue": "% of group revenue",
+      "per_lesson": "Per lesson"
+    },
+    "payTypeHint": {
+      "fixed_monthly": "The same amount every month.",
+      "percent_of_revenue": "A share of the fees collected in the month for this teacher's groups.",
+      "per_lesson": "An amount for every lesson the teacher held in the month."
+    },
+    "lesson": {
+      "date": "Date",
+      "time": "Time",
+      "group": "Group",
+      "status": "Status",
+      "substitute": "Substitute",
+      "statuses": {
+        "scheduled": "Scheduled",
+        "held": "Held",
+        "cancelled": "Cancelled"
+      }
+    },
+    "pay": {
+      "rateHistory": "Rate history",
+      "setNewRate": "Set new rate",
+      "setNewRateHint": "A new rate is added to the history. Earlier rates stay as they are.",
+      "currentRate": "Current rate",
+      "noRate": "No rate yet",
+      "amount": "Amount, soʻm",
+      "percent": "Percent",
+      "effectiveFrom": "Effective from",
+      "effectiveHint": "A month is paid at the rate in effect on its 1st day.",
+      "rate": "Rate",
+      "status": "Status",
+      "perMonth": "a month",
+      "perLesson": "per lesson",
+      "percentValue": "{percent}% of collected fees",
+      "rateSaved": "Rate saved",
+      "rateStatus": {
+        "current": "Current",
+        "upcoming": "Upcoming",
+        "past": "Past"
+      },
+      "payouts": "Payouts",
+      "noPayouts": "No payouts yet.",
+      "month": "Month",
+      "paid": "Amount",
+      "payoutStatus": {
+        "draft": "Draft",
+        "paid": "Paid"
+      }
+    },
+    "archive": {
+      "title": "Archive {name}?",
+      "body": "The teacher is hidden from the list. Lessons and payouts are kept.",
+      "done": "Teacher archived"
+    },
+    "errors": {
+      "nameRequired": "Enter the name.",
+      "phoneInvalid": "Enter a phone number like +998 90 123 45 67.",
+      "dateInvalid": "Choose a valid date.",
+      "tooLong": "This text is too long.",
+      "payTypeRequired": "Choose a pay type.",
+      "amountInvalid": "Enter a whole amount above 0.",
+      "percentInvalid": "Enter a percent from 1 to 100.",
+      "rateDateTaken": "A rate already starts on this date. Choose another date.",
+      "notFound": "This teacher no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."
     }

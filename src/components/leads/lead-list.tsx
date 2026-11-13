@@ -1,11 +1,10 @@
 "use client";
 
 import { createColumnHelper, tableFeatures, useTable } from "@tanstack/react-table";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useMemo } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Pagination } from "@/components/ui/pagination";
 import { StatusPill } from "@/components/ui/status-pill";
 import {
   Table,
@@ -17,7 +16,6 @@ import {
 } from "@/components/ui/table";
 import { formatDate, formatPhone } from "@/lib/format";
 import type { LeadSummary, StaffOption } from "@/lib/leads/queries";
-import { LEADS_PAGE_SIZE } from "@/lib/validation/leads";
 
 import { SOURCE_ICON, STATUS_TONE } from "./lead-meta";
 import { NextContact } from "./next-contact";
@@ -118,10 +116,6 @@ export function LeadList({
 
   const table = useTable({ features, columns, data: rows, getRowId: (row) => row.id });
 
-  const first = total === 0 ? 0 : (page - 1) * LEADS_PAGE_SIZE + 1;
-  const last = Math.min(page * LEADS_PAGE_SIZE, total);
-  const pages = Math.max(1, Math.ceil(total / LEADS_PAGE_SIZE));
-
   return (
     <div className="flex flex-col gap-3">
       <Table>
@@ -157,29 +151,11 @@ export function LeadList({
           ))}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-between gap-3 text-footnote text-text-secondary">
-        <span className="numeric">{t("pagination.range", { first, last, total })}</span>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={t("pagination.previous")}
-            disabled={page <= 1}
-            onClick={() => setParams({ page: page - 1 <= 1 ? null : String(page - 1) })}
-          >
-            <ChevronLeft aria-hidden />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={t("pagination.next")}
-            disabled={page >= pages}
-            onClick={() => setParams({ page: String(page + 1) })}
-          >
-            <ChevronRight aria-hidden />
-          </Button>
-        </div>
-      </div>
+      <Pagination
+        page={page}
+        total={total}
+        onPageChange={(next) => setParams({ page: next <= 1 ? null : String(next) })}
+      />
     </div>
   );
 }

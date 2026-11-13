@@ -13,17 +13,11 @@ import {
   getStaff,
   getTrialGroups,
 } from "@/lib/leads/queries";
+import { firstValues, type SearchParams } from "@/lib/search-params";
 import { leadsSearchSchema } from "@/lib/validation/leads";
 
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-
 async function Leads({ searchParams }: { searchParams: SearchParams }) {
-  const raw = await searchParams;
-  const search = leadsSearchSchema.parse(
-    Object.fromEntries(
-      Object.entries(raw).map(([key, value]) => [key, Array.isArray(value) ? value[0] : value]),
-    ),
-  );
+  const search = leadsSearchSchema.parse(firstValues(await searchParams));
   const user = await getCurrentUser();
   if (!user) return null;
 

@@ -1,12 +1,12 @@
 import { expect, type Page } from "@playwright/test";
 
 // The two logins from supabase/seed.sql.
-const LOGINS = {
+export const LOGINS = {
   owner: "owner@demo.educrm.uz",
   manager: "manager@demo.educrm.uz",
 } as const;
 
-const PASSWORD = process.env.SEED_PASSWORD ?? "EduCrm-demo-2026";
+export const PASSWORD = process.env.SEED_PASSWORD ?? "EduCrm-demo-2026";
 
 export async function signIn(page: Page, who: keyof typeof LOGINS, locale = "en") {
   await page.goto(`/${locale}/sign-in`);

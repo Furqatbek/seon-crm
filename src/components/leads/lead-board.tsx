@@ -198,6 +198,9 @@ export function LeadBoard({
 }) {
   const t = useTranslations("leads");
   const [activeId, setActiveId] = useState<string | null>(null);
+  // The floating copy is exactly as wide as the card, so it only touches a
+  // neighbouring column once it has really been moved there.
+  const [activeWidth, setActiveWidth] = useState<number | undefined>(undefined);
   const active = leads.find((lead) => lead.id === activeId) ?? null;
   const dndId = useId();
 
@@ -230,7 +233,10 @@ export function LeadBoard({
       id={dndId}
       sensors={sensors}
       collisionDetection={collisionDetection}
-      onDragStart={({ active: dragged }) => setActiveId(String(dragged.id))}
+      onDragStart={({ active: dragged }) => {
+        setActiveId(String(dragged.id));
+        setActiveWidth(dragged.rect.current.initial?.width);
+      }}
       onDragEnd={onDragEnd}
       onDragCancel={() => setActiveId(null)}
       accessibility={{
@@ -262,7 +268,10 @@ export function LeadBoard({
       </div>
       <DragOverlay dropAnimation={null}>
         {active ? (
-          <div className={cn(cardClasses, "w-60 cursor-grabbing shadow-float")}>
+          <div
+            className={cn(cardClasses, "cursor-grabbing shadow-float")}
+            style={{ width: activeWidth }}
+          >
             <CardBody lead={active} now={now} />
           </div>
         ) : null}

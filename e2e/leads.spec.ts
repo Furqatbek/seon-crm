@@ -44,10 +44,18 @@ test("a lead moves New → Contacted → Trial → Lost and every step is in the
     await choose(page, sheet(page).getByRole("combobox", { name: "Stage" }), "Contacted");
   } else {
     // Drag with the keyboard: Space picks up, → moves one column, Space drops.
+    // Each step is announced to screen readers; wait for it before the next key.
+    // The New lead sheet must be gone first: while it closes, the page behind it cannot take focus.
+    await expect(sheet(page)).toHaveCount(0);
     await card(page, name).focus();
+    await expect(card(page, name)).toBeFocused();
     await page.keyboard.press("Space");
+    await expect(card(page, name)).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByText(`Picked up ${name}.`)).toBeAttached();
     await page.keyboard.press("ArrowRight");
+    await expect(page.getByText(`${name} is over Contacted.`)).toBeAttached();
     await page.keyboard.press("Space");
+    await expect(page.getByText(`${name} was dropped on Contacted.`)).toBeAttached();
     await expect(card(column(page, "contacted"), name)).toBeVisible();
     // Enter opens the lead.
     await card(page, name).focus();

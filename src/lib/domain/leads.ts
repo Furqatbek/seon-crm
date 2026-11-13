@@ -1,5 +1,9 @@
 // Pure rules for the Leads block — docs/SPEC.md → "Business rules → Leads".
 
+import { tashkentDate } from "./time";
+
+export { tashkentDate, tashkentDayStart } from "./time";
+
 export const LEAD_STATUSES = ["new", "contacted", "trial", "won", "lost"] as const;
 export type LeadStatus = (typeof LEAD_STATUSES)[number];
 
@@ -52,23 +56,9 @@ export function normalizePhone(input: string): string | null {
   return null;
 }
 
-const TASHKENT_OFFSET_MS = 5 * 60 * 60 * 1000;
-
-/** The calendar day in Tashkent (UTC+5, no daylight saving) as "YYYY-MM-DD". */
-export function tashkentDate(instant: Date | string): string {
-  const date = typeof instant === "string" ? new Date(instant) : instant;
-  return new Date(date.getTime() + TASHKENT_OFFSET_MS).toISOString().slice(0, 10);
-}
-
 /** A next-contact day picked in the form → the instant stored (09:00 in Tashkent). */
 export function nextContactTimestamp(day: string): string {
   return `${day}T09:00:00+05:00`;
-}
-
-/** Start of a Tashkent calendar day, `days` from the day of `now`, as an ISO instant. */
-export function tashkentDayStart(now: Date, days = 0): string {
-  const day = new Date(`${tashkentDate(now)}T00:00:00+05:00`);
-  return new Date(day.getTime() + days * 24 * 60 * 60 * 1000).toISOString();
 }
 
 /** An open lead whose next contact date is today or earlier (Tashkent days). */

@@ -1,31 +1,10 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useUrlState } from "@/lib/hooks/use-url-state";
 
-import { usePathname, useRouter } from "@/i18n/navigation";
-
-/** Filters, the view and the open lead live in the URL, so a link reopens the same screen. */
+/** URL state of /leads: filters, the view and the open lead. */
 export function useLeadsUrl() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const setParams = useCallback(
-    (patch: Record<string, string | null>, options: { push?: boolean } = {}) => {
-      const next = new URLSearchParams(searchParams);
-      for (const [key, value] of Object.entries(patch)) {
-        if (value === null || value === "") next.delete(key);
-        else next.set(key, value);
-      }
-      const query = next.toString();
-      const href = query ? `${pathname}?${query}` : pathname;
-      if (options.push) router.push(href, { scroll: false });
-      else router.replace(href, { scroll: false });
-    },
-    [pathname, router, searchParams],
-  );
-
+  const { setParams } = useUrlState();
   return {
     setParams,
     openLead: (id: string) => setParams({ lead: id }, { push: true }),

@@ -101,4 +101,4 @@ export const leadsSearchSchema = z.object({
 });
 export type LeadsSearch = z.output<typeof leadsSearchSchema>;
 
-export const LEADS_PAGE_SIZE = 50;
+export { PAGE_SIZE as LEADS_PAGE_SIZE } from "@/lib/pagination";

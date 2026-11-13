@@ -6,7 +6,21 @@
     "close": "Yopish",
     "cancel": "Bekor qilish",
     "save": "Saqlash",
-    "search": "Qidirish"
+    "search": "Qidirish",
+    "pagination": {
+      "range": "{first}–{last} / {total}",
+      "previous": "Oldingi sahifa",
+      "next": "Keyingi sahifa"
+    },
+    "weekdays": {
+      "1": "Du",
+      "2": "Se",
+      "3": "Chor",
+      "4": "Pay",
+      "5": "Ju",
+      "6": "Sha",
+      "7": "Yak"
+    }
   },
   "nav": {
     "label": "Asosiy menyu",
@@ -178,11 +192,6 @@
       "body": "Lid doska va roʻyxatdan yashiriladi. Tarixi saqlanadi.",
       "done": "Lid arxivlandi"
     },
-    "pagination": {
-      "range": "{first}–{last} / {total}",
-      "previous": "Oldingi sahifa",
-      "next": "Keyingi sahifa"
-    },
     "dnd": {
       "instructions": "Lidni olish uchun Probel tugmasini bosing. Chap va oʻng strelkalar bilan ustunni tanlang, qoʻyish uchun yana Probelni bosing. Bekor qilish uchun Escape.",
       "pickedUp": "{name} olindi.",
@@ -202,6 +211,113 @@
       "noteRequired": "Izohni yozing.",
       "moveNotAllowed": "Bu lidni u yerga koʻchirib boʻlmaydi.",
       "notFound": "Bu lid endi mavjud emas.",
+      "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    }
+  },
+  "teachers": {
+    "newTeacher": "Yangi oʻqituvchi",
+    "editTeacher": "Oʻqituvchini tahrirlash",
+    "searchPlaceholder": "Ism yoki telefon",
+    "noMatches": "Bu qidiruvga mos oʻqituvchi yoʻq.",
+    "clearSearch": "Qidiruvni tozalash",
+    "inactive": "Ishlamaydi",
+    "contacts": "Aloqa",
+    "noGroups": "Hozircha guruhlar yoʻq.",
+    "lessonsThisMonth": "Shu oydagi darslar",
+    "noLessons": "Bu oyda darslar yoʻq.",
+    "tabs": {
+      "overview": "Umumiy",
+      "pay": "Toʻlov"
+    },
+    "fields": {
+      "name": "Ism",
+      "phone": "Telefon",
+      "subjects": "Fanlar",
+      "groups": "Guruhlar",
+      "lessonsThisMonth": "Shu oydagi darslar",
+      "payType": "Toʻlov turi",
+      "hiredOn": "Ishga kirgan sana",
+      "notes": "Izohlar",
+      "isActive": "Markazda ishlaydi"
+    },
+    "form": {
+      "created": "Oʻqituvchi qoʻshildi",
+      "saved": "Oʻqituvchi saqlandi",
+      "subjectsHint": "Fanlarni vergul bilan ajrating."
+    },
+    "actions": {
+      "edit": "Tahrirlash",
+      "archive": "Arxivlash",
+      "more": "Boshqa amallar"
+    },
+    "payType": {
+      "fixed_monthly": "Oylik qatʼiy maosh",
+      "percent_of_revenue": "Guruh tushumidan %",
+      "per_lesson": "Har bir dars uchun"
+    },
+    "payTypeHint": {
+      "fixed_monthly": "Har oy bir xil summa.",
+      "percent_of_revenue": "Shu oʻqituvchi guruhlari boʻyicha oy davomida yigʻilgan toʻlovlardan ulush.",
+      "per_lesson": "Oʻqituvchi oy davomida oʻtgan har bir dars uchun summa."
+    },
+    "lesson": {
+      "date": "Sana",
+      "time": "Vaqt",
+      "group": "Guruh",
+      "status": "Holat",
+      "substitute": "Oʻrinbosar",
+      "statuses": {
+        "scheduled": "Rejalashtirilgan",
+        "held": "Oʻtildi",
+        "cancelled": "Bekor qilindi"
+      }
+    },
+    "pay": {
+      "rateHistory": "Stavkalar tarixi",
+      "setNewRate": "Yangi stavka",
+      "setNewRateHint": "Yangi stavka tarixga qoʻshiladi. Oldingi stavkalar oʻzgarmaydi.",
+      "currentRate": "Joriy stavka",
+      "noRate": "Stavka hali yoʻq",
+      "amount": "Summa, soʻm",
+      "percent": "Foiz",
+      "effectiveFrom": "Qaysi sanadan",
+      "effectiveHint": "Oy oʻsha oyning 1-kunida amalda boʻlgan stavka boʻyicha toʻlanadi.",
+      "rate": "Stavka",
+      "status": "Holat",
+      "perMonth": "oyiga",
+      "perLesson": "har bir dars uchun",
+      "percentValue": "Yigʻilgan toʻlovlarning {percent}%",
+      "rateSaved": "Stavka saqlandi",
+      "rateStatus": {
+        "current": "Joriy",
+        "upcoming": "Kelgusi",
+        "past": "Oldingi"
+      },
+      "payouts": "Toʻlovlar",
+      "noPayouts": "Hozircha toʻlovlar yoʻq.",
+      "month": "Oy",
+      "paid": "Summa",
+      "payoutStatus": {
+        "draft": "Qoralama",
+        "paid": "Toʻlangan"
+      }
+    },
+    "archive": {
+      "title": "{name} arxivlansinmi?",
+      "body": "Oʻqituvchi roʻyxatdan yashiriladi. Darslar va toʻlovlar saqlanadi.",
+      "done": "Oʻqituvchi arxivlandi"
+    },
+    "errors": {
+      "nameRequired": "Ismni kiriting.",
+      "phoneInvalid": "Raqamni +998 90 123 45 67 koʻrinishida kiriting.",
+      "dateInvalid": "Toʻgʻri sanani tanlang.",
+      "tooLong": "Matn juda uzun.",
+      "payTypeRequired": "Toʻlov turini tanlang.",
+      "amountInvalid": "0 dan katta butun summa kiriting.",
+      "percentInvalid": "1 dan 100 gacha foiz kiriting.",
+      "rateDateTaken": "Bu sanadan boshlanadigan stavka bor. Boshqa sanani tanlang.",
+      "notFound": "Bu oʻqituvchi endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
     }
