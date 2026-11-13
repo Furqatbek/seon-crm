@@ -53,7 +53,8 @@
     "roles": {
       "owner": "Owner",
       "manager": "Manager"
-    }
+    },
+    "profile": "Profile"
   },
   "auth": {
     "email": "Email",
@@ -79,7 +80,10 @@
       "linkInvalid": "This link is invalid or has expired. Request a new one.",
       "notConfigured": "Sign-in is not set up yet: the Supabase keys are missing.",
       "generic": "Something went wrong. Try again."
-    }
+    },
+    "inviteTitle": "Welcome",
+    "inviteOpening": "Opening your invitation…",
+    "inviteInvalid": "This invitation is invalid or has expired. Ask the owner to invite you again."
   },
   "empty": {
     "leads": "No leads yet.",
@@ -1076,6 +1080,134 @@
       "notFound": "This no longer exists.",
       "noDebt": "This student no longer owes anything.",
       "noTemplate": "There is no template for this message.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "settings": {
+    "tabs": {
+      "centre": "Centre",
+      "users": "Users",
+      "notifications": "Notifications",
+      "templates": "Templates",
+      "profile": "Profile"
+    },
+    "saved": "Saved",
+    "centre": {
+      "name": "Centre name",
+      "billingDay": "Billing day",
+      "billingDayHint": "Monthly fees are created on this day of the month.",
+      "dueDay": "Due day",
+      "dueDayHint": "Fees are due by this day. After it an unpaid fee is a debt."
+    },
+    "users": {
+      "invite": "Invite user",
+      "inviteTitle": "Invite a user",
+      "inviteHint": "They get an email with a link to choose a password.",
+      "email": "Email",
+      "name": "Full name",
+      "role": "Role",
+      "language": "Language",
+      "sendInvite": "Send invitation",
+      "invited": "Invitation sent to {email}",
+      "you": "you",
+      "status": {
+        "active": "Active",
+        "invited": "Invited",
+        "deactivated": "Deactivated"
+      },
+      "statusColumn": "Status",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "deactivateTitle": "Deactivate {name}?",
+      "deactivateBody": "They are signed out and can no longer sign in or see anything. Their past work stays as it is. You can reactivate them later.",
+      "deactivated": "{name} is deactivated",
+      "reactivated": "{name} can sign in again",
+      "roleChanged": "{name} is now {role}",
+      "roleFor": "Role of {name}"
+    },
+    "notifications": {
+      "enabled": "Send automatic reminders",
+      "enabledHint": "Payment due, payment overdue and lesson reminders. Messages staff send by hand are not affected.",
+      "lessonHours": "Lesson reminder, hours before",
+      "quietFrom": "Quiet hours from",
+      "quietTo": "Quiet hours to",
+      "quietHint": "Nothing is sent in quiet hours. Payment messages wait until they end; a lesson reminder is skipped.",
+      "telegram": "Telegram bot",
+      "telegramNotConfigured": "Not configured",
+      "telegramNotConfiguredHint": "Set TELEGRAM_BOT_TOKEN and TELEGRAM_WEBHOOK_SECRET on the server.",
+      "telegramUnreachable": "Telegram does not answer",
+      "telegramConnected": "Connected",
+      "telegramNotConnected": "Webhook not connected",
+      "webhook": "Webhook address",
+      "webhookElsewhere": "Telegram currently delivers to {url}.",
+      "webhookNeedsHttps": "Telegram only calls https addresses, and the server needs TELEGRAM_WEBHOOK_SECRET. Connect it from the deployed app.",
+      "lastError": "Last delivery error: {error}",
+      "connect": "Connect webhook",
+      "connectedToast": "Webhook connected to @{username}",
+      "eskiz": "Eskiz SMS",
+      "eskizConfigured": "Configured",
+      "eskizNotConfigured": "Not configured",
+      "eskizNotConfiguredHint": "Set ESKIZ_EMAIL and ESKIZ_PASSWORD on the server.",
+      "sender": "Sender: {sender}",
+      "testPhone": "Phone for the test SMS",
+      "sendTest": "Send test SMS",
+      "testHint": "Sends one real SMS with Eskiz's fixed test text.",
+      "testSent": "Test SMS sent to {phone}",
+      "serverNotReady": "SUPABASE_SECRET_KEY is not set on the server: reminders, messages and invitations cannot work yet."
+    },
+    "templates": {
+      "type": "Message",
+      "channel": "Channel",
+      "language": "Language",
+      "text": "Text",
+      "placeholders": "Placeholders",
+      "insert": "Insert {placeholder}",
+      "preview": "Preview",
+      "characters": "{count, plural, one {# character} other {# characters}}",
+      "smsParts": "{count, plural, one {# SMS} other {# SMS}}",
+      "smsGsm": "Plain Latin: 160 characters fit in one SMS.",
+      "smsUnicode": "Sent as Unicode because of {characters}: only 70 characters fit in one SMS.",
+      "smsConverted": "ʻ and curly quotes are replaced with straight ones when an SMS is sent.",
+      "unknown": "Not a placeholder, sent as written: {names}",
+      "unsaved": "Unsaved changes",
+      "placeholder": {
+        "student": "Student's name",
+        "group": "Group",
+        "month": "Month",
+        "amount": "Amount",
+        "due_date": "Due date",
+        "time": "Lesson time",
+        "centre": "Centre name"
+      }
+    },
+    "profile": {
+      "name": "Full name",
+      "language": "Interface language",
+      "email": "Email",
+      "password": "Password",
+      "newPassword": "New password",
+      "confirmPassword": "Repeat the password",
+      "savePassword": "Change password",
+      "passwordSaved": "Password changed"
+    },
+    "errors": {
+      "nameRequired": "Enter a name.",
+      "tooLong": "This text is too long.",
+      "dayInvalid": "Choose a day from 1 to 28.",
+      "dueBeforeBilling": "The due day cannot be before the billing day.",
+      "timeInvalid": "Enter a time like 21:00.",
+      "hoursInvalid": "Enter 1 to 48 hours.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailTaken": "This email already has an account.",
+      "phoneInvalid": "Enter a phone like +998901234567.",
+      "textRequired": "Write the text.",
+      "passwordTooShort": "The password needs at least 8 characters.",
+      "passwordMismatch": "The passwords do not match.",
+      "notSelf": "You cannot change your own role or deactivate yourself.",
+      "lastOwner": "The centre needs at least one active owner.",
+      "notAllowed": "You are not allowed to do this.",
+      "notConfigured": "This is not set up on the server yet.",
+      "notFound": "This no longer exists.",
       "generic": "Something went wrong. Try again."
     }
   }

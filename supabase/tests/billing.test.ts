@@ -436,7 +436,8 @@ describe.skipIf(!DB_URL)("Monthly billing", () => {
 
         // The billing day can be 1–28; on the 29th–31st there is nothing more to check.
         if (day <= 28) {
-          await s.rows(`update centre_settings set billing_day = $1`, [day]);
+          // The due day is never before the billing day.
+          await s.rows(`update centre_settings set billing_day = $1, due_day = greatest(due_day, $1)`, [day]);
           const [{ created }] = await s.rows<{ created: number }>(`select public.run_billing_day() as created`);
           expect(created).toBeGreaterThan(70);
           expect(await s.rows(`select public.run_billing_day() as created`)).toEqual([{ created: 0 }]);

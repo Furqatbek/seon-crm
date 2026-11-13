@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, LogOut } from "lucide-react";
+import { ChevronsUpDown, LogOut, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 
@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "@/i18n/navigation";
 import type { CurrentUser } from "@/lib/auth";
 import { signOut } from "@/lib/auth-actions";
 
@@ -23,7 +24,7 @@ import { useSwitchLocale } from "./use-switch-locale";
 export function UserMenu({ user }: { user: CurrentUser }) {
   const t = useTranslations("userMenu");
   const tLanguage = useTranslations("language");
-  const { locale, locales, switchLocale } = useSwitchLocale();
+  const { locale, locales, switchLocale } = useSwitchLocale({ remember: true });
   const [, startTransition] = useTransition();
 
   return (
@@ -58,6 +59,13 @@ export function UserMenu({ user }: { user: CurrentUser }) {
           ))}
         </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
+        {/* Name, language and password: for everyone, also a manager who has no Settings in the sidebar. */}
+        <DropdownMenuItem asChild>
+          <Link href="/settings?tab=profile">
+            <UserRound aria-hidden />
+            {t("profile")}
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem onSelect={() => startTransition(() => signOut(locale))}>
           <LogOut aria-hidden />
           {t("signOut")}

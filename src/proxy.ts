@@ -7,7 +7,7 @@ import { refreshSession } from "@/lib/supabase/proxy";
 const handleI18n = createIntlMiddleware(routing);
 
 // Reachable without a session. Everything else under /[locale] is protected.
-const PUBLIC_PATHS = ["/sign-in", "/forgot-password"];
+const PUBLIC_PATHS = ["/sign-in", "/forgot-password", "/accept-invite"];
 const DEV_PATHS = ["/dev"];
 
 function matches(path: string, prefixes: string[]): boolean {
@@ -40,6 +40,8 @@ export default async function proxy(request: NextRequest) {
   if (process.env.NODE_ENV === "development" && matches(path, DEV_PATHS)) {
     return response;
   }
+  // An invitation is opened whoever is signed in on this browser: it replaces the session.
+  if (matches(path, ["/accept-invite"])) return response;
   if (matches(path, PUBLIC_PATHS)) {
     return signedIn ? redirectTo(request, response, `/${locale}`) : response;
   }

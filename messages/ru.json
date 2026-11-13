@@ -53,7 +53,8 @@
     "roles": {
       "owner": "Владелец",
       "manager": "Менеджер"
-    }
+    },
+    "profile": "Профиль"
   },
   "auth": {
     "email": "Эл. почта",
@@ -79,7 +80,10 @@
       "linkInvalid": "Ссылка недействительна или устарела. Запросите новую.",
       "notConfigured": "Вход ещё не настроен: нет ключей Supabase.",
       "generic": "Что-то пошло не так. Попробуйте ещё раз."
-    }
+    },
+    "inviteTitle": "Добро пожаловать",
+    "inviteOpening": "Открываем приглашение…",
+    "inviteInvalid": "Приглашение недействительно или истекло. Попросите владельца пригласить вас снова."
   },
   "empty": {
     "leads": "Лидов пока нет.",
@@ -1076,6 +1080,134 @@
       "notFound": "Этого больше нет.",
       "noDebt": "У этого ученика больше нет долга.",
       "noTemplate": "Для этого сообщения нет шаблона.",
+      "generic": "Что-то пошло не так. Повторите."
+    }
+  },
+  "settings": {
+    "tabs": {
+      "centre": "Центр",
+      "users": "Пользователи",
+      "notifications": "Уведомления",
+      "templates": "Шаблоны",
+      "profile": "Профиль"
+    },
+    "saved": "Сохранено",
+    "centre": {
+      "name": "Название центра",
+      "billingDay": "День начисления",
+      "billingDayHint": "В этот день месяца создаются ежемесячные начисления.",
+      "dueDay": "Срок оплаты",
+      "dueDayHint": "Оплатить нужно до этого дня. После него неоплаченное начисление становится долгом."
+    },
+    "users": {
+      "invite": "Пригласить пользователя",
+      "inviteTitle": "Приглашение пользователя",
+      "inviteHint": "Он получит письмо со ссылкой, чтобы задать пароль.",
+      "email": "Email",
+      "name": "Имя и фамилия",
+      "role": "Роль",
+      "language": "Язык",
+      "sendInvite": "Отправить приглашение",
+      "invited": "Приглашение отправлено на {email}",
+      "you": "вы",
+      "status": {
+        "active": "Активен",
+        "invited": "Приглашён",
+        "deactivated": "Отключён"
+      },
+      "statusColumn": "Статус",
+      "deactivate": "Отключить",
+      "reactivate": "Включить",
+      "deactivateTitle": "Отключить: {name}?",
+      "deactivateBody": "Пользователь будет выведен из системы и больше не сможет войти или что-либо увидеть. Его прошлая работа останется как есть. Позже его можно включить снова.",
+      "deactivated": "{name}: доступ отключён",
+      "reactivated": "{name}: доступ включён",
+      "roleChanged": "{name}: роль изменена на «{role}»",
+      "roleFor": "Роль: {name}"
+    },
+    "notifications": {
+      "enabled": "Отправлять автоматические напоминания",
+      "enabledHint": "О сроке оплаты, о просрочке и о занятиях. На сообщения, которые сотрудники отправляют вручную, это не влияет.",
+      "lessonHours": "Напоминание о занятии, за сколько часов",
+      "quietFrom": "Тихие часы с",
+      "quietTo": "Тихие часы до",
+      "quietHint": "В тихие часы ничего не отправляется. Сообщения об оплате ждут их окончания; напоминание о занятии пропускается.",
+      "telegram": "Telegram-бот",
+      "telegramNotConfigured": "Не настроен",
+      "telegramNotConfiguredHint": "Задайте на сервере TELEGRAM_BOT_TOKEN и TELEGRAM_WEBHOOK_SECRET.",
+      "telegramUnreachable": "Telegram не отвечает",
+      "telegramConnected": "Подключён",
+      "telegramNotConnected": "Вебхук не подключён",
+      "webhook": "Адрес вебхука",
+      "webhookElsewhere": "Сейчас Telegram отправляет на {url}.",
+      "webhookNeedsHttps": "Telegram вызывает только адреса https, а серверу нужен TELEGRAM_WEBHOOK_SECRET. Подключите вебхук из развёрнутого приложения.",
+      "lastError": "Последняя ошибка доставки: {error}",
+      "connect": "Подключить вебхук",
+      "connectedToast": "Вебхук подключён к @{username}",
+      "eskiz": "SMS через Eskiz",
+      "eskizConfigured": "Настроен",
+      "eskizNotConfigured": "Не настроен",
+      "eskizNotConfiguredHint": "Задайте на сервере ESKIZ_EMAIL и ESKIZ_PASSWORD.",
+      "sender": "Отправитель: {sender}",
+      "testPhone": "Телефон для тестового SMS",
+      "sendTest": "Отправить тестовое SMS",
+      "testHint": "Отправит одно настоящее SMS с фиксированным тестовым текстом Eskiz.",
+      "testSent": "Тестовое SMS отправлено на {phone}",
+      "serverNotReady": "На сервере не задан SUPABASE_SECRET_KEY: напоминания, сообщения и приглашения пока не работают."
+    },
+    "templates": {
+      "type": "Сообщение",
+      "channel": "Канал",
+      "language": "Язык",
+      "text": "Текст",
+      "placeholders": "Подстановки",
+      "insert": "Вставить {placeholder}",
+      "preview": "Предпросмотр",
+      "characters": "{count, plural, one {# знак} few {# знака} many {# знаков} other {# знака}}",
+      "smsParts": "{count} SMS",
+      "smsGsm": "Латиница: в одно SMS помещается 160 знаков.",
+      "smsUnicode": "Отправится в Unicode из-за {characters}: в одно SMS помещается только 70 знаков.",
+      "smsConverted": "При отправке SMS знак ʻ и «ёлочки» заменяются прямыми.",
+      "unknown": "Не подстановка, уйдёт как написано: {names}",
+      "unsaved": "Есть несохранённые изменения",
+      "placeholder": {
+        "student": "Имя ученика",
+        "group": "Группа",
+        "month": "Месяц",
+        "amount": "Сумма",
+        "due_date": "Срок оплаты",
+        "time": "Время занятия",
+        "centre": "Название центра"
+      }
+    },
+    "profile": {
+      "name": "Имя и фамилия",
+      "language": "Язык интерфейса",
+      "email": "Email",
+      "password": "Пароль",
+      "newPassword": "Новый пароль",
+      "confirmPassword": "Повторите пароль",
+      "savePassword": "Сменить пароль",
+      "passwordSaved": "Пароль изменён"
+    },
+    "errors": {
+      "nameRequired": "Введите имя.",
+      "tooLong": "Слишком длинный текст.",
+      "dayInvalid": "Выберите день от 1 до 28.",
+      "dueBeforeBilling": "Срок оплаты не может быть раньше дня начисления.",
+      "timeInvalid": "Введите время, например 21:00.",
+      "hoursInvalid": "Введите от 1 до 48 часов.",
+      "emailInvalid": "Введите правильный email.",
+      "emailTaken": "У этого email уже есть аккаунт.",
+      "phoneInvalid": "Введите телефон, например +998901234567.",
+      "textRequired": "Напишите текст.",
+      "passwordTooShort": "В пароле должно быть не меньше 8 символов.",
+      "passwordMismatch": "Пароли не совпадают.",
+      "notSelf": "Нельзя изменить свою роль или отключить себя.",
+      "lastOwner": "В центре должен остаться хотя бы один активный владелец.",
+      "notAllowed": "У вас нет прав на это действие.",
+      "notConfigured": "На сервере это ещё не настроено.",
+      "notFound": "Этого больше нет.",
       "generic": "Что-то пошло не так. Повторите."
     }
   }

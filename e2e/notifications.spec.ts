@@ -28,7 +28,7 @@ test("the reminders job needs the cron secret", async ({ request }) => {
 
   const response = await request.post("/api/jobs/reminders", { headers: { authorization: `Bearer ${CRON_SECRET}` } });
   expect(response.status()).toBe(200);
-  // Reminders are switched off for the test run (e2e/support/notify-setup.ts),
+  // Reminders are switched off for the test run (e2e/support/global-setup.ts),
   // so the job answers and sends nothing.
   expect(await response.json()).toEqual({ sent: 0, failed: 0, skipped: 0, duplicate: 0, idle: "reminders_off" });
 });

@@ -1,28 +1,21 @@
 "use server";
 
 import { hasLocale } from "next-intl";
-import { headers } from "next/headers";
 
 import { redirect } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
+import { appUrl } from "@/lib/app-url";
 import { createClient } from "@/lib/supabase/server";
 import {
   forgotPasswordSchema,
   resetPasswordSchema,
+  sessionTokensSchema,
   signInSchema,
   type AuthResult,
 } from "@/lib/validation/auth";
 
 function toLocale(value: unknown): Locale {
   return hasLocale(routing.locales, value) ? value : routing.defaultLocale;
-}
-
-async function appUrl(): Promise<string> {
-  if (process.env.APP_URL) return process.env.APP_URL.replace(/\/$/, "");
-  const headerList = await headers();
-  const host = headerList.get("x-forwarded-host") ?? headerList.get("host");
-  const protocol = headerList.get("x-forwarded-proto") ?? "http";
-  return `${protocol}://${host}`;
 }
 
 export async function signIn(input: unknown, localeInput: unknown): Promise<AuthResult> {
@@ -39,8 +32,30 @@ export async function signIn(input: unknown, localeInput: unknown): Promise<Auth
     return { ok: false, error: wrongLogin ? "invalidCredentials" : "generic" };
   }
 
-  // The home route sends owners to Reports and managers to Groups.
-  return redirect({ href: "/", locale });
+  // The interface opens in the language saved on the user's profile. The home
+  // route sends owners to Reports and managers to Groups.
+  const { data: user } = await supabase.auth.getUser();
+  const { data: profile } = user.user
+    ? await supabase.from("profiles").select("language").eq("id", user.user.id).maybeSingle()
+    : { data: null };
+  return redirect({ href: "/", locale: profile ? toLocale(profile.language) : locale });
+}
+
+/**
+ * The last step of an invitation. The emailed link lands on /accept-invite
+ * with the new session in the address fragment, which only the browser sees;
+ * the page hands it over here to be stored, then the user chooses a password.
+ */
+export async function acceptInvite(tokens: unknown, localeInput: unknown): Promise<AuthResult> {
+  const locale = toLocale(localeInput);
+  const parsed = sessionTokensSchema.safeParse(tokens);
+  const supabase = await createClient();
+  if (!supabase) return { ok: false, error: "notConfigured" };
+  if (!parsed.success) return { ok: false, error: "linkInvalid" };
+
+  const { error } = await supabase.auth.setSession(parsed.data);
+  if (error) return { ok: false, error: "linkInvalid" };
+  return redirect({ href: "/reset-password", locale });
 }
 
 export async function requestPasswordReset(

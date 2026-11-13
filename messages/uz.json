@@ -53,7 +53,8 @@
     "roles": {
       "owner": "Rahbar",
       "manager": "Menejer"
-    }
+    },
+    "profile": "Profil"
   },
   "auth": {
     "email": "Elektron pochta",
@@ -79,7 +80,10 @@
       "linkInvalid": "Havola yaroqsiz yoki muddati oʻtgan. Yangisini soʻrang.",
       "notConfigured": "Kirish hali sozlanmagan: Supabase kalitlari yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
-    }
+    },
+    "inviteTitle": "Xush kelibsiz",
+    "inviteOpening": "Taklif ochilmoqda…",
+    "inviteInvalid": "Taklif yaroqsiz yoki muddati oʻtgan. Egasidan qayta taklif qilishni soʻrang."
   },
   "empty": {
     "leads": "Hozircha lidlar yoʻq.",
@@ -1076,6 +1080,134 @@
       "notFound": "Bu endi mavjud emas.",
       "noDebt": "Bu oʻquvchining qarzi qolmagan.",
       "noTemplate": "Bu xabar uchun shablon yoʻq.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    }
+  },
+  "settings": {
+    "tabs": {
+      "centre": "Markaz",
+      "users": "Foydalanuvchilar",
+      "notifications": "Bildirishnomalar",
+      "templates": "Shablonlar",
+      "profile": "Profil"
+    },
+    "saved": "Saqlandi",
+    "centre": {
+      "name": "Markaz nomi",
+      "billingDay": "Hisoblash kuni",
+      "billingDayHint": "Oylik toʻlovlar oyning shu kunida hisoblanadi.",
+      "dueDay": "Toʻlov muddati",
+      "dueDayHint": "Toʻlov shu kungacha amalga oshirilishi kerak. Undan keyin toʻlanmagan summa qarzga aylanadi."
+    },
+    "users": {
+      "invite": "Foydalanuvchi taklif qilish",
+      "inviteTitle": "Foydalanuvchini taklif qilish",
+      "inviteHint": "Unga parol oʻrnatish havolasi bilan xat boradi.",
+      "email": "Email",
+      "name": "Ism va familiya",
+      "role": "Rol",
+      "language": "Til",
+      "sendInvite": "Taklif yuborish",
+      "invited": "Taklif {email} manziliga yuborildi",
+      "you": "siz",
+      "status": {
+        "active": "Faol",
+        "invited": "Taklif qilingan",
+        "deactivated": "Oʻchirilgan"
+      },
+      "statusColumn": "Holat",
+      "deactivate": "Oʻchirish",
+      "reactivate": "Yoqish",
+      "deactivateTitle": "{name} oʻchirilsinmi?",
+      "deactivateBody": "U tizimdan chiqariladi va endi kira olmaydi, hech narsani koʻra olmaydi. Avvalgi ishlari oʻz holicha qoladi. Keyinroq qayta yoqish mumkin.",
+      "deactivated": "{name} oʻchirildi",
+      "reactivated": "{name} yana kira oladi",
+      "roleChanged": "{name}: roli «{role}» boʻldi",
+      "roleFor": "{name}: rol"
+    },
+    "notifications": {
+      "enabled": "Avtomatik eslatmalarni yuborish",
+      "enabledHint": "Toʻlov muddati, kechikkan toʻlov va dars eslatmalari. Xodimlar qoʻlda yuboradigan xabarlarga taʼsir qilmaydi.",
+      "lessonHours": "Dars eslatmasi, necha soat oldin",
+      "quietFrom": "Sokin soatlar boshlanishi",
+      "quietTo": "Sokin soatlar tugashi",
+      "quietHint": "Sokin soatlarda hech narsa yuborilmaydi. Toʻlov xabarlari ular tugashini kutadi; dars eslatmasi oʻtkazib yuboriladi.",
+      "telegram": "Telegram bot",
+      "telegramNotConfigured": "Sozlanmagan",
+      "telegramNotConfiguredHint": "Serverda TELEGRAM_BOT_TOKEN va TELEGRAM_WEBHOOK_SECRET ni kiriting.",
+      "telegramUnreachable": "Telegram javob bermayapti",
+      "telegramConnected": "Ulangan",
+      "telegramNotConnected": "Webhook ulanmagan",
+      "webhook": "Webhook manzili",
+      "webhookElsewhere": "Hozir Telegram {url} manziliga yuboryapti.",
+      "webhookNeedsHttps": "Telegram faqat https manzillarga murojaat qiladi, serverga esa TELEGRAM_WEBHOOK_SECRET kerak. Webhookni joylashtirilgan ilovadan ulang.",
+      "lastError": "Oxirgi yetkazish xatosi: {error}",
+      "connect": "Webhookni ulash",
+      "connectedToast": "Webhook @{username} ga ulandi",
+      "eskiz": "Eskiz SMS",
+      "eskizConfigured": "Sozlangan",
+      "eskizNotConfigured": "Sozlanmagan",
+      "eskizNotConfiguredHint": "Serverda ESKIZ_EMAIL va ESKIZ_PASSWORD ni kiriting.",
+      "sender": "Yuboruvchi: {sender}",
+      "testPhone": "Sinov SMS uchun telefon",
+      "sendTest": "Sinov SMS yuborish",
+      "testHint": "Eskizning belgilangan sinov matni bilan bitta haqiqiy SMS yuboradi.",
+      "testSent": "Sinov SMS {phone} raqamiga yuborildi",
+      "serverNotReady": "Serverda SUPABASE_SECRET_KEY kiritilmagan: eslatmalar, xabarlar va takliflar hozircha ishlamaydi."
+    },
+    "templates": {
+      "type": "Xabar",
+      "channel": "Kanal",
+      "language": "Til",
+      "text": "Matn",
+      "placeholders": "Oʻrinbosarlar",
+      "insert": "{placeholder} qoʻshish",
+      "preview": "Koʻrinishi",
+      "characters": "{count} ta belgi",
+      "smsParts": "{count} ta SMS",
+      "smsGsm": "Oddiy lotin: bitta SMSga 160 belgi sigʻadi.",
+      "smsUnicode": "{characters} sababli Unicode boʻlib ketadi: bitta SMSga atigi 70 belgi sigʻadi.",
+      "smsConverted": "SMS yuborilganda ʻ va qiyshiq qoʻshtirnoqlar toʻgʻrisiga almashtiriladi.",
+      "unknown": "Oʻrinbosar emas, yozilganidek ketadi: {names}",
+      "unsaved": "Saqlanmagan oʻzgarishlar bor",
+      "placeholder": {
+        "student": "Oʻquvchi ismi",
+        "group": "Guruh",
+        "month": "Oy",
+        "amount": "Summa",
+        "due_date": "Toʻlov muddati",
+        "time": "Dars vaqti",
+        "centre": "Markaz nomi"
+      }
+    },
+    "profile": {
+      "name": "Ism va familiya",
+      "language": "Interfeys tili",
+      "email": "Email",
+      "password": "Parol",
+      "newPassword": "Yangi parol",
+      "confirmPassword": "Parolni takrorlang",
+      "savePassword": "Parolni oʻzgartirish",
+      "passwordSaved": "Parol oʻzgartirildi"
+    },
+    "errors": {
+      "nameRequired": "Ismni kiriting.",
+      "tooLong": "Matn juda uzun.",
+      "dayInvalid": "1 dan 28 gacha kun tanlang.",
+      "dueBeforeBilling": "Toʻlov muddati hisoblash kunidan oldin boʻlishi mumkin emas.",
+      "timeInvalid": "Vaqtni 21:00 koʻrinishida kiriting.",
+      "hoursInvalid": "1 dan 48 gacha soat kiriting.",
+      "emailInvalid": "Toʻgʻri email kiriting.",
+      "emailTaken": "Bu email bilan akkaunt allaqachon bor.",
+      "phoneInvalid": "Telefonni +998901234567 koʻrinishida kiriting.",
+      "textRequired": "Matnni yozing.",
+      "passwordTooShort": "Parol kamida 8 belgidan iborat boʻlishi kerak.",
+      "passwordMismatch": "Parollar mos kelmadi.",
+      "notSelf": "Oʻz rolingizni oʻzgartira yoki oʻzingizni oʻchira olmaysiz.",
+      "lastOwner": "Markazda kamida bitta faol egasi qolishi kerak.",
+      "notAllowed": "Sizga bu amalga ruxsat yoʻq.",
+      "notConfigured": "Bu serverda hali sozlanmagan.",
+      "notFound": "Bu endi mavjud emas.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
     }
   }

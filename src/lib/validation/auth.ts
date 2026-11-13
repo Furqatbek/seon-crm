@@ -23,6 +23,12 @@ export const resetPasswordSchema = z
   });
 export type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
+/** The session an invitation link carries. */
+export const sessionTokensSchema = z.object({
+  access_token: z.string().min(20),
+  refresh_token: z.string().min(1),
+});
+
 export type AuthErrorKey =
   | "emailInvalid"
   | "passwordRequired"

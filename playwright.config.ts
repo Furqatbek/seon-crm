@@ -8,8 +8,8 @@ const executablePath = process.env.PLAYWRIGHT_CHROMIUM_PATH;
 // the local stack (npx supabase start) or the dev project in .env.local.
 export default defineConfig({
   testDir: "./e2e",
-  globalSetup: "./e2e/support/notify-setup.ts",
-  globalTeardown: "./e2e/support/notify-teardown.ts",
+  globalSetup: "./e2e/support/global-setup.ts",
+  globalTeardown: "./e2e/support/global-teardown.ts",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
