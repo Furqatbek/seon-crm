@@ -1,0 +1,1 @@
+-- Demo data for the dev project. Filled in Phase 2 (docs/SPEC.md → Build prompts).
