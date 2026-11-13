@@ -68,6 +68,144 @@
     "reports": "No data to report yet.",
     "settings": "No settings yet."
   },
+  "leads": {
+    "newLead": "New lead",
+    "editLead": "Edit lead",
+    "searchPlaceholder": "Name or phone",
+    "followUpToday": "Follow up today",
+    "followUpDue": "Follow-up is due",
+    "noSubject": "No subject yet",
+    "last30Days": "Last 30 days",
+    "noMatches": "No leads match these filters.",
+    "clearFilters": "Clear filters",
+    "readOnly": "This lead became a student and can no longer be changed.",
+    "openStudent": "Open the student",
+    "view": {
+      "label": "View",
+      "board": "Board",
+      "list": "List"
+    },
+    "filters": {
+      "allSources": "All sources",
+      "allStaff": "Everyone"
+    },
+    "status": {
+      "new": "New",
+      "contacted": "Contacted",
+      "trial": "Trial lesson",
+      "won": "Won",
+      "lost": "Lost"
+    },
+    "source": {
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "phone_call": "Phone call",
+      "walk_in": "Walk-in",
+      "referral": "Referral",
+      "website": "Website",
+      "other": "Other"
+    },
+    "lostReason": {
+      "price": "Price",
+      "schedule": "Schedule",
+      "another_centre": "Chose another centre",
+      "no_answer": "No answer",
+      "other": "Other"
+    },
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "source": "Source",
+      "subject": "Subject",
+      "preferredTime": "Preferred time",
+      "assignedTo": "Assigned to",
+      "nextContact": "Next contact",
+      "notes": "Notes",
+      "status": "Status",
+      "created": "Created",
+      "trial": "Trial lesson",
+      "lostReason": "Lost because",
+      "unassigned": "Nobody"
+    },
+    "form": {
+      "created": "Lead added",
+      "saved": "Lead saved",
+      "chooseSource": "Choose a source",
+      "duplicateLead": "A lead already has this number:",
+      "duplicateStudent": "A student already has this number:"
+    },
+    "actions": {
+      "logCall": "Log call",
+      "addNote": "Add note",
+      "bookTrial": "Book trial",
+      "convert": "Convert to student",
+      "markLost": "Mark lost",
+      "edit": "Edit",
+      "archive": "Archive",
+      "more": "More actions",
+      "moveTo": "Stage"
+    },
+    "composer": {
+      "callLabel": "What was the call about?",
+      "noteLabel": "Note",
+      "saveCall": "Save call",
+      "saveNote": "Save note"
+    },
+    "timeline": {
+      "title": "Timeline",
+      "empty": "Nothing has happened yet.",
+      "call": "Call",
+      "note": "Note",
+      "statusChange": "{from} → {to}",
+      "reason": "Reason: {reason}"
+    },
+    "lost": {
+      "title": "Mark {name} as lost?",
+      "body": "Choose why. The reason is kept in the timeline.",
+      "reason": "Reason",
+      "choose": "Choose a reason",
+      "otherLabel": "What happened?"
+    },
+    "trial": {
+      "title": "Book a trial lesson for {name}",
+      "body": "Choose the group and the date of the trial lesson.",
+      "group": "Group",
+      "choose": "Choose a group",
+      "date": "Date"
+    },
+    "archive": {
+      "title": "Archive {name}?",
+      "body": "The lead is hidden from the board and the list. Its timeline is kept.",
+      "done": "Lead archived"
+    },
+    "pagination": {
+      "range": "{first}–{last} of {total}",
+      "previous": "Previous page",
+      "next": "Next page"
+    },
+    "dnd": {
+      "instructions": "Press Space to pick up a lead. Use the left and right arrow keys to choose a column, then press Space to drop it. Press Escape to cancel.",
+      "pickedUp": "Picked up {name}.",
+      "over": "{name} is over {column}.",
+      "dropped": "{name} was dropped on {column}.",
+      "cancelled": "Moving {name} was cancelled."
+    },
+    "errors": {
+      "nameRequired": "Enter the name.",
+      "phoneInvalid": "Enter a phone number like +998 90 123 45 67.",
+      "sourceRequired": "Choose a source.",
+      "dateInvalid": "Choose a valid date.",
+      "tooLong": "This text is too long.",
+      "lostReasonRequired": "Choose a reason.",
+      "trialGroupRequired": "Choose a group.",
+      "trialDateRequired": "Choose a date.",
+      "noteRequired": "Write the note.",
+      "moveNotAllowed": "This lead cannot be moved there.",
+      "notFound": "This lead no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
   "dev": {
     "title": "Components",
     "newStudent": "New student",

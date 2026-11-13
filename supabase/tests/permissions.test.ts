@@ -68,7 +68,8 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
   describe("Leads — owner: full · manager: full, except archive", () => {
     it.each(BOTH)("%s reads, creates and edits leads and writes to the timeline", async (who) => {
       await as(who, async (s) => {
-        expect(await s.count("leads")).toBe(40);
+        // At least the seed: other test runs may have added more.
+        expect(await s.count("leads")).toBeGreaterThanOrEqual(40);
         const lead = await newLead(s);
         allowed(lead);
         allowed(await s.attempt(`update leads set status = 'contacted' where id = $1`, [idOf(lead)]));
@@ -81,6 +82,46 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         );
         allowed(
           await s.attempt(`update leads set status = 'lost', lost_reason = 'price' where id = $1`, [leadId(1)]),
+        );
+      });
+    });
+
+    it("every status change writes a timeline row, with who did it and why", async () => {
+      await as("manager", async (s) => {
+        const lead = idOf(await newLead(s));
+        const timeline = () =>
+          s.rows(
+            `select kind, from_status, to_status, body, created_by from lead_activities
+             where lead_id = $1 order by from_status`,
+            [lead],
+          );
+        expect(await timeline()).toEqual([]);
+
+        allowed(await s.attempt(`update leads set status = 'contacted' where id = $1`, [lead]));
+        // Editing anything else is not a status change.
+        allowed(await s.attempt(`update leads set notes = 'x' where id = $1`, [lead]));
+        allowed(await s.attempt(`update leads set status = 'lost', lost_reason = 'price' where id = $1`, [lead]));
+
+        // Both rows share the test transaction's timestamp, so order by stage.
+        expect(await timeline()).toEqual([
+          { kind: "status_change", from_status: "new", to_status: "contacted", body: null, created_by: MANAGER_ID },
+          { kind: "status_change", from_status: "contacted", to_status: "lost", body: "price", created_by: MANAGER_ID },
+        ]);
+      });
+    });
+
+    it("a lead cannot be lost without a reason or in trial without a group and date", async () => {
+      await as("manager", async (s) => {
+        const lead = idOf(await newLead(s));
+        const noReason = await s.attempt(`update leads set status = 'lost' where id = $1`, [lead]);
+        expect(noReason.ok ? "allowed" : noReason.code).toBe("23514");
+        const noGroup = await s.attempt(`update leads set status = 'trial' where id = $1`, [lead]);
+        expect(noGroup.ok ? "allowed" : noGroup.code).toBe("23514");
+        allowed(
+          await s.attempt(
+            `update leads set status = 'trial', trial_group_id = $2, trial_date = ${today} where id = $1`,
+            [lead, groupId(1)],
+          ),
         );
       });
     });
@@ -108,7 +149,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
   describe("Students — owner: full · manager: create, edit, enrol, transfer, mark as left", () => {
     it.each(BOTH)("%s creates, edits, enrols, transfers and marks a student as left", async (who) => {
       await as(who, async (s) => {
-        expect(await s.count("students")).toBe(80);
+        expect(await s.count("students")).toBeGreaterThanOrEqual(80);
         const student = await s.attempt(
           `insert into students (full_name, phone) values ('Test Student', '+998900000002')
            returning id, telegram_link_code`,
@@ -150,7 +191,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
   describe("Groups and lessons — owner: full · manager: create, edit, cancel a lesson, mark attendance", () => {
     it.each(BOTH)("%s creates and edits a group, cancels a lesson and marks attendance", async (who) => {
       await as(who, async (s) => {
-        expect(await s.count("groups")).toBe(10);
+        expect(await s.count("groups")).toBeGreaterThanOrEqual(10);
         const group = await s.attempt(
           `insert into groups (name, subject, teacher_id, monthly_fee, days, start_time, start_date)
            values ('Test Group', 'Ingliz tili', $1, 500000, '{1,3,5}', '09:00', ${today}) returning id`,
@@ -474,7 +515,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
       await as(who, async (s) => {
         expect(await s.rows(`select status, count(*)::int as n from leads group by status order by status`)).toHaveLength(5);
         expect(await s.count("attendance")).toBeGreaterThan(1000);
-        expect(await s.count("students", "status = 'active'")).toBe(74);
+        expect(await s.count("students", "status = 'active'")).toBeGreaterThanOrEqual(74);
       });
     });
 

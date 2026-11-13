@@ -418,8 +418,9 @@ insert into public.leads (
 select
   pg_temp.uid(6, i),
   coalesce(s.full_name,
-    case when i % 2 = 0 then n.male[1 + (i * 3) % 20] else n.female[1 + (i * 3) % 20] end
-      || ' ' || n.family[1 + (i * 11) % 20] || case when i % 2 = 0 then 'ov' else 'ova' end),
+    case when i % 2 = 0 then n.male[1 + (i - 1) % 20] else n.female[1 + (i - 1) % 20] end
+      || ' ' || n.family[1 + ((i - 1) * 3 + ((i - 1) / 20) * 7 + 5) % 20]
+      || case when i % 2 = 0 then 'ov' else 'ova' end),
   coalesce(s.phone, '+998' || n.operators[1 + (i + 1) % 6] || lpad((2000000 + (i * 73459) % 7999999)::text, 7, '0')),
   (array['instagram', 'telegram', 'phone_call', 'walk_in', 'referral', 'website', 'other'])[1 + i % 7]::public.lead_source,
   (array['Ingliz tili', 'IELTS', 'Matematika', 'Rus tili', 'Dasturlash'])[1 + i % 5],

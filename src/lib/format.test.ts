@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatMoney, formatPhone } from "./format";
+import { formatDate, formatDateTime, formatDay, formatMoney, formatPhone } from "./format";
 
 describe("formatMoney", () => {
   it("formats Uzbek with spaces and soʻm (U+02BB)", () => {
@@ -52,5 +52,36 @@ describe("formatPhone", () => {
     expect(formatPhone("")).toBe("");
     expect(formatPhone("901234567")).toBe("901234567");
     expect(formatPhone("+7 912 345 67 89")).toBe("+7 912 345 67 89");
+  });
+});
+
+describe("formatDate", () => {
+  const instant = "2026-11-10T04:00:00Z"; // 09:00 in Tashkent
+
+  it("writes the day in each language", () => {
+    expect(formatDate(instant, "en")).toBe("Nov 10");
+    expect(formatDate(instant, "ru")).toBe("10 нояб.");
+    expect(formatDate(instant, "uz")).toBe("10-noy");
+  });
+
+  it("adds the year and long month names when asked", () => {
+    expect(formatDate(instant, "en", { year: true })).toBe("Nov 10, 2026");
+    expect(formatDate(instant, "ru", { year: true, month: "long" })).toBe("10 ноября 2026");
+    expect(formatDate(instant, "uz", { month: "long" })).toBe("10-noyabr");
+  });
+
+  it("uses the Tashkent day, not the UTC day", () => {
+    expect(formatDate("2026-12-31T19:30:00Z", "en", { year: true })).toBe("Jan 1, 2027");
+    expect(formatDate(new Date("2026-03-08T18:59:00Z"), "uz")).toBe("8-mar");
+  });
+
+  it("formats a day with a 24-hour time", () => {
+    expect(formatDateTime("2026-11-13T10:09:00Z", "en")).toBe("Nov 13, 15:09");
+    expect(formatDateTime("2026-11-13T19:05:00Z", "uz")).toBe("14-noy, 00:05");
+  });
+
+  it("formats a date column", () => {
+    expect(formatDay("2026-11-20", "ru", { month: "long" })).toBe("20 ноября");
+    expect(formatDay("2026-01-01", "en")).toBe("Jan 1");
   });
 });

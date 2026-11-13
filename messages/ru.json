@@ -68,6 +68,144 @@
     "reports": "Данных для отчётов пока нет.",
     "settings": "Настроек пока нет."
   },
+  "leads": {
+    "newLead": "Новый лид",
+    "editLead": "Изменить лид",
+    "searchPlaceholder": "Имя или телефон",
+    "followUpToday": "Связаться сегодня",
+    "followUpDue": "Пора связаться",
+    "noSubject": "Предмет не указан",
+    "last30Days": "За последние 30 дней",
+    "noMatches": "Нет лидов под эти фильтры.",
+    "clearFilters": "Сбросить фильтры",
+    "readOnly": "Этот лид стал учеником, изменить его больше нельзя.",
+    "openStudent": "Открыть ученика",
+    "view": {
+      "label": "Вид",
+      "board": "Доска",
+      "list": "Список"
+    },
+    "filters": {
+      "allSources": "Все источники",
+      "allStaff": "Все сотрудники"
+    },
+    "status": {
+      "new": "Новый",
+      "contacted": "Связались",
+      "trial": "Пробный урок",
+      "won": "Записался",
+      "lost": "Отказ"
+    },
+    "source": {
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "phone_call": "Звонок",
+      "walk_in": "Пришёл сам",
+      "referral": "Рекомендация",
+      "website": "Сайт",
+      "other": "Другое"
+    },
+    "lostReason": {
+      "price": "Цена",
+      "schedule": "Расписание",
+      "another_centre": "Выбрал другой центр",
+      "no_answer": "Не отвечает",
+      "other": "Другое"
+    },
+    "fields": {
+      "name": "Имя",
+      "phone": "Телефон",
+      "source": "Источник",
+      "subject": "Предмет",
+      "preferredTime": "Удобное время",
+      "assignedTo": "Ответственный",
+      "nextContact": "Следующий контакт",
+      "notes": "Заметки",
+      "status": "Статус",
+      "created": "Создан",
+      "trial": "Пробный урок",
+      "lostReason": "Причина отказа",
+      "unassigned": "Никто"
+    },
+    "form": {
+      "created": "Лид добавлен",
+      "saved": "Лид сохранён",
+      "chooseSource": "Выберите источник",
+      "duplicateLead": "Этот номер уже есть у лида:",
+      "duplicateStudent": "Этот номер уже есть у ученика:"
+    },
+    "actions": {
+      "logCall": "Записать звонок",
+      "addNote": "Добавить заметку",
+      "bookTrial": "Записать на пробный",
+      "convert": "Сделать учеником",
+      "markLost": "Отметить отказ",
+      "edit": "Изменить",
+      "archive": "В архив",
+      "more": "Другие действия",
+      "moveTo": "Этап"
+    },
+    "composer": {
+      "callLabel": "О чём был разговор?",
+      "noteLabel": "Заметка",
+      "saveCall": "Сохранить звонок",
+      "saveNote": "Сохранить заметку"
+    },
+    "timeline": {
+      "title": "История",
+      "empty": "Пока ничего не произошло.",
+      "call": "Звонок",
+      "note": "Заметка",
+      "statusChange": "{from} → {to}",
+      "reason": "Причина: {reason}"
+    },
+    "lost": {
+      "title": "Отметить отказ: {name}?",
+      "body": "Выберите причину. Она сохранится в истории.",
+      "reason": "Причина",
+      "choose": "Выберите причину",
+      "otherLabel": "Что случилось?"
+    },
+    "trial": {
+      "title": "Пробный урок: {name}",
+      "body": "Выберите группу и дату пробного урока.",
+      "group": "Группа",
+      "choose": "Выберите группу",
+      "date": "Дата"
+    },
+    "archive": {
+      "title": "Отправить в архив: {name}?",
+      "body": "Лид скрывается с доски и из списка. История сохраняется.",
+      "done": "Лид в архиве"
+    },
+    "pagination": {
+      "range": "{first}–{last} из {total}",
+      "previous": "Предыдущая страница",
+      "next": "Следующая страница"
+    },
+    "dnd": {
+      "instructions": "Нажмите пробел, чтобы взять лид. Стрелками влево и вправо выберите колонку и нажмите пробел, чтобы отпустить. Escape — отмена.",
+      "pickedUp": "Взят лид: {name}.",
+      "over": "{name} над колонкой «{column}».",
+      "dropped": "{name} перемещён в колонку «{column}».",
+      "cancelled": "Перемещение отменено: {name}."
+    },
+    "errors": {
+      "nameRequired": "Введите имя.",
+      "phoneInvalid": "Введите номер в виде +998 90 123 45 67.",
+      "sourceRequired": "Выберите источник.",
+      "dateInvalid": "Выберите правильную дату.",
+      "tooLong": "Текст слишком длинный.",
+      "lostReasonRequired": "Выберите причину.",
+      "trialGroupRequired": "Выберите группу.",
+      "trialDateRequired": "Выберите дату.",
+      "noteRequired": "Напишите заметку.",
+      "moveNotAllowed": "Этот лид нельзя переместить сюда.",
+      "notFound": "Этого лида больше нет.",
+      "notAllowed": "У вас нет прав на это действие.",
+      "generic": "Что-то пошло не так. Попробуйте ещё раз."
+    }
+  },
   "dev": {
     "title": "Компоненты",
     "newStudent": "Новый ученик",

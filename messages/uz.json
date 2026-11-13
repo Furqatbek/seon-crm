@@ -68,6 +68,144 @@
     "reports": "Hisobot uchun hozircha maʼlumot yoʻq.",
     "settings": "Hozircha sozlamalar yoʻq."
   },
+  "leads": {
+    "newLead": "Yangi lid",
+    "editLead": "Lidni tahrirlash",
+    "searchPlaceholder": "Ism yoki telefon",
+    "followUpToday": "Bugun bogʻlanish kerak",
+    "followUpDue": "Bogʻlanish vaqti keldi",
+    "noSubject": "Fan koʻrsatilmagan",
+    "last30Days": "Oxirgi 30 kun",
+    "noMatches": "Bu filtrlarga mos lid yoʻq.",
+    "clearFilters": "Filtrlarni tozalash",
+    "readOnly": "Bu lid oʻquvchiga aylangan, uni endi oʻzgartirib boʻlmaydi.",
+    "openStudent": "Oʻquvchini ochish",
+    "view": {
+      "label": "Koʻrinish",
+      "board": "Doska",
+      "list": "Roʻyxat"
+    },
+    "filters": {
+      "allSources": "Barcha manbalar",
+      "allStaff": "Barcha xodimlar"
+    },
+    "status": {
+      "new": "Yangi",
+      "contacted": "Bogʻlanildi",
+      "trial": "Sinov darsi",
+      "won": "Yozildi",
+      "lost": "Rad etdi"
+    },
+    "source": {
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "phone_call": "Qoʻngʻiroq",
+      "walk_in": "Oʻzi keldi",
+      "referral": "Tavsiya",
+      "website": "Veb-sayt",
+      "other": "Boshqa"
+    },
+    "lostReason": {
+      "price": "Narx",
+      "schedule": "Dars jadvali",
+      "another_centre": "Boshqa markazni tanladi",
+      "no_answer": "Javob bermayapti",
+      "other": "Boshqa"
+    },
+    "fields": {
+      "name": "Ism",
+      "phone": "Telefon",
+      "source": "Manba",
+      "subject": "Fan",
+      "preferredTime": "Qulay vaqt",
+      "assignedTo": "Masʼul",
+      "nextContact": "Keyingi aloqa",
+      "notes": "Izohlar",
+      "status": "Holat",
+      "created": "Yaratilgan",
+      "trial": "Sinov darsi",
+      "lostReason": "Rad etish sababi",
+      "unassigned": "Hech kim"
+    },
+    "form": {
+      "created": "Lid qoʻshildi",
+      "saved": "Lid saqlandi",
+      "chooseSource": "Manbani tanlang",
+      "duplicateLead": "Bu raqam boshqa lidda bor:",
+      "duplicateStudent": "Bu raqam oʻquvchida bor:"
+    },
+    "actions": {
+      "logCall": "Qoʻngʻiroqni yozish",
+      "addNote": "Izoh qoʻshish",
+      "bookTrial": "Sinov darsiga yozish",
+      "convert": "Oʻquvchiga aylantirish",
+      "markLost": "Rad etdi deb belgilash",
+      "edit": "Tahrirlash",
+      "archive": "Arxivlash",
+      "more": "Boshqa amallar",
+      "moveTo": "Bosqich"
+    },
+    "composer": {
+      "callLabel": "Suhbat nima haqida boʻldi?",
+      "noteLabel": "Izoh",
+      "saveCall": "Qoʻngʻiroqni saqlash",
+      "saveNote": "Izohni saqlash"
+    },
+    "timeline": {
+      "title": "Tarix",
+      "empty": "Hozircha hech narsa boʻlmagan.",
+      "call": "Qoʻngʻiroq",
+      "note": "Izoh",
+      "statusChange": "{from} → {to}",
+      "reason": "Sabab: {reason}"
+    },
+    "lost": {
+      "title": "{name} rad etdi deb belgilansinmi?",
+      "body": "Sababini tanlang. U tarixda saqlanadi.",
+      "reason": "Sabab",
+      "choose": "Sababni tanlang",
+      "otherLabel": "Nima boʻldi?"
+    },
+    "trial": {
+      "title": "{name} uchun sinov darsi",
+      "body": "Sinov darsi guruhi va sanasini tanlang.",
+      "group": "Guruh",
+      "choose": "Guruhni tanlang",
+      "date": "Sana"
+    },
+    "archive": {
+      "title": "{name} arxivlansinmi?",
+      "body": "Lid doska va roʻyxatdan yashiriladi. Tarixi saqlanadi.",
+      "done": "Lid arxivlandi"
+    },
+    "pagination": {
+      "range": "{first}–{last} / {total}",
+      "previous": "Oldingi sahifa",
+      "next": "Keyingi sahifa"
+    },
+    "dnd": {
+      "instructions": "Lidni olish uchun Probel tugmasini bosing. Chap va oʻng strelkalar bilan ustunni tanlang, qoʻyish uchun yana Probelni bosing. Bekor qilish uchun Escape.",
+      "pickedUp": "{name} olindi.",
+      "over": "{name} «{column}» ustuni ustida.",
+      "dropped": "{name} «{column}» ustuniga qoʻyildi.",
+      "cancelled": "{name} koʻchirilishi bekor qilindi."
+    },
+    "errors": {
+      "nameRequired": "Ismni kiriting.",
+      "phoneInvalid": "Raqamni +998 90 123 45 67 koʻrinishida kiriting.",
+      "sourceRequired": "Manbani tanlang.",
+      "dateInvalid": "Toʻgʻri sanani tanlang.",
+      "tooLong": "Matn juda uzun.",
+      "lostReasonRequired": "Sababni tanlang.",
+      "trialGroupRequired": "Guruhni tanlang.",
+      "trialDateRequired": "Sanani tanlang.",
+      "noteRequired": "Izohni yozing.",
+      "moveNotAllowed": "Bu lidni u yerga koʻchirib boʻlmaydi.",
+      "notFound": "Bu lid endi mavjud emas.",
+      "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    }
+  },
   "dev": {
     "title": "Komponentlar",
     "newStudent": "Yangi oʻquvchi",
