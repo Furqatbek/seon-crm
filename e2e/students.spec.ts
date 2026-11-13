@@ -49,17 +49,15 @@ test("a lead is converted into a student, linked both ways", async ({ page }, te
   await choose(page, sheet(page).locator("#student-language"), "Русский");
   await expect(sheet(page).locator("#student-phone-matches")).toHaveCount(0);
 
-  // The Enrol step is shown but waits for Groups.
-  const enrol = sheet(page).getByRole("button", { name: "Enrol in a group" });
-  await expect(enrol).toBeDisabled();
-  // Focus shows the reason on a phone as well as with a keyboard.
-  await enrol.locator("..").focus();
-  await expect(page.getByRole("tooltip")).toContainText("Enrolling opens with the Groups block.");
   await page.screenshot({ path: testInfo.outputPath("convert.png") });
 
   await sheet(page).getByRole("button", { name: "Save" }).click();
 
   // ── The student page ──
+  // Convert continues to the enrol sheet for the new student.
+  await expect(page).toHaveURL(/\/en\/students\/[0-9a-f-]{36}\?enrol=1$/);
+  await expect(sheet(page).getByRole("heading", { name: `Enrol ${name}` })).toBeVisible();
+  await sheet(page).getByRole("button", { name: "Cancel" }).click();
   await expect(page).toHaveURL(/\/en\/students\/[0-9a-f-]{36}$/);
   const studentUrl = page.url();
   const studentId = studentUrl.split("/").pop()!;

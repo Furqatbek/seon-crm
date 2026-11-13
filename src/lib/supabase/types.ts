@@ -538,6 +538,15 @@ isOneToOne: false
 "convert_lead_to_student":
 { Args: { "p_birth_date"?: string,"p_full_name": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_lead_id": string,"p_notes"?: string,"p_parent_name"?: string,"p_parent_phone"?: string,"p_phone": string }; Returns: string
                            },
+"enrol_student":
+{ Args: { "p_charge_mode"?: string,"p_charge_note"?: string,"p_custom_amount"?: number,"p_discount_kind"?: string,"p_discount_value"?: number,"p_group_id": string,"p_joined_on": string,"p_note"?: string,"p_student_id": string }; Returns: string
+                           },
+"generate_all_lessons":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
+"generate_lessons":
+{ Args: { "p_from": string,"p_group_id": string,"p_to": string }; Returns: number
+                           },
 "generate_link_code":
 { Args: Record<PropertyKey, never>; Returns: string
                            },
@@ -550,8 +559,40 @@ isOneToOne: false
 "is_staff":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
+"is_user_request":
+{ Args: Record<PropertyKey, never>; Returns: boolean
+                           },
+"leave_group":
+{ Args: { "p_credit_amount"?: number,"p_credit_note"?: string,"p_enrollment_id": string,"p_left_on": string }; Returns: undefined
+                           },
+"lesson_horizon":
+{ Args: Record<PropertyKey, never>; Returns: string
+                           },
 "mark_student_left":
 { Args: { "p_student_id": string }; Returns: undefined
+                           },
+"propose_first_charge":
+{ Args: { "p_discount_kind"?: string,"p_discount_value"?: number,"p_group_id": string,"p_joined_on": string }; Returns: {
+              "amount": number,"base_amount": number,"billing_month": string,"discount_amount": number,"full_amount": number,"is_prorated": boolean,"lessons_counted": number,"lessons_in_month": number
+            }[]
+                           },
+"rebuild_future_lessons":
+{ Args: { "p_group_id": string }; Returns: number
+                           },
+"restore_lesson":
+{ Args: { "p_lesson_id": string }; Returns: undefined
+                           },
+"round_to_thousand":
+{ Args: { "denominator"?: number,"numerator": number }; Returns: number
+                           },
+"save_attendance":
+{ Args: { "p_lesson_id": string,"p_marks": Json }; Returns: undefined
+                           },
+"tashkent_today":
+{ Args: Record<PropertyKey, never>; Returns: string
+                           },
+"transfer_student":
+{ Args: { "p_charge_mode"?: string,"p_charge_note"?: string,"p_credit_amount"?: number,"p_credit_note"?: string,"p_custom_amount"?: number,"p_discount_kind"?: string,"p_discount_value"?: number,"p_enrollment_id": string,"p_on": string,"p_to_group_id": string }; Returns: string
                            }
           }
           Enums: {

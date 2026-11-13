@@ -8,7 +8,6 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { PhoneMatches, usePhoneMatches } from "@/components/shared/phone-matches";
-import { SoonButton } from "@/components/shared/soon-button";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -57,7 +56,7 @@ function StudentForm({
 }: {
   mode: StudentFormMode;
   onCancel: () => void;
-  onSaved: (id: string) => void;
+  onSaved: (id: string, enrol: boolean) => void;
 }) {
   const t = useTranslations("students");
   const tCommon = useTranslations("common");
@@ -95,7 +94,9 @@ function StudentForm({
   const message = (key: string | undefined) =>
     key ? t(`errors.${key as StudentErrorKey}`) : null;
 
-  const onSubmit = handleSubmit(() => {
+  // Convert always continues to the enrol sheet; a new student only when asked.
+  const submit = (enrol: boolean) =>
+    handleSubmit(() => {
     setFormError(null);
     startTransition(async () => {
       // The server validates the same raw form again.
@@ -104,18 +105,18 @@ function StudentForm({
         const result = await updateStudent(mode.student.id, raw);
         if (!result.ok) return setFormError(result.error);
         toast(t("form.saved"));
-        return onSaved(mode.student.id);
+        return onSaved(mode.student.id, false);
       }
       const result =
         mode.kind === "convert" ? await convertLead(mode.lead.id, raw) : await createStudent(raw);
       if (!result.ok) return setFormError(result.error);
       toast(t(mode.kind === "convert" ? "form.converted" : "form.created"));
-      onSaved(result.data.id);
+      onSaved(result.data.id, enrol || mode.kind === "convert");
     });
   });
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
+    <form onSubmit={submit(false)} noValidate className="flex min-h-0 flex-1 flex-col">
       <SheetBody>
         <Field label={t("fields.name")} htmlFor="student-name" error={message(errors.full_name?.message)}>
           <Input
@@ -202,16 +203,15 @@ function StudentForm({
           <Textarea id="student-notes" {...register("notes")} />
         </Field>
 
-        {mode.kind === "edit" ? null : (
+        {mode.kind === "new" ? (
           <div className="flex flex-col gap-2 border-t border-border pt-4">
             <span className="text-footnote text-text-secondary">{t("form.enrolStep")}</span>
-            {/* The enrol sheet with proration arrives with Groups. */}
-            <SoonButton hint={t("soon.enrol")} className="w-full">
+            <Button disabled={pending} onClick={submit(true)} className="w-full">
               <UserPlus aria-hidden />
-              {t("actions.enrol")}
-            </SoonButton>
+              {t("form.saveAndEnrol")}
+            </Button>
           </div>
-        )}
+        ) : null}
 
         {formError ? (
           <p role="alert" className="text-footnote text-danger">
@@ -224,7 +224,7 @@ function StudentForm({
           {tCommon("cancel")}
         </Button>
         <Button type="submit" variant="primary" disabled={pending}>
-          {tCommon("save")}
+          {mode.kind === "convert" ? t("form.convertAndEnrol") : tCommon("save")}
         </Button>
       </SheetFooter>
     </form>
@@ -239,7 +239,7 @@ export function StudentFormSheet({
 }: {
   mode: StudentFormMode | null;
   onClose: () => void;
-  onSaved: (id: string) => void;
+  onSaved: (id: string, enrol: boolean) => void;
 }) {
   const t = useTranslations("students");
   const title = mode ? t(`form.title.${mode.kind}`) : "";

@@ -160,7 +160,8 @@ export function LeadsScreen({
         onClose={() => setConverting(null)}
         onSaved={(id) => {
           setConverting(null);
-          router.push(`/students/${id}`);
+          // Convert continues to the enrol sheet on the student page.
+          router.push(`/students/${id}?enrol=1`);
         }}
       />
       <MoveDialog move={pendingMove} groups={groups} onClose={() => setPendingMove(null)} />

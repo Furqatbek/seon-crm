@@ -16,6 +16,7 @@ import { useTranslations } from "next-intl";
 import { useOptimistic, useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { EnrolSheet } from "@/components/enrolments/enrol-sheet";
 import { SoonButton } from "@/components/shared/soon-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +42,7 @@ import type { UserRole } from "@/lib/auth";
 import type { BalanceState } from "@/lib/domain/ledger";
 import { useUrlState } from "@/lib/hooks/use-url-state";
 import { archiveStudent, markStudentLeft, setStudentStatus } from "@/lib/students/actions";
+import type { OpenGroup } from "@/lib/groups/queries";
 import type { StudentDetail } from "@/lib/students/queries";
 import { STUDENT_TABS, type StudentErrorKey, type StudentTab } from "@/lib/validation/students";
 
@@ -59,12 +61,20 @@ export function StudentScreen({
   balanceState,
   role,
   tab,
+  openGroups,
+  today,
+  autoEnrol,
   children,
 }: {
   student: StudentDetail;
   balanceState: BalanceState;
   role: UserRole;
   tab: StudentTab;
+  openGroups: OpenGroup[];
+  /** "YYYY-MM-DD" in Tashkent. */
+  today: string;
+  /** Open the enrol sheet straight away (after New student or Convert). */
+  autoEnrol: boolean;
   children: React.ReactNode;
 }) {
   const t = useTranslations("students");
@@ -73,6 +83,7 @@ export function StudentScreen({
   const router = useRouter();
   const { setParams } = useUrlState();
   const [editing, setEditing] = useState(false);
+  const [enrolling, setEnrolling] = useState(autoEnrol);
   const [confirm, setConfirm] = useState<Confirm | null>(null);
   const [pending, startTransition] = useTransition();
   // The tab bar follows the click at once; the content follows when it has loaded.
@@ -109,15 +120,15 @@ export function StudentScreen({
         }
         action={
           <div className="flex flex-wrap items-center gap-2">
-            {/* Enabled with Finance (payments), Groups (enrol) and Notifications (messages). */}
+            {/* Enabled with Finance (payments) and Notifications (messages). */}
             <SoonButton variant="primary" hint={t("soon.payment")}>
               <Wallet aria-hidden />
               {t("actions.takePayment")}
             </SoonButton>
-            <SoonButton hint={t("soon.enrol")}>
+            <Button onClick={() => setEnrolling(true)}>
               <UserPlus aria-hidden />
               {t("actions.enrol")}
-            </SoonButton>
+            </Button>
             <SoonButton hint={t("soon.message")}>
               <MessageSquare aria-hidden />
               {t("actions.sendMessage")}
@@ -193,6 +204,25 @@ export function StudentScreen({
         </TabsList>
         <TabsContent value={shownTab}>{children}</TabsContent>
       </Tabs>
+
+      <EnrolSheet
+        target={
+          enrolling
+            ? { kind: "enrol", student: { id: student.id, full_name: student.full_name, phone: student.phone } }
+            : null
+        }
+        groups={openGroups.filter(
+          (group) =>
+            !student.enrolments.some(
+              (enrolment) => enrolment.status === "active" && enrolment.group?.id === group.id,
+            ),
+        )}
+        today={today}
+        onClose={() => {
+          setEnrolling(false);
+          if (autoEnrol) setParams({ enrol: null });
+        }}
+      />
 
       <StudentFormSheet
         mode={editing ? { kind: "edit", student } : null}

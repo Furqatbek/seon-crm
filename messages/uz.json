@@ -24,6 +24,10 @@
     "phoneMatch": {
       "lead": "Bu raqam boshqa lidda bor:",
       "student": "Bu raqam oʻquvchida bor:"
+    },
+    "month": {
+      "previous": "Oldingi oy",
+      "next": "Keyingi oy"
     }
   },
   "nav": {
@@ -273,7 +277,9 @@
       "enrolStep": "Keyingi qadam",
       "created": "Oʻquvchi qoʻshildi",
       "saved": "Oʻquvchi saqlandi",
-      "converted": "Lid oʻquvchiga aylantirildi"
+      "converted": "Lid oʻquvchiga aylantirildi",
+      "saveAndEnrol": "Saqlash va guruhga yozish",
+      "convertAndEnrol": "Saqlash va yozish"
     },
     "actions": {
       "takePayment": "Toʻlov qabul qilish",
@@ -288,7 +294,6 @@
     },
     "soon": {
       "payment": "Toʻlovlar «Moliya» boʻlimi bilan birga ochiladi.",
-      "enrol": "Guruhga yozish «Guruhlar» boʻlimi bilan birga ochiladi.",
       "message": "Xabarlar bildirishnomalar bilan birga ochiladi."
     },
     "done": {
@@ -392,6 +397,218 @@
       "tooLong": "Matn juda uzun.",
       "leadNotOpen": "Bu lid allaqachon yopilgan, uni oʻquvchiga aylantirib boʻlmaydi.",
       "notFound": "Bu oʻquvchi endi mavjud emas.",
+      "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    }
+  },
+  "groups": {
+    "newGroup": "Yangi guruh",
+    "editGroup": "Guruhni tahrirlash",
+    "searchPlaceholder": "Nomi yoki fan",
+    "noMatches": "Bu filtrlarga mos guruh yoʻq.",
+    "studentCount": "{count} ta oʻquvchi",
+    "tabs": {
+      "today": "Bugun",
+      "all": "Barcha guruhlar"
+    },
+    "groupTabs": {
+      "students": "Oʻquvchilar",
+      "attendance": "Davomat",
+      "lessons": "Darslar",
+      "trials": "Sinov darslari"
+    },
+    "status": {
+      "forming": "Yigʻilmoqda",
+      "active": "Faol",
+      "finished": "Tugagan"
+    },
+    "filters": {
+      "allStatuses": "Barcha holatlar",
+      "clear": "Filtrlarni tozalash"
+    },
+    "fields": {
+      "name": "Nomi",
+      "subject": "Fan",
+      "level": "Daraja",
+      "teacher": "Oʻqituvchi",
+      "monthlyFee": "Oylik toʻlov",
+      "days": "Kunlar",
+      "startTime": "Boshlanish vaqti",
+      "duration": "Davomiyligi, daqiqa",
+      "room": "Xona",
+      "capacity": "Oʻrinlar soni",
+      "startDate": "Boshlanish sanasi",
+      "status": "Holat",
+      "students": "Oʻquvchilar",
+      "daysAndTime": "Kunlar va vaqt",
+      "joined": "Qoʻshilgan",
+      "balance": "Balans",
+      "attendance": "Davomat",
+      "phone": "Telefon"
+    },
+    "form": {
+      "created": "Guruh qoʻshildi",
+      "saved": "Guruh saqlandi",
+      "chooseTeacher": "Oʻqituvchini tanlang",
+      "feeHint": "Yangi narx keyingi oydan amal qiladi va yozilgan hisoblarni oʻzgartirmaydi.",
+      "scheduleHint": "Kunlar, vaqt, oʻqituvchi yoki sanalar oʻzgarsa, davomati belgilanmagan kelgusi darslar qayta yaratiladi."
+    },
+    "today": {
+      "empty": "Bugun darslar yoʻq.",
+      "markAttendance": "Davomatni belgilash",
+      "marked": "Belgilandi"
+    },
+    "lesson": {
+      "date": "Sana",
+      "time": "Vaqt",
+      "open": "Darsni ochish",
+      "actions": "{date} darsi uchun amallar",
+      "saved": "Davomat saqlandi",
+      "noStudents": "Bu kuni guruhda hech kim boʻlmagan.",
+      "substitute": "Oʻrinbosar",
+      "setSubstitute": "Oʻrinbosar tayinlash",
+      "saveSubstitute": "Saqlash",
+      "substituteTitle": "{date} darsini kim oʻtadi?",
+      "substituteBody": "Faqat shu dars oʻzgaradi. Dars uchun toʻlov uni oʻtgan oʻqituvchiga yoziladi.",
+      "substituteSaved": "Dars oʻqituvchisi saqlandi",
+      "cancel": "Darsni bekor qilish",
+      "cancelTitle": "{date} darsi bekor qilinsinmi?",
+      "cancelBody": "Bekor qilingan dars oʻqituvchi toʻlovida ham, toʻliq boʻlmagan oy hisobida ham sanalmaydi.",
+      "reason": "Sabab",
+      "cancelled": "Dars bekor qilindi",
+      "restore": "Darsni tiklash",
+      "restored": "Dars tiklandi",
+      "locked": {
+        "cancelled": "Bu dars bekor qilingan. Davomatni belgilash uchun uni tiklang.",
+        "future": "Bu dars hali oʻtmagan.",
+        "tooOld": "Bu darsga 7 kundan koʻp boʻldi. Davomatni faqat rahbar oʻzgartira oladi."
+      },
+      "mark": {
+        "present": "Keldi",
+        "late": "Kechikdi",
+        "absent": "Kelmadi",
+        "excused": "Sababli"
+      },
+      "statuses": {
+        "scheduled": "Rejalashtirilgan",
+        "held": "Oʻtildi",
+        "cancelled": "Bekor qilindi"
+      }
+    },
+    "attendanceGrid": {
+      "student": "Oʻquvchi",
+      "openLesson": "{date} darsini ochish",
+      "notMarked": "Belgilanmagan",
+      "notEnrolled": "Guruhda emas",
+      "noLessons": "Bu oyda darslar yoʻq.",
+      "noStudents": "Bu oyda oʻquvchilar yoʻq."
+    },
+    "trials": {
+      "empty": "Bu hafta sinov darsiga keluvchilar yoʻq.",
+      "thisWeek": "«Lidlar» boʻlimidan shu haftaga yozilgan sinov darslari."
+    },
+    "studentsTab": {
+      "empty": "Bu guruhda hali oʻquvchilar yoʻq.",
+      "rowActions": "{name} uchun amallar",
+      "transfer": "Boshqa guruhga oʻtkazish",
+      "leave": "Guruhdan chiqarish"
+    },
+    "actions": {
+      "addStudent": "Oʻquvchi qoʻshish",
+      "edit": "Tahrirlash",
+      "archive": "Arxivlash",
+      "more": "Boshqa amallar"
+    },
+    "archive": {
+      "title": "{name} arxivlansinmi?",
+      "body": "Guruh roʻyxatlardan yashiriladi va yangi darslar yaratilmaydi. Tarixi saqlanadi.",
+      "done": "Guruh arxivlandi"
+    },
+    "enrol": {
+      "titleGroup": "{group} guruhiga oʻquvchi qoʻshish",
+      "titleStudent": "{student}ni guruhga yozish",
+      "transferTitle": "{student}ni oʻtkazish",
+      "hint": "Birinchi hisob saqlanganda yaratiladi.",
+      "transferHint": "Oʻquvchi {group} guruhidan chiqadi va shu kuni yangi guruhga qoʻshiladi.",
+      "student": "Oʻquvchi",
+      "findStudent": "Ism yoki telefon",
+      "noStudentsFound": "Oʻquvchilar topilmadi.",
+      "change": "Oʻzgartirish",
+      "group": "Guruh",
+      "toGroup": "Yangi guruh",
+      "chooseGroup": "Guruhni tanlang",
+      "chooseGroupFirst": "Birinchi hisobni koʻrish uchun guruhni tanlang.",
+      "groupFull": "Guruh toʻlgan: {capacity} tadan {students} ta.",
+      "joinDate": "Qoʻshilish sanasi",
+      "transferDate": "Oʻtkazish sanasi",
+      "discount": "Chegirma",
+      "discountNone": "Chegirmasiz",
+      "discountPercent": "Foiz",
+      "discountAmount": "Qatʼiy summa",
+      "discountPercentValue": "Chegirma, %",
+      "discountAmountValue": "Chegirma, soʻm",
+      "note": "Izoh",
+      "firstCharge": "Birinchi hisob",
+      "calculating": "Hisoblanmoqda…",
+      "mode": {
+        "prorated": "Qolgan darslar uchun",
+        "full": "Toʻliq oy uchun",
+        "custom": "Boshqa summa"
+      },
+      "proratedDetail": "{total} darsdan {counted} tasi",
+      "fullDetail": "Qoʻshilish sanasidan qatʼi nazar butun oy",
+      "beforeFirst": "Oyning birinchi darsidan oldin qoʻshiladi",
+      "nothing": "Bu oyda hech narsa",
+      "nothingDetail": "Bu oyda dars qolmagan. Birinchi hisob keyingi oyda yoziladi.",
+      "customDetail": "Summani kiriting va sababini yozing",
+      "customAmount": "Summa, soʻm",
+      "customNote": "Nega shu summa",
+      "creditFor": "{group} uchun qaytarish",
+      "creditHint": "Ixtiyoriy. Hech narsa avtomatik qaytarilmaydi; qaytarish oʻquvchining qarzini kamaytiradi.",
+      "creditAmount": "Qaytarish, soʻm",
+      "creditNote": "Qaytarish sababi",
+      "save": "Yozish",
+      "saveTransfer": "Oʻtkazish",
+      "done": "Oʻquvchi guruhga yozildi",
+      "transferDone": "Oʻquvchi oʻtkazildi"
+    },
+    "leave": {
+      "title": "{student} {group} guruhidan chiqadi",
+      "body": "Oʻquvchi markazda qoladi, lekin endi bu guruhda emas.",
+      "date": "Chiqish sanasi",
+      "credit": "Qaytarish",
+      "save": "Guruhdan chiqarish",
+      "done": "Oʻquvchi guruhdan chiqdi"
+    },
+    "errors": {
+      "nameRequired": "Nomini kiriting.",
+      "subjectRequired": "Fanni kiriting.",
+      "teacherRequired": "Oʻqituvchini tanlang.",
+      "feeInvalid": "Oylik toʻlovni butun soʻmda kiriting.",
+      "daysRequired": "Kamida bitta kunni tanlang.",
+      "timeInvalid": "Boshlanish vaqtini kiriting.",
+      "durationInvalid": "Davomiylikni 15 dan 480 daqiqagacha kiriting.",
+      "capacityInvalid": "0 dan katta son kiriting yoki boʻsh qoldiring.",
+      "dateInvalid": "Toʻgʻri sanani tanlang.",
+      "tooLong": "Matn juda uzun.",
+      "studentRequired": "Oʻquvchini tanlang.",
+      "groupRequired": "Guruhni tanlang.",
+      "discountInvalid": "Chegirmani kiriting: foiz uchun 1–100 yoki 0 dan katta summa.",
+      "customAmountInvalid": "Summani butun soʻmda kiriting.",
+      "chargeNoteRequired": "Nega shu summa ekanini yozing.",
+      "creditInvalid": "Qaytarishni butun soʻmda kiriting.",
+      "creditNoteRequired": "Qaytarish sababini yozing.",
+      "reasonRequired": "Sababni yozing.",
+      "noStudents": "Belgilash uchun hech kim yoʻq.",
+      "alreadyEnrolled": "Oʻquvchi allaqachon bu guruhda.",
+      "groupClosed": "Bu guruh tugagan yoki arxivlangan.",
+      "dateOutOfRange": "Shu oy boshidan keyingi oy oxirigacha boʻlgan sanani tanlang; chiqish sanasi kelajakda boʻlmasin.",
+      "lessonCancelled": "Bu dars bekor qilingan.",
+      "lessonFuture": "Bu dars hali oʻtmagan.",
+      "notInGroup": "Oʻquvchi bu kuni guruhda emas.",
+      "sameGroup": "Oʻquvchi allaqachon bu guruhda.",
+      "attendanceLocked": "Bu darsga 7 kundan koʻp boʻldi. Davomatni faqat rahbar oʻzgartira oladi.",
+      "notFound": "Bu endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
     }

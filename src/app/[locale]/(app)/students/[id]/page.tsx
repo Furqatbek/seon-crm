@@ -14,6 +14,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { attendanceRate } from "@/lib/domain/attendance";
 import { balanceState, buildLedger } from "@/lib/domain/ledger";
 import { tashkentDate } from "@/lib/domain/time";
+import { getOpenGroups } from "@/lib/groups/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
 import {
   getCentreBilling,
@@ -77,9 +78,13 @@ async function Student({ params, searchParams }: Props) {
 
   const user = await getCurrentUser();
   if (!user) return null;
-  const { tab, month } = studentSearchSchema.parse(firstValues(await searchParams));
+  const { tab, month, enrol } = studentSearchSchema.parse(firstValues(await searchParams));
 
-  const [student, billing] = await Promise.all([getStudent(id), getCentreBilling()]);
+  const [student, billing, openGroups] = await Promise.all([
+    getStudent(id),
+    getCentreBilling(),
+    getOpenGroups(),
+  ]);
   if (!student) notFound();
 
   const today = tashkentDate(new Date());
@@ -95,8 +100,18 @@ async function Student({ params, searchParams }: Props) {
       })}
       role={user.role}
       tab={tab}
+      openGroups={openGroups}
+      today={today}
+      autoEnrol={enrol === "1"}
     >
-      {tab === "overview" ? <OverviewTab student={student} botUsername={billing.botUsername} /> : null}
+      {tab === "overview" ? (
+        <OverviewTab
+          student={student}
+          botUsername={billing.botUsername}
+          openGroups={openGroups}
+          today={today}
+        />
+      ) : null}
       {tab === "ledger" ? <Ledger id={student.id} /> : null}
       {tab === "attendance" ? (
         <Attendance

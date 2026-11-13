@@ -246,7 +246,11 @@ select
 from seed_cfg c
 join public.groups g on g.status = 'active'
 cross join generate_series(c.m2::timestamp, (c.today + 30)::timestamp, interval '1 day') as d
-where extract(isodow from d)::smallint = any (g.days);
+where extract(isodow from d)::smallint = any (g.days)
+-- Creating a group already generated this month's lessons as scheduled; the
+-- demo history replaces their status.
+on conflict (group_id, lesson_date, start_time) do update
+  set status = excluded.status, cancel_reason = excluded.cancel_reason;
 
 -- Zilola Hamidova stood in for two of Rustam Qodirov's lessons last month.
 update public.lessons l

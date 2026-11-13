@@ -25,3 +25,31 @@ export function tashkentMonth(now: Date, offset = 0): { start: string; end: stri
   const first = (index: number) => new Date(Date.UTC(year, index, 1)).toISOString().slice(0, 10);
   return { start: first(month - 1 + offset), end: first(month + offset) };
 }
+
+/**
+ * The Monday-to-Sunday week (weeks start on Monday) that contains `now` in
+ * Tashkent, as date strings: `start` is the Monday, `end` the Monday after.
+ */
+export function tashkentWeek(now: Date): { start: string; end: string } {
+  const today = new Date(`${tashkentDate(now)}T00:00:00Z`);
+  const sinceMonday = (today.getUTCDay() + 6) % 7;
+  const monday = new Date(today.getTime() - sinceMonday * DAY_MS);
+  const day = (offset: number) => new Date(monday.getTime() + offset * DAY_MS).toISOString().slice(0, 10);
+  return { start: day(0), end: day(7) };
+}
+
+/** A date string moved by whole days. */
+export function addDays(day: string, days: number): string {
+  return new Date(new Date(`${day}T00:00:00Z`).getTime() + days * DAY_MS).toISOString().slice(0, 10);
+}
+
+/** "YYYY-MM" moved by whole months. */
+export function shiftMonth(month: string, by: number): string {
+  const [year, index] = month.split("-").map(Number);
+  return new Date(Date.UTC(year, index - 1 + by, 1)).toISOString().slice(0, 7);
+}
+
+/** ISO weekday of a date string: 1 = Monday … 7 = Sunday. */
+export function isoWeekday(day: string): number {
+  return ((new Date(`${day}T00:00:00Z`).getUTCDay() + 6) % 7) + 1;
+}

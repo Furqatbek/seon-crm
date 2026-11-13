@@ -13,7 +13,9 @@ function Toaster(props: ToasterProps) {
         unstyled: true,
         classNames: {
           toast:
-            "flex w-full items-center justify-center gap-2 rounded-full bg-text px-5 py-2.5 text-body text-bg shadow-float",
+            // pointer-events-none: a toast has no actions, so it must never block the
+            // buttons underneath it (a sheet's footer on a phone).
+            "pointer-events-none! flex w-full items-center justify-center gap-2 rounded-full bg-text px-5 py-2.5 text-body text-bg shadow-float",
           title: "font-medium",
           description: "text-footnote",
           icon: "flex items-center",

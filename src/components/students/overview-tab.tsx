@@ -4,12 +4,16 @@ import { Check, Copy, QrCode as QrIcon, Send } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { EnrolSheet, type EnrolTarget } from "@/components/enrolments/enrol-sheet";
+import { LeaveSheet, type LeaveTarget } from "@/components/enrolments/leave-sheet";
+import { EnrolmentMenu } from "@/components/groups/enrolment-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MoneyText } from "@/components/ui/money-text";
 import { StatusPill } from "@/components/ui/status-pill";
 import { Link } from "@/i18n/navigation";
 import { formatDay, formatPhone } from "@/lib/format";
+import type { OpenGroup } from "@/lib/groups/queries";
 import type { StudentDetail } from "@/lib/students/queries";
 
 import { QrCode } from "./qr-code";
@@ -83,11 +87,24 @@ function TelegramCard({ student, botUsername }: { student: StudentDetail; botUse
 }
 
 /** Contacts, groups with fee and discount, and the Telegram link. */
-export function OverviewTab({ student, botUsername }: { student: StudentDetail; botUsername: string | null }) {
+export function OverviewTab({
+  student,
+  botUsername,
+  openGroups,
+  today,
+}: {
+  student: StudentDetail;
+  botUsername: string | null;
+  openGroups: OpenGroup[];
+  today: string;
+}) {
   const t = useTranslations("students");
   const tDays = useTranslations("common.weekdays");
   const tLanguage = useTranslations("language");
   const locale = useLocale();
+  const [transfer, setTransfer] = useState<EnrolTarget | null>(null);
+  const [leave, setLeave] = useState<LeaveTarget | null>(null);
+  const person = { id: student.id, full_name: student.full_name, phone: student.phone };
 
   return (
     <div className="grid gap-8 lg:grid-cols-2">
@@ -184,6 +201,29 @@ export function OverviewTab({ student, botUsername }: { student: StudentDetail; 
                     ) : null}
                   </span>
                 ) : null}
+                {enrolment.status === "active" && enrolment.group ? (
+                  <EnrolmentMenu
+                    label={enrolment.group.name}
+                    onTransfer={() =>
+                      setTransfer({
+                        kind: "transfer",
+                        enrollmentId: enrolment.id,
+                        student: person,
+                        fromGroup: { id: enrolment.group!.id, name: enrolment.group!.name },
+                        discountKind: enrolment.discount_kind,
+                        discountValue: enrolment.discount_value,
+                      })
+                    }
+                    onLeave={() =>
+                      setLeave({
+                        enrollmentId: enrolment.id,
+                        student: person,
+                        group: { name: enrolment.group!.name },
+                        joinedOn: enrolment.joined_on,
+                      })
+                    }
+                  />
+                ) : null}
               </li>
             ))}
           </ul>
@@ -193,6 +233,9 @@ export function OverviewTab({ student, botUsername }: { student: StudentDetail; 
       <div className="lg:col-span-2">
         <TelegramCard student={student} botUsername={botUsername} />
       </div>
+
+      <EnrolSheet target={transfer} groups={openGroups} today={today} onClose={() => setTransfer(null)} />
+      <LeaveSheet target={leave} today={today} onClose={() => setLeave(null)} />
     </div>
   );
 }

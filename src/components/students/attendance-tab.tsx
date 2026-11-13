@@ -12,14 +12,14 @@ import { useUrlState } from "@/lib/hooks/use-url-state";
 import type { StudentLesson } from "@/lib/students/queries";
 import { cn } from "@/lib/utils";
 
-const MARK_ICON: Record<AttendanceStatus, LucideIcon> = {
+export const MARK_ICON: Record<AttendanceStatus, LucideIcon> = {
   present: Check,
   late: Clock,
   absent: X,
   excused: Minus,
 };
 
-const MARK_CLASS: Record<AttendanceStatus, string> = {
+export const MARK_CLASS: Record<AttendanceStatus, string> = {
   present: "bg-success-tint text-success",
   late: "bg-warning-tint text-warning",
   absent: "bg-danger-tint text-danger",

@@ -297,9 +297,9 @@ export function StudentsScreen({
       <StudentFormSheet
         mode={form}
         onClose={() => setForm(null)}
-        onSaved={(id) => {
+        onSaved={(id, enrol) => {
           setForm(null);
-          open(id);
+          router.push(enrol ? `/students/${id}?enrol=1` : `/students/${id}`);
         }}
       />
     </>

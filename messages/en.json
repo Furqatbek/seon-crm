@@ -24,6 +24,10 @@
     "phoneMatch": {
       "lead": "A lead already has this number:",
       "student": "A student already has this number:"
+    },
+    "month": {
+      "previous": "Previous month",
+      "next": "Next month"
     }
   },
   "nav": {
@@ -273,7 +277,9 @@
       "enrolStep": "Next step",
       "created": "Student added",
       "saved": "Student saved",
-      "converted": "Lead converted to a student"
+      "converted": "Lead converted to a student",
+      "saveAndEnrol": "Save and enrol in a group",
+      "convertAndEnrol": "Save and enrol"
     },
     "actions": {
       "takePayment": "Take payment",
@@ -288,7 +294,6 @@
     },
     "soon": {
       "payment": "Payments open with the Finance block.",
-      "enrol": "Enrolling opens with the Groups block.",
       "message": "Messages open with notifications."
     },
     "done": {
@@ -392,6 +397,218 @@
       "tooLong": "This text is too long.",
       "leadNotOpen": "This lead is already closed and cannot be converted.",
       "notFound": "This student no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "groups": {
+    "newGroup": "New group",
+    "editGroup": "Edit group",
+    "searchPlaceholder": "Name or subject",
+    "noMatches": "No groups match these filters.",
+    "studentCount": "{count, plural, one {# student} other {# students}}",
+    "tabs": {
+      "today": "Today",
+      "all": "All groups"
+    },
+    "groupTabs": {
+      "students": "Students",
+      "attendance": "Attendance",
+      "lessons": "Lessons",
+      "trials": "Trials"
+    },
+    "status": {
+      "forming": "Forming",
+      "active": "Active",
+      "finished": "Finished"
+    },
+    "filters": {
+      "allStatuses": "All statuses",
+      "clear": "Clear filters"
+    },
+    "fields": {
+      "name": "Name",
+      "subject": "Subject",
+      "level": "Level",
+      "teacher": "Teacher",
+      "monthlyFee": "Monthly fee",
+      "days": "Days",
+      "startTime": "Start time",
+      "duration": "Duration, minutes",
+      "room": "Room",
+      "capacity": "Capacity",
+      "startDate": "Start date",
+      "status": "Status",
+      "students": "Students",
+      "daysAndTime": "Days and time",
+      "joined": "Joined",
+      "balance": "Balance",
+      "attendance": "Attendance",
+      "phone": "Phone"
+    },
+    "form": {
+      "created": "Group added",
+      "saved": "Group saved",
+      "chooseTeacher": "Choose a teacher",
+      "feeHint": "A changed fee applies from the next billing month, never to fees already charged.",
+      "scheduleHint": "Changing the days, time, teacher or dates rebuilds future lessons that have no attendance yet."
+    },
+    "today": {
+      "empty": "No lessons today.",
+      "markAttendance": "Mark attendance",
+      "marked": "Marked"
+    },
+    "lesson": {
+      "date": "Date",
+      "time": "Time",
+      "open": "Open the lesson",
+      "actions": "Actions for the lesson on {date}",
+      "saved": "Attendance saved",
+      "noStudents": "Nobody was in the group on this day.",
+      "substitute": "Substitute",
+      "setSubstitute": "Set substitute",
+      "saveSubstitute": "Save",
+      "substituteTitle": "Who teaches the lesson on {date}?",
+      "substituteBody": "Only this lesson changes. Pay per lesson goes to whoever taught it.",
+      "substituteSaved": "Teacher for the lesson saved",
+      "cancel": "Cancel lesson",
+      "cancelTitle": "Cancel the lesson on {date}?",
+      "cancelBody": "A cancelled lesson is not counted for per-lesson pay or for proration.",
+      "reason": "Reason",
+      "cancelled": "Lesson cancelled",
+      "restore": "Restore lesson",
+      "restored": "Lesson restored",
+      "locked": {
+        "cancelled": "This lesson is cancelled. Restore it to mark attendance.",
+        "future": "This lesson has not happened yet.",
+        "tooOld": "This lesson is more than 7 days old. Only the owner can change its attendance."
+      },
+      "mark": {
+        "present": "Present",
+        "late": "Late",
+        "absent": "Absent",
+        "excused": "Excused"
+      },
+      "statuses": {
+        "scheduled": "Scheduled",
+        "held": "Held",
+        "cancelled": "Cancelled"
+      }
+    },
+    "attendanceGrid": {
+      "student": "Student",
+      "openLesson": "Open the lesson on {date}",
+      "notMarked": "Not marked",
+      "notEnrolled": "Not in the group",
+      "noLessons": "No lessons this month.",
+      "noStudents": "No students in this month."
+    },
+    "trials": {
+      "empty": "No trial visitors this week.",
+      "thisWeek": "Trial lessons booked for this week, from Leads."
+    },
+    "studentsTab": {
+      "empty": "No students in this group yet.",
+      "rowActions": "Actions for {name}",
+      "transfer": "Transfer to another group",
+      "leave": "Leave group"
+    },
+    "actions": {
+      "addStudent": "Add student",
+      "edit": "Edit",
+      "archive": "Archive",
+      "more": "More actions"
+    },
+    "archive": {
+      "title": "Archive {name}?",
+      "body": "The group is hidden from lists and gets no more lessons. Its history is kept.",
+      "done": "Group archived"
+    },
+    "enrol": {
+      "titleGroup": "Add a student to {group}",
+      "titleStudent": "Enrol {student}",
+      "transferTitle": "Transfer {student}",
+      "hint": "The first fee is created when you save.",
+      "transferHint": "The student leaves {group} and joins the new group on the same date.",
+      "student": "Student",
+      "findStudent": "Name or phone",
+      "noStudentsFound": "No students found.",
+      "change": "Change",
+      "group": "Group",
+      "toGroup": "New group",
+      "chooseGroup": "Choose a group",
+      "chooseGroupFirst": "Choose a group to see the first fee.",
+      "groupFull": "This group is full: {students} of {capacity}.",
+      "joinDate": "Join date",
+      "transferDate": "Transfer date",
+      "discount": "Discount",
+      "discountNone": "No discount",
+      "discountPercent": "Percent",
+      "discountAmount": "Fixed amount",
+      "discountPercentValue": "Discount, %",
+      "discountAmountValue": "Discount, soʻm",
+      "note": "Note",
+      "firstCharge": "First fee",
+      "calculating": "Calculating…",
+      "mode": {
+        "prorated": "Prorated",
+        "full": "Full month",
+        "custom": "Custom amount"
+      },
+      "proratedDetail": "{counted} of {total} lessons",
+      "fullDetail": "The whole month, whatever the join date",
+      "beforeFirst": "Joins before the month's first lesson",
+      "nothing": "Nothing this month",
+      "nothingDetail": "No lessons are left this month. The first fee comes next month.",
+      "customDetail": "Type the amount and say why",
+      "customAmount": "Amount, soʻm",
+      "customNote": "Why this amount",
+      "creditFor": "Credit for {group}",
+      "creditHint": "Optional. Nothing is refunded automatically; a credit lowers what the student owes.",
+      "creditAmount": "Credit, soʻm",
+      "creditNote": "Why the credit",
+      "save": "Enrol",
+      "saveTransfer": "Transfer",
+      "done": "Student enrolled",
+      "transferDone": "Student transferred"
+    },
+    "leave": {
+      "title": "{student} leaves {group}",
+      "body": "The student stays in the centre but is no longer in this group.",
+      "date": "Leave date",
+      "credit": "Credit",
+      "save": "Leave group",
+      "done": "Student left the group"
+    },
+    "errors": {
+      "nameRequired": "Enter the name.",
+      "subjectRequired": "Enter the subject.",
+      "teacherRequired": "Choose a teacher.",
+      "feeInvalid": "Enter the monthly fee in whole soʻm.",
+      "daysRequired": "Choose at least one day.",
+      "timeInvalid": "Enter the start time.",
+      "durationInvalid": "Enter a duration from 15 to 480 minutes.",
+      "capacityInvalid": "Enter a capacity above 0, or leave it empty.",
+      "dateInvalid": "Choose a valid date.",
+      "tooLong": "This text is too long.",
+      "studentRequired": "Choose a student.",
+      "groupRequired": "Choose a group.",
+      "discountInvalid": "Enter a discount: 1–100 for percent, or an amount above 0.",
+      "customAmountInvalid": "Enter the amount in whole soʻm.",
+      "chargeNoteRequired": "Say why this amount is charged.",
+      "creditInvalid": "Enter the credit in whole soʻm.",
+      "creditNoteRequired": "Say why the credit is given.",
+      "reasonRequired": "Write the reason.",
+      "noStudents": "There is nobody to mark.",
+      "alreadyEnrolled": "The student is already in this group.",
+      "groupClosed": "This group is finished or archived.",
+      "dateOutOfRange": "Choose a date from the start of this month to the end of next month, and not in the future for leaving.",
+      "lessonCancelled": "This lesson is cancelled.",
+      "lessonFuture": "This lesson has not happened yet.",
+      "notInGroup": "A student is not in this group on that day.",
+      "sameGroup": "The student is already in this group.",
+      "attendanceLocked": "This lesson is more than 7 days old. Only the owner can change its attendance.",
+      "notFound": "This no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."
     }

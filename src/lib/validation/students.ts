@@ -76,6 +76,8 @@ export type StudentTab = (typeof STUDENT_TABS)[number];
 /** URL state of /students/[id]. */
 export const studentSearchSchema = z.object({
   tab: z.enum(STUDENT_TABS).catch("overview"),
+  // Set after New student or Convert: opens the enrol sheet.
+  enrol: z.literal("1").optional().catch(undefined),
   // Attendance month, "YYYY-MM".
   month: z
     .string()
