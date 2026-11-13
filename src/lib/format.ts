@@ -31,6 +31,48 @@ export function formatMoney(amount: bigint | number, locale: Locale): string {
   }
 }
 
+const AXIS_UNITS: Record<Locale, { million: string; thousand: string }> = {
+  en: { million: "M", thousand: "K" },
+  ru: { million: " млн", thousand: " тыс." },
+  uz: { million: " mln", thousand: " ming" },
+};
+
+/**
+ * Whole soʻm shortened for a chart axis, where the full amount does not fit:
+ * 45000000 → en "45M", ru "45 млн", uz "45 mln"; 2500000 → "2.5M"; 500000 → "500K".
+ * Axis ticks only: every amount a person reads off is written by formatMoney().
+ */
+export function formatMoneyAxis(amount: number, locale: Locale): string {
+  if (!Number.isSafeInteger(amount)) throw new RangeError(`formatMoneyAxis expects whole soʻm, got ${amount}`);
+  const sign = amount < 0 ? MINUS : "";
+  const value = Math.abs(amount);
+  const units = AXIS_UNITS[locale];
+  const decimal = locale === "en" ? "." : ",";
+  const short = (divisor: number) => {
+    // One decimal at most, cut and not rounded up, written without floats.
+    const tenths = Math.floor((value * 10) / divisor);
+    return tenths % 10 === 0 ? String(tenths / 10) : `${Math.floor(tenths / 10)}${decimal}${tenths % 10}`;
+  };
+  if (value >= 1_000_000) return `${sign}${short(1_000_000)}${units.million}`;
+  if (value >= 1_000) return `${sign}${short(1_000)}${units.thousand}`;
+  return `${sign}${value}`;
+}
+
+/** A rate with one decimal: 92.8 → en "92.8%", ru and uz "92,8%". */
+export function formatPercent(value: number, locale: Locale): string {
+  const tenths = Math.round(value * 10);
+  const whole = Math.trunc(tenths / 10);
+  const rest = Math.abs(tenths % 10);
+  const sign = tenths < 0 && whole === 0 ? MINUS : "";
+  return `${sign}${String(whole).replace("-", MINUS)}${rest === 0 ? "" : `${locale === "en" ? "." : ","}${rest}`}%`;
+}
+
+/** A month for a chart axis, from "YYYY-MM" or "YYYY-MM-01": en "Nov 26", ru "нояб. 26", uz "noy 26". */
+export function formatMonthShort(month: string, locale: Locale): string {
+  const [year, index] = month.split("-").map(Number);
+  return `${MONTHS_SHORT_ALONE[locale][index - 1]} ${String(year).slice(2)}`;
+}
+
 /** Whole soʻm as the starting value of a money input: 600000 → "600 000". */
 export function formatMoneyInput(amount: number): string {
   if (!Number.isSafeInteger(amount) || amount < 0) {
@@ -72,6 +114,13 @@ const MONTHS: Record<Locale, { short: string[]; long: string[] }> = {
       "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr",
     ],
   },
+};
+
+// Months standing alone, short: Russian needs the nominative ("май", not "мая").
+const MONTHS_SHORT_ALONE: Record<Locale, string[]> = {
+  en: MONTHS.en.short,
+  ru: ["янв.", "февр.", "март", "апр.", "май", "июнь", "июль", "авг.", "сент.", "окт.", "нояб.", "дек."],
+  uz: MONTHS.uz.short,
 };
 
 const TASHKENT_OFFSET_MS = 5 * 60 * 60 * 1000;

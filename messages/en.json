@@ -961,5 +961,84 @@
     "archiveBody": "The student is hidden from lists. Payments and attendance are kept.",
     "noMatches": "No students match these filters.",
     "clearFilters": "Clear filters"
+  },
+  "reports": {
+    "period": {
+      "label": "Period",
+      "this": "This month",
+      "last": "Last month",
+      "3": "Last 3 months",
+      "6": "Last 6 months",
+      "12": "Last 12 months",
+      "custom": "Custom range",
+      "from": "From",
+      "to": "To"
+    },
+    "kpi": {
+      "collected": "Collected",
+      "costs": "Expenses + salaries",
+      "profit": "Profit",
+      "activeStudents": "Active students",
+      "newLeads": "New leads",
+      "leadConversion": "Lead conversion",
+      "totalDebt": "Debt today",
+      "attendanceRate": "Attendance rate"
+    },
+    "exportCsv": "Export CSV",
+    "exportCsvFor": "Export CSV: {chart}",
+    "empty": "Nothing to show for this period.",
+    "month": "Month",
+    "money": {
+      "title": "Collected vs expenses by month",
+      "collected": "Collected",
+      "costs": "Expenses + salaries",
+      "expenses": "Expenses",
+      "salaries": "Salaries"
+    },
+    "revenue": {
+      "title": "Revenue",
+      "by": "Revenue by",
+      "group": "By group",
+      "subject": "By subject",
+      "groupColumn": "Group",
+      "subjectColumn": "Subject",
+      "collected": "Collected"
+    },
+    "funnel": {
+      "title": "Lead funnel",
+      "stage": "Stage",
+      "source": "Source",
+      "leads": "Leads",
+      "won": "Won",
+      "bySource": "By source",
+      "dimension": "Split"
+    },
+    "students": {
+      "title": "Active students",
+      "active": "Active students",
+      "joined": "Joined",
+      "left": "Left",
+      "flow": "Joins and leaves"
+    },
+    "attendance": {
+      "title": "Attendance rate by group",
+      "group": "Group",
+      "rate": "Attendance rate",
+      "present": "Present",
+      "late": "Late",
+      "absent": "Absent",
+      "excused": "Excused"
+    },
+    "debtAge": {
+      "title": "Debt by age",
+      "hint": "What students owe today, by how long ago it was billed.",
+      "bucket": "Age",
+      "amount": "Debt",
+      "students": "Students",
+      "studentsCount": "{count, plural, one {# student} other {# students}}",
+      "0_30": "0–30 days",
+      "31_60": "31–60 days",
+      "over_60": "Over 60 days"
+    }
   }
 }

@@ -4,7 +4,10 @@ import {
   formatDateTime,
   formatDay,
   formatMoney,
+  formatMoneyAxis,
   formatMoneyInput,
+  formatMonthShort,
+  formatPercent,
   formatMonth,
   formatPhone,
 } from "./format";
@@ -110,5 +113,45 @@ describe("formatMonth", () => {
     expect(formatMonth("2026-11-01", "ru")).toBe("ноябрь 2026");
     expect(formatMonth("2026-11", "uz")).toBe("noyabr 2026");
     expect(formatMonth("2027-01-01", "ru")).toBe("январь 2027");
+  });
+});
+
+describe("formatMoneyAxis", () => {
+  it("shortens millions and thousands per language", () => {
+    expect(formatMoneyAxis(45_000_000, "en")).toBe("45M");
+    expect(formatMoneyAxis(45_000_000, "ru")).toBe("45 млн");
+    expect(formatMoneyAxis(45_000_000, "uz")).toBe("45 mln");
+    expect(formatMoneyAxis(2_500_000, "en")).toBe("2.5M");
+    expect(formatMoneyAxis(2_500_000, "uz")).toBe("2,5 mln");
+    expect(formatMoneyAxis(500_000, "en")).toBe("500K");
+    expect(formatMoneyAxis(500_000, "ru")).toBe("500 тыс.");
+    expect(formatMoneyAxis(0, "en")).toBe("0");
+    expect(formatMoneyAxis(900, "uz")).toBe("900");
+  });
+
+  it("cuts to one decimal and never rounds up to the next unit", () => {
+    expect(formatMoneyAxis(1_999_999, "en")).toBe("1.9M");
+    expect(formatMoneyAxis(999_999, "en")).toBe("999.9K");
+    expect(formatMoneyAxis(-12_340_000, "en")).toBe("−12.3M");
+    expect(() => formatMoneyAxis(1.5, "en")).toThrow(RangeError);
+  });
+});
+
+describe("formatPercent", () => {
+  it("writes one decimal only when there is one", () => {
+    expect(formatPercent(92.8, "en")).toBe("92.8%");
+    expect(formatPercent(92.8, "ru")).toBe("92,8%");
+    expect(formatPercent(92.8, "uz")).toBe("92,8%");
+    expect(formatPercent(100, "en")).toBe("100%");
+    expect(formatPercent(0, "uz")).toBe("0%");
+    expect(formatPercent(19.44, "en")).toBe("19.4%");
+  });
+});
+
+describe("formatMonthShort", () => {
+  it("is a short month and a two-digit year", () => {
+    expect(formatMonthShort("2026-11", "en")).toBe("Nov 26");
+    expect(formatMonthShort("2026-11-01", "uz")).toBe("noy 26");
+    expect(formatMonthShort("2026-05", "ru")).toBe("май 26");
   });
 });

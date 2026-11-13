@@ -961,5 +961,84 @@
     "archiveBody": "Oʻquvchi roʻyxatlardan yashiriladi. Toʻlovlar va davomat saqlanadi.",
     "noMatches": "Bu filtrlarga mos oʻquvchi yoʻq.",
     "clearFilters": "Filtrlarni tozalash"
+  },
+  "reports": {
+    "period": {
+      "label": "Davr",
+      "this": "Shu oy",
+      "last": "Oʻtgan oy",
+      "3": "Oxirgi 3 oy",
+      "6": "Oxirgi 6 oy",
+      "12": "Oxirgi 12 oy",
+      "custom": "Boshqa davr",
+      "from": "Dan",
+      "to": "Gacha"
+    },
+    "kpi": {
+      "collected": "Yigʻilgan",
+      "costs": "Xarajatlar + maoshlar",
+      "profit": "Foyda",
+      "activeStudents": "Faol oʻquvchilar",
+      "newLeads": "Yangi lidlar",
+      "leadConversion": "Lidlar konversiyasi",
+      "totalDebt": "Bugungi qarz",
+      "attendanceRate": "Davomat"
+    },
+    "exportCsv": "CSV yuklab olish",
+    "exportCsvFor": "CSV yuklab olish: {chart}",
+    "empty": "Bu davr uchun koʻrsatadigan narsa yoʻq.",
+    "month": "Oy",
+    "money": {
+      "title": "Oylar boʻyicha yigʻilgan va xarajatlar",
+      "collected": "Yigʻilgan",
+      "costs": "Xarajatlar + maoshlar",
+      "expenses": "Xarajatlar",
+      "salaries": "Maoshlar"
+    },
+    "revenue": {
+      "title": "Tushum",
+      "by": "Tushum kesimi",
+      "group": "Guruhlar boʻyicha",
+      "subject": "Fanlar boʻyicha",
+      "groupColumn": "Guruh",
+      "subjectColumn": "Fan",
+      "collected": "Yigʻilgan"
+    },
+    "funnel": {
+      "title": "Lidlar voronkasi",
+      "stage": "Bosqich",
+      "source": "Manba",
+      "leads": "Lidlar",
+      "won": "Yozildi",
+      "bySource": "Manbalar boʻyicha",
+      "dimension": "Kesim"
+    },
+    "students": {
+      "title": "Faol oʻquvchilar",
+      "active": "Faol oʻquvchilar",
+      "joined": "Qoʻshildi",
+      "left": "Ketdi",
+      "flow": "Qoʻshilganlar va ketganlar"
+    },
+    "attendance": {
+      "title": "Guruhlar boʻyicha davomat",
+      "group": "Guruh",
+      "rate": "Davomat",
+      "present": "Keldi",
+      "late": "Kechikdi",
+      "absent": "Kelmadi",
+      "excused": "Sababli"
+    },
+    "debtAge": {
+      "title": "Qarz muddati boʻyicha",
+      "hint": "Oʻquvchilarning bugungi qarzi va u qachon hisoblangani.",
+      "bucket": "Muddat",
+      "amount": "Qarz",
+      "students": "Oʻquvchilar",
+      "studentsCount": "{count} ta oʻquvchi",
+      "0_30": "0–30 kun",
+      "31_60": "31–60 kun",
+      "over_60": "60 kundan ortiq"
+    }
   }
 }

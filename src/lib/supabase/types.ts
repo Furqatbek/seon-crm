@@ -642,6 +642,53 @@ isOneToOne: false
 "rebuild_future_lessons":
 { Args: { "p_group_id": string }; Returns: number
                            },
+"report_active_students":
+{ Args: { "p_day": string }; Returns: number
+                           },
+"report_attendance":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "absent": number,"excused": number,"group_id": string,"group_name": string,"late": number,"present": number,"rate": number
+            }[]
+                           },
+"report_check_period":
+{ Args: { "p_from": string,"p_to": string }; Returns: undefined
+                           },
+"report_collected_vs_expenses":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "collected": number,"costs": number,"expenses": number,"month": string,"salaries": number
+            }[]
+                           },
+"report_debt_age":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "amount": number,"bucket": string,"students": number
+            }[]
+                           },
+"report_ends":
+{ Args: { "p_to": string }; Returns: string
+                           },
+"report_kpis":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "active_students": number,"attendance_rate": number,"collected": number,"costs": number,"expenses": number,"lead_conversion": number,"new_leads": number,"profit": number,"salaries": number,"total_debt": number,"won_leads": number
+            }[]
+                           },
+"report_lead_funnel":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "dimension": string,"key": string,"leads": number,"won": number
+            }[]
+                           },
+"report_revenue":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "collected": number,"dimension": string,"name": string
+            }[]
+                           },
+"report_starts":
+{ Args: { "p_from": string }; Returns: string
+                           },
+"report_students":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "active": number,"joined": number,"left_count": number,"month": string
+            }[]
+                           },
 "restore_lesson":
 { Args: { "p_lesson_id": string }; Returns: undefined
                            },
