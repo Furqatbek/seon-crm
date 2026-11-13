@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
 import { TeachersScreen } from "@/components/teachers/teachers-screen";
-import { PageHeader } from "@/components/ui/page-header";
+import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import { getCurrentUser } from "@/lib/auth";
 import { getTeachers } from "@/lib/teachers/queries";
@@ -24,7 +24,7 @@ async function Teachers({ searchParams }: { searchParams: SearchParams }) {
 
 function Fallback() {
   const t = useTranslations("nav");
-  return <PageHeader title={t("teachers")} />;
+  return <ListSkeleton title={t("teachers")} />;
 }
 
 export default async function TeachersPage({

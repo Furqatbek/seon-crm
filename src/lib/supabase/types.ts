@@ -555,7 +555,10 @@ isOneToOne: false
                 }
           }
           Functions: {
-            "app_role":
+            "activate_started_groups":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
+"app_role":
 { Args: Record<PropertyKey, never>; Returns: Database["public"]['Enums']["user_role"]
                            },
 "attendance_is_editable":
@@ -566,6 +569,9 @@ isOneToOne: false
                            },
 "call_reminders_job":
 { Args: Record<PropertyKey, never>; Returns: number
+                           },
+"centre_name":
+{ Args: Record<PropertyKey, never>; Returns: string
                            },
 "convert_lead_to_student":
 { Args: { "p_birth_date"?: string,"p_full_name": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_lead_id": string,"p_notes"?: string,"p_parent_name"?: string,"p_parent_phone"?: string,"p_phone": string }; Returns: string

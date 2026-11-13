@@ -28,6 +28,16 @@
     "month": {
       "previous": "Previous month",
       "next": "Next month"
+    },
+    "loading": "Loading…",
+    "problem": {
+      "errorTitle": "This page could not be loaded",
+      "errorBody": "Something went wrong while getting the data. Nothing was changed. Try again; if it keeps happening, tell the owner.",
+      "retry": "Try again",
+      "reference": "Reference: {code}",
+      "notFoundTitle": "Nothing here",
+      "notFoundBody": "This record does not exist, or the link is wrong.",
+      "home": "Go to the start page"
     }
   },
   "nav": {

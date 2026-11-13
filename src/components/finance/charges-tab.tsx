@@ -92,7 +92,8 @@ export function ChargesTab({
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="grid flex-1 gap-4 sm:max-w-xl sm:grid-cols-2">
+        {/* On a phone the two totals take the full width and the button goes below them. */}
+        <div className="grid w-full flex-none gap-4 sm:w-auto sm:max-w-xl sm:flex-1 sm:grid-cols-2">
           <KpiCard label={t("charges.billed", { month: monthName })}>
             <MoneyText amount={summary.billed} />
           </KpiCard>

@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
+import { useReturnFocus } from "@/lib/hooks/use-return-focus";
 import { cn } from "@/lib/utils";
 
 const Sheet = SheetPrimitive.Root;
@@ -37,12 +38,14 @@ function SheetContent({
   children,
   side = "right",
   showCloseButton = true,
+  onCloseAutoFocus,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "left" | "right";
   showCloseButton?: boolean;
 }) {
   const t = useTranslations("common");
+  const focus = useReturnFocus({ onCloseAutoFocus });
   return (
     <SheetPrimitive.Portal>
       <SheetOverlay />
@@ -58,7 +61,9 @@ function SheetContent({
           className,
         )}
         {...props}
+        onCloseAutoFocus={focus.onCloseAutoFocus}
       >
+        {focus.marker}
         {children}
         {showCloseButton ? (
           <SheetPrimitive.Close asChild>

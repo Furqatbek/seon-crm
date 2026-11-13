@@ -31,9 +31,10 @@ export function UserMenu({ user }: { user: CurrentUser }) {
     <DropdownMenu>
       <DropdownMenuTrigger
         data-slot="user-menu"
-        aria-label={t("label")}
         className="flex w-full items-center gap-3 rounded-control p-2 text-left outline-none motion-fast hover:bg-border focus-visible:ring-3 focus-visible:ring-focus-ring data-[state=open]:bg-border"
       >
+        {/* The name a screen reader hears starts with what the button is, then what it shows. */}
+        <span className="sr-only">{t("label")}:</span>
         <Avatar name={user.fullName} />
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="truncate text-body font-medium text-text">{user.fullName}</span>

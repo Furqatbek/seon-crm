@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
 import { ReportsScreen } from "@/components/reports/reports-screen";
-import { PageHeader } from "@/components/ui/page-header";
+import { ChartsSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import { getCurrentUser } from "@/lib/auth";
 import { MAX_REPORT_MONTHS, monthsBetween, resolvePeriod } from "@/lib/domain/report-period";
@@ -27,7 +27,7 @@ async function Reports({ searchParams }: { searchParams: SearchParams }) {
 
 function Fallback() {
   const t = useTranslations("nav");
-  return <PageHeader title={t("reports")} />;
+  return <ChartsSkeleton title={t("reports")} />;
 }
 
 export default async function ReportsPage({

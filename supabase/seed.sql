@@ -481,27 +481,6 @@ cross join lateral (values
 where a.applies;
 
 -- ─────────────────────── Message templates ─────────────────────────
--- Every type × channel × language. SMS texts stay plain Latin with a straight
--- apostrophe where they can (ʻ or Cyrillic make an SMS Unicode: 70 characters
--- per part instead of 160).
-
-insert into public.message_templates (type, channel, language, body)
-select t.type::public.message_type, ch.channel::public.message_channel, t.language::public.app_language,
-  case when ch.channel = 'telegram' and t.language = 'uz' then replace(t.body, '''', 'ʻ') else t.body end
-from (values
-  ('payment_due', 'uz', 'Assalomu alaykum! {student} uchun {month} oyi to''lovi: {amount} so''m. Iltimos, {due_date} gacha to''lang. {centre}'),
-  ('payment_due', 'ru', 'Здравствуйте! Оплата за {month} для {student}: {amount} сум. Пожалуйста, оплатите до {due_date}. {centre}'),
-  ('payment_due', 'en', 'Hello! The {month} fee for {student} is {amount} UZS. Please pay by {due_date}. {centre}'),
-  ('payment_overdue', 'uz', 'Assalomu alaykum! {student} uchun {month} oyi to''lovi kechikdi. Qarz: {amount} so''m. Iltimos, to''lovni amalga oshiring. {centre}'),
-  ('payment_overdue', 'ru', 'Здравствуйте! Оплата за {month} для {student} просрочена. Долг: {amount} сум. Пожалуйста, оплатите. {centre}'),
-  ('payment_overdue', 'en', 'Hello! The {month} fee for {student} is overdue. Amount owed: {amount} UZS. Please pay as soon as you can. {centre}'),
-  ('lesson_reminder', 'uz', 'Eslatma: {student}, bugun soat {time} da {group} darsi bor. {centre}'),
-  ('lesson_reminder', 'ru', 'Напоминание: {student}, сегодня в {time} занятие в группе {group}. {centre}'),
-  ('lesson_reminder', 'en', 'Reminder: {student} has a {group} lesson today at {time}. {centre}'),
-  ('custom', 'uz', 'Assalomu alaykum, {student}! {centre}'),
-  ('custom', 'ru', 'Здравствуйте, {student}! {centre}'),
-  ('custom', 'en', 'Hello, {student}! {centre}')
-) as t (type, language, body)
-cross join (values ('telegram'), ('sms')) as ch (channel);
+-- (Message templates come with the schema: supabase/migrations/…_hardening.sql.)
 
 commit;

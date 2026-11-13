@@ -8,7 +8,7 @@ import { ExpensesTab } from "@/components/finance/expenses-tab";
 import { FinanceScreen } from "@/components/finance/finance-screen";
 import { PaymentsTab } from "@/components/finance/payments-tab";
 import { SalariesTab } from "@/components/finance/salaries-tab";
-import { PageHeader } from "@/components/ui/page-header";
+import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import { getCurrentUser, type UserRole } from "@/lib/auth";
 import { tashkentDate } from "@/lib/domain/time";
@@ -111,7 +111,7 @@ async function Finance({ searchParams, locale }: { searchParams: SearchParams; l
 
 function Fallback() {
   const t = useTranslations("nav");
-  return <PageHeader title={t("finance")} />;
+  return <ListSkeleton title={t("finance")} kpis={4} tabs={3} filters={false} />;
 }
 
 export default async function FinancePage({

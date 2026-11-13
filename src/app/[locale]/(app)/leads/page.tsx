@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
 import { LeadsScreen } from "@/components/leads/leads-screen";
-import { PageHeader } from "@/components/ui/page-header";
+import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import { getCurrentUser } from "@/lib/auth";
 import {
@@ -48,7 +48,7 @@ async function Leads({ searchParams }: { searchParams: SearchParams }) {
 
 function LeadsFallback() {
   const t = useTranslations("nav");
-  return <PageHeader title={t("leads")} />;
+  return <ListSkeleton title={t("leads")} />;
 }
 
 export default async function LeadsPage({

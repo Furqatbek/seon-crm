@@ -21,7 +21,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       className={cn(
         fieldClasses,
-        "flex h-control items-center justify-between gap-2 text-left pointer-coarse:h-control-touch data-placeholder:text-text-tertiary data-[state=open]:bg-bg data-[state=open]:ring-3 data-[state=open]:ring-focus-ring [&>span]:truncate",
+        "flex h-control items-center justify-between gap-2 text-left pointer-coarse:h-control-touch data-placeholder:text-text-secondary data-[state=open]:bg-bg data-[state=open]:ring-3 data-[state=open]:ring-focus-ring [&>span]:truncate",
         className,
       )}
       {...props}

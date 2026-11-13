@@ -9,6 +9,7 @@ import { GroupLessonsTab } from "@/components/groups/group-lessons-tab";
 import { GroupScreen } from "@/components/groups/group-screen";
 import { GroupStudentsTab } from "@/components/groups/group-students-tab";
 import { GroupTrialsTab } from "@/components/groups/group-trials-tab";
+import { RecordSkeleton } from "@/components/ui/skeleton";
 import { routing } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth";
 import { attendanceLock, attendanceRate } from "@/lib/domain/attendance";
@@ -174,7 +175,7 @@ async function Group({ params, searchParams }: Props) {
 // The id is only known at request time, so the whole page streams in.
 export default function GroupPage(props: Props) {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<RecordSkeleton />}>
       <Group {...props} />
     </Suspense>
   );

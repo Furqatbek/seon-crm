@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
 import { StudentsScreen } from "@/components/students/students-screen";
-import { PageHeader } from "@/components/ui/page-header";
+import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import { getCurrentUser } from "@/lib/auth";
 import { tashkentDate } from "@/lib/domain/time";
@@ -35,7 +35,7 @@ async function Students({ searchParams }: { searchParams: SearchParams }) {
 
 function Fallback() {
   const t = useTranslations("nav");
-  return <PageHeader title={t("students")} />;
+  return <ListSkeleton title={t("students")} />;
 }
 
 export default async function StudentsPage({

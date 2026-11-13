@@ -457,11 +457,37 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         [studentId(1), groupId(1), amount, note],
       );
 
-    it.each(BOTH)("%s adds a monthly fee and a credit with a note", async (who) => {
+    it.each(BOTH)("%s adds a credit with a note", async (who) => {
       await as(who, async (s) => {
         expect(await s.count("charges")).toBeGreaterThan(200);
-        allowed(await monthlyFee(s));
         allowed(await adjustment(s, -100_000, "Kasallik sababli"));
+      });
+    });
+
+    it("the owner adds a monthly fee for any month; a manager only for the month an enrolment joined in", async () => {
+      await as("owner", async (s) => allowed(await monthlyFee(s)));
+      await as("manager", async (s) => {
+        // Next month's fee for an old enrolment is the billing job's to write.
+        denied(await monthlyFee(s));
+        // A new enrolment: its own first month is allowed, and nothing else about it.
+        const [enrolment] = await s.rows<{ id: string; student_id: string; group_id: string }>(
+          `insert into enrollments (group_id, student_id, joined_on)
+           select $1, st.id, ${today} from students st
+           where st.id not in (select student_id from enrollments where group_id = $1) and st.archived_at is null limit 1
+           returning id, student_id, group_id`,
+          [groupId(1)],
+        );
+        const fee = (monthSql: string, student = enrolment.student_id, group = enrolment.group_id) =>
+          s.attempt(
+            `insert into charges (student_id, enrollment_id, group_id, billing_month, type, base_amount, amount, created_by)
+             values ($1, $2, $3, ${monthSql}, 'monthly_fee', 500000, 0, auth.uid())`,
+            [student, enrolment.id, group],
+          );
+        denied(await fee(`(${month} + interval '1 month')::date`));
+        denied(await fee(`(${month} - interval '1 month')::date`));
+        denied(await fee(month, studentId(1)));
+        denied(await fee(month, enrolment.student_id, groupId(2)));
+        allowed(await fee(month));
       });
     });
 

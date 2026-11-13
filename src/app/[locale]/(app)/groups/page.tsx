@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
 import { GroupsScreen } from "@/components/groups/groups-screen";
-import { PageHeader } from "@/components/ui/page-header";
+import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import { getCurrentUser } from "@/lib/auth";
 import { attendanceLock } from "@/lib/domain/attendance";
@@ -49,7 +49,7 @@ async function Groups({ searchParams }: { searchParams: SearchParams }) {
 
 function Fallback() {
   const t = useTranslations("nav");
-  return <PageHeader title={t("groups")} />;
+  return <ListSkeleton title={t("groups")} />;
 }
 
 export default async function GroupsPage({

@@ -44,9 +44,11 @@ function NavLink({
 
 function SidebarContent({
   user,
+  centreName,
   onNavigate,
 }: {
   user: CurrentUser;
+  centreName: string;
   onNavigate?: () => void;
 }) {
   const t = useTranslations();
@@ -57,7 +59,9 @@ function SidebarContent({
   return (
     <div className="flex h-full flex-col">
       <div className="flex h-14 shrink-0 items-center px-5">
-        <span className="truncate text-headline text-text">{t("app.name")}</span>
+        <span className="truncate text-headline text-text" data-slot="centre-name">
+          {centreName}
+        </span>
       </div>
       <nav
         aria-label={t("nav.label")}
@@ -92,9 +96,12 @@ function SidebarContent({
  */
 export function AppShell({
   user,
+  centreName,
   children,
 }: {
   user: CurrentUser;
+  /** From Settings → Centre. */
+  centreName: string;
   children: React.ReactNode;
 }) {
   const t = useTranslations();
@@ -103,7 +110,7 @@ export function AppShell({
   return (
     <div className="min-h-dvh bg-bg">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-sidebar border-r border-border bg-bg-subtle/80 backdrop-blur-frost shell:block">
-        <SidebarContent user={user} />
+        <SidebarContent user={user} centreName={centreName} />
       </aside>
 
       <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-bg-subtle/80 px-2 backdrop-blur-frost shell:hidden">
@@ -115,7 +122,7 @@ export function AppShell({
         >
           <Menu aria-hidden />
         </Button>
-        <span className="truncate text-headline text-text">{t("app.name")}</span>
+        <span className="truncate text-headline text-text">{centreName}</span>
       </header>
 
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
@@ -126,8 +133,8 @@ export function AppShell({
           className="bg-bg-subtle shell:hidden"
         >
           <SheetTitle className="sr-only">{t("nav.label")}</SheetTitle>
-          <SheetDescription className="sr-only">{t("app.name")}</SheetDescription>
-          <SidebarContent user={user} onNavigate={() => setMenuOpen(false)} />
+          <SheetDescription className="sr-only">{centreName}</SheetDescription>
+          <SidebarContent user={user} centreName={centreName} onNavigate={() => setMenuOpen(false)} />
         </SheetContent>
       </Sheet>
 

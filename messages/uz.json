@@ -28,6 +28,16 @@
     "month": {
       "previous": "Oldingi oy",
       "next": "Keyingi oy"
+    },
+    "loading": "Yuklanmoqda…",
+    "problem": {
+      "errorTitle": "Sahifani yuklab boʻlmadi",
+      "errorBody": "Maʼlumotlarni olishda xatolik yuz berdi. Hech narsa oʻzgarmadi. Qayta urinib koʻring; takrorlansa, egasiga xabar bering.",
+      "retry": "Qayta urinish",
+      "reference": "Kod: {code}",
+      "notFoundTitle": "Bu yerda hech narsa yoʻq",
+      "notFoundBody": "Bunday yozuv yoʻq yoki havola notoʻgʻri.",
+      "home": "Bosh sahifaga oʻtish"
     }
   },
   "nav": {

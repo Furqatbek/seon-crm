@@ -7,7 +7,7 @@ import { ProfileTab } from "@/components/settings/profile-tab";
 import { SettingsScreen } from "@/components/settings/settings-screen";
 import { TemplatesTab } from "@/components/settings/templates-tab";
 import { UsersTab } from "@/components/settings/users-tab";
-import { PageHeader } from "@/components/ui/page-header";
+import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import type { Locale } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth";
@@ -55,7 +55,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
 
 function Fallback() {
   const t = useTranslations("nav");
-  return <PageHeader title={t("settings")} />;
+  return <ListSkeleton title={t("settings")} tabs={5} filters={false} />;
 }
 
 export default async function SettingsPage({

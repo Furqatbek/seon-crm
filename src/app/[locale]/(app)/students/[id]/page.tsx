@@ -9,6 +9,7 @@ import { LedgerTab } from "@/components/students/ledger-tab";
 import { MessagesTab } from "@/components/students/messages-tab";
 import { OverviewTab } from "@/components/students/overview-tab";
 import { StudentScreen } from "@/components/students/student-screen";
+import { RecordSkeleton } from "@/components/ui/skeleton";
 import { routing } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth";
 import { attendanceRate } from "@/lib/domain/attendance";
@@ -129,7 +130,7 @@ async function Student({ params, searchParams }: Props) {
 // The id is only known at request time, so the whole page streams in.
 export default function StudentPage(props: Props) {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<RecordSkeleton />}>
       <Student {...props} />
     </Suspense>
   );

@@ -22,7 +22,8 @@ export function LanguageSwitch() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" aria-label={t("label")}>
+        <Button variant="ghost" className="relative">
+          <span className="sr-only">{t("label")}:</span>
           <Globe className="text-text-secondary" aria-hidden />
           {t(locale)}
         </Button>

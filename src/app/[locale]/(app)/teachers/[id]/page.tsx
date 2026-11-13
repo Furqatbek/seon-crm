@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { z } from "zod";
 
 import { TeacherScreen } from "@/components/teachers/teacher-screen";
+import { RecordSkeleton } from "@/components/ui/skeleton";
 import { routing } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth";
 import { firstValues, type SearchParams } from "@/lib/search-params";
@@ -45,7 +46,7 @@ async function Teacher({ params, searchParams }: Props) {
 // The id is only known at request time, so the whole page streams in.
 export default function TeacherPage(props: Props) {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<RecordSkeleton />}>
       <Teacher {...props} />
     </Suspense>
   );

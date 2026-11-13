@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { z } from "zod";
 
 import { ReceiptView } from "@/components/finance/receipt-view";
+import { RecordSkeleton } from "@/components/ui/skeleton";
 import { routing } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth";
 import { getReceipt } from "@/lib/finance/queries";
@@ -29,7 +30,7 @@ async function Receipt({ params }: Props) {
 
 export default function ReceiptPage(props: Props) {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<div className="mx-auto max-w-md p-6"><RecordSkeleton /></div>}>
       <Receipt {...props} />
     </Suspense>
   );
