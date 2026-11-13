@@ -1,0 +1,121 @@
+{
+  "app": {
+    "name": "Edu CRM"
+  },
+  "common": {
+    "close": "Закрыть",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "search": "Поиск"
+  },
+  "nav": {
+    "label": "Основная навигация",
+    "openMenu": "Открыть меню",
+    "leads": "Лиды",
+    "students": "Ученики",
+    "groups": "Группы",
+    "teachers": "Учителя",
+    "finance": "Финансы",
+    "reports": "Отчёты",
+    "settings": "Настройки"
+  },
+  "language": {
+    "label": "Язык",
+    "uz": "Oʻzbekcha",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "userMenu": {
+    "label": "Меню аккаунта",
+    "signOut": "Выйти",
+    "roles": {
+      "owner": "Владелец",
+      "manager": "Менеджер"
+    }
+  },
+  "auth": {
+    "email": "Эл. почта",
+    "password": "Пароль",
+    "signIn": "Войти",
+    "forgotPassword": "Забыли пароль?",
+    "forgotTitle": "Сброс пароля",
+    "forgotHint": "Введите эл. почту, и мы отправим ссылку для нового пароля.",
+    "sendLink": "Отправить ссылку",
+    "linkSent": "Если для этой почты есть аккаунт, ссылка для сброса уже отправлена.",
+    "backToSignIn": "Назад ко входу",
+    "resetTitle": "Новый пароль",
+    "newPassword": "Новый пароль",
+    "confirmPassword": "Повторите пароль",
+    "savePassword": "Сохранить пароль",
+    "passwordSaved": "Пароль сохранён",
+    "errors": {
+      "emailInvalid": "Введите правильный адрес эл. почты.",
+      "passwordRequired": "Введите пароль.",
+      "passwordTooShort": "В пароле должно быть не меньше 8 символов.",
+      "passwordMismatch": "Пароли не совпадают.",
+      "invalidCredentials": "Неверная почта или пароль.",
+      "linkInvalid": "Ссылка недействительна или устарела. Запросите новую.",
+      "notConfigured": "Вход ещё не настроен: нет ключей Supabase.",
+      "generic": "Что-то пошло не так. Попробуйте ещё раз."
+    }
+  },
+  "empty": {
+    "leads": "Лидов пока нет.",
+    "students": "Учеников пока нет.",
+    "groups": "Групп пока нет.",
+    "teachers": "Учителей пока нет.",
+    "finance": "Платежей пока нет.",
+    "reports": "Данных для отчётов пока нет.",
+    "settings": "Настроек пока нет."
+  },
+  "dev": {
+    "title": "Компоненты",
+    "newStudent": "Новый ученик",
+    "export": "Экспорт",
+    "archive": "В архив",
+    "edit": "Изменить",
+    "disabled": "Недоступно",
+    "fullName": "Имя и фамилия",
+    "fullNameError": "Введите имя и фамилию.",
+    "notes": "Заметки",
+    "source": "Источник",
+    "sourcePlaceholder": "Выберите источник",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "referral": "Рекомендация",
+    "reminders": "Отправлять напоминания",
+    "board": "Доска",
+    "list": "Список",
+    "view": "Вид",
+    "overview": "Обзор",
+    "ledger": "Расчёты",
+    "attendance": "Посещаемость",
+    "messages": "Сообщения",
+    "active": "Активен",
+    "paid": "Оплачено",
+    "due": "К оплате",
+    "debt": "Долг",
+    "present": "Был",
+    "late": "Опоздал",
+    "absent": "Не был",
+    "excused": "По причине",
+    "student": "Ученик",
+    "group": "Группа",
+    "status": "Статус",
+    "balance": "Баланс",
+    "collected": "Собрано",
+    "activeStudents": "Активные ученики",
+    "totalDebt": "Общий долг",
+    "attendanceRate": "Посещаемость",
+    "telegramLinked": "Telegram подключён",
+    "paymentSaved": "Платёж сохранён",
+    "showToast": "Показать уведомление",
+    "openSheet": "Открыть панель",
+    "openDialog": "Открыть диалог",
+    "openMenu": "Открыть меню",
+    "archiveTitle": "Отправить ученика в архив?",
+    "archiveBody": "Ученик скрывается из списков. Платежи и посещаемость сохраняются.",
+    "noMatches": "Нет учеников под эти фильтры.",
+    "clearFilters": "Сбросить фильтры"
+  }
+}

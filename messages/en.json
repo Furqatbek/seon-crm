@@ -1,0 +1,121 @@
+{
+  "app": {
+    "name": "Edu CRM"
+  },
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "search": "Search"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "openMenu": "Open menu",
+    "leads": "Leads",
+    "students": "Students",
+    "groups": "Groups",
+    "teachers": "Teachers",
+    "finance": "Finance",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "language": {
+    "label": "Language",
+    "uz": "Oʻzbekcha",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "userMenu": {
+    "label": "Account menu",
+    "signOut": "Sign out",
+    "roles": {
+      "owner": "Owner",
+      "manager": "Manager"
+    }
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "forgotPassword": "Forgot password?",
+    "forgotTitle": "Reset password",
+    "forgotHint": "Enter your email and we will send you a link to set a new password.",
+    "sendLink": "Send link",
+    "linkSent": "If this email has an account, a reset link is on its way.",
+    "backToSignIn": "Back to sign in",
+    "resetTitle": "New password",
+    "newPassword": "New password",
+    "confirmPassword": "Repeat the password",
+    "savePassword": "Save password",
+    "passwordSaved": "Password saved",
+    "errors": {
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Enter your password.",
+      "passwordTooShort": "The password needs at least 8 characters.",
+      "passwordMismatch": "The passwords do not match.",
+      "invalidCredentials": "Wrong email or password.",
+      "linkInvalid": "This link is invalid or has expired. Request a new one.",
+      "notConfigured": "Sign-in is not set up yet: the Supabase keys are missing.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "empty": {
+    "leads": "No leads yet.",
+    "students": "No students yet.",
+    "groups": "No groups yet.",
+    "teachers": "No teachers yet.",
+    "finance": "No payments yet.",
+    "reports": "No data to report yet.",
+    "settings": "No settings yet."
+  },
+  "dev": {
+    "title": "Components",
+    "newStudent": "New student",
+    "export": "Export",
+    "archive": "Archive",
+    "edit": "Edit",
+    "disabled": "Disabled",
+    "fullName": "Full name",
+    "fullNameError": "Enter the full name.",
+    "notes": "Notes",
+    "source": "Source",
+    "sourcePlaceholder": "Choose a source",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "referral": "Referral",
+    "reminders": "Send reminders",
+    "board": "Board",
+    "list": "List",
+    "view": "View",
+    "overview": "Overview",
+    "ledger": "Ledger",
+    "attendance": "Attendance",
+    "messages": "Messages",
+    "active": "Active",
+    "paid": "Paid",
+    "due": "Due",
+    "debt": "Debt",
+    "present": "Present",
+    "late": "Late",
+    "absent": "Absent",
+    "excused": "Excused",
+    "student": "Student",
+    "group": "Group",
+    "status": "Status",
+    "balance": "Balance",
+    "collected": "Collected",
+    "activeStudents": "Active students",
+    "totalDebt": "Total debt",
+    "attendanceRate": "Attendance rate",
+    "telegramLinked": "Telegram linked",
+    "paymentSaved": "Payment saved",
+    "showToast": "Show toast",
+    "openSheet": "Open sheet",
+    "openDialog": "Open dialog",
+    "openMenu": "Open menu",
+    "archiveTitle": "Archive this student?",
+    "archiveBody": "The student is hidden from lists. Payments and attendance are kept.",
+    "noMatches": "No students match these filters.",
+    "clearFilters": "Clear filters"
+  }
+}

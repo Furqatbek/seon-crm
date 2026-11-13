@@ -1,0 +1,121 @@
+{
+  "app": {
+    "name": "Edu CRM"
+  },
+  "common": {
+    "close": "Yopish",
+    "cancel": "Bekor qilish",
+    "save": "Saqlash",
+    "search": "Qidirish"
+  },
+  "nav": {
+    "label": "Asosiy menyu",
+    "openMenu": "Menyuni ochish",
+    "leads": "Lidlar",
+    "students": "Oʻquvchilar",
+    "groups": "Guruhlar",
+    "teachers": "Oʻqituvchilar",
+    "finance": "Moliya",
+    "reports": "Hisobotlar",
+    "settings": "Sozlamalar"
+  },
+  "language": {
+    "label": "Til",
+    "uz": "Oʻzbekcha",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "userMenu": {
+    "label": "Akkaunt menyusi",
+    "signOut": "Chiqish",
+    "roles": {
+      "owner": "Rahbar",
+      "manager": "Menejer"
+    }
+  },
+  "auth": {
+    "email": "Elektron pochta",
+    "password": "Parol",
+    "signIn": "Kirish",
+    "forgotPassword": "Parolni unutdingizmi?",
+    "forgotTitle": "Parolni tiklash",
+    "forgotHint": "Elektron pochtangizni kiriting, yangi parol oʻrnatish havolasini yuboramiz.",
+    "sendLink": "Havolani yuborish",
+    "linkSent": "Agar bu pochta uchun akkaunt boʻlsa, tiklash havolasi yuborildi.",
+    "backToSignIn": "Kirishga qaytish",
+    "resetTitle": "Yangi parol",
+    "newPassword": "Yangi parol",
+    "confirmPassword": "Parolni takrorlang",
+    "savePassword": "Parolni saqlash",
+    "passwordSaved": "Parol saqlandi",
+    "errors": {
+      "emailInvalid": "Toʻgʻri elektron pochta manzilini kiriting.",
+      "passwordRequired": "Parolni kiriting.",
+      "passwordTooShort": "Parol kamida 8 ta belgidan iborat boʻlishi kerak.",
+      "passwordMismatch": "Parollar bir xil emas.",
+      "invalidCredentials": "Pochta yoki parol notoʻgʻri.",
+      "linkInvalid": "Havola yaroqsiz yoki muddati oʻtgan. Yangisini soʻrang.",
+      "notConfigured": "Kirish hali sozlanmagan: Supabase kalitlari yoʻq.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    }
+  },
+  "empty": {
+    "leads": "Hozircha lidlar yoʻq.",
+    "students": "Hozircha oʻquvchilar yoʻq.",
+    "groups": "Hozircha guruhlar yoʻq.",
+    "teachers": "Hozircha oʻqituvchilar yoʻq.",
+    "finance": "Hozircha toʻlovlar yoʻq.",
+    "reports": "Hisobot uchun hozircha maʼlumot yoʻq.",
+    "settings": "Hozircha sozlamalar yoʻq."
+  },
+  "dev": {
+    "title": "Komponentlar",
+    "newStudent": "Yangi oʻquvchi",
+    "export": "Eksport",
+    "archive": "Arxivlash",
+    "edit": "Tahrirlash",
+    "disabled": "Faol emas",
+    "fullName": "Ism va familiya",
+    "fullNameError": "Ism va familiyani kiriting.",
+    "notes": "Izohlar",
+    "source": "Manba",
+    "sourcePlaceholder": "Manbani tanlang",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "referral": "Tavsiya",
+    "reminders": "Eslatmalarni yuborish",
+    "board": "Doska",
+    "list": "Roʻyxat",
+    "view": "Koʻrinish",
+    "overview": "Umumiy",
+    "ledger": "Hisob-kitob",
+    "attendance": "Davomat",
+    "messages": "Xabarlar",
+    "active": "Faol",
+    "paid": "Toʻlangan",
+    "due": "Toʻlanishi kerak",
+    "debt": "Qarz",
+    "present": "Keldi",
+    "late": "Kechikdi",
+    "absent": "Kelmadi",
+    "excused": "Sababli",
+    "student": "Oʻquvchi",
+    "group": "Guruh",
+    "status": "Holat",
+    "balance": "Balans",
+    "collected": "Yigʻilgan",
+    "activeStudents": "Faol oʻquvchilar",
+    "totalDebt": "Umumiy qarz",
+    "attendanceRate": "Davomat",
+    "telegramLinked": "Telegram ulangan",
+    "paymentSaved": "Toʻlov saqlandi",
+    "showToast": "Bildirishnomani koʻrsatish",
+    "openSheet": "Panelni ochish",
+    "openDialog": "Dialogni ochish",
+    "openMenu": "Menyuni ochish",
+    "archiveTitle": "Oʻquvchi arxivlansinmi?",
+    "archiveBody": "Oʻquvchi roʻyxatlardan yashiriladi. Toʻlovlar va davomat saqlanadi.",
+    "noMatches": "Bu filtrlarga mos oʻquvchi yoʻq.",
+    "clearFilters": "Filtrlarni tozalash"
+  }
+}
