@@ -561,6 +561,9 @@ isOneToOne: false
 "attendance_is_editable":
 { Args: { "p_lesson_id": string }; Returns: boolean
                            },
+"calculate_teacher_payouts":
+{ Args: { "p_month": string }; Returns: number
+                           },
 "convert_lead_to_student":
 { Args: { "p_birth_date"?: string,"p_full_name": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_lead_id": string,"p_notes"?: string,"p_parent_name"?: string,"p_parent_phone"?: string,"p_phone": string }; Returns: string
                            },
@@ -572,7 +575,7 @@ isOneToOne: false
                            },
 "finance_month_summary":
 { Args: { "p_month": string }; Returns: {
-              "billed": number,"collected": number,"debt": number
+              "billed": number,"collected": number,"debt": number,"expenses": number
             }[]
                            },
 "generate_all_lessons":
@@ -607,6 +610,11 @@ isOneToOne: false
                            },
 "lesson_horizon":
 { Args: Record<PropertyKey, never>; Returns: string
+                           },
+"list_adjustments":
+{ Args: { "p_limit"?: number,"p_month": string,"p_offset"?: number }; Returns: {
+              "amount": number,"by_name": string,"group_name": string,"happened_at": string,"kind": string,"reason": string,"receipt_no": number,"student_id": string,"student_name": string,"total": number
+            }[]
                            },
 "list_debtors":
 { Args: { "p_limit"?: number,"p_offset"?: number }; Returns: {

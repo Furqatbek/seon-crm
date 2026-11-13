@@ -31,7 +31,7 @@ export type TeacherRate = PayRate & { id: string };
 
 export type TeacherPayout = Pick<
   Tables<"teacher_payouts">,
-  "id" | "month" | "pay_type" | "final_amount" | "status"
+  "id" | "month" | "pay_type" | "calculated" | "bonus" | "deduction" | "final_amount" | "status"
 >;
 
 export type TeacherDetail = Tables<"teachers"> & {
@@ -156,7 +156,7 @@ export async function getTeacher(
     options.withPay
       ? supabase
           .from("teacher_payouts")
-          .select("id, month, pay_type, final_amount, status")
+          .select("id, month, pay_type, calculated, bonus, deduction, final_amount, status")
           .eq("teacher_id", id)
           .order("month", { ascending: false })
       : null,

@@ -76,7 +76,8 @@ test("generate a month, take a payment, and the balance and debtors follow", asy
   // ── Finance → Charges: preview, then generate ──
   await page.goto("/en/finance?tab=charges");
   await expect(page.locator('[data-slot="month-strip"]')).toBeVisible();
-  await expect(page.locator('[data-kpi="expenses"]')).toHaveText("UZS 0");
+  // The seed has this month's rent, so Expenses is never empty.
+  expect(await kpi(page, "expenses")).toBeGreaterThan(0);
   const collectedBefore = await kpi(page, "collected");
   await page.waitForLoadState("networkidle");
   await page.screenshot({ path: testInfo.outputPath("charges.png") });

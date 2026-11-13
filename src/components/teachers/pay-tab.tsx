@@ -18,14 +18,14 @@ import {
 } from "@/components/ui/table";
 import { rateOn, rateStatus, type PayRate } from "@/lib/domain/pay-rates";
 import { tashkentDate, tashkentMonth } from "@/lib/domain/time";
-import { formatDay } from "@/lib/format";
+import { formatDay, formatMonth } from "@/lib/format";
 import type { TeacherPayout, TeacherRate } from "@/lib/teachers/queries";
 
 import { RateFormSheet } from "./rate-form-sheet";
 import { RATE_TONE } from "./teacher-meta";
 
 /** "5 000 000 soʻm a month", "120 000 soʻm per lesson", "40% of collected fees". */
-function RateValue({ rate }: { rate: PayRate }) {
+export function RateValue({ rate }: { rate: Pick<PayRate, "pay_type" | "amount" | "percent"> }) {
   const t = useTranslations("teachers.pay");
   if (rate.pay_type === "percent_of_revenue") {
     return <span className="whitespace-nowrap numeric">{t("percentValue", { percent: rate.percent ?? 0 })}</span>;
@@ -129,19 +129,27 @@ export function PayTab({
               <TableRow>
                 <TableHead>{t("pay.month")}</TableHead>
                 <TableHead>{t("fields.payType")}</TableHead>
+                <TableHead numeric>{t("pay.calculated")}</TableHead>
+                <TableHead numeric>{t("pay.bonus")}</TableHead>
+                <TableHead numeric>{t("pay.deduction")}</TableHead>
                 <TableHead numeric>{t("pay.paid")}</TableHead>
                 <TableHead>{t("pay.status")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {payouts.map((payout) => (
-                <TableRow key={payout.id}>
+                <TableRow key={payout.id} data-payout={payout.month} data-payout-status={payout.status}>
                   <TableCell className="whitespace-nowrap numeric">
-                    {formatDay(payout.month, locale, { year: true, month: "long" })}
+                    {formatMonth(payout.month.slice(0, 7), locale)}
                   </TableCell>
                   <TableCell className="whitespace-nowrap">{t(`payType.${payout.pay_type}`)}</TableCell>
                   <TableCell numeric>
-                    <MoneyText amount={payout.final_amount} />
+                    <MoneyText amount={payout.calculated} />
+                  </TableCell>
+                  <TableCell numeric>{payout.bonus > 0 ? <MoneyText amount={payout.bonus} /> : "—"}</TableCell>
+                  <TableCell numeric>{payout.deduction > 0 ? <MoneyText amount={payout.deduction} /> : "—"}</TableCell>
+                  <TableCell numeric>
+                    <MoneyText amount={payout.final_amount} className="font-medium" />
                   </TableCell>
                   <TableCell>
                     <StatusPill tone={payout.status === "paid" ? "success" : "neutral"}>

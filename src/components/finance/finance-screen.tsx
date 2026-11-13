@@ -2,7 +2,7 @@
 
 import { Wallet } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useOptimistic, useState, useTransition } from "react";
+import { useEffect, useOptimistic, useRef, useState, useTransition } from "react";
 
 import { MonthNav } from "@/components/shared/month-nav";
 import { Button } from "@/components/ui/button";
@@ -32,7 +32,7 @@ export function FinanceScreen({
   children,
 }: {
   tab: FinanceTab;
-  /** The tabs this user has: a manager has no Charges tab. */
+  /** The tabs this user has: a manager has Payments and Debtors only. */
   tabs: readonly FinanceTab[];
   month: string;
   currentMonth: string;
@@ -48,6 +48,20 @@ export function FinanceScreen({
   const [payment, setPayment] = useState<{ studentId?: string } | null>(null);
   const [shownTab, showTab] = useOptimistic(tab);
   const [, startTabChange] = useTransition();
+  const tabList = useRef<HTMLDivElement>(null);
+
+  // The owner's six tabs do not fit a phone: keep the open one in view.
+  useEffect(() => {
+    const list = tabList.current;
+    const active = list?.querySelector<HTMLElement>('[data-state="active"]');
+    if (!list || !active) return;
+    // Only the tab bar moves, sideways; the page itself is never scrolled.
+    const left = active.offsetLeft - list.offsetLeft;
+    if (left < list.scrollLeft) list.scrollLeft = left;
+    else if (left + active.offsetWidth > list.scrollLeft + list.clientWidth) {
+      list.scrollLeft = left + active.offsetWidth - list.clientWidth;
+    }
+  }, [shownTab]);
 
   return (
     <TakePaymentContext value={(studentId) => setPayment({ studentId })}>
@@ -84,10 +98,9 @@ export function FinanceScreen({
               <MoneyText amount={summary.debt} className={summary.debt > 0 ? "text-danger" : undefined} />
             </span>
           </KpiCard>
-          {/* Expenses arrive with the owner tools; until then the strip shows 0. */}
           <KpiCard label={t("strip.expenses")}>
-            <span data-kpi="expenses">
-              <MoneyText amount={0} />
+            <span data-kpi="expenses" data-value={summary.expenses}>
+              <MoneyText amount={summary.expenses} />
             </span>
           </KpiCard>
         </div>
@@ -98,12 +111,12 @@ export function FinanceScreen({
         onValueChange={(value) =>
           startTabChange(() => {
             showTab(value as FinanceTab);
-            setParams({ tab: value === "payments" ? null : value, page: null, method: null });
+            setParams({ tab: value === "payments" ? null : value, page: null, method: null, category: null });
           })
         }
         className="gap-6"
       >
-        <TabsList>
+        <TabsList ref={tabList}>
           {tabs.map((name) => (
             <TabsTrigger key={name} value={name}>
               {t(`tabs.${name}`)}

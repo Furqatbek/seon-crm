@@ -617,7 +617,10 @@
     "tabs": {
       "payments": "Toʻlovlar",
       "debtors": "Qarzdorlar",
-      "charges": "Hisoblar"
+      "charges": "Hisoblar",
+      "expenses": "Xarajatlar",
+      "salaries": "Maoshlar",
+      "adjustments": "Tuzatishlar"
     },
     "strip": {
       "collected": "Yigʻilgan",
@@ -631,7 +634,8 @@
       "transfer": "Oʻtkazma"
     },
     "filters": {
-      "allMethods": "Barcha usullar"
+      "allMethods": "Barcha usullar",
+      "allCategories": "Barcha toifalar"
     },
     "fields": {
       "student": "Oʻquvchi",
@@ -646,7 +650,12 @@
       "debt": "Qarz",
       "oldestUnpaid": "Eng eski toʻlanmagan oy",
       "lastPayment": "Oxirgi toʻlov",
-      "description": "Tavsif"
+      "description": "Tavsif",
+      "category": "Toifa",
+      "teacher": "Oʻqituvchi",
+      "type": "Turi",
+      "by": "Kim",
+      "reason": "Sabab"
     },
     "payment": {
       "title": "Toʻlov qabul qilish",
@@ -729,7 +738,68 @@
       "alreadyVoided": "Bu toʻlov allaqachon bekor qilingan.",
       "notFound": "Bu endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
-      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "monthInFuture": "Bu oy hali boshlanmagan.",
+      "categoryRequired": "Toifani tanlang.",
+      "adjustmentNoteRequired": "Mukofot yoki ushlanma nima uchunligini yozing.",
+      "deductionTooLarge": "Ushlanma toʻlov summasidan katta.",
+      "alreadyPaid": "Bu toʻlov allaqachon toʻlangan.",
+      "payoutChanged": "Maosh oʻzgargan yoki allaqachon toʻlangan. Summani tekshirib, qayta urinib koʻring."
+    },
+    "expenses": {
+      "add": "Xarajat qoʻshish",
+      "title": "Yangi xarajat",
+      "empty": "Bu oyda xarajatlar yoʻq.",
+      "amount": "Summa, soʻm",
+      "save": "Xarajat qoʻshish",
+      "done": "Xarajat qoʻshildi",
+      "category": {
+        "rent": "Ijara",
+        "utilities": "Kommunal",
+        "marketing": "Marketing",
+        "supplies": "Jihozlar",
+        "other": "Boshqa"
+      }
+    },
+    "salaries": {
+      "calculate": "Hisoblash",
+      "hint": "Har oy uning 1-kunida amalda boʻlgan stavka boʻyicha toʻlanadi. Toʻlangan maoshlar oʻzgarmaydi.",
+      "empty": "{month} uchun maoshlar hali yoʻq. Yaratish uchun «Hisoblash»ni bosing.",
+      "calculated": "{count, plural, =0 {Hisoblanadigan narsa yoʻq} other {# ta maosh hisoblandi}}",
+      "calculatedColumn": "Hisoblangan",
+      "bonus": "Mukofot",
+      "deduction": "Ushlanma",
+      "toPay": "Toʻlanadi",
+      "status": "Holat",
+      "draft": "Qoralama",
+      "paid": "Toʻlangan",
+      "showBreakdown": "{teacher}: hisob-kitobni koʻrsatish",
+      "hideBreakdown": "{teacher}: hisob-kitobni yashirish",
+      "rowActions": "{teacher}: amallar",
+      "lessons": "{count} ta dars",
+      "collected": "yigʻilgan",
+      "noLines": "Bu oyda hisobga olingan dars yoki toʻlov yoʻq.",
+      "rate": "Stavka",
+      "paidOn": "{date} kuni toʻlangan",
+      "note": "Izoh",
+      "adjust": "Mukofot va ushlanma",
+      "adjustTitle": "{teacher}: mukofot va ushlanma",
+      "adjustHint": "Ikkalasi ham hisoblangan summaga qoʻshiladi. Qayta hisoblashda saqlanib qoladi.",
+      "bonusField": "Mukofot, soʻm",
+      "deductionField": "Ushlanma, soʻm",
+      "noteField": "Nima uchun",
+      "adjustSaved": "Maosh yangilandi",
+      "markPaid": "Toʻlangan deb belgilash",
+      "markPaidTitle": "{teacher} maoshi toʻlangan deb belgilansinmi?",
+      "markPaidBody": "Toʻlangan maosh qulflanadi: uni tahrirlab yoki qayta hisoblab boʻlmaydi.",
+      "markedPaid": "Maosh toʻlangan deb belgilandi",
+      "monthOpenWarning": "{month} hali tugamagan. Bundan keyingi darslar va toʻlovlar toʻlangan maoshga qoʻshilmaydi."
+    },
+    "adjustments": {
+      "empty": "Bu oyda balansga qaytarish yoki bekor qilingan toʻlov yoʻq.",
+      "credit": "Balansga qaytarildi",
+      "void": "Bekor qilingan toʻlov",
+      "receipt": "Chek {receipt}"
     }
   },
   "teachers": {
@@ -814,11 +884,14 @@
       "payouts": "Toʻlovlar",
       "noPayouts": "Hozircha toʻlovlar yoʻq.",
       "month": "Oy",
-      "paid": "Summa",
+      "paid": "Toʻlanadi",
       "payoutStatus": {
         "draft": "Qoralama",
         "paid": "Toʻlangan"
-      }
+      },
+      "calculated": "Hisoblangan",
+      "bonus": "Mukofot",
+      "deduction": "Ushlanma"
     },
     "archive": {
       "title": "{name} arxivlansinmi?",

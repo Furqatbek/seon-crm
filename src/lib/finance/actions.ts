@@ -9,7 +9,10 @@ import { tashkentDate } from "@/lib/domain/time";
 import { createClient } from "@/lib/supabase/server";
 import {
   creditSchema,
+  expenseSchema,
+  markPaidSchema,
   paymentSchema,
+  payoutAdjustmentSchema,
   voidSchema,
   type FinanceErrorKey,
   type FinanceResult,
@@ -19,6 +22,8 @@ const ERRORS: Record<string, FinanceErrorKey> = {
   "42501": "notAllowed",
   P0002: "notFound",
   EF001: "monthNotCurrent",
+  ES001: "monthInFuture",
+  ES002: "deductionTooLarge",
 };
 
 async function session() {
@@ -258,4 +263,84 @@ export async function generateMonthlyCharges(
 
   refresh();
   return { ok: true, data: { created: data } };
+}
+
+// ── Owner tools: expenses and teacher payouts ──
+
+async function ownerSession() {
+  const ctx = await session();
+  return ctx && ctx.user.role === "owner" ? ctx : null;
+}
+
+/** Add expense. Owner only. */
+export async function addExpense(input: unknown): Promise<FinanceResult> {
+  const parsed = expenseSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  if (parsed.data.spent_on > tashkentDate(new Date())) return { ok: false, error: "dateInFuture" };
+
+  const { error } = await ctx.supabase.from("expenses").insert({ ...parsed.data, created_by: ctx.user.id });
+  if (error) return failure(error);
+
+  refresh();
+  return { ok: true };
+}
+
+/** Calculate: creates or refreshes the month's draft payouts. Owner only. */
+export async function calculatePayouts(monthInput: unknown): Promise<FinanceResult<{ count: number }>> {
+  const month = monthSchema.safeParse(monthInput);
+  if (!month.success) return { ok: false, error: "dateInvalid" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase.rpc("calculate_teacher_payouts", { p_month: `${month.data}-01` });
+  if (error) return failure(error);
+
+  refresh();
+  return { ok: true, data: { count: data } };
+}
+
+/** Bonus and deduction with a note, on a draft payout. The database works out the amount to pay. */
+export async function savePayoutAdjustment(input: unknown): Promise<FinanceResult> {
+  const parsed = payoutAdjustmentSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("teacher_payouts")
+    .update({ bonus: parsed.data.bonus, deduction: parsed.data.deduction, note: parsed.data.note || null })
+    .eq("id", parsed.data.payout_id)
+    .eq("status", "draft")
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "alreadyPaid" };
+
+  refresh();
+  return { ok: true };
+}
+
+/**
+ * Mark paid: locks the payout for good, at the amount the owner confirmed.
+ * A payout that was recalculated, adjusted or paid in the meantime is left alone.
+ */
+export async function markPayoutPaid(input: unknown): Promise<FinanceResult> {
+  const parsed = markPaidSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "notFound" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("teacher_payouts")
+    .update({ status: "paid", paid_at: new Date().toISOString(), paid_by: ctx.user.id })
+    .eq("id", parsed.data.payout_id)
+    .eq("status", "draft")
+    .eq("final_amount", parsed.data.expected)
+    .select("id");
+  if (error) return failure(error);
+
+  // Either way the list shows the payout as it now is.
+  refresh();
+  return data.length === 0 ? { ok: false, error: "payoutChanged" } : { ok: true };
 }

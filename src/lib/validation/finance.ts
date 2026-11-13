@@ -59,6 +59,55 @@ export const creditSchema = z.object({
 export type CreditInput = z.input<typeof creditSchema>;
 export type CreditValues = z.output<typeof creditSchema>;
 
+export const EXPENSE_CATEGORIES = ["rent", "utilities", "marketing", "supplies", "other"] as const;
+export type ExpenseCategory = (typeof EXPENSE_CATEGORIES)[number];
+
+/** Add expense: owner only. */
+export const expenseSchema = z.object({
+  category: z.enum(EXPENSE_CATEGORIES, "categoryRequired"),
+  amount: positiveMoney("amountInvalid"),
+  spent_on: day,
+  note: z
+    .string()
+    .trim()
+    .max(500, "tooLong")
+    .transform((value) => value || null),
+});
+export type ExpenseInput = z.input<typeof expenseSchema>;
+export type ExpenseValues = z.output<typeof expenseSchema>;
+
+/** Whole soʻm, 0 or more; an empty field is 0. */
+const optionalMoney = z.string().transform((value, ctx) => {
+  if (value.trim() === "") return 0;
+  const amount = parseMoneyInput(value);
+  if (amount === null) {
+    ctx.addIssue({ code: "custom", message: "amountInvalid" });
+    return z.NEVER;
+  }
+  return amount;
+});
+
+/** Bonus and deduction on a draft payout: either one needs a note. */
+export const payoutAdjustmentSchema = z
+  .object({
+    payout_id: z.uuid(),
+    bonus: optionalMoney,
+    deduction: optionalMoney,
+    note: z.string().trim().max(500, "tooLong"),
+  })
+  .refine((value) => (value.bonus === 0 && value.deduction === 0) || value.note !== "", {
+    path: ["note"],
+    message: "adjustmentNoteRequired",
+  });
+export type PayoutAdjustmentInput = z.input<typeof payoutAdjustmentSchema>;
+export type PayoutAdjustmentValues = z.output<typeof payoutAdjustmentSchema>;
+
+/** Mark paid: the payout and the amount the owner saw when confirming. */
+export const markPaidSchema = z.object({
+  payout_id: z.uuid(),
+  expected: z.number().int(),
+});
+
 export type FinanceErrorKey =
   | "studentRequired"
   | "groupRequired"
@@ -70,6 +119,12 @@ export type FinanceErrorKey =
   | "reasonRequired"
   | "tooLong"
   | "monthNotCurrent"
+  | "monthInFuture"
+  | "categoryRequired"
+  | "adjustmentNoteRequired"
+  | "deductionTooLarge"
+  | "alreadyPaid"
+  | "payoutChanged"
   | "alreadyVoided"
   | "notFound"
   | "notAllowed"
@@ -79,7 +134,9 @@ export type FinanceResult<T = undefined> =
   | (T extends undefined ? { ok: true } : { ok: true; data: T })
   | { ok: false; error: FinanceErrorKey };
 
-export const FINANCE_TABS = ["payments", "debtors", "charges"] as const;
+export const FINANCE_TABS = ["payments", "debtors", "charges", "expenses", "salaries", "adjustments"] as const;
+/** The tabs a manager has; the rest are the owner's. */
+export const MANAGER_FINANCE_TABS = ["payments", "debtors"] as const satisfies readonly (typeof FINANCE_TABS)[number][];
 export type FinanceTab = (typeof FINANCE_TABS)[number];
 
 /** URL state of /finance. */
@@ -87,6 +144,7 @@ export const financeSearchSchema = z.object({
   tab: z.enum(FINANCE_TABS).catch("payments"),
   month: monthParam,
   method: z.enum(PAYMENT_METHODS).optional().catch(undefined),
+  category: z.enum(EXPENSE_CATEGORIES).optional().catch(undefined),
   page: z.coerce.number().int().min(1).catch(1),
 });
 export type FinanceSearch = z.output<typeof financeSearchSchema>;

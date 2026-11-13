@@ -617,7 +617,10 @@
     "tabs": {
       "payments": "Payments",
       "debtors": "Debtors",
-      "charges": "Charges"
+      "charges": "Charges",
+      "expenses": "Expenses",
+      "salaries": "Salaries",
+      "adjustments": "Adjustments"
     },
     "strip": {
       "collected": "Collected",
@@ -631,7 +634,8 @@
       "transfer": "Bank transfer"
     },
     "filters": {
-      "allMethods": "All methods"
+      "allMethods": "All methods",
+      "allCategories": "All categories"
     },
     "fields": {
       "student": "Student",
@@ -646,7 +650,12 @@
       "debt": "Debt",
       "oldestUnpaid": "Oldest unpaid month",
       "lastPayment": "Last payment",
-      "description": "Description"
+      "description": "Description",
+      "category": "Category",
+      "teacher": "Teacher",
+      "type": "Type",
+      "by": "By",
+      "reason": "Reason"
     },
     "payment": {
       "title": "Take payment",
@@ -729,7 +738,68 @@
       "alreadyVoided": "This payment is already voided.",
       "notFound": "This no longer exists.",
       "notAllowed": "You are not allowed to do this.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "monthInFuture": "This month has not started yet.",
+      "categoryRequired": "Choose a category.",
+      "adjustmentNoteRequired": "Say what the bonus or deduction is for.",
+      "deductionTooLarge": "The deduction is larger than the payout.",
+      "alreadyPaid": "This payout is already paid.",
+      "payoutChanged": "This payout has changed or is already paid. Check the amount and try again."
+    },
+    "expenses": {
+      "add": "Add expense",
+      "title": "New expense",
+      "empty": "No expenses for this month.",
+      "amount": "Amount, soʻm",
+      "save": "Add expense",
+      "done": "Expense added",
+      "category": {
+        "rent": "Rent",
+        "utilities": "Utilities",
+        "marketing": "Marketing",
+        "supplies": "Supplies",
+        "other": "Other"
+      }
+    },
+    "salaries": {
+      "calculate": "Calculate",
+      "hint": "Each month is paid at the rate in effect on its 1st day. Paid payouts are not changed.",
+      "empty": "No payouts for {month} yet. Press Calculate to create them.",
+      "calculated": "{count, plural, =0 {Nothing to calculate} one {# payout calculated} other {# payouts calculated}}",
+      "calculatedColumn": "Calculated",
+      "bonus": "Bonus",
+      "deduction": "Deduction",
+      "toPay": "To pay",
+      "status": "Status",
+      "draft": "Draft",
+      "paid": "Paid",
+      "showBreakdown": "Show breakdown for {teacher}",
+      "hideBreakdown": "Hide breakdown for {teacher}",
+      "rowActions": "Actions for {teacher}",
+      "lessons": "{count, plural, one {# lesson} other {# lessons}}",
+      "collected": "collected",
+      "noLines": "No lessons or payments counted this month.",
+      "rate": "Rate",
+      "paidOn": "Paid on {date}",
+      "note": "Note",
+      "adjust": "Bonus and deduction",
+      "adjustTitle": "Bonus and deduction for {teacher}",
+      "adjustHint": "Both are added to the calculated amount. A recalculation keeps them.",
+      "bonusField": "Bonus, soʻm",
+      "deductionField": "Deduction, soʻm",
+      "noteField": "What it is for",
+      "adjustSaved": "Payout updated",
+      "markPaid": "Mark paid",
+      "markPaidTitle": "Mark the payout for {teacher} as paid?",
+      "markPaidBody": "A paid payout is locked: it cannot be edited or recalculated.",
+      "markedPaid": "Payout marked paid",
+      "monthOpenWarning": "{month} is not over yet. Lessons held and payments received after this will not be added to a paid payout."
+    },
+    "adjustments": {
+      "empty": "No credits or voided payments this month.",
+      "credit": "Credit",
+      "void": "Voided payment",
+      "receipt": "Receipt {receipt}"
     }
   },
   "teachers": {
@@ -814,11 +884,14 @@
       "payouts": "Payouts",
       "noPayouts": "No payouts yet.",
       "month": "Month",
-      "paid": "Amount",
+      "paid": "To pay",
       "payoutStatus": {
         "draft": "Draft",
         "paid": "Paid"
-      }
+      },
+      "calculated": "Calculated",
+      "bonus": "Bonus",
+      "deduction": "Deduction"
     },
     "archive": {
       "title": "Archive {name}?",
