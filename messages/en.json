@@ -293,9 +293,6 @@
       "more": "More actions",
       "addCredit": "Add credit"
     },
-    "soon": {
-      "message": "Messages open with notifications."
-    },
     "done": {
       "paused": "Student paused",
       "resumed": "Student is active again",
@@ -687,7 +684,6 @@
       "count": "{count, plural, one {# student in debt} other {# students in debt}}",
       "remind": "Remind",
       "remindAll": "Remind all",
-      "remindSoon": "Reminders open with notifications.",
       "never": "Never"
     },
     "charges": {
@@ -1039,6 +1035,48 @@
       "0_30": "0–30 days",
       "31_60": "31–60 days",
       "over_60": "Over 60 days"
+    }
+  },
+  "bot": {
+    "linked": "{student} is now linked. Payment and lesson reminders from {centre} will come here. Send /stop to unlink.",
+    "unknownCode": "This link is not valid. Ask {centre} for a new one.",
+    "stopped": "Unlinked. You will get no more messages from {centre}.",
+    "nothingLinked": "Nothing is linked to this chat.",
+    "help": "This bot sends reminders from {centre}. Open the personal link the centre gave you to connect."
+  },
+  "notify": {
+    "send": {
+      "title": "Message to {student}",
+      "channel": "Channel",
+      "telegram": "Telegram",
+      "sms": "SMS",
+      "notLinked": "Telegram is not linked for this student.",
+      "text": "Text",
+      "smsHint": "Sent to {phone}. Plain Latin keeps an SMS at 160 characters; Cyrillic or ʻ halves that.",
+      "action": "Send",
+      "sent": "Message sent",
+      "failed": "The message could not be delivered. The Messages tab shows why."
+    },
+    "remind": {
+      "sent": "Reminder sent",
+      "failed": "The reminder could not be delivered. The student's Messages tab shows why.",
+      "already": "Already reminded today",
+      "allDone": "{sent, plural, =0 {No reminders sent} one {# reminder sent} other {# reminders sent}}{already, plural, =0 {} other { · # already reminded today}}{failed, plural, =0 {} other { · # failed}}",
+      "allTitle": "Remind every debtor?",
+      "allBody": "{count, plural, one {# student in debt gets a reminder} other {# students in debt each get a reminder}} by Telegram, or by SMS when Telegram is not linked. Anyone already reminded today is left out.",
+      "allAction": "Remind all"
+    },
+    "errors": {
+      "notAllowed": "You are not allowed to do this.",
+      "notConfigured": "Messages are not set up on this server yet.",
+      "quietHours": "Nothing is sent between {from} and {to}. Try again after {to}.",
+      "noChannel": "This student cannot be reached on that channel.",
+      "textRequired": "Write the message.",
+      "tooLong": "This text is too long.",
+      "notFound": "This no longer exists.",
+      "noDebt": "This student no longer owes anything.",
+      "noTemplate": "There is no template for this message.",
+      "generic": "Something went wrong. Try again."
     }
   }
 }

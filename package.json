@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "e2e": "playwright test",
-    "db:types": "supabase gen types typescript --linked > src/lib/supabase/types.ts"
+    "db:types": "supabase gen types typescript --linked > src/lib/supabase/types.ts",
+    "notify:test": "node scripts/notify-test.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

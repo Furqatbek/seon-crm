@@ -65,7 +65,7 @@ test("a lead is converted into a student, linked both ways", async ({ page }, te
   await expect(status(page)).toHaveAttribute("data-student-status", "active");
   await expect(page.locator('[data-slot="student-balance"]')).toContainText("UZS 0");
   await expect(page.getByRole("button", { name: "Take payment" })).toBeEnabled();
-  await expect(page.getByRole("button", { name: "Send message" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Send message" })).toBeEnabled();
   await expect(page.getByText("Test Parent")).toBeVisible();
   await expect(page.getByText("Русский")).toBeVisible();
 

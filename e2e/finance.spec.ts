@@ -119,8 +119,8 @@ test("generate a month, take a payment, and the balance and debtors follow", asy
     await expect(debtor).toContainText(debt);
     await expect(debtor).toContainText(formatMonth(month, "en"));
     await expect(debtor).toContainText("Never");
-    await expect(debtor.getByRole("button", { name: "Remind" })).toBeDisabled();
-    await expect(page.getByRole("button", { name: "Remind all" })).toBeDisabled();
+    await expect(debtor.getByRole("button", { name: "Remind", exact: true })).toBeEnabled();
+    await expect(page.getByRole("button", { name: "Remind all" })).toBeEnabled();
     await page.waitForLoadState("networkidle");
     await page.screenshot({ path: testInfo.outputPath("debtors.png") });
     await debtor.getByRole("button", { name: "Take payment" }).click();

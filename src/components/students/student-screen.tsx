@@ -20,7 +20,6 @@ import { toast } from "sonner";
 import { EnrolSheet } from "@/components/enrolments/enrol-sheet";
 import { CreditSheet } from "@/components/finance/credit-sheet";
 import { TakePaymentSheet } from "@/components/finance/take-payment-sheet";
-import { SoonButton } from "@/components/shared/soon-button";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -50,6 +49,7 @@ import type { StudentDetail } from "@/lib/students/queries";
 import { STUDENT_TABS, type StudentErrorKey, type StudentTab } from "@/lib/validation/students";
 
 import { BalanceText } from "./balance-text";
+import { SendMessageSheet } from "./send-message-sheet";
 import { StudentFormSheet } from "./student-form-sheet";
 import { STUDENT_TONE } from "./student-meta";
 
@@ -88,6 +88,7 @@ export function StudentScreen({
   const [editing, setEditing] = useState(false);
   const [enrolling, setEnrolling] = useState(autoEnrol);
   const [paying, setPaying] = useState(false);
+  const [messaging, setMessaging] = useState(false);
   const [crediting, setCrediting] = useState(false);
   const [confirm, setConfirm] = useState<Confirm | null>(null);
   const [pending, startTransition] = useTransition();
@@ -133,11 +134,10 @@ export function StudentScreen({
               <UserPlus aria-hidden />
               {t("actions.enrol")}
             </Button>
-            {/* Enabled with notifications. */}
-            <SoonButton hint={t("soon.message")}>
+            <Button onClick={() => setMessaging(true)}>
               <MessageSquare aria-hidden />
               {t("actions.sendMessage")}
-            </SoonButton>
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size="icon" aria-label={t("actions.more")}>
@@ -234,6 +234,7 @@ export function StudentScreen({
       />
 
       <TakePaymentSheet open={paying} studentId={student.id} today={today} onClose={() => setPaying(false)} />
+      <SendMessageSheet open={messaging} student={student} onClose={() => setMessaging(false)} />
       <CreditSheet
         open={crediting}
         student={student}

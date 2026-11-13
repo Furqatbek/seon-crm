@@ -564,6 +564,9 @@ isOneToOne: false
 "calculate_teacher_payouts":
 { Args: { "p_month": string }; Returns: number
                            },
+"call_reminders_job":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
 "convert_lead_to_student":
 { Args: { "p_birth_date"?: string,"p_full_name": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_lead_id": string,"p_notes"?: string,"p_parent_name"?: string,"p_parent_phone"?: string,"p_phone": string }; Returns: string
                            },
@@ -623,6 +626,16 @@ isOneToOne: false
                            },
 "mark_student_left":
 { Args: { "p_student_id": string }; Returns: undefined
+                           },
+"notify_debtors":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "charged_months": (string)[],"debt": number,"full_name": string,"language": Database["public"]['Enums']["app_language"],"parent_phone": string,"phone": string,"student_id": string,"telegram_chat_id": number
+            }[]
+                           },
+"notify_lessons":
+{ Args: { "p_days": (string)[] }; Returns: {
+              "full_name": string,"group_name": string,"language": Database["public"]['Enums']["app_language"],"lesson_date": string,"lesson_id": string,"parent_phone": string,"phone": string,"start_time": string,"student_id": string,"telegram_chat_id": number
+            }[]
                            },
 "preview_monthly_charges":
 { Args: { "p_month": string }; Returns: {

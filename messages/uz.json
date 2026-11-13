@@ -293,9 +293,6 @@
       "more": "Boshqa amallar",
       "addCredit": "Qaytarish qoʻshish"
     },
-    "soon": {
-      "message": "Xabarlar bildirishnomalar bilan birga ochiladi."
-    },
     "done": {
       "paused": "Oʻquvchi toʻxtatildi",
       "resumed": "Oʻquvchi yana faol",
@@ -687,7 +684,6 @@
       "count": "{count} ta qarzdor",
       "remind": "Eslatish",
       "remindAll": "Hammaga eslatish",
-      "remindSoon": "Eslatmalar bildirishnomalar bilan birga ochiladi.",
       "never": "Hech qachon"
     },
     "charges": {
@@ -1039,6 +1035,48 @@
       "0_30": "0–30 kun",
       "31_60": "31–60 kun",
       "over_60": "60 kundan ortiq"
+    }
+  },
+  "bot": {
+    "linked": "{student} ulandi. {centre} toʻlov va dars eslatmalarini shu yerga yuboradi. Uzish uchun /stop yuboring.",
+    "unknownCode": "Bu havola yaroqsiz. {centre}dan yangisini soʻrang.",
+    "stopped": "Uzildi. {centre}dan boshqa xabar kelmaydi.",
+    "nothingLinked": "Bu chatga hech narsa ulanmagan.",
+    "help": "Bu bot {centre} eslatmalarini yuboradi. Ulanish uchun markaz bergan shaxsiy havolani oching."
+  },
+  "notify": {
+    "send": {
+      "title": "{student}ga xabar",
+      "channel": "Kanal",
+      "telegram": "Telegram",
+      "sms": "SMS",
+      "notLinked": "Bu oʻquvchida Telegram ulanmagan.",
+      "text": "Matn",
+      "smsHint": "{phone} raqamiga yuboriladi. Oddiy lotin harflarida bitta SMSga 160 belgi sigʻadi; kirill yoki ʻ belgisi bilan ikki baravar kam.",
+      "action": "Yuborish",
+      "sent": "Xabar yuborildi",
+      "failed": "Xabar yetkazilmadi. Sababi «Xabarlar» boʻlimida."
+    },
+    "remind": {
+      "sent": "Eslatma yuborildi",
+      "failed": "Eslatma yetkazilmadi. Sababi oʻquvchining «Xabarlar» boʻlimida.",
+      "already": "Bugun eslatilgan",
+      "allDone": "{sent, plural, =0 {Eslatma yuborilmadi} other {# ta eslatma yuborildi}}{already, plural, =0 {} other { · bugun eslatilgan: #}}{failed, plural, =0 {} other { · yetkazilmadi: #}}",
+      "allTitle": "Barcha qarzdorlarga eslatilsinmi?",
+      "allBody": "{count} ta qarzdor oʻquvchiga Telegram orqali, Telegram ulanmagan boʻlsa SMS orqali eslatma boradi. Bugun eslatilganlarga yuborilmaydi.",
+      "allAction": "Hammasiga eslatish"
+    },
+    "errors": {
+      "notAllowed": "Sizga bu amalga ruxsat yoʻq.",
+      "notConfigured": "Bu serverda xabar yuborish hali sozlanmagan.",
+      "quietHours": "{from} dan {to} gacha hech narsa yuborilmaydi. {to} dan keyin urinib koʻring.",
+      "noChannel": "Bu oʻquvchi bilan bu kanal orqali bogʻlanib boʻlmaydi.",
+      "textRequired": "Xabarni yozing.",
+      "tooLong": "Matn juda uzun.",
+      "notFound": "Bu endi mavjud emas.",
+      "noDebt": "Bu oʻquvchining qarzi qolmagan.",
+      "noTemplate": "Bu xabar uchun shablon yoʻq.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
     }
   }
 }

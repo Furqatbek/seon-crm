@@ -8,6 +8,8 @@ const executablePath = process.env.PLAYWRIGHT_CHROMIUM_PATH;
 // the local stack (npx supabase start) or the dev project in .env.local.
 export default defineConfig({
   testDir: "./e2e",
+  globalSetup: "./e2e/support/notify-setup.ts",
+  globalTeardown: "./e2e/support/notify-teardown.ts",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -41,5 +43,14 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    // Secrets for the two API routes, so the tests can call them. No Telegram
+    // or Eskiz credentials are ever set here: nothing real can be sent.
+    env: {
+      CRON_SECRET: process.env.CRON_SECRET ?? "e2e-cron-secret",
+      TELEGRAM_WEBHOOK_SECRET: process.env.TELEGRAM_WEBHOOK_SECRET ?? "e2e-webhook-secret",
+      TELEGRAM_BOT_TOKEN: "",
+      ESKIZ_EMAIL: "",
+      ESKIZ_PASSWORD: "",
+    },
   },
 });

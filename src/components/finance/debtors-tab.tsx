@@ -2,10 +2,19 @@
 
 import { BellRing, CircleCheck } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
-import { SoonButton } from "@/components/shared/soon-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MoneyText } from "@/components/ui/money-text";
 import { Pagination } from "@/components/ui/pagination";
@@ -19,6 +28,8 @@ import {
 } from "@/components/ui/table";
 import { Link } from "@/i18n/navigation";
 import type { DebtorRow } from "@/lib/finance/queries";
+import { remindAllDebtors, remindDebtor } from "@/lib/notify/actions";
+import type { NotifyFailure } from "@/lib/validation/notify";
 import { formatDate, formatMonth } from "@/lib/format";
 import { useUrlState } from "@/lib/hooks/use-url-state";
 
@@ -30,6 +41,37 @@ export function DebtorsTab({ rows, total, page }: { rows: DebtorRow[]; total: nu
   const locale = useLocale();
   const { setParams } = useUrlState();
   const takePayment = useTakePayment();
+  const tNotify = useTranslations("notify");
+  const tCommon = useTranslations("common");
+  const [confirmAll, setConfirmAll] = useState(false);
+  // The row being reminded, or "all".
+  const [reminding, setReminding] = useState<string | null>(null);
+  const [, startTransition] = useTransition();
+
+  const explain = (failure: NotifyFailure) => {
+    toast(tNotify(`errors.${failure.error}`, { from: failure.quiet?.from ?? "", to: failure.quiet?.to ?? "" }));
+  };
+
+  function remind(studentId: string) {
+    setReminding(studentId);
+    startTransition(async () => {
+      const result = await remindDebtor(studentId);
+      setReminding(null);
+      if (!result.ok) explain(result);
+      else toast(tNotify(`remind.${result.outcome}`));
+    });
+  }
+
+  function remindAll() {
+    setConfirmAll(false);
+    setReminding("all");
+    startTransition(async () => {
+      const result = await remindAllDebtors();
+      setReminding(null);
+      if (!result.ok) explain(result);
+      else toast(tNotify("remind.allDone", { sent: result.sent, already: result.already, failed: result.failed }));
+    });
+  }
   if (total === 0) {
     return <EmptyState icon={CircleCheck}>{t("debtors.empty")}</EmptyState>;
   }
@@ -38,11 +80,10 @@ export function DebtorsTab({ rows, total, page }: { rows: DebtorRow[]; total: nu
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-body text-text-secondary">{t("debtors.count", { count: total })}</p>
-        {/* Reminders are sent once notifications are connected. */}
-        <SoonButton hint={t("debtors.remindSoon")}>
+        <Button onClick={() => setConfirmAll(true)} disabled={reminding !== null}>
           <BellRing aria-hidden />
           {t("debtors.remindAll")}
-        </SoonButton>
+        </Button>
       </div>
       <Table>
         <TableHeader>
@@ -90,7 +131,9 @@ export function DebtorsTab({ rows, total, page }: { rows: DebtorRow[]; total: nu
               <TableCell>
                 <span className="flex items-center justify-end gap-2">
                   <Button onClick={() => takePayment(row.id)}>{t("payment.title")}</Button>
-                  <SoonButton hint={t("debtors.remindSoon")}>{t("debtors.remind")}</SoonButton>
+                  <Button onClick={() => remind(row.id)} disabled={reminding !== null}>
+                    {t("debtors.remind")}
+                  </Button>
                 </span>
               </TableCell>
             </TableRow>
@@ -102,6 +145,24 @@ export function DebtorsTab({ rows, total, page }: { rows: DebtorRow[]; total: nu
         total={total}
         onPageChange={(next) => setParams({ page: next <= 1 ? null : String(next) })}
       />
+
+      {/* Remind all reaches every debtor, not only this page: it is confirmed first. */}
+      <Dialog open={confirmAll} onOpenChange={setConfirmAll}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{tNotify("remind.allTitle")}</DialogTitle>
+            <DialogDescription>{tNotify("remind.allBody", { count: total })}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setConfirmAll(false)}>
+              {tCommon("cancel")}
+            </Button>
+            <Button variant="primary" onClick={remindAll}>
+              {tNotify("remind.allAction")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
