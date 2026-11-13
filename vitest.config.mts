@@ -7,7 +7,9 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["src/**/*.test.{ts,tsx}"],
+    include: ["src/**/*.test.{ts,tsx}", "supabase/tests/**/*.test.ts"],
+    // Database tests share one connection and roll back; keep files in order.
+    fileParallelism: false,
     passWithNoTests: true,
   },
 });

@@ -14,12 +14,10 @@ export type CurrentUser = {
 };
 
 /**
- * The signed-in staff member, or null. Verified with Supabase Auth on every
- * request (cached for the duration of one render).
- *
- * Until the profiles table exists (Phase 2) the role and name come from the
- * auth user: app_metadata.role, which only the service role can write, and
- * user_metadata.full_name. Anyone without a role is a manager.
+ * The signed-in staff member, or null. The session is verified with Supabase
+ * Auth and the name, role and active flag come from the user's profiles row
+ * (cached for the duration of one render). A deactivated user, or one whose
+ * profile the owner has not activated yet, is treated as signed out.
  */
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   const supabase = await createClient();
@@ -28,16 +26,17 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) return null;
 
-  const { id, email = "", app_metadata, user_metadata } = data.user;
-  const fullName =
-    typeof user_metadata?.full_name === "string" && user_metadata.full_name.trim() !== ""
-      ? user_metadata.full_name.trim()
-      : email;
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name, role, is_active")
+    .eq("id", data.user.id)
+    .maybeSingle();
+  if (!profile || !profile.is_active) return null;
 
   return {
-    id,
-    email,
-    fullName,
-    role: app_metadata?.role === "owner" ? "owner" : "manager",
+    id: data.user.id,
+    email: data.user.email ?? "",
+    fullName: profile.full_name,
+    role: profile.role === "owner" ? "owner" : "manager",
   };
 });
