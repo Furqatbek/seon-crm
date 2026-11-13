@@ -20,6 +20,10 @@
       "5": "Fri",
       "6": "Sat",
       "7": "Sun"
+    },
+    "phoneMatch": {
+      "lead": "A lead already has this number:",
+      "student": "A student already has this number:"
     }
   },
   "nav": {
@@ -144,9 +148,7 @@
     "form": {
       "created": "Lead added",
       "saved": "Lead saved",
-      "chooseSource": "Choose a source",
-      "duplicateLead": "A lead already has this number:",
-      "duplicateStudent": "A student already has this number:"
+      "chooseSource": "Choose a source"
     },
     "actions": {
       "logCall": "Log call",
@@ -211,6 +213,185 @@
       "noteRequired": "Write the note.",
       "moveNotAllowed": "This lead cannot be moved there.",
       "notFound": "This lead no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "students": {
+    "newStudent": "New student",
+    "searchPlaceholder": "Name or phone",
+    "noMatches": "No students match these filters.",
+    "contacts": "Contacts",
+    "noGroups": "Not in a group yet.",
+    "openLead": "Open the lead",
+    "filters": {
+      "allStatuses": "All statuses",
+      "allGroups": "All groups",
+      "debtOnly": "Debt only",
+      "clear": "Clear filters"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "left": "Left"
+    },
+    "balance": {
+      "debt": "Debt",
+      "due": "Due",
+      "settled": "Settled",
+      "credit": "Credit"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "ledger": "Ledger",
+      "attendance": "Attendance",
+      "messages": "Messages"
+    },
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "parentName": "Parent's name",
+      "parentPhone": "Parent's phone",
+      "birthDate": "Birth date",
+      "language": "Message language",
+      "notes": "Notes",
+      "groups": "Groups",
+      "group": "Group",
+      "balance": "Balance",
+      "status": "Status",
+      "telegram": "Telegram",
+      "lead": "Came from"
+    },
+    "form": {
+      "title": {
+        "new": "New student",
+        "edit": "Edit student",
+        "convert": "Convert to student"
+      },
+      "convertHint": "The lead becomes a student and is marked Won. Check the details before saving.",
+      "languageHint": "Reminders to this student are sent in this language.",
+      "enrolStep": "Next step",
+      "created": "Student added",
+      "saved": "Student saved",
+      "converted": "Lead converted to a student"
+    },
+    "actions": {
+      "takePayment": "Take payment",
+      "enrol": "Enrol in a group",
+      "sendMessage": "Send message",
+      "edit": "Edit",
+      "pause": "Pause",
+      "resume": "Mark as active",
+      "markLeft": "Mark as left",
+      "archive": "Archive",
+      "more": "More actions"
+    },
+    "soon": {
+      "payment": "Payments open with the Finance block.",
+      "enrol": "Enrolling opens with the Groups block.",
+      "message": "Messages open with notifications."
+    },
+    "done": {
+      "paused": "Student paused",
+      "resumed": "Student is active again",
+      "left": "Student marked as left",
+      "archived": "Student archived"
+    },
+    "left": {
+      "title": "Mark {name} as left?",
+      "body": "The student leaves every group today and is no longer billed. Nothing is refunded automatically."
+    },
+    "archive": {
+      "title": "Archive {name}?",
+      "body": "The student is hidden from lists. Payments and attendance are kept."
+    },
+    "enrolment": {
+      "left": "Left",
+      "since": "Since {date}",
+      "period": "{from} – {to}",
+      "discount": "Discount"
+    },
+    "telegram": {
+      "title": "Telegram",
+      "linked": "Linked",
+      "linkedShort": "Linked",
+      "notLinked": "Not linked",
+      "hint": "Send this link to the student or parent. When they press Start in the bot, reminders will arrive in Telegram.",
+      "copy": "Copy link",
+      "copied": "Copied",
+      "showQr": "Show QR code",
+      "hideQr": "Hide QR code",
+      "qrLabel": "QR code with the Telegram link",
+      "noBot": "The Telegram bot is not connected yet. The owner connects it in Settings."
+    },
+    "ledger": {
+      "empty": "No charges or payments yet.",
+      "date": "Date",
+      "description": "Description",
+      "charge": "Charge",
+      "payment": "Payment",
+      "balance": "Balance",
+      "monthlyFee": "Fee for {month}",
+      "credit": "Credit",
+      "adjustment": "Adjustment",
+      "prorated": "{counted} of {total} lessons",
+      "paymentLine": "Payment · {method} · receipt {receipt}",
+      "voided": "Voided",
+      "method": {
+        "cash": "cash",
+        "card": "card",
+        "transfer": "bank transfer"
+      }
+    },
+    "attendance": {
+      "empty": "No lessons this month.",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "rate": "Attendance {rate}%",
+      "noRate": "Nothing marked yet",
+      "legend": "Marks",
+      "notMarked": "Not marked",
+      "cancelled": "Cancelled",
+      "mark": {
+        "present": "Present",
+        "late": "Late",
+        "absent": "Absent",
+        "excused": "Excused"
+      }
+    },
+    "messages": {
+      "empty": "Nothing has been sent yet.",
+      "date": "Date",
+      "type": "Message",
+      "channel": "Channel",
+      "status": "Status",
+      "text": "Text",
+      "types": {
+        "payment_due": "Payment due",
+        "payment_overdue": "Payment overdue",
+        "lesson_reminder": "Lesson reminder",
+        "custom": "One-off message"
+      },
+      "channels": {
+        "telegram": "Telegram",
+        "sms": "SMS"
+      },
+      "statuses": {
+        "queued": "Queued",
+        "sent": "Sent",
+        "failed": "Failed",
+        "skipped": "Skipped"
+      }
+    },
+    "errors": {
+      "nameRequired": "Enter the name.",
+      "phoneInvalid": "Enter a phone number like +998 90 123 45 67.",
+      "parentPhoneInvalid": "Enter the parent's number like +998 90 123 45 67, or leave it empty.",
+      "dateInvalid": "Choose a valid date.",
+      "languageRequired": "Choose a language.",
+      "tooLong": "This text is too long.",
+      "leadNotOpen": "This lead is already closed and cannot be converted.",
+      "notFound": "This student no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."
     }

@@ -22,12 +22,16 @@ import { useId, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { LEAD_STATUSES, canMoveLead, type LeadStatus } from "@/lib/domain/leads";
+import { LEAD_STATUSES, canConvertLead, canMoveLead, type LeadStatus } from "@/lib/domain/leads";
 import type { LeadSummary } from "@/lib/leads/queries";
 import { cn } from "@/lib/utils";
 
 import { SOURCE_ICON } from "./lead-meta";
 import { NextContact } from "./next-contact";
+
+// Dropping on Won starts Convert to student; every other column is a plain move.
+const canDrop = (from: LeadStatus, to: LeadStatus) =>
+  to === "won" ? canConvertLead(from) : canMoveLead(from, to);
 
 // The pointer decides while dragging with a mouse or finger; the dragged
 // card's rectangle decides while moving with the keyboard.
@@ -225,7 +229,7 @@ export function LeadBoard({
     setActiveId(null);
     const lead = leads.find((candidate) => candidate.id === dragged.id);
     const to = over?.id as LeadStatus | undefined;
-    if (lead && to && canMoveLead(lead.status, to)) onMove(lead, to);
+    if (lead && to && canDrop(lead.status, to)) onMove(lead, to);
   }
 
   return (
@@ -262,7 +266,7 @@ export function LeadBoard({
             leads={leads.filter((lead) => lead.status === status)}
             now={now}
             onOpen={onOpen}
-            droppable={active ? canMoveLead(active.status, status) : status !== "won"}
+            droppable={active ? canDrop(active.status, status) : true}
           />
         ))}
       </div>

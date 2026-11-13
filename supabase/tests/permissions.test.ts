@@ -180,6 +180,73 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
       });
     });
 
+    it.each(BOTH)("%s converts an open lead: student created, linked both ways, lead Won", async (who) => {
+      await as(who, async (s) => {
+        // Lead 1 is New in the seed.
+        const [{ id }] = await s.rows<{ id: string }>(
+          `select convert_lead_to_student($1, 'Converted Student', '+998900000009', p_language => 'ru') as id`,
+          [leadId(1)],
+        );
+        expect(
+          await s.rows(`select lead_id, language, status, length(telegram_link_code) as code from students where id = $1`, [id]),
+        ).toEqual([{ lead_id: leadId(1), language: "ru", status: "active", code: 22 }]);
+        expect(
+          await s.rows(`select status, converted_student_id, next_contact_at from leads where id = $1`, [leadId(1)]),
+        ).toEqual([{ status: "won", converted_student_id: id, next_contact_at: null }]);
+        expect(
+          await s.rows(
+            `select from_status, to_status from lead_activities
+             where lead_id = $1 and kind = 'status_change' and to_status = 'won'`,
+            [leadId(1)],
+          ),
+        ).toEqual([{ from_status: "new", to_status: "won" }]);
+
+        // It cannot be converted twice, and a won lead is read-only.
+        const again = await s.attempt(`select convert_lead_to_student($1, 'x', '+998900000009')`, [leadId(1)]);
+        expect(again.ok ? "allowed" : again.code).toBe("P0001");
+        denied(await s.attempt(`update leads set notes = 'x' where id = $1`, [leadId(1)]));
+        denied(await s.attempt(`update leads set status = 'new', converted_student_id = null where id = $1`, [leadId(1)]));
+      });
+    });
+
+    it("a won lead can still be archived by the owner, not by a manager", async () => {
+      // Lead 4 is Won in the seed.
+      const archive = (s: Session) =>
+        s.attempt(`update leads set archived_at = now() where id = $1`, [leadId(4)]);
+      allowed(await as("owner", archive));
+      denied(await as("manager", archive));
+    });
+
+    it.each(BOTH)("%s marks a student as left: every active enrolment ends today", async (who) => {
+      await as(who, async (s) => {
+        // Student 8 is in two groups.
+        expect(await s.count("enrollments", `student_id = '${studentId(8)}' and status = 'active'`)).toBe(2);
+        await s.rows(`select mark_student_left($1)`, [studentId(8)]);
+        expect(await s.rows(`select status from students where id = $1`, [studentId(8)])).toEqual([{ status: "left" }]);
+        expect(
+          await s.rows(
+            `select status, left_on = ${today} as today from enrollments where student_id = $1`,
+            [studentId(8)],
+          ),
+        ).toEqual([
+          { status: "left", today: true },
+          { status: "left", today: true },
+        ]);
+      });
+    });
+
+    it.each(BOTH)("%s reads the student list with balances", async (who) => {
+      await as(who, async (s) => {
+        expect(await s.count("student_overview")).toBe(await s.count("students"));
+        expect(
+          await s.rows(
+            `select count(*)::int as n from student_overview o join student_balances b on b.student_id = o.id
+             where o.balance is distinct from b.balance`,
+          ),
+        ).toEqual([{ n: 0 }]);
+      });
+    });
+
     it("owner archives a student; manager cannot", async () => {
       const archive = (s: Session) =>
         s.attempt(`update students set archived_at = now() where id = $1`, [studentId(1)]);
@@ -658,7 +725,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
     const tables = [
       "profiles", "centre_settings", "message_templates", "leads", "lead_activities", "teachers",
       "teacher_pay_rates", "students", "groups", "enrollments", "lessons", "attendance", "charges",
-      "payments", "expenses", "teacher_payouts", "messages", "student_balances",
+      "payments", "expenses", "teacher_payouts", "messages", "student_balances", "student_overview",
     ];
 
     it("every table has row level security switched on", async () => {

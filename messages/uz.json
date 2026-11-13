@@ -20,6 +20,10 @@
       "5": "Ju",
       "6": "Sha",
       "7": "Yak"
+    },
+    "phoneMatch": {
+      "lead": "Bu raqam boshqa lidda bor:",
+      "student": "Bu raqam oʻquvchida bor:"
     }
   },
   "nav": {
@@ -144,9 +148,7 @@
     "form": {
       "created": "Lid qoʻshildi",
       "saved": "Lid saqlandi",
-      "chooseSource": "Manbani tanlang",
-      "duplicateLead": "Bu raqam boshqa lidda bor:",
-      "duplicateStudent": "Bu raqam oʻquvchida bor:"
+      "chooseSource": "Manbani tanlang"
     },
     "actions": {
       "logCall": "Qoʻngʻiroqni yozish",
@@ -211,6 +213,185 @@
       "noteRequired": "Izohni yozing.",
       "moveNotAllowed": "Bu lidni u yerga koʻchirib boʻlmaydi.",
       "notFound": "Bu lid endi mavjud emas.",
+      "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    }
+  },
+  "students": {
+    "newStudent": "Yangi oʻquvchi",
+    "searchPlaceholder": "Ism yoki telefon",
+    "noMatches": "Bu filtrlarga mos oʻquvchi yoʻq.",
+    "contacts": "Aloqa",
+    "noGroups": "Hali guruhda emas.",
+    "openLead": "Lidni ochish",
+    "filters": {
+      "allStatuses": "Barcha holatlar",
+      "allGroups": "Barcha guruhlar",
+      "debtOnly": "Faqat qarzdorlar",
+      "clear": "Filtrlarni tozalash"
+    },
+    "status": {
+      "active": "Faol",
+      "paused": "Toʻxtatilgan",
+      "left": "Ketgan"
+    },
+    "balance": {
+      "debt": "Qarz",
+      "due": "Toʻlanishi kerak",
+      "settled": "Toʻlangan",
+      "credit": "Ortiqcha toʻlov"
+    },
+    "tabs": {
+      "overview": "Umumiy",
+      "ledger": "Hisob-kitob",
+      "attendance": "Davomat",
+      "messages": "Xabarlar"
+    },
+    "fields": {
+      "name": "Ism",
+      "phone": "Telefon",
+      "parentName": "Ota-ona ismi",
+      "parentPhone": "Ota-ona telefoni",
+      "birthDate": "Tugʻilgan sana",
+      "language": "Xabarlar tili",
+      "notes": "Izohlar",
+      "groups": "Guruhlar",
+      "group": "Guruh",
+      "balance": "Balans",
+      "status": "Holat",
+      "telegram": "Telegram",
+      "lead": "Qayerdan kelgan"
+    },
+    "form": {
+      "title": {
+        "new": "Yangi oʻquvchi",
+        "edit": "Oʻquvchini tahrirlash",
+        "convert": "Oʻquvchiga aylantirish"
+      },
+      "convertHint": "Lid oʻquvchiga aylanadi va «Yozildi» deb belgilanadi. Saqlashdan oldin maʼlumotlarni tekshiring.",
+      "languageHint": "Bu oʻquvchiga eslatmalar shu tilda yuboriladi.",
+      "enrolStep": "Keyingi qadam",
+      "created": "Oʻquvchi qoʻshildi",
+      "saved": "Oʻquvchi saqlandi",
+      "converted": "Lid oʻquvchiga aylantirildi"
+    },
+    "actions": {
+      "takePayment": "Toʻlov qabul qilish",
+      "enrol": "Guruhga yozish",
+      "sendMessage": "Xabar yuborish",
+      "edit": "Tahrirlash",
+      "pause": "Toʻxtatib turish",
+      "resume": "Faol qilish",
+      "markLeft": "Ketdi deb belgilash",
+      "archive": "Arxivlash",
+      "more": "Boshqa amallar"
+    },
+    "soon": {
+      "payment": "Toʻlovlar «Moliya» boʻlimi bilan birga ochiladi.",
+      "enrol": "Guruhga yozish «Guruhlar» boʻlimi bilan birga ochiladi.",
+      "message": "Xabarlar bildirishnomalar bilan birga ochiladi."
+    },
+    "done": {
+      "paused": "Oʻquvchi toʻxtatildi",
+      "resumed": "Oʻquvchi yana faol",
+      "left": "Oʻquvchi ketdi deb belgilandi",
+      "archived": "Oʻquvchi arxivlandi"
+    },
+    "left": {
+      "title": "{name} ketdi deb belgilansinmi?",
+      "body": "Oʻquvchi bugun barcha guruhlardan chiqadi va unga boshqa hisob yozilmaydi. Hech narsa avtomatik qaytarilmaydi."
+    },
+    "archive": {
+      "title": "{name} arxivlansinmi?",
+      "body": "Oʻquvchi roʻyxatlardan yashiriladi. Toʻlovlar va davomat saqlanadi."
+    },
+    "enrolment": {
+      "left": "Chiqqan",
+      "since": "{date} dan beri",
+      "period": "{from} – {to}",
+      "discount": "Chegirma"
+    },
+    "telegram": {
+      "title": "Telegram",
+      "linked": "Ulangan",
+      "linkedShort": "Ulangan",
+      "notLinked": "Ulanmagan",
+      "hint": "Bu havolani oʻquvchi yoki ota-onaga yuboring. Ular botda «Start» tugmasini bosgach, eslatmalar Telegramga keladi.",
+      "copy": "Havolani nusxalash",
+      "copied": "Nusxalandi",
+      "showQr": "QR-kodni koʻrsatish",
+      "hideQr": "QR-kodni yashirish",
+      "qrLabel": "Telegram havolasi bilan QR-kod",
+      "noBot": "Telegram-bot hali ulanmagan. Rahbar uni sozlamalarda ulaydi."
+    },
+    "ledger": {
+      "empty": "Hozircha hisob yoki toʻlovlar yoʻq.",
+      "date": "Sana",
+      "description": "Tavsif",
+      "charge": "Hisoblangan",
+      "payment": "Toʻlangan",
+      "balance": "Balans",
+      "monthlyFee": "Oylik toʻlov: {month}",
+      "credit": "Balansga qaytarildi",
+      "adjustment": "Tuzatish",
+      "prorated": "{total} darsdan {counted} tasi",
+      "paymentLine": "Toʻlov · {method} · chek {receipt}",
+      "voided": "Bekor qilingan",
+      "method": {
+        "cash": "naqd",
+        "card": "karta",
+        "transfer": "oʻtkazma"
+      }
+    },
+    "attendance": {
+      "empty": "Bu oyda darslar yoʻq.",
+      "previousMonth": "Oldingi oy",
+      "nextMonth": "Keyingi oy",
+      "rate": "Davomat {rate}%",
+      "noRate": "Hali belgilanmagan",
+      "legend": "Belgilar",
+      "notMarked": "Belgilanmagan",
+      "cancelled": "Bekor qilingan",
+      "mark": {
+        "present": "Keldi",
+        "late": "Kechikdi",
+        "absent": "Kelmadi",
+        "excused": "Sababli"
+      }
+    },
+    "messages": {
+      "empty": "Hozircha hech narsa yuborilmagan.",
+      "date": "Sana",
+      "type": "Xabar",
+      "channel": "Kanal",
+      "status": "Holat",
+      "text": "Matn",
+      "types": {
+        "payment_due": "Toʻlov vaqti",
+        "payment_overdue": "Toʻlov kechikdi",
+        "lesson_reminder": "Dars eslatmasi",
+        "custom": "Bir martalik xabar"
+      },
+      "channels": {
+        "telegram": "Telegram",
+        "sms": "SMS"
+      },
+      "statuses": {
+        "queued": "Navbatda",
+        "sent": "Yuborildi",
+        "failed": "Xato",
+        "skipped": "Oʻtkazib yuborildi"
+      }
+    },
+    "errors": {
+      "nameRequired": "Ismni kiriting.",
+      "phoneInvalid": "Raqamni +998 90 123 45 67 koʻrinishida kiriting.",
+      "parentPhoneInvalid": "Ota-ona raqamini +998 90 123 45 67 koʻrinishida kiriting yoki boʻsh qoldiring.",
+      "dateInvalid": "Toʻgʻri sanani tanlang.",
+      "languageRequired": "Tilni tanlang.",
+      "tooLong": "Matn juda uzun.",
+      "leadNotOpen": "Bu lid allaqachon yopilgan, uni oʻquvchiga aylantirib boʻlmaydi.",
+      "notFound": "Bu oʻquvchi endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
     }

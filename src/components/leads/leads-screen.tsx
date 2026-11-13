@@ -7,9 +7,11 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { StudentFormSheet, type StudentFormMode } from "@/components/students/student-form-sheet";
 import { PageHeader } from "@/components/ui/page-header";
+import { useRouter } from "@/i18n/navigation";
 import type { UserRole } from "@/lib/auth";
-import { canMoveLead, type LeadStatus } from "@/lib/domain/leads";
+import { canConvertLead, canMoveLead, type LeadStatus } from "@/lib/domain/leads";
 import { moveLead } from "@/lib/leads/actions";
 import type { GroupOption, LeadDetail, LeadSummary, StaffOption } from "@/lib/leads/queries";
 import type { LeadsSearch } from "@/lib/validation/leads";
@@ -23,7 +25,7 @@ import { LeadsToolbar } from "./leads-toolbar";
 import { MoveDialog, type PendingMove } from "./move-dialog";
 import { useLeadsUrl } from "./use-leads-url";
 
-type Movable = { id: string; full_name: string; status: LeadStatus };
+type Movable = { id: string; full_name: string; phone: string; status: LeadStatus };
 
 export function LeadsScreen({
   search,
@@ -51,11 +53,13 @@ export function LeadsScreen({
   const tNav = useTranslations("nav");
   const tEmpty = useTranslations("empty");
   const { openLead, closeLead, setParams } = useLeadsUrl();
+  const router = useRouter();
   const now = useMemo(() => new Date(nowIso), [nowIso]);
   const activeStaff = useMemo(() => staff.filter((person) => person.is_active), [staff]);
 
   const [form, setForm] = useState<{ lead: LeadDetail | null } | null>(null);
   const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
+  const [converting, setConverting] = useState<StudentFormMode | null>(null);
   const [, startTransition] = useTransition();
   const [boardLeads, moveOnBoard] = useOptimistic(
     board ?? [],
@@ -64,6 +68,16 @@ export function LeadsScreen({
   );
 
   function requestMove(lead: Movable, to: LeadStatus) {
+    // Won is reached through Convert to student, which creates the student.
+    if (to === "won") {
+      if (canConvertLead(lead.status)) {
+        setConverting({
+          kind: "convert",
+          lead: { id: lead.id, full_name: lead.full_name, phone: lead.phone },
+        });
+      }
+      return;
+    }
     if (!canMoveLead(lead.status, to)) return;
     // Lost needs a reason and Trial a group and date: ask first.
     if (to === "lost" || to === "trial") {
@@ -125,7 +139,7 @@ export function LeadsScreen({
       )}
 
       <LeadSheet
-        lead={form?.lead ? null : selected}
+        lead={form?.lead || converting ? null : selected}
         staff={staff}
         groups={groups}
         role={user.role}
@@ -140,6 +154,14 @@ export function LeadsScreen({
         staff={activeStaff}
         defaultAssignee={user.id}
         onClose={() => setForm(null)}
+      />
+      <StudentFormSheet
+        mode={converting}
+        onClose={() => setConverting(null)}
+        onSaved={(id) => {
+          setConverting(null);
+          router.push(`/students/${id}`);
+        }}
       />
       <MoveDialog move={pendingMove} groups={groups} onClose={() => setPendingMove(null)} />
     </>

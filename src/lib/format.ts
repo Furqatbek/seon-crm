@@ -114,3 +114,19 @@ export function formatDay(
 ): string {
   return formatDate(`${day}T12:00:00+05:00`, locale, options);
 }
+
+// Month names on their own ("November 2026"); Russian differs from the form used in a date.
+const MONTHS_ALONE: Record<Locale, string[]> = {
+  en: MONTHS.en.long,
+  ru: [
+    "январь", "февраль", "март", "апрель", "май", "июнь",
+    "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь",
+  ],
+  uz: MONTHS.uz.long,
+};
+
+/** A month from "YYYY-MM" or "YYYY-MM-01": en "November 2026", ru "ноябрь 2026", uz "noyabr 2026". */
+export function formatMonth(month: string, locale: Locale): string {
+  const [year, index] = month.split("-").map(Number);
+  return `${MONTHS_ALONE[locale][index - 1]} ${year}`;
+}

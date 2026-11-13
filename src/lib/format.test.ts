@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { formatDate, formatDateTime, formatDay, formatMoney, formatPhone } from "./format";
+import {
+  formatDate,
+  formatDateTime,
+  formatDay,
+  formatMoney,
+  formatMonth,
+  formatPhone,
+} from "./format";
 
 describe("formatMoney", () => {
   it("formats Uzbek with spaces and soʻm (U+02BB)", () => {
@@ -83,5 +90,14 @@ describe("formatDate", () => {
   it("formats a date column", () => {
     expect(formatDay("2026-11-20", "ru", { month: "long" })).toBe("20 ноября");
     expect(formatDay("2026-01-01", "en")).toBe("Jan 1");
+  });
+});
+
+describe("formatMonth", () => {
+  it("names a billing month", () => {
+    expect(formatMonth("2026-11-01", "en")).toBe("November 2026");
+    expect(formatMonth("2026-11-01", "ru")).toBe("ноябрь 2026");
+    expect(formatMonth("2026-11", "uz")).toBe("noyabr 2026");
+    expect(formatMonth("2027-01-01", "ru")).toBe("январь 2027");
   });
 });

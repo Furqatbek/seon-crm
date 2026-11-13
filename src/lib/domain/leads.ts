@@ -43,6 +43,11 @@ export function canMoveLead(from: LeadStatus, to: LeadStatus): boolean {
   return true;
 }
 
+/** Convert to student is offered while the lead is still open. */
+export function canConvertLead(status: LeadStatus): boolean {
+  return OPEN_STATUSES.includes(status);
+}
+
 /**
  * Any way people type an Uzbek mobile number → "+998XXXXXXXXX", or null.
  * Accepts "+998 90 123 45 67", "998901234567", "90 123-45-67", "(90) 1234567".

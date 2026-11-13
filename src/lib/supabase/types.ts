@@ -57,6 +57,12 @@ isOneToOne: false
       foreignKeyName: "attendance_student_id_fkey"
       columns: ["student_id"]
 isOneToOne: false
+      referencedRelation: "student_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "attendance_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
       referencedRelation: "students"
       referencedColumns: ["id"]
     }
@@ -115,6 +121,12 @@ isOneToOne: false
       foreignKeyName: "charges_student_id_fkey"
       columns: ["student_id"]
 isOneToOne: false
+      referencedRelation: "student_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "charges_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
       referencedRelation: "students"
       referencedColumns: ["id"]
     }
@@ -143,6 +155,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "student_balances"
       referencedColumns: ["student_id"]
+    },{
+      foreignKeyName: "enrollments_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "student_overview"
+      referencedColumns: ["id"]
     },{
       foreignKeyName: "enrollments_student_id_fkey"
       columns: ["student_id"]
@@ -245,6 +263,12 @@ isOneToOne: false
       foreignKeyName: "leads_converted_student_id_fkey"
       columns: ["converted_student_id"]
 isOneToOne: false
+      referencedRelation: "student_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "leads_converted_student_id_fkey"
+      columns: ["converted_student_id"]
+isOneToOne: false
       referencedRelation: "students"
       referencedColumns: ["id"]
     },{
@@ -323,6 +347,12 @@ isOneToOne: false
       foreignKeyName: "messages_student_id_fkey"
       columns: ["student_id"]
 isOneToOne: false
+      referencedRelation: "student_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "messages_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
       referencedRelation: "students"
       referencedColumns: ["id"]
     }
@@ -357,6 +387,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "student_balances"
       referencedColumns: ["student_id"]
+    },{
+      foreignKeyName: "payments_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "student_overview"
+      referencedColumns: ["id"]
     },{
       foreignKeyName: "payments_student_id_fkey"
       columns: ["student_id"]
@@ -476,6 +512,20 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"student_overview": {
+                  Row: {
+                    "archived_at": string | null,"balance": number | null,"birth_date": string | null,"charged": number | null,"created_at": string,"full_name": string,"id": string,"language": Database["public"]['Enums']["app_language"],"lead_id": string | null,"notes": string | null,"oldest_unpaid_month": string | null,"paid": number | null,"parent_name": string | null,"parent_phone": string | null,"phone": string,"status": Database["public"]['Enums']["student_status"],"telegram_chat_id": number | null,"telegram_link_code": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "students_lead_id_fkey"
+      columns: ["lead_id"]
+isOneToOne: false
+      referencedRelation: "leads"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Functions: {
@@ -484,6 +534,9 @@ isOneToOne: false
                            },
 "attendance_is_editable":
 { Args: { "p_lesson_id": string }; Returns: boolean
+                           },
+"convert_lead_to_student":
+{ Args: { "p_birth_date"?: string,"p_full_name": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_lead_id": string,"p_notes"?: string,"p_parent_name"?: string,"p_parent_phone"?: string,"p_phone": string }; Returns: string
                            },
 "generate_link_code":
 { Args: Record<PropertyKey, never>; Returns: string
@@ -496,6 +549,9 @@ isOneToOne: false
                            },
 "is_staff":
 { Args: Record<PropertyKey, never>; Returns: boolean
+                           },
+"mark_student_left":
+{ Args: { "p_student_id": string }; Returns: undefined
                            }
           }
           Enums: {

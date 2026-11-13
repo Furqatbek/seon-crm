@@ -159,10 +159,11 @@ export type PhoneMatch = { kind: "lead" | "student"; id: string; full_name: stri
 /** Leads and students that already use this phone number (also as a parent's). */
 export async function findPhoneMatches(
   phoneInput: unknown,
-  excludeLeadId?: unknown,
+  exclude: { leadId?: string | null; studentId?: string | null } = {},
 ): Promise<PhoneMatch[]> {
   const phone = typeof phoneInput === "string" ? normalizePhone(phoneInput) : null;
-  const exclude = z.uuid().safeParse(excludeLeadId);
+  const excludeLead = z.uuid().safeParse(exclude?.leadId);
+  const excludeStudent = z.uuid().safeParse(exclude?.studentId);
   const ctx = await session();
   if (!phone || !ctx) return [];
 
@@ -171,18 +172,20 @@ export async function findPhoneMatches(
     .select("id, full_name")
     .eq("phone", phone)
     .is("archived_at", null)
+    // A won lead is already a student, who is listed below.
+    .neq("status", "won")
     .limit(3);
-  if (exclude.success) leads = leads.neq("id", exclude.data);
+  if (excludeLead.success) leads = leads.neq("id", excludeLead.data);
 
-  const [leadMatches, studentMatches] = await Promise.all([
-    leads,
-    ctx.supabase
-      .from("students")
-      .select("id, full_name")
-      .or(`phone.eq.${phone},parent_phone.eq.${phone}`)
-      .is("archived_at", null)
-      .limit(3),
-  ]);
+  let students = ctx.supabase
+    .from("students")
+    .select("id, full_name")
+    .or(`phone.eq.${phone},parent_phone.eq.${phone}`)
+    .is("archived_at", null)
+    .limit(3);
+  if (excludeStudent.success) students = students.neq("id", excludeStudent.data);
+
+  const [leadMatches, studentMatches] = await Promise.all([leads, students]);
 
   return [
     ...(leadMatches.data ?? []).map((row) => ({ kind: "lead" as const, ...row })),

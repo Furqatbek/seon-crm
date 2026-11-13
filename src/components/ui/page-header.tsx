@@ -21,7 +21,8 @@ function PageHeader({
     <header data-slot="page-header" className={cn("mb-6 flex flex-col gap-4", className)}>
       <div className="flex min-h-control flex-wrap items-center justify-between gap-x-4 gap-y-3">
         <h1 className="min-w-0 text-large-title break-words text-text">{title}</h1>
-        {action ? <div className="shrink-0">{action}</div> : null}
+        {/* max-w-full: a row of several actions wraps on a phone instead of widening the page */}
+        {action ? <div className="max-w-full">{action}</div> : null}
       </div>
       {children ? <div className="flex flex-wrap items-center gap-2">{children}</div> : null}
     </header>

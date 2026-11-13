@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  canConvertLead,
   canMoveLead,
   isFollowUpDue,
   isLostReasonCode,
@@ -48,6 +49,18 @@ describe("canMoveLead", () => {
     expect(canMoveLead("trial", "won")).toBe(false);
     expect(canMoveLead("won", "lost")).toBe(false);
     expect(canMoveLead("won", "new")).toBe(false);
+  });
+});
+
+describe("canConvertLead", () => {
+  it("is offered for open leads only", () => {
+    expect(["new", "contacted", "trial", "won", "lost"].map((status) => canConvertLead(status as never))).toEqual([
+      true,
+      true,
+      true,
+      false,
+      false,
+    ]);
   });
 });
 

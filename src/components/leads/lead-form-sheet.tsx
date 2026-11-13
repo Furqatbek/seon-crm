@@ -1,12 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
+import { PhoneMatches, usePhoneMatches } from "@/components/shared/phone-matches";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -27,10 +27,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { Link } from "@/i18n/navigation";
-import { LEAD_SOURCES, normalizePhone, tashkentDate } from "@/lib/domain/leads";
+import { LEAD_SOURCES, tashkentDate } from "@/lib/domain/leads";
 import { formatPhone } from "@/lib/format";
-import { createLead, findPhoneMatches, updateLead, type PhoneMatch } from "@/lib/leads/actions";
+import { createLead, updateLead } from "@/lib/leads/actions";
 import type { LeadDetail, StaffOption } from "@/lib/leads/queries";
 import {
   leadFormSchema,
@@ -40,7 +39,6 @@ import {
 } from "@/lib/validation/leads";
 
 const UNASSIGNED = "none";
-const PHONE_CHECK_DELAY_MS = 400;
 
 function LeadForm({
   lead,
@@ -57,7 +55,6 @@ function LeadForm({
   const tCommon = useTranslations("common");
   const [pending, startTransition] = useTransition();
   const [formError, setFormError] = useState<LeadErrorKey | null>(null);
-  const [matches, setMatches] = useState<PhoneMatch[]>([]);
 
   const {
     register,
@@ -90,15 +87,7 @@ function LeadForm({
 
   // Warn when the number already belongs to a lead or a student. It does not block saving.
   const phone = useWatch({ control, name: "phone" });
-  const leadId = lead?.id;
-  useEffect(() => {
-    const normalized = normalizePhone(phone ?? "");
-    const timer = setTimeout(
-      async () => setMatches(normalized ? await findPhoneMatches(normalized, leadId) : []),
-      PHONE_CHECK_DELAY_MS,
-    );
-    return () => clearTimeout(timer);
-  }, [phone, leadId]);
+  const matches = usePhoneMatches(phone, { leadId: lead?.id });
 
   const message = (key: string | undefined) => (key ? t(`errors.${key as LeadErrorKey}`) : null);
 
@@ -148,29 +137,7 @@ function LeadForm({
             aria-describedby={matches.length > 0 ? "lead-phone-matches" : undefined}
             {...register("phone")}
           />
-          {matches.length > 0 ? (
-            <div
-              id="lead-phone-matches"
-              role="status"
-              className="flex items-start gap-2 rounded-control bg-warning-tint px-3 py-2 text-footnote text-warning"
-            >
-              <TriangleAlert className="size-4" aria-hidden />
-              <ul className="flex flex-col gap-0.5">
-                {matches.map((match) => (
-                  <li key={`${match.kind}-${match.id}`}>
-                    {t(match.kind === "lead" ? "form.duplicateLead" : "form.duplicateStudent")}{" "}
-                    <Link
-                      href={match.kind === "lead" ? `/leads?lead=${match.id}` : `/students/${match.id}`}
-                      target="_blank"
-                      className="font-medium underline underline-offset-2"
-                    >
-                      {match.full_name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+          <PhoneMatches id="lead-phone-matches" matches={matches} />
         </Field>
 
         <Field label={t("fields.source")} htmlFor="lead-source" error={message(errors.source?.message)}>

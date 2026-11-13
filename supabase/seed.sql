@@ -91,7 +91,10 @@ select
 from auth.users u
 where u.id in (pg_temp.uid(1, 1), pg_temp.uid(1, 2));
 
-update public.centre_settings set centre_name = 'Ziyo oʻquv markazi';
+-- The bot name is a placeholder so the Telegram link and QR code have something
+-- to show; Settings → Notifications replaces it with the real bot.
+update public.centre_settings
+set centre_name = 'Ziyo oʻquv markazi', telegram_bot_username = 'ziyo_markaz_demo_bot';
 
 -- ──────────────────────────── Teachers ─────────────────────────────
 
@@ -347,9 +350,13 @@ from (
     ch.student_id, ch.group_id,
     case when pay.part = 'full' then ch.amount else pg_temp.round_1000(ch.amount, 2) end as amount,
     (case when h.m < 60 then 'cash' when h.m < 85 then 'card' else 'transfer' end)::public.payment_method as method,
+    -- Never before the charge it pays, never in the future.
     least(
-      pg_temp.tashkent(greatest(ch.billing_month, ch.created_at::date) + h.d % 9, '09:00')
-        + (h.m * 5) * interval '1 minute',
+      greatest(
+        pg_temp.tashkent(greatest(ch.billing_month, ch.created_at::date) + h.d % 9, '09:00')
+          + (h.m * 5) * interval '1 minute',
+        ch.created_at + interval '30 minutes'
+      ),
       now() - interval '1 hour'
     ) as paid_at,
     case when pay.part = 'half' then 'Qolganini keyingi hafta toʻlaydi' end as note,

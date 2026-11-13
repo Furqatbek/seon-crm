@@ -51,6 +51,7 @@ import { Link } from "@/i18n/navigation";
 import type { UserRole } from "@/lib/auth";
 import {
   LEAD_STATUSES,
+  canConvertLead,
   canMoveLead,
   isLostReasonCode,
   type LeadStatus,
@@ -265,7 +266,12 @@ export function LeadSheet({
                             <SelectItem
                               key={status}
                               value={status}
-                              disabled={status !== lead.status && !canMoveLead(lead.status, status)}
+                              disabled={
+                                status !== lead.status &&
+                                !(status === "won"
+                                  ? canConvertLead(lead.status)
+                                  : canMoveLead(lead.status, status))
+                              }
                             >
                               {t(`status.${status}`)}
                             </SelectItem>
@@ -313,8 +319,7 @@ export function LeadSheet({
                           {t("actions.bookTrial")}
                         </Button>
                       ) : null}
-                      {/* Enabled in Phase 5, when a lead can become a student. */}
-                      <Button disabled>
+                      <Button disabled={!canConvertLead(lead.status)} onClick={() => onMove(lead, "won")}>
                         <UserCheck aria-hidden />
                         {t("actions.convert")}
                       </Button>
