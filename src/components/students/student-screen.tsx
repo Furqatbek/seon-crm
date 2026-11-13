@@ -2,6 +2,7 @@
 
 import {
   Archive,
+  BadgeMinus,
   ChevronLeft,
   Ellipsis,
   LogOut,
@@ -17,6 +18,8 @@ import { useOptimistic, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { EnrolSheet } from "@/components/enrolments/enrol-sheet";
+import { CreditSheet } from "@/components/finance/credit-sheet";
+import { TakePaymentSheet } from "@/components/finance/take-payment-sheet";
 import { SoonButton } from "@/components/shared/soon-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -84,6 +87,8 @@ export function StudentScreen({
   const { setParams } = useUrlState();
   const [editing, setEditing] = useState(false);
   const [enrolling, setEnrolling] = useState(autoEnrol);
+  const [paying, setPaying] = useState(false);
+  const [crediting, setCrediting] = useState(false);
   const [confirm, setConfirm] = useState<Confirm | null>(null);
   const [pending, startTransition] = useTransition();
   // The tab bar follows the click at once; the content follows when it has loaded.
@@ -120,15 +125,15 @@ export function StudentScreen({
         }
         action={
           <div className="flex flex-wrap items-center gap-2">
-            {/* Enabled with Finance (payments) and Notifications (messages). */}
-            <SoonButton variant="primary" hint={t("soon.payment")}>
+            <Button variant="primary" onClick={() => setPaying(true)}>
               <Wallet aria-hidden />
               {t("actions.takePayment")}
-            </SoonButton>
+            </Button>
             <Button onClick={() => setEnrolling(true)}>
               <UserPlus aria-hidden />
               {t("actions.enrol")}
             </Button>
+            {/* Enabled with notifications. */}
             <SoonButton hint={t("soon.message")}>
               <MessageSquare aria-hidden />
               {t("actions.sendMessage")}
@@ -143,6 +148,10 @@ export function StudentScreen({
                 <DropdownMenuItem onSelect={() => setEditing(true)}>
                   <Pencil aria-hidden />
                   {t("actions.edit")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setCrediting(true)}>
+                  <BadgeMinus aria-hidden />
+                  {t("actions.addCredit")}
                 </DropdownMenuItem>
                 {student.status === "active" ? (
                   <DropdownMenuItem
@@ -222,6 +231,18 @@ export function StudentScreen({
           setEnrolling(false);
           if (autoEnrol) setParams({ enrol: null });
         }}
+      />
+
+      <TakePaymentSheet open={paying} studentId={student.id} today={today} onClose={() => setPaying(false)} />
+      <CreditSheet
+        open={crediting}
+        student={student}
+        groups={student.enrolments.flatMap((enrolment, index, all) =>
+          enrolment.group && all.findIndex((other) => other.group?.id === enrolment.group?.id) === index
+            ? [{ id: enrolment.group.id, name: enrolment.group.name }]
+            : [],
+        )}
+        onClose={() => setCrediting(false)}
       />
 
       <StudentFormSheet

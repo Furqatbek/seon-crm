@@ -64,7 +64,7 @@ test("a lead is converted into a student, linked both ways", async ({ page }, te
   await expect(page.getByRole("heading", { level: 1 })).toContainText(name);
   await expect(status(page)).toHaveAttribute("data-student-status", "active");
   await expect(page.locator('[data-slot="student-balance"]')).toContainText("UZS 0");
-  await expect(page.getByRole("button", { name: "Take payment" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Take payment" })).toBeEnabled();
   await expect(page.getByRole("button", { name: "Send message" })).toBeDisabled();
   await expect(page.getByText("Test Parent")).toBeVisible();
   await expect(page.getByText("Русский")).toBeVisible();
@@ -104,7 +104,7 @@ test("a lead is converted into a student, linked both ways", async ({ page }, te
 
   // A manager is not offered Archive.
   await page.getByRole("button", { name: "More actions" }).click();
-  await expect(page.getByRole("menuitem", { name: "Edit" })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: "Edit", exact: true })).toBeVisible();
   await expect(page.getByRole("menuitem", { name: "Archive" })).toHaveCount(0);
   await page.keyboard.press("Escape");
 

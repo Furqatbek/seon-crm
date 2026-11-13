@@ -95,7 +95,7 @@ test("a lead moves New → Contacted → Trial → Lost and every step is in the
 
   // ── A manager is not offered Archive ──
   await sheet(page).getByRole("button", { name: "More actions" }).click();
-  await expect(page.getByRole("menuitem", { name: "Edit" })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: "Edit", exact: true })).toBeVisible();
   await expect(page.getByRole("menuitem", { name: "Archive" })).toHaveCount(0);
   await page.keyboard.press("Escape");
 

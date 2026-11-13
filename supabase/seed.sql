@@ -369,9 +369,9 @@ from (
   join public.charges ch on ch.type = 'monthly_fee' and ch.amount > 0
   cross join lateral (
     select
-      pg_temp.pct('pay' || ch.id::text) as p,
-      pg_temp.pct('method' || ch.id::text) as m,
-      pg_temp.pct('day' || ch.id::text) as d
+      pg_temp.pct('pay' || ch.enrollment_id::text || ch.billing_month::text) as p,
+      pg_temp.pct('method' || ch.enrollment_id::text || ch.billing_month::text) as m,
+      pg_temp.pct('day' || ch.enrollment_id::text || ch.billing_month::text) as d
   ) h
   cross join lateral (
     select case

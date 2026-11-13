@@ -189,6 +189,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"group_fee_history": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"effective_month": string,"group_id": string,"id": string,"monthly_fee": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"effective_month": string,"group_id": string,"id"?: string,"monthly_fee": number
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"effective_month"?: string,"group_id"?: string,"id"?: string,"monthly_fee"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "group_fee_history_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "group_fee_history_group_id_fkey"
+      columns: ["group_id"]
+isOneToOne: false
+      referencedRelation: "groups"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"groups": {
                   Row: {
                     "archived_at": string | null,"capacity": number | null,"created_at": string,"days": (number)[],"duration_min": number,"end_date": string | null,"id": string,"level": string | null,"monthly_fee": number,"name": string,"room": string | null,"start_date": string,"start_time": string,"status": Database["public"]['Enums']["group_status"],"subject": string,"teacher_id": string,"updated_at": string
@@ -538,8 +564,16 @@ isOneToOne: false
 "convert_lead_to_student":
 { Args: { "p_birth_date"?: string,"p_full_name": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_lead_id": string,"p_notes"?: string,"p_parent_name"?: string,"p_parent_phone"?: string,"p_phone": string }; Returns: string
                            },
+"discount_amount":
+{ Args: { "p_fee": number,"p_kind": string,"p_value": number }; Returns: number
+                           },
 "enrol_student":
 { Args: { "p_charge_mode"?: string,"p_charge_note"?: string,"p_custom_amount"?: number,"p_discount_kind"?: string,"p_discount_value"?: number,"p_group_id": string,"p_joined_on": string,"p_note"?: string,"p_student_id": string }; Returns: string
+                           },
+"finance_month_summary":
+{ Args: { "p_month": string }; Returns: {
+              "billed": number,"collected": number,"debt": number
+            }[]
                            },
 "generate_all_lessons":
 { Args: Record<PropertyKey, never>; Returns: number
@@ -549,6 +583,12 @@ isOneToOne: false
                            },
 "generate_link_code":
 { Args: Record<PropertyKey, never>; Returns: string
+                           },
+"generate_monthly_charges":
+{ Args: { "p_month": string }; Returns: number
+                           },
+"group_fee_for":
+{ Args: { "p_group_id": string,"p_month": string }; Returns: number
                            },
 "is_api_user":
 { Args: Record<PropertyKey, never>; Returns: boolean
@@ -568,8 +608,23 @@ isOneToOne: false
 "lesson_horizon":
 { Args: Record<PropertyKey, never>; Returns: string
                            },
+"list_debtors":
+{ Args: { "p_limit"?: number,"p_offset"?: number }; Returns: {
+              "balance": number,"full_name": string,"groups": Json,"last_payment_at": string,"oldest_unpaid_month": string,"phone": string,"student_id": string,"total": number
+            }[]
+                           },
 "mark_student_left":
 { Args: { "p_student_id": string }; Returns: undefined
+                           },
+"preview_monthly_charges":
+{ Args: { "p_month": string }; Returns: {
+              "amount": number,"base_amount": number,"discount_amount": number,"enrollment_id": string,"group_id": string,"group_name": string,"student_id": string,"student_name": string
+            }[]
+                           },
+"preview_monthly_charges_summary":
+{ Args: { "p_month": string }; Returns: {
+              "charges": number,"total": number
+            }[]
                            },
 "propose_first_charge":
 { Args: { "p_discount_kind"?: string,"p_discount_value"?: number,"p_group_id": string,"p_joined_on": string }; Returns: {
@@ -584,6 +639,9 @@ isOneToOne: false
                            },
 "round_to_thousand":
 { Args: { "denominator"?: number,"numerator": number }; Returns: number
+                           },
+"run_billing_day":
+{ Args: Record<PropertyKey, never>; Returns: number
                            },
 "save_attendance":
 { Args: { "p_lesson_id": string,"p_marks": Json }; Returns: undefined

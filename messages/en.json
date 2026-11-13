@@ -290,10 +290,10 @@
       "resume": "Mark as active",
       "markLeft": "Mark as left",
       "archive": "Archive",
-      "more": "More actions"
+      "more": "More actions",
+      "addCredit": "Add credit"
     },
     "soon": {
-      "payment": "Payments open with the Finance block.",
       "message": "Messages open with notifications."
     },
     "done": {
@@ -608,6 +608,125 @@
       "notInGroup": "A student is not in this group on that day.",
       "sameGroup": "The student is already in this group.",
       "attendanceLocked": "This lesson is more than 7 days old. Only the owner can change its attendance.",
+      "notFound": "This no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "finance": {
+    "tabs": {
+      "payments": "Payments",
+      "debtors": "Debtors",
+      "charges": "Charges"
+    },
+    "strip": {
+      "collected": "Collected",
+      "billed": "Billed",
+      "debt": "Debt today",
+      "expenses": "Expenses"
+    },
+    "method": {
+      "cash": "Cash",
+      "card": "Card",
+      "transfer": "Bank transfer"
+    },
+    "filters": {
+      "allMethods": "All methods"
+    },
+    "fields": {
+      "student": "Student",
+      "group": "Group",
+      "groups": "Groups",
+      "method": "Method",
+      "date": "Date",
+      "note": "Note",
+      "amount": "Amount",
+      "receipt": "Receipt no.",
+      "receivedBy": "Received by",
+      "debt": "Debt",
+      "oldestUnpaid": "Oldest unpaid month",
+      "lastPayment": "Last payment",
+      "description": "Description"
+    },
+    "payment": {
+      "title": "Take payment",
+      "balance": "Balance",
+      "chooseGroup": "Choose a group",
+      "amount": "Amount, soʻm",
+      "save": "Save payment",
+      "saved": "Payment saved",
+      "receipt": "Receipt no. {number}",
+      "print": "Print receipt",
+      "done": "Done",
+      "loading": "Loading…",
+      "noGroups": "This student has never been in a group, so there is nothing to pay for yet."
+    },
+    "payments": {
+      "empty": "No payments this month.",
+      "rowActions": "Actions for receipt {receipt}"
+    },
+    "void": {
+      "action": "Void payment",
+      "title": "Void receipt {receipt}?",
+      "body": "The payment drops out of every total and the student owes the amount again. This cannot be undone.",
+      "reason": "Reason",
+      "voided": "Voided",
+      "done": "Payment voided"
+    },
+    "debtors": {
+      "empty": "Nobody is in debt.",
+      "count": "{count, plural, one {# student in debt} other {# students in debt}}",
+      "remind": "Remind",
+      "remindAll": "Remind all",
+      "remindSoon": "Reminders open with notifications.",
+      "never": "Never"
+    },
+    "charges": {
+      "billed": "Billed for {month}",
+      "collected": "Collected in {month}",
+      "generate": "Generate charges",
+      "empty": "No charges for this month yet.",
+      "monthlyFee": "Monthly fee",
+      "credit": "Credit",
+      "adjustment": "Adjustment",
+      "prorated": "{counted} of {total} lessons",
+      "discount": "discount",
+      "previewTitle": "Charges for {month}",
+      "previewHint": "One monthly fee for every active student in an active group who has none for this month yet.",
+      "previewCount": "{count, plural, one {# fee to create} other {# fees to create}}",
+      "nothingToGenerate": "Every fee for this month already exists. There is nothing to create.",
+      "confirm": "{count, plural, one {Create # charge} other {Create # charges}}",
+      "created": "{count, plural, =0 {No new charges} one {# charge created} other {# charges created}}",
+      "previewMore": "and {count} more"
+    },
+    "credit": {
+      "title": "Credit for {student}",
+      "hint": "A credit lowers what the student owes. It is listed for the owner with who added it and why.",
+      "amount": "Credit, soʻm",
+      "note": "Why the credit",
+      "noGroup": "No group",
+      "save": "Add credit",
+      "done": "Credit added"
+    },
+    "receipt": {
+      "paper": "Paper",
+      "roll": "80 mm",
+      "a4": "A4",
+      "print": "Print",
+      "paid": "Paid"
+    },
+    "errors": {
+      "studentRequired": "Choose a student.",
+      "groupRequired": "Choose one of the student's groups.",
+      "amountInvalid": "Enter a whole amount above 0.",
+      "methodRequired": "Choose a method.",
+      "dateInvalid": "Choose a valid date.",
+      "dateInFuture": "The date cannot be in the future.",
+      "noteRequired": "Say why the credit is given.",
+      "reasonRequired": "Write the reason.",
+      "tooLong": "This text is too long.",
+      "monthNotCurrent": "Only the current month can be billed.",
+      "alreadyVoided": "This payment is already voided.",
       "notFound": "This no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."

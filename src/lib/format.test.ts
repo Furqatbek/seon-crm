@@ -4,6 +4,7 @@ import {
   formatDateTime,
   formatDay,
   formatMoney,
+  formatMoneyInput,
   formatMonth,
   formatPhone,
 } from "./format";
@@ -43,6 +44,16 @@ describe("formatMoney", () => {
   it("refuses floats", () => {
     expect(() => formatMoney(1250.5, "uz")).toThrow(RangeError);
     expect(() => formatMoney(Number.NaN, "uz")).toThrow(RangeError);
+  });
+});
+
+describe("formatMoneyInput", () => {
+  it("groups digits with spaces and reads back as the same amount", () => {
+    expect(formatMoneyInput(600_000)).toBe("600 000");
+    expect(formatMoneyInput(1_250_000)).toBe("1 250 000");
+    expect(formatMoneyInput(999)).toBe("999");
+    expect(() => formatMoneyInput(1000.5)).toThrow(RangeError);
+    expect(() => formatMoneyInput(-1)).toThrow(RangeError);
   });
 });
 

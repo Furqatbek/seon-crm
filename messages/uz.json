@@ -290,10 +290,10 @@
       "resume": "Faol qilish",
       "markLeft": "Ketdi deb belgilash",
       "archive": "Arxivlash",
-      "more": "Boshqa amallar"
+      "more": "Boshqa amallar",
+      "addCredit": "Qaytarish qoʻshish"
     },
     "soon": {
-      "payment": "Toʻlovlar «Moliya» boʻlimi bilan birga ochiladi.",
       "message": "Xabarlar bildirishnomalar bilan birga ochiladi."
     },
     "done": {
@@ -608,6 +608,125 @@
       "notInGroup": "Oʻquvchi bu kuni guruhda emas.",
       "sameGroup": "Oʻquvchi allaqachon bu guruhda.",
       "attendanceLocked": "Bu darsga 7 kundan koʻp boʻldi. Davomatni faqat rahbar oʻzgartira oladi.",
+      "notFound": "Bu endi mavjud emas.",
+      "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    }
+  },
+  "finance": {
+    "tabs": {
+      "payments": "Toʻlovlar",
+      "debtors": "Qarzdorlar",
+      "charges": "Hisoblar"
+    },
+    "strip": {
+      "collected": "Yigʻilgan",
+      "billed": "Hisoblangan",
+      "debt": "Bugungi qarz",
+      "expenses": "Xarajatlar"
+    },
+    "method": {
+      "cash": "Naqd",
+      "card": "Karta",
+      "transfer": "Oʻtkazma"
+    },
+    "filters": {
+      "allMethods": "Barcha usullar"
+    },
+    "fields": {
+      "student": "Oʻquvchi",
+      "group": "Guruh",
+      "groups": "Guruhlar",
+      "method": "Usul",
+      "date": "Sana",
+      "note": "Izoh",
+      "amount": "Summa",
+      "receipt": "Chek №",
+      "receivedBy": "Qabul qildi",
+      "debt": "Qarz",
+      "oldestUnpaid": "Eng eski toʻlanmagan oy",
+      "lastPayment": "Oxirgi toʻlov",
+      "description": "Tavsif"
+    },
+    "payment": {
+      "title": "Toʻlov qabul qilish",
+      "balance": "Balans",
+      "chooseGroup": "Guruhni tanlang",
+      "amount": "Summa, soʻm",
+      "save": "Toʻlovni saqlash",
+      "saved": "Toʻlov saqlandi",
+      "receipt": "Chek № {number}",
+      "print": "Chekni chop etish",
+      "done": "Tayyor",
+      "loading": "Yuklanmoqda…",
+      "noGroups": "Bu oʻquvchi hali hech bir guruhda boʻlmagan, toʻlanadigan narsa yoʻq."
+    },
+    "payments": {
+      "empty": "Bu oyda toʻlovlar yoʻq.",
+      "rowActions": "{receipt}-chek uchun amallar"
+    },
+    "void": {
+      "action": "Toʻlovni bekor qilish",
+      "title": "{receipt}-chek bekor qilinsinmi?",
+      "body": "Toʻlov barcha yakuniy summalardan chiqariladi va oʻquvchi bu summani yana qarz boʻladi. Bu amalni ortga qaytarib boʻlmaydi.",
+      "reason": "Sabab",
+      "voided": "Bekor qilingan",
+      "done": "Toʻlov bekor qilindi"
+    },
+    "debtors": {
+      "empty": "Qarzdorlar yoʻq.",
+      "count": "{count} ta qarzdor",
+      "remind": "Eslatish",
+      "remindAll": "Hammaga eslatish",
+      "remindSoon": "Eslatmalar bildirishnomalar bilan birga ochiladi.",
+      "never": "Hech qachon"
+    },
+    "charges": {
+      "billed": "{month} uchun hisoblangan",
+      "collected": "{month} uchun yigʻilgan",
+      "generate": "Hisoblarni yaratish",
+      "empty": "Bu oy uchun hali hisoblar yoʻq.",
+      "monthlyFee": "Oylik toʻlov",
+      "credit": "Balansga qaytarildi",
+      "adjustment": "Tuzatish",
+      "prorated": "{total} darsdan {counted} tasi",
+      "discount": "chegirma",
+      "previewTitle": "{month} uchun hisoblar",
+      "previewHint": "Faol guruhdagi har bir faol oʻquvchi uchun, agar bu oyda hisobi boʻlmasa, bitta oylik toʻlov.",
+      "previewCount": "{count} ta hisob yaratiladi",
+      "nothingToGenerate": "Bu oy uchun barcha hisoblar yaratilgan. Yaratadigan narsa yoʻq.",
+      "confirm": "{count} ta hisobni yaratish",
+      "created": "{count, plural, =0 {Yangi hisoblar yoʻq} other {# ta hisob yaratildi}}",
+      "previewMore": "va yana {count} ta"
+    },
+    "credit": {
+      "title": "{student} uchun qaytarish",
+      "hint": "Qaytarish oʻquvchining qarzini kamaytiradi. Rahbar uni kim va nega qoʻshganini koʻradi.",
+      "amount": "Qaytarish, soʻm",
+      "note": "Qaytarish sababi",
+      "noGroup": "Guruhsiz",
+      "save": "Qaytarish qoʻshish",
+      "done": "Qaytarish qoʻshildi"
+    },
+    "receipt": {
+      "paper": "Qogʻoz",
+      "roll": "80 mm",
+      "a4": "A4",
+      "print": "Chop etish",
+      "paid": "Toʻlandi"
+    },
+    "errors": {
+      "studentRequired": "Oʻquvchini tanlang.",
+      "groupRequired": "Oʻquvchining guruhlaridan birini tanlang.",
+      "amountInvalid": "0 dan katta butun summa kiriting.",
+      "methodRequired": "Toʻlov usulini tanlang.",
+      "dateInvalid": "Toʻgʻri sanani tanlang.",
+      "dateInFuture": "Sana kelajakda boʻlishi mumkin emas.",
+      "noteRequired": "Qaytarish sababini yozing.",
+      "reasonRequired": "Sababni yozing.",
+      "tooLong": "Matn juda uzun.",
+      "monthNotCurrent": "Faqat joriy oy uchun hisoblash mumkin.",
+      "alreadyVoided": "Bu toʻlov allaqachon bekor qilingan.",
       "notFound": "Bu endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."

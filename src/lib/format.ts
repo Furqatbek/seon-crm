@@ -31,6 +31,14 @@ export function formatMoney(amount: bigint | number, locale: Locale): string {
   }
 }
 
+/** Whole soʻm as the starting value of a money input: 600000 → "600 000". */
+export function formatMoneyInput(amount: number): string {
+  if (!Number.isSafeInteger(amount) || amount < 0) {
+    throw new RangeError(`formatMoneyInput expects whole soʻm, got ${amount}`);
+  }
+  return groupDigits(String(amount), " ");
+}
+
 /** "+998901234567" → "+998 90 123 45 67". Anything else is returned as it is. */
 export function formatPhone(phone: string): string {
   const match = /^\+998(\d{2})(\d{3})(\d{2})(\d{2})$/.exec(phone.replace(/[\s()-]/g, ""));
