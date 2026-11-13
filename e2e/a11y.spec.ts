@@ -39,6 +39,7 @@ test("no serious accessibility issues on any page", async ({ page }) => {
 });
 
 test("a record that does not exist shows a clear page, inside the app", async ({ page }) => {
+  // On a phone the navigation is behind the menu button.
   await signIn(page, "manager");
   for (const path of ["/en/students/11111111-1111-4111-8111-111111111111", "/en/groups/not-an-id", "/en/teachers/11111111-1111-4111-8111-111111111111"]) {
     await page.goto(path);
@@ -46,7 +47,9 @@ test("a record that does not exist shows a clear page, inside the app", async ({
     await expect(problem.getByRole("heading", { name: "Nothing here" })).toBeVisible();
     await expect(problem.getByRole("link", { name: "Go to the start page" })).toBeVisible();
     // The sidebar is still there to go somewhere else.
-    await expect(page.getByRole("link", { name: "Students" }).first()).toBeAttached();
+    await expect(
+      page.getByRole("link", { name: "Students" }).or(page.getByRole("button", { name: "Open menu" })).first(),
+    ).toBeVisible();
     expect(await serious(page, path)).toEqual([]);
   }
   await page.locator('[data-slot="page-problem"]').getByRole("link", { name: "Go to the start page" }).click();
