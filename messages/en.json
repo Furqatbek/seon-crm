@@ -1,0 +1,1224 @@
+{
+  "app": {
+    "name": "Edu CRM"
+  },
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "search": "Search",
+    "pagination": {
+      "range": "{first}–{last} of {total}",
+      "previous": "Previous page",
+      "next": "Next page"
+    },
+    "weekdays": {
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat",
+      "7": "Sun"
+    },
+    "phoneMatch": {
+      "lead": "A lead already has this number:",
+      "student": "A student already has this number:"
+    },
+    "month": {
+      "previous": "Previous month",
+      "next": "Next month"
+    },
+    "loading": "Loading…",
+    "problem": {
+      "errorTitle": "This page could not be loaded",
+      "errorBody": "Something went wrong while getting the data. Nothing was changed. Try again; if it keeps happening, tell the owner.",
+      "retry": "Try again",
+      "reference": "Reference: {code}",
+      "notFoundTitle": "Nothing here",
+      "notFoundBody": "This record does not exist, or the link is wrong.",
+      "home": "Go to the start page"
+    }
+  },
+  "nav": {
+    "label": "Main navigation",
+    "openMenu": "Open menu",
+    "leads": "Leads",
+    "students": "Students",
+    "groups": "Groups",
+    "teachers": "Teachers",
+    "finance": "Finance",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "language": {
+    "label": "Language",
+    "uz": "Oʻzbekcha",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "userMenu": {
+    "label": "Account menu",
+    "signOut": "Sign out",
+    "roles": {
+      "owner": "Owner",
+      "manager": "Manager"
+    },
+    "profile": "Profile"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "forgotPassword": "Forgot password?",
+    "forgotTitle": "Reset password",
+    "forgotHint": "Enter your email and we will send you a link to set a new password.",
+    "sendLink": "Send link",
+    "linkSent": "If this email has an account, a reset link is on its way.",
+    "backToSignIn": "Back to sign in",
+    "resetTitle": "New password",
+    "newPassword": "New password",
+    "confirmPassword": "Repeat the password",
+    "savePassword": "Save password",
+    "passwordSaved": "Password saved",
+    "errors": {
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Enter your password.",
+      "passwordTooShort": "The password needs at least 8 characters.",
+      "passwordMismatch": "The passwords do not match.",
+      "invalidCredentials": "Wrong email or password.",
+      "linkInvalid": "This link is invalid or has expired. Request a new one.",
+      "notConfigured": "Sign-in is not set up yet: the Supabase keys are missing.",
+      "generic": "Something went wrong. Try again."
+    },
+    "inviteTitle": "Welcome",
+    "inviteOpening": "Opening your invitation…",
+    "inviteInvalid": "This invitation is invalid or has expired. Ask the owner to invite you again."
+  },
+  "empty": {
+    "leads": "No leads yet.",
+    "students": "No students yet.",
+    "groups": "No groups yet.",
+    "teachers": "No teachers yet.",
+    "finance": "No payments yet.",
+    "reports": "No data to report yet.",
+    "settings": "No settings yet."
+  },
+  "leads": {
+    "newLead": "New lead",
+    "editLead": "Edit lead",
+    "searchPlaceholder": "Name or phone",
+    "followUpToday": "Follow up today",
+    "followUpDue": "Follow-up is due",
+    "noSubject": "No subject yet",
+    "last30Days": "Last 30 days",
+    "noMatches": "No leads match these filters.",
+    "clearFilters": "Clear filters",
+    "readOnly": "This lead became a student and can no longer be changed.",
+    "openStudent": "Open the student",
+    "view": {
+      "label": "View",
+      "board": "Board",
+      "list": "List"
+    },
+    "filters": {
+      "allSources": "All sources",
+      "allStaff": "Everyone"
+    },
+    "status": {
+      "new": "New",
+      "contacted": "Contacted",
+      "trial": "Trial lesson",
+      "won": "Won",
+      "lost": "Lost"
+    },
+    "source": {
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "phone_call": "Phone call",
+      "walk_in": "Walk-in",
+      "referral": "Referral",
+      "website": "Website",
+      "other": "Other"
+    },
+    "lostReason": {
+      "price": "Price",
+      "schedule": "Schedule",
+      "another_centre": "Chose another centre",
+      "no_answer": "No answer",
+      "other": "Other"
+    },
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "source": "Source",
+      "subject": "Subject",
+      "preferredTime": "Preferred time",
+      "assignedTo": "Assigned to",
+      "nextContact": "Next contact",
+      "notes": "Notes",
+      "status": "Status",
+      "created": "Created",
+      "trial": "Trial lesson",
+      "lostReason": "Lost because",
+      "unassigned": "Nobody"
+    },
+    "form": {
+      "created": "Lead added",
+      "saved": "Lead saved",
+      "chooseSource": "Choose a source"
+    },
+    "actions": {
+      "logCall": "Log call",
+      "addNote": "Add note",
+      "bookTrial": "Book trial",
+      "convert": "Convert to student",
+      "markLost": "Mark lost",
+      "edit": "Edit",
+      "archive": "Archive",
+      "more": "More actions",
+      "moveTo": "Stage"
+    },
+    "composer": {
+      "callLabel": "What was the call about?",
+      "noteLabel": "Note",
+      "saveCall": "Save call",
+      "saveNote": "Save note"
+    },
+    "timeline": {
+      "title": "Timeline",
+      "empty": "Nothing has happened yet.",
+      "call": "Call",
+      "note": "Note",
+      "statusChange": "{from} → {to}",
+      "reason": "Reason: {reason}"
+    },
+    "lost": {
+      "title": "Mark {name} as lost?",
+      "body": "Choose why. The reason is kept in the timeline.",
+      "reason": "Reason",
+      "choose": "Choose a reason",
+      "otherLabel": "What happened?"
+    },
+    "trial": {
+      "title": "Book a trial lesson for {name}",
+      "body": "Choose the group and the date of the trial lesson.",
+      "group": "Group",
+      "choose": "Choose a group",
+      "date": "Date"
+    },
+    "archive": {
+      "title": "Archive {name}?",
+      "body": "The lead is hidden from the board and the list. Its timeline is kept.",
+      "done": "Lead archived"
+    },
+    "dnd": {
+      "instructions": "Press Space to pick up a lead. Use the left and right arrow keys to choose a column, then press Space to drop it. Press Escape to cancel.",
+      "pickedUp": "Picked up {name}.",
+      "over": "{name} is over {column}.",
+      "dropped": "{name} was dropped on {column}.",
+      "cancelled": "Moving {name} was cancelled."
+    },
+    "errors": {
+      "nameRequired": "Enter the name.",
+      "phoneInvalid": "Enter a phone number like +998 90 123 45 67.",
+      "sourceRequired": "Choose a source.",
+      "dateInvalid": "Choose a valid date.",
+      "tooLong": "This text is too long.",
+      "lostReasonRequired": "Choose a reason.",
+      "trialGroupRequired": "Choose a group.",
+      "trialDateRequired": "Choose a date.",
+      "noteRequired": "Write the note.",
+      "moveNotAllowed": "This lead cannot be moved there.",
+      "notFound": "This lead no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "students": {
+    "newStudent": "New student",
+    "searchPlaceholder": "Name or phone",
+    "noMatches": "No students match these filters.",
+    "contacts": "Contacts",
+    "noGroups": "Not in a group yet.",
+    "openLead": "Open the lead",
+    "filters": {
+      "allStatuses": "All statuses",
+      "allGroups": "All groups",
+      "debtOnly": "Debt only",
+      "clear": "Clear filters"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "left": "Left"
+    },
+    "balance": {
+      "debt": "Debt",
+      "due": "Due",
+      "settled": "Settled",
+      "credit": "Credit"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "ledger": "Ledger",
+      "attendance": "Attendance",
+      "messages": "Messages"
+    },
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "parentName": "Parent's name",
+      "parentPhone": "Parent's phone",
+      "birthDate": "Birth date",
+      "language": "Message language",
+      "notes": "Notes",
+      "groups": "Groups",
+      "group": "Group",
+      "balance": "Balance",
+      "status": "Status",
+      "telegram": "Telegram",
+      "lead": "Came from"
+    },
+    "form": {
+      "title": {
+        "new": "New student",
+        "edit": "Edit student",
+        "convert": "Convert to student"
+      },
+      "convertHint": "The lead becomes a student and is marked Won. Check the details before saving.",
+      "languageHint": "Reminders to this student are sent in this language.",
+      "enrolStep": "Next step",
+      "created": "Student added",
+      "saved": "Student saved",
+      "converted": "Lead converted to a student",
+      "saveAndEnrol": "Save and enrol in a group",
+      "convertAndEnrol": "Save and enrol"
+    },
+    "actions": {
+      "takePayment": "Take payment",
+      "enrol": "Enrol in a group",
+      "sendMessage": "Send message",
+      "edit": "Edit",
+      "pause": "Pause",
+      "resume": "Mark as active",
+      "markLeft": "Mark as left",
+      "archive": "Archive",
+      "more": "More actions",
+      "addCredit": "Add credit"
+    },
+    "done": {
+      "paused": "Student paused",
+      "resumed": "Student is active again",
+      "left": "Student marked as left",
+      "archived": "Student archived"
+    },
+    "left": {
+      "title": "Mark {name} as left?",
+      "body": "The student leaves every group today and is no longer billed. Nothing is refunded automatically."
+    },
+    "archive": {
+      "title": "Archive {name}?",
+      "body": "The student is hidden from lists. Payments and attendance are kept."
+    },
+    "enrolment": {
+      "left": "Left",
+      "since": "Since {date}",
+      "period": "{from} – {to}",
+      "discount": "Discount"
+    },
+    "telegram": {
+      "title": "Telegram",
+      "linked": "Linked",
+      "linkedShort": "Linked",
+      "notLinked": "Not linked",
+      "hint": "Send this link to the student or parent. When they press Start in the bot, reminders will arrive in Telegram.",
+      "copy": "Copy link",
+      "copied": "Copied",
+      "showQr": "Show QR code",
+      "hideQr": "Hide QR code",
+      "qrLabel": "QR code with the Telegram link",
+      "noBot": "The Telegram bot is not connected yet. The owner connects it in Settings."
+    },
+    "ledger": {
+      "empty": "No charges or payments yet.",
+      "date": "Date",
+      "description": "Description",
+      "charge": "Charge",
+      "payment": "Payment",
+      "balance": "Balance",
+      "monthlyFee": "Fee for {month}",
+      "credit": "Credit",
+      "adjustment": "Adjustment",
+      "prorated": "{counted} of {total} lessons",
+      "paymentLine": "Payment · {method} · receipt {receipt}",
+      "voided": "Voided",
+      "method": {
+        "cash": "cash",
+        "card": "card",
+        "transfer": "bank transfer"
+      }
+    },
+    "attendance": {
+      "empty": "No lessons this month.",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "rate": "Attendance {rate}%",
+      "noRate": "Nothing marked yet",
+      "legend": "Marks",
+      "notMarked": "Not marked",
+      "cancelled": "Cancelled",
+      "mark": {
+        "present": "Present",
+        "late": "Late",
+        "absent": "Absent",
+        "excused": "Excused"
+      }
+    },
+    "messages": {
+      "empty": "Nothing has been sent yet.",
+      "date": "Date",
+      "type": "Message",
+      "channel": "Channel",
+      "status": "Status",
+      "text": "Text",
+      "types": {
+        "payment_due": "Payment due",
+        "payment_overdue": "Payment overdue",
+        "lesson_reminder": "Lesson reminder",
+        "custom": "One-off message"
+      },
+      "channels": {
+        "telegram": "Telegram",
+        "sms": "SMS"
+      },
+      "statuses": {
+        "queued": "Queued",
+        "sent": "Sent",
+        "failed": "Failed",
+        "skipped": "Skipped"
+      }
+    },
+    "errors": {
+      "nameRequired": "Enter the name.",
+      "phoneInvalid": "Enter a phone number like +998 90 123 45 67.",
+      "parentPhoneInvalid": "Enter the parent's number like +998 90 123 45 67, or leave it empty.",
+      "dateInvalid": "Choose a valid date.",
+      "languageRequired": "Choose a language.",
+      "tooLong": "This text is too long.",
+      "leadNotOpen": "This lead is already closed and cannot be converted.",
+      "notFound": "This student no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "groups": {
+    "newGroup": "New group",
+    "editGroup": "Edit group",
+    "searchPlaceholder": "Name or subject",
+    "noMatches": "No groups match these filters.",
+    "studentCount": "{count, plural, one {# student} other {# students}}",
+    "tabs": {
+      "today": "Today",
+      "all": "All groups"
+    },
+    "groupTabs": {
+      "students": "Students",
+      "attendance": "Attendance",
+      "lessons": "Lessons",
+      "trials": "Trials"
+    },
+    "status": {
+      "forming": "Forming",
+      "active": "Active",
+      "finished": "Finished"
+    },
+    "filters": {
+      "allStatuses": "All statuses",
+      "clear": "Clear filters"
+    },
+    "fields": {
+      "name": "Name",
+      "subject": "Subject",
+      "level": "Level",
+      "teacher": "Teacher",
+      "monthlyFee": "Monthly fee",
+      "days": "Days",
+      "startTime": "Start time",
+      "duration": "Duration, minutes",
+      "room": "Room",
+      "capacity": "Capacity",
+      "startDate": "Start date",
+      "status": "Status",
+      "students": "Students",
+      "daysAndTime": "Days and time",
+      "joined": "Joined",
+      "balance": "Balance",
+      "attendance": "Attendance",
+      "phone": "Phone"
+    },
+    "form": {
+      "created": "Group added",
+      "saved": "Group saved",
+      "chooseTeacher": "Choose a teacher",
+      "feeHint": "A changed fee applies from the next billing month, never to fees already charged.",
+      "scheduleHint": "Changing the days, time, teacher or dates rebuilds future lessons that have no attendance yet."
+    },
+    "today": {
+      "empty": "No lessons today.",
+      "markAttendance": "Mark attendance",
+      "marked": "Marked"
+    },
+    "lesson": {
+      "date": "Date",
+      "time": "Time",
+      "open": "Open the lesson",
+      "actions": "Actions for the lesson on {date}",
+      "saved": "Attendance saved",
+      "noStudents": "Nobody was in the group on this day.",
+      "substitute": "Substitute",
+      "setSubstitute": "Set substitute",
+      "saveSubstitute": "Save",
+      "substituteTitle": "Who teaches the lesson on {date}?",
+      "substituteBody": "Only this lesson changes. Pay per lesson goes to whoever taught it.",
+      "substituteSaved": "Teacher for the lesson saved",
+      "cancel": "Cancel lesson",
+      "cancelTitle": "Cancel the lesson on {date}?",
+      "cancelBody": "A cancelled lesson is not counted for per-lesson pay or for proration.",
+      "reason": "Reason",
+      "cancelled": "Lesson cancelled",
+      "restore": "Restore lesson",
+      "restored": "Lesson restored",
+      "locked": {
+        "cancelled": "This lesson is cancelled. Restore it to mark attendance.",
+        "future": "This lesson has not happened yet.",
+        "tooOld": "This lesson is more than 7 days old. Only the owner can change its attendance."
+      },
+      "mark": {
+        "present": "Present",
+        "late": "Late",
+        "absent": "Absent",
+        "excused": "Excused"
+      },
+      "statuses": {
+        "scheduled": "Scheduled",
+        "held": "Held",
+        "cancelled": "Cancelled"
+      }
+    },
+    "attendanceGrid": {
+      "student": "Student",
+      "openLesson": "Open the lesson on {date}",
+      "notMarked": "Not marked",
+      "notEnrolled": "Not in the group",
+      "noLessons": "No lessons this month.",
+      "noStudents": "No students in this month."
+    },
+    "trials": {
+      "empty": "No trial visitors this week.",
+      "thisWeek": "Trial lessons booked for this week, from Leads."
+    },
+    "studentsTab": {
+      "empty": "No students in this group yet.",
+      "rowActions": "Actions for {name}",
+      "transfer": "Transfer to another group",
+      "leave": "Leave group"
+    },
+    "actions": {
+      "addStudent": "Add student",
+      "edit": "Edit",
+      "archive": "Archive",
+      "more": "More actions"
+    },
+    "archive": {
+      "title": "Archive {name}?",
+      "body": "The group is hidden from lists and gets no more lessons. Its history is kept.",
+      "done": "Group archived"
+    },
+    "enrol": {
+      "titleGroup": "Add a student to {group}",
+      "titleStudent": "Enrol {student}",
+      "transferTitle": "Transfer {student}",
+      "hint": "The first fee is created when you save.",
+      "transferHint": "The student leaves {group} and joins the new group on the same date.",
+      "student": "Student",
+      "findStudent": "Name or phone",
+      "noStudentsFound": "No students found.",
+      "change": "Change",
+      "group": "Group",
+      "toGroup": "New group",
+      "chooseGroup": "Choose a group",
+      "chooseGroupFirst": "Choose a group to see the first fee.",
+      "groupFull": "This group is full: {students} of {capacity}.",
+      "joinDate": "Join date",
+      "transferDate": "Transfer date",
+      "discount": "Discount",
+      "discountNone": "No discount",
+      "discountPercent": "Percent",
+      "discountAmount": "Fixed amount",
+      "discountPercentValue": "Discount, %",
+      "discountAmountValue": "Discount, soʻm",
+      "note": "Note",
+      "firstCharge": "First fee",
+      "calculating": "Calculating…",
+      "mode": {
+        "prorated": "Prorated",
+        "full": "Full month",
+        "custom": "Custom amount"
+      },
+      "proratedDetail": "{counted} of {total} lessons",
+      "fullDetail": "The whole month, whatever the join date",
+      "beforeFirst": "Joins before the month's first lesson",
+      "nothing": "Nothing this month",
+      "nothingDetail": "No lessons are left this month. The first fee comes next month.",
+      "customDetail": "Type the amount and say why",
+      "customAmount": "Amount, soʻm",
+      "customNote": "Why this amount",
+      "creditFor": "Credit for {group}",
+      "creditHint": "Optional. Nothing is refunded automatically; a credit lowers what the student owes.",
+      "creditAmount": "Credit, soʻm",
+      "creditNote": "Why the credit",
+      "save": "Enrol",
+      "saveTransfer": "Transfer",
+      "done": "Student enrolled",
+      "transferDone": "Student transferred"
+    },
+    "leave": {
+      "title": "{student} leaves {group}",
+      "body": "The student stays in the centre but is no longer in this group.",
+      "date": "Leave date",
+      "credit": "Credit",
+      "save": "Leave group",
+      "done": "Student left the group"
+    },
+    "errors": {
+      "nameRequired": "Enter the name.",
+      "subjectRequired": "Enter the subject.",
+      "teacherRequired": "Choose a teacher.",
+      "feeInvalid": "Enter the monthly fee in whole soʻm.",
+      "daysRequired": "Choose at least one day.",
+      "timeInvalid": "Enter the start time.",
+      "durationInvalid": "Enter a duration from 15 to 480 minutes.",
+      "capacityInvalid": "Enter a capacity above 0, or leave it empty.",
+      "dateInvalid": "Choose a valid date.",
+      "tooLong": "This text is too long.",
+      "studentRequired": "Choose a student.",
+      "groupRequired": "Choose a group.",
+      "discountInvalid": "Enter a discount: 1–100 for percent, or an amount above 0.",
+      "customAmountInvalid": "Enter the amount in whole soʻm.",
+      "chargeNoteRequired": "Say why this amount is charged.",
+      "creditInvalid": "Enter the credit in whole soʻm.",
+      "creditNoteRequired": "Say why the credit is given.",
+      "reasonRequired": "Write the reason.",
+      "noStudents": "There is nobody to mark.",
+      "alreadyEnrolled": "The student is already in this group.",
+      "groupClosed": "This group is finished or archived.",
+      "dateOutOfRange": "Choose a date from the start of this month to the end of next month, and not in the future for leaving.",
+      "lessonCancelled": "This lesson is cancelled.",
+      "lessonFuture": "This lesson has not happened yet.",
+      "notInGroup": "A student is not in this group on that day.",
+      "sameGroup": "The student is already in this group.",
+      "attendanceLocked": "This lesson is more than 7 days old. Only the owner can change its attendance.",
+      "notFound": "This no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "finance": {
+    "tabs": {
+      "payments": "Payments",
+      "debtors": "Debtors",
+      "charges": "Charges",
+      "expenses": "Expenses",
+      "salaries": "Salaries",
+      "adjustments": "Adjustments"
+    },
+    "strip": {
+      "collected": "Collected",
+      "billed": "Billed",
+      "debt": "Debt today",
+      "expenses": "Expenses"
+    },
+    "method": {
+      "cash": "Cash",
+      "card": "Card",
+      "transfer": "Bank transfer"
+    },
+    "filters": {
+      "allMethods": "All methods",
+      "allCategories": "All categories"
+    },
+    "fields": {
+      "student": "Student",
+      "group": "Group",
+      "groups": "Groups",
+      "method": "Method",
+      "date": "Date",
+      "note": "Note",
+      "amount": "Amount",
+      "receipt": "Receipt no.",
+      "receivedBy": "Received by",
+      "debt": "Debt",
+      "oldestUnpaid": "Oldest unpaid month",
+      "lastPayment": "Last payment",
+      "description": "Description",
+      "category": "Category",
+      "teacher": "Teacher",
+      "type": "Type",
+      "by": "By",
+      "reason": "Reason"
+    },
+    "payment": {
+      "title": "Take payment",
+      "balance": "Balance",
+      "chooseGroup": "Choose a group",
+      "amount": "Amount, soʻm",
+      "save": "Save payment",
+      "saved": "Payment saved",
+      "receipt": "Receipt no. {number}",
+      "print": "Print receipt",
+      "done": "Done",
+      "loading": "Loading…",
+      "noGroups": "This student has never been in a group, so there is nothing to pay for yet."
+    },
+    "payments": {
+      "empty": "No payments this month.",
+      "rowActions": "Actions for receipt {receipt}"
+    },
+    "void": {
+      "action": "Void payment",
+      "title": "Void receipt {receipt}?",
+      "body": "The payment drops out of every total and the student owes the amount again. This cannot be undone.",
+      "reason": "Reason",
+      "voided": "Voided",
+      "done": "Payment voided"
+    },
+    "debtors": {
+      "empty": "Nobody is in debt.",
+      "count": "{count, plural, one {# student in debt} other {# students in debt}}",
+      "remind": "Remind",
+      "remindAll": "Remind all",
+      "never": "Never"
+    },
+    "charges": {
+      "billed": "Billed for {month}",
+      "collected": "Collected in {month}",
+      "generate": "Generate charges",
+      "empty": "No charges for this month yet.",
+      "monthlyFee": "Monthly fee",
+      "credit": "Credit",
+      "adjustment": "Adjustment",
+      "prorated": "{counted} of {total} lessons",
+      "discount": "discount",
+      "previewTitle": "Charges for {month}",
+      "previewHint": "One monthly fee for every active student in an active group who has none for this month yet.",
+      "previewCount": "{count, plural, one {# fee to create} other {# fees to create}}",
+      "nothingToGenerate": "Every fee for this month already exists. There is nothing to create.",
+      "confirm": "{count, plural, one {Create # charge} other {Create # charges}}",
+      "created": "{count, plural, =0 {No new charges} one {# charge created} other {# charges created}}",
+      "previewMore": "and {count} more"
+    },
+    "credit": {
+      "title": "Credit for {student}",
+      "hint": "A credit lowers what the student owes. It is listed for the owner with who added it and why.",
+      "amount": "Credit, soʻm",
+      "note": "Why the credit",
+      "noGroup": "No group",
+      "save": "Add credit",
+      "done": "Credit added"
+    },
+    "receipt": {
+      "paper": "Paper",
+      "roll": "80 mm",
+      "a4": "A4",
+      "print": "Print",
+      "paid": "Paid"
+    },
+    "errors": {
+      "studentRequired": "Choose a student.",
+      "groupRequired": "Choose one of the student's groups.",
+      "amountInvalid": "Enter a whole amount above 0.",
+      "methodRequired": "Choose a method.",
+      "dateInvalid": "Choose a valid date.",
+      "dateInFuture": "The date cannot be in the future.",
+      "noteRequired": "Say why the credit is given.",
+      "reasonRequired": "Write the reason.",
+      "tooLong": "This text is too long.",
+      "monthNotCurrent": "Only the current month can be billed.",
+      "alreadyVoided": "This payment is already voided.",
+      "notFound": "This no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again.",
+      "monthInFuture": "This month has not started yet.",
+      "categoryRequired": "Choose a category.",
+      "adjustmentNoteRequired": "Say what the bonus or deduction is for.",
+      "deductionTooLarge": "The deduction is larger than the payout.",
+      "alreadyPaid": "This payout is already paid.",
+      "payoutChanged": "This payout has changed or is already paid. Check the amount and try again."
+    },
+    "expenses": {
+      "add": "Add expense",
+      "title": "New expense",
+      "empty": "No expenses for this month.",
+      "amount": "Amount, soʻm",
+      "save": "Add expense",
+      "done": "Expense added",
+      "category": {
+        "rent": "Rent",
+        "utilities": "Utilities",
+        "marketing": "Marketing",
+        "supplies": "Supplies",
+        "other": "Other"
+      }
+    },
+    "salaries": {
+      "calculate": "Calculate",
+      "hint": "Each month is paid at the rate in effect on its 1st day. Paid payouts are not changed.",
+      "empty": "No payouts for {month} yet. Press Calculate to create them.",
+      "calculated": "{count, plural, =0 {Nothing to calculate} one {# payout calculated} other {# payouts calculated}}",
+      "calculatedColumn": "Calculated",
+      "bonus": "Bonus",
+      "deduction": "Deduction",
+      "toPay": "To pay",
+      "status": "Status",
+      "draft": "Draft",
+      "paid": "Paid",
+      "showBreakdown": "Show breakdown for {teacher}",
+      "hideBreakdown": "Hide breakdown for {teacher}",
+      "rowActions": "Actions for {teacher}",
+      "lessons": "{count, plural, one {# lesson} other {# lessons}}",
+      "collected": "collected",
+      "noLines": "No lessons or payments counted this month.",
+      "rate": "Rate",
+      "paidOn": "Paid on {date}",
+      "note": "Note",
+      "adjust": "Bonus and deduction",
+      "adjustTitle": "Bonus and deduction for {teacher}",
+      "adjustHint": "Both are added to the calculated amount. A recalculation keeps them.",
+      "bonusField": "Bonus, soʻm",
+      "deductionField": "Deduction, soʻm",
+      "noteField": "What it is for",
+      "adjustSaved": "Payout updated",
+      "markPaid": "Mark paid",
+      "markPaidTitle": "Mark the payout for {teacher} as paid?",
+      "markPaidBody": "A paid payout is locked: it cannot be edited or recalculated.",
+      "markedPaid": "Payout marked paid",
+      "monthOpenWarning": "{month} is not over yet. Lessons held and payments received after this will not be added to a paid payout."
+    },
+    "adjustments": {
+      "empty": "No credits or voided payments this month.",
+      "credit": "Credit",
+      "void": "Voided payment",
+      "receipt": "Receipt {receipt}"
+    }
+  },
+  "teachers": {
+    "newTeacher": "New teacher",
+    "editTeacher": "Edit teacher",
+    "searchPlaceholder": "Name or phone",
+    "noMatches": "No teachers match this search.",
+    "clearSearch": "Clear search",
+    "inactive": "Not working",
+    "contacts": "Contacts",
+    "noGroups": "No groups yet.",
+    "lessonsThisMonth": "Lessons this month",
+    "noLessons": "No lessons this month.",
+    "tabs": {
+      "overview": "Overview",
+      "pay": "Pay"
+    },
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "subjects": "Subjects",
+      "groups": "Groups",
+      "lessonsThisMonth": "Lessons this month",
+      "payType": "Pay type",
+      "hiredOn": "Hired on",
+      "notes": "Notes",
+      "isActive": "Works at the centre"
+    },
+    "form": {
+      "created": "Teacher added",
+      "saved": "Teacher saved",
+      "subjectsHint": "Separate subjects with commas."
+    },
+    "actions": {
+      "edit": "Edit",
+      "archive": "Archive",
+      "more": "More actions"
+    },
+    "payType": {
+      "fixed_monthly": "Fixed monthly salary",
+      "percent_of_revenue": "% of group revenue",
+      "per_lesson": "Per lesson"
+    },
+    "payTypeHint": {
+      "fixed_monthly": "The same amount every month.",
+      "percent_of_revenue": "A share of the fees collected in the month for this teacher's groups.",
+      "per_lesson": "An amount for every lesson the teacher held in the month."
+    },
+    "lesson": {
+      "date": "Date",
+      "time": "Time",
+      "group": "Group",
+      "status": "Status",
+      "substitute": "Substitute",
+      "statuses": {
+        "scheduled": "Scheduled",
+        "held": "Held",
+        "cancelled": "Cancelled"
+      }
+    },
+    "pay": {
+      "rateHistory": "Rate history",
+      "setNewRate": "Set new rate",
+      "setNewRateHint": "A new rate is added to the history. Earlier rates stay as they are.",
+      "currentRate": "Current rate",
+      "noRate": "No rate yet",
+      "amount": "Amount, soʻm",
+      "percent": "Percent",
+      "effectiveFrom": "Effective from",
+      "effectiveHint": "A month is paid at the rate in effect on its 1st day.",
+      "rate": "Rate",
+      "status": "Status",
+      "perMonth": "a month",
+      "perLesson": "per lesson",
+      "percentValue": "{percent}% of collected fees",
+      "rateSaved": "Rate saved",
+      "rateStatus": {
+        "current": "Current",
+        "upcoming": "Upcoming",
+        "past": "Past"
+      },
+      "payouts": "Payouts",
+      "noPayouts": "No payouts yet.",
+      "month": "Month",
+      "paid": "To pay",
+      "payoutStatus": {
+        "draft": "Draft",
+        "paid": "Paid"
+      },
+      "calculated": "Calculated",
+      "bonus": "Bonus",
+      "deduction": "Deduction"
+    },
+    "archive": {
+      "title": "Archive {name}?",
+      "body": "The teacher is hidden from the list. Lessons and payouts are kept.",
+      "done": "Teacher archived"
+    },
+    "errors": {
+      "nameRequired": "Enter the name.",
+      "phoneInvalid": "Enter a phone number like +998 90 123 45 67.",
+      "dateInvalid": "Choose a valid date.",
+      "tooLong": "This text is too long.",
+      "payTypeRequired": "Choose a pay type.",
+      "amountInvalid": "Enter a whole amount above 0.",
+      "percentInvalid": "Enter a percent from 1 to 100.",
+      "rateDateTaken": "A rate already starts on this date. Choose another date.",
+      "notFound": "This teacher no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "dev": {
+    "title": "Components",
+    "newStudent": "New student",
+    "export": "Export",
+    "archive": "Archive",
+    "edit": "Edit",
+    "disabled": "Disabled",
+    "fullName": "Full name",
+    "fullNameError": "Enter the full name.",
+    "notes": "Notes",
+    "source": "Source",
+    "sourcePlaceholder": "Choose a source",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "referral": "Referral",
+    "reminders": "Send reminders",
+    "board": "Board",
+    "list": "List",
+    "view": "View",
+    "overview": "Overview",
+    "ledger": "Ledger",
+    "attendance": "Attendance",
+    "messages": "Messages",
+    "active": "Active",
+    "paid": "Paid",
+    "due": "Due",
+    "debt": "Debt",
+    "present": "Present",
+    "late": "Late",
+    "absent": "Absent",
+    "excused": "Excused",
+    "student": "Student",
+    "group": "Group",
+    "status": "Status",
+    "balance": "Balance",
+    "collected": "Collected",
+    "activeStudents": "Active students",
+    "totalDebt": "Total debt",
+    "attendanceRate": "Attendance rate",
+    "telegramLinked": "Telegram linked",
+    "paymentSaved": "Payment saved",
+    "showToast": "Show toast",
+    "openSheet": "Open sheet",
+    "openDialog": "Open dialog",
+    "openMenu": "Open menu",
+    "archiveTitle": "Archive this student?",
+    "archiveBody": "The student is hidden from lists. Payments and attendance are kept.",
+    "noMatches": "No students match these filters.",
+    "clearFilters": "Clear filters"
+  },
+  "reports": {
+    "period": {
+      "label": "Period",
+      "this": "This month",
+      "last": "Last month",
+      "3": "Last 3 months",
+      "6": "Last 6 months",
+      "12": "Last 12 months",
+      "custom": "Custom range",
+      "from": "From",
+      "to": "To"
+    },
+    "kpi": {
+      "collected": "Collected",
+      "costs": "Expenses + salaries",
+      "profit": "Profit",
+      "activeStudents": "Active students",
+      "newLeads": "New leads",
+      "leadConversion": "Lead conversion",
+      "totalDebt": "Debt today",
+      "attendanceRate": "Attendance rate"
+    },
+    "exportCsv": "Export CSV",
+    "exportCsvFor": "Export CSV: {chart}",
+    "empty": "Nothing to show for this period.",
+    "month": "Month",
+    "money": {
+      "title": "Collected vs expenses by month",
+      "collected": "Collected",
+      "costs": "Expenses + salaries",
+      "expenses": "Expenses",
+      "salaries": "Salaries"
+    },
+    "revenue": {
+      "title": "Revenue",
+      "by": "Revenue by",
+      "group": "By group",
+      "subject": "By subject",
+      "groupColumn": "Group",
+      "subjectColumn": "Subject",
+      "collected": "Collected"
+    },
+    "funnel": {
+      "title": "Lead funnel",
+      "stage": "Stage",
+      "source": "Source",
+      "leads": "Leads",
+      "won": "Won",
+      "bySource": "By source",
+      "dimension": "Split"
+    },
+    "students": {
+      "title": "Active students",
+      "active": "Active students",
+      "joined": "Joined",
+      "left": "Left",
+      "flow": "Joins and leaves"
+    },
+    "attendance": {
+      "title": "Attendance rate by group",
+      "group": "Group",
+      "rate": "Attendance rate",
+      "present": "Present",
+      "late": "Late",
+      "absent": "Absent",
+      "excused": "Excused"
+    },
+    "debtAge": {
+      "title": "Debt by age",
+      "hint": "What students owe today, by how long ago it was billed.",
+      "bucket": "Age",
+      "amount": "Debt",
+      "students": "Students",
+      "studentsCount": "{count, plural, one {# student} other {# students}}",
+      "0_30": "0–30 days",
+      "31_60": "31–60 days",
+      "over_60": "Over 60 days"
+    }
+  },
+  "bot": {
+    "linked": "{student} is now linked. Payment and lesson reminders from {centre} will come here. Send /stop to unlink.",
+    "unknownCode": "This link is not valid. Ask {centre} for a new one.",
+    "stopped": "Unlinked. You will get no more messages from {centre}.",
+    "nothingLinked": "Nothing is linked to this chat.",
+    "help": "This bot sends reminders from {centre}. Open the personal link the centre gave you to connect."
+  },
+  "notify": {
+    "send": {
+      "title": "Message to {student}",
+      "channel": "Channel",
+      "telegram": "Telegram",
+      "sms": "SMS",
+      "notLinked": "Telegram is not linked for this student.",
+      "text": "Text",
+      "smsHint": "Sent to {phone}. Plain Latin keeps an SMS at 160 characters; Cyrillic or ʻ halves that.",
+      "action": "Send",
+      "sent": "Message sent",
+      "failed": "The message could not be delivered. The Messages tab shows why."
+    },
+    "remind": {
+      "sent": "Reminder sent",
+      "failed": "The reminder could not be delivered. The student's Messages tab shows why.",
+      "already": "Already reminded today",
+      "allDone": "{sent, plural, =0 {No reminders sent} one {# reminder sent} other {# reminders sent}}{already, plural, =0 {} other { · # already reminded today}}{failed, plural, =0 {} other { · # failed}}",
+      "allTitle": "Remind every debtor?",
+      "allBody": "{count, plural, one {# student in debt gets a reminder} other {# students in debt each get a reminder}} by Telegram, or by SMS when Telegram is not linked. Anyone already reminded today is left out.",
+      "allAction": "Remind all"
+    },
+    "errors": {
+      "notAllowed": "You are not allowed to do this.",
+      "notConfigured": "Messages are not set up on this server yet.",
+      "quietHours": "Nothing is sent between {from} and {to}. Try again after {to}.",
+      "noChannel": "This student cannot be reached on that channel.",
+      "textRequired": "Write the message.",
+      "tooLong": "This text is too long.",
+      "notFound": "This no longer exists.",
+      "noDebt": "This student no longer owes anything.",
+      "noTemplate": "There is no template for this message.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "settings": {
+    "tabs": {
+      "centre": "Centre",
+      "users": "Users",
+      "notifications": "Notifications",
+      "templates": "Templates",
+      "profile": "Profile"
+    },
+    "saved": "Saved",
+    "centre": {
+      "name": "Centre name",
+      "billingDay": "Billing day",
+      "billingDayHint": "Monthly fees are created on this day of the month.",
+      "dueDay": "Due day",
+      "dueDayHint": "Fees are due by this day. After it an unpaid fee is a debt."
+    },
+    "users": {
+      "invite": "Invite user",
+      "inviteTitle": "Invite a user",
+      "inviteHint": "They get an email with a link to choose a password.",
+      "email": "Email",
+      "name": "Full name",
+      "role": "Role",
+      "language": "Language",
+      "sendInvite": "Send invitation",
+      "invited": "Invitation sent to {email}",
+      "you": "you",
+      "status": {
+        "active": "Active",
+        "invited": "Invited",
+        "deactivated": "Deactivated"
+      },
+      "statusColumn": "Status",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "deactivateTitle": "Deactivate {name}?",
+      "deactivateBody": "They are signed out and can no longer sign in or see anything. Their past work stays as it is. You can reactivate them later.",
+      "deactivated": "{name} is deactivated",
+      "reactivated": "{name} can sign in again",
+      "roleChanged": "{name} is now {role}",
+      "roleFor": "Role of {name}"
+    },
+    "notifications": {
+      "enabled": "Send automatic reminders",
+      "enabledHint": "Payment due, payment overdue and lesson reminders. Messages staff send by hand are not affected.",
+      "lessonHours": "Lesson reminder, hours before",
+      "quietFrom": "Quiet hours from",
+      "quietTo": "Quiet hours to",
+      "quietHint": "Nothing is sent in quiet hours. Payment messages wait until they end; a lesson reminder is skipped.",
+      "telegram": "Telegram bot",
+      "telegramNotConfigured": "Not configured",
+      "telegramNotConfiguredHint": "Set TELEGRAM_BOT_TOKEN and TELEGRAM_WEBHOOK_SECRET on the server.",
+      "telegramUnreachable": "Telegram does not answer",
+      "telegramConnected": "Connected",
+      "telegramNotConnected": "Webhook not connected",
+      "webhook": "Webhook address",
+      "webhookElsewhere": "Telegram currently delivers to {url}.",
+      "webhookNeedsHttps": "Telegram only calls https addresses, and the server needs TELEGRAM_WEBHOOK_SECRET. Connect it from the deployed app.",
+      "lastError": "Last delivery error: {error}",
+      "connect": "Connect webhook",
+      "connectedToast": "Webhook connected to @{username}",
+      "eskiz": "Eskiz SMS",
+      "eskizConfigured": "Configured",
+      "eskizNotConfigured": "Not configured",
+      "eskizNotConfiguredHint": "Set ESKIZ_EMAIL and ESKIZ_PASSWORD on the server.",
+      "sender": "Sender: {sender}",
+      "testPhone": "Phone for the test SMS",
+      "sendTest": "Send test SMS",
+      "testHint": "Sends one real SMS with Eskiz's fixed test text.",
+      "testSent": "Test SMS sent to {phone}",
+      "serverNotReady": "SUPABASE_SECRET_KEY is not set on the server: reminders, messages and invitations cannot work yet."
+    },
+    "templates": {
+      "type": "Message",
+      "channel": "Channel",
+      "language": "Language",
+      "text": "Text",
+      "placeholders": "Placeholders",
+      "insert": "Insert {placeholder}",
+      "preview": "Preview",
+      "characters": "{count, plural, one {# character} other {# characters}}",
+      "smsParts": "{count, plural, one {# SMS} other {# SMS}}",
+      "smsGsm": "Plain Latin: 160 characters fit in one SMS.",
+      "smsUnicode": "Sent as Unicode because of {characters}: only 70 characters fit in one SMS.",
+      "smsConverted": "ʻ and curly quotes are replaced with straight ones when an SMS is sent.",
+      "unknown": "Not a placeholder, sent as written: {names}",
+      "unsaved": "Unsaved changes",
+      "placeholder": {
+        "student": "Student's name",
+        "group": "Group",
+        "month": "Month",
+        "amount": "Amount",
+        "due_date": "Due date",
+        "time": "Lesson time",
+        "centre": "Centre name"
+      }
+    },
+    "profile": {
+      "name": "Full name",
+      "language": "Interface language",
+      "email": "Email",
+      "password": "Password",
+      "newPassword": "New password",
+      "confirmPassword": "Repeat the password",
+      "savePassword": "Change password",
+      "passwordSaved": "Password changed"
+    },
+    "errors": {
+      "nameRequired": "Enter a name.",
+      "tooLong": "This text is too long.",
+      "dayInvalid": "Choose a day from 1 to 28.",
+      "dueBeforeBilling": "The due day cannot be before the billing day.",
+      "timeInvalid": "Enter a time like 21:00.",
+      "hoursInvalid": "Enter 1 to 48 hours.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailTaken": "This email already has an account.",
+      "phoneInvalid": "Enter a phone like +998901234567.",
+      "textRequired": "Write the text.",
+      "passwordTooShort": "The password needs at least 8 characters.",
+      "passwordMismatch": "The passwords do not match.",
+      "notSelf": "You cannot change your own role or deactivate yourself.",
+      "lastOwner": "The centre needs at least one active owner.",
+      "notAllowed": "You are not allowed to do this.",
+      "notConfigured": "This is not set up on the server yet.",
+      "notFound": "This no longer exists.",
+      "generic": "Something went wrong. Try again."
+    }
+  }
+}

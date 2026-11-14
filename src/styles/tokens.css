@@ -1,0 +1,200 @@
+/*
+ * Design tokens — docs/SPEC.md → "Design system".
+ * The only place colours, radii, shadows and motion values are defined.
+ * Everything below is exposed to Tailwind through @theme, e.g.
+ * bg-bg-subtle, text-text-secondary, bg-purple, rounded-card, shadow-float.
+ */
+
+:root {
+  /* Colour */
+  --bg: #ffffff;
+  --bg-subtle: #f5f5f7;
+  --text: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-tertiary: #86868b;
+  --border: #e5e5ea;
+  --border-strong: #d2d2d7;
+  --purple: #6236c9;
+  --purple-hover: #5b2bc4;
+  --purple-pressed: #4e22a8;
+  --purple-tint: #f3eefc;
+  --success: #0e7a3e;
+  --warning: #a35200;
+  --danger: #c62828;
+
+  /* Derived colour: status tints at 10 %, focus ring at 30 %, scrim behind sheets */
+  --success-tint: color-mix(in srgb, var(--success) 10%, transparent);
+  --warning-tint: color-mix(in srgb, var(--warning) 10%, transparent);
+  --danger-tint: color-mix(in srgb, var(--danger) 10%, transparent);
+  --focus-ring: color-mix(in srgb, var(--purple) 30%, transparent);
+  --danger-ring: color-mix(in srgb, var(--danger) 30%, transparent);
+  --scrim: color-mix(in srgb, var(--text) 25%, transparent);
+
+  /* Radius: 8 buttons and inputs, 12 cards, 16 sheets and dialogs.
+     "inner" is for parts nested inside an 8 px control (segments, menu rows, checkbox). */
+  --radius-inner: 6px;
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-sheet: 16px;
+
+  /* Shadow: one, for floating layers only */
+  --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --ease-fast: ease-out;
+  --duration-sheet: 250ms;
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Type */
+  --font-stack:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-inter), Inter,
+    "Segoe UI", sans-serif;
+
+  /* Layout and component sizes */
+  --size-sidebar: 240px;
+  --size-sheet: 480px;
+  --size-content: 1200px;
+  --size-control: 36px;
+  --size-control-touch: 44px;
+  --size-row: 48px;
+  --size-icon: 18px;
+  --stroke-icon: 1.5;
+  --blur-frost: 20px;
+}
+
+@theme inline {
+  /* Only our palette exists: bg-red-500 and friends are not generated. */
+  --color-*: initial;
+  --color-bg: var(--bg);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-text: var(--text);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-purple: var(--purple);
+  --color-purple-hover: var(--purple-hover);
+  --color-purple-pressed: var(--purple-pressed);
+  --color-purple-tint: var(--purple-tint);
+  --color-success: var(--success);
+  --color-success-tint: var(--success-tint);
+  --color-warning: var(--warning);
+  --color-warning-tint: var(--warning-tint);
+  --color-danger: var(--danger);
+  --color-danger-tint: var(--danger-tint);
+  --color-focus-ring: var(--focus-ring);
+  --color-danger-ring: var(--danger-ring);
+  --color-scrim: var(--scrim);
+
+  --radius-*: initial;
+  --radius-inner: var(--radius-inner);
+  --radius-control: var(--radius-control);
+  --radius-card: var(--radius-card);
+  --radius-sheet: var(--radius-sheet);
+
+  --shadow-*: initial;
+  --shadow-float: var(--shadow-float);
+
+  --ease-*: initial;
+  --ease-fast: var(--ease-fast);
+  --ease-sheet: var(--ease-sheet);
+
+  --font-*: initial;
+  --font-sans: var(--font-stack);
+
+  /* Type scale: size / line height, weight, tracking */
+  --text-*: initial;
+  --text-large-title: 1.75rem;
+  --text-large-title--line-height: 2.125rem;
+  --text-large-title--font-weight: 600;
+  --text-large-title--letter-spacing: -0.01em;
+  --text-title: 1.375rem;
+  --text-title--line-height: 1.75rem;
+  --text-title--font-weight: 600;
+  --text-title--letter-spacing: -0.01em;
+  --text-headline: 1.0625rem;
+  --text-headline--line-height: 1.375rem;
+  --text-headline--font-weight: 600;
+  --text-headline--letter-spacing: -0.01em;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.25rem;
+  --text-footnote: 0.8125rem;
+  --text-footnote--line-height: 1.125rem;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-caption--font-weight: 500;
+
+  /* Sizes: w-sidebar, max-w-sheet, max-w-content, h-control, h-row, size-icon */
+  --spacing-sidebar: var(--size-sidebar);
+  --spacing-sheet: var(--size-sheet);
+  --spacing-content: var(--size-content);
+  --spacing-control: var(--size-control);
+  --spacing-control-touch: var(--size-control-touch);
+  --spacing-row: var(--size-row);
+  --spacing-icon: var(--size-icon);
+
+  --blur-*: initial;
+  --blur-frost: var(--blur-frost);
+
+  /* Below this the sidebar becomes a slide-over: shell:flex, max-shell:hidden */
+  --breakpoint-shell: 900px;
+}
+
+/* 150 ms ease-out for hover and press */
+@utility motion-fast {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-fast);
+}
+
+/* 250 ms sheet curve, for tw-animate-css enter and exit animations */
+@utility motion-sheet {
+  animation-duration: var(--duration-sheet);
+  animation-timing-function: var(--ease-sheet);
+}
+
+/* Money and counts */
+@utility numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-stack);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
+  }
+
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  /* lucide icons: 18 px, stroke 1.5, colour inherited from the text around them */
+  svg.lucide {
+    width: var(--size-icon);
+    height: var(--size-icon);
+    stroke-width: var(--stroke-icon);
+    flex-shrink: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
