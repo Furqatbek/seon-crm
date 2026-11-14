@@ -75,15 +75,22 @@ npx supabase login
 npx supabase link --project-ref <project-ref>
 ```
 
+The project ref is the short id alone (for `https://abcd1234.supabase.co` it
+is `abcd1234`), not the whole address.
+
 Look at what will be applied before applying it:
 
 ```bash
-npx supabase db push --dry-run
+npx supabase db push --remote --dry-run
 ```
 
 ```bash
-npx supabase db push
+npx supabase db push --remote
 ```
+
+`--remote` is what makes the command act on the linked project: without it
+the CLI targets the local database on your computer. The first line it prints
+names the target; read it before confirming.
 
 Never add `--include-seed` against production.
 
@@ -357,7 +364,7 @@ node scripts/notify-test.mjs --phone +998901234567
 
 - **Updating the app**: push to the production branch; Vercel deploys it. If
   the change includes new files in `supabase/migrations/`, link the production
-  project and run `npx supabase db push` first, so the database is never
+  project and run `npx supabase db push --remote` first, so the database is never
   behind the code.
 - **Backups**: check which backup schedule your Supabase plan includes, and
   whether it is enough for a system that holds payments.
