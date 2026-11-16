@@ -187,7 +187,7 @@ Titles use letter-spacing -0.01em.
 
 ## Data model
 
-Seventeen tables cover all six blocks. A student's balance is never stored: it is always payments minus charges, read from one view. Every table also has `id uuid`, `created_at` and, where marked, `archived_at`.
+Eighteen tables cover all six blocks. A student's balance is never stored: it is always payments minus charges, read from one view. Every table also has `id uuid`, `created_at` and, where marked, `archived_at`.
 
 ```text
 ENUMS
@@ -231,6 +231,10 @@ teachers           full_name, phone, subjects text[], hired_on, is_active, notes
 teacher_pay_rates  teacher_id, pay_type, amount bigint (fixed or per lesson),
                    percent numeric(5,2), effective_from date        -- owner only
 
+ROOMS
+rooms              number, name, capacity smallint (> 0), is_active, archived_at
+                   -- everyone signed in reads; only the owner writes
+
 STUDENTS AND GROUPS
 students           full_name, phone, parent_name, parent_phone, birth_date,
                    language app_language, telegram_chat_id bigint,
@@ -238,7 +242,8 @@ students           full_name, phone, parent_name, parent_phone, birth_date,
                    notes, archived_at
 groups             name, subject, level, teacher_id → teachers, monthly_fee bigint,
                    days smallint[] (1 = Mon … 7 = Sun), start_time, duration_min (90),
-                   room, capacity, start_date, end_date, status, archived_at
+                   room_id → rooms, capacity (≤ the room's capacity), start_date,
+                   end_date, status, archived_at
 enrollments        group_id, student_id, joined_on, left_on, status,
                    discount_kind (percent | amount | null), discount_value, note
                    unique active (group_id, student_id)
@@ -279,6 +284,7 @@ The owner sees everything; a manager runs the front desk but never sees profit, 
 | Leads | Full | Full, except archive |
 | Students | Full | Create, edit, enrol, transfer, mark as left |
 | Groups and lessons | Full | Create, edit, cancel a lesson, mark attendance |
+| Rooms | Full: create, edit, archive | Read only: choose a room for a group |
 | Teachers | Full, including pay rates | Contact details and schedule only |
 | Payments | Take and void | Take only |
 | Charges | Generate a month, add credits | Set the first-month amount at enrolment; add a credit with a required note |
@@ -386,9 +392,10 @@ Six blocks plus Settings, each a list page and a record page. After sign-in the 
 
 ### Groups — `/groups` and `/groups/[id]`
 
-- Today tab: today's lessons by time with group, teacher, room, student count and a Mark attendance button that turns into a green tick once saved.
+- Today tab: today's lessons by time with group, teacher, room, student count and a Mark attendance button that turns into a green tick once saved. A room is shown as "number · name" here, on the group page and on the lesson sheet.
 - All groups tab: name, subject, teacher, days and time, students / capacity, monthly fee, status.
-- New group sheet: name, subject, level, teacher, monthly fee, weekdays as toggle chips, start time, duration, room, capacity, start date.
+- New group sheet: name, subject, level, teacher, monthly fee, weekdays as toggle chips, start time, duration, room, capacity, start date. Room is a dropdown of the active rooms, each with its capacity. Capacity defaults to the room's capacity and cannot exceed it.
+- A room holds one group at a time. A group cannot be saved when another group that is active or forming uses the same room on a shared weekday at an overlapping time; the error names the clashing group. Back-to-back lessons (one ends as the next starts) are allowed.
 - Group page tabs: Students (balance, attendance %, joined date, Add student opens the enrol sheet with proration), Attendance (students × lesson dates grid; a date opens that lesson), Lessons (cancel, restore, set substitute), Trials (this week's trial visitors).
 - Lesson sheet: one row per student with a Present / Late / Absent / Excused segmented control, then Save.
 
@@ -417,6 +424,7 @@ Six blocks plus Settings, each a list page and a record page. After sign-in the 
 ### Settings — `/settings`
 
 - Centre (owner): name, billing day, due day.
+- Rooms (owner): list with number, name, capacity and the groups using each room; Add room and Edit room sheets; a room can be archived only when no active or forming group uses it.
 - Users (owner): invite by email, role, deactivate.
 - Notifications (owner): on/off, lesson reminder hours, quiet hours, Telegram bot status with Connect webhook, Eskiz status with Send test SMS.
 - Templates (owner): one editor per message type, channel and language, with placeholder chips and a live preview.
