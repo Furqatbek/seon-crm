@@ -1,4 +1,5 @@
 import { LanguageSwitch } from "@/components/shell/language-switch";
+import { ThemeSwitch } from "@/components/shell/theme-switch";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 
 // White page, one centred card, language switch in the top-right corner.
@@ -9,7 +10,8 @@ export default async function AuthLayout({
   await initLocale(params);
   return (
     <div className="flex min-h-dvh flex-col bg-bg">
-      <div className="flex justify-end p-4">
+      <div className="flex justify-end gap-1 p-4">
+        <ThemeSwitch />
         <LanguageSwitch />
       </div>
       <main className="flex flex-1 items-center justify-center px-4 pb-20">

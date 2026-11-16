@@ -57,6 +57,12 @@
     "ru": "Русский",
     "en": "English"
   },
+  "theme": {
+    "label": "Theme",
+    "system": "Same as device",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "userMenu": {
     "label": "Account menu",
     "signOut": "Sign out",

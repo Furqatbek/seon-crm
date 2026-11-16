@@ -138,6 +138,31 @@ Contrast is measured against white. Anything below 4.5:1 is never used for text 
 
 Status colours get a tint background at 10% opacity with the full colour as text.
 
+### Dark theme
+
+The app follows the device's light or dark setting. The account menu (and the sign-in page) has a Theme switch: Same as device, Light, Dark. A choice is kept in the browser and applied before the first paint. Printed pages, receipts included, are always light.
+
+Dark values, with contrast measured against the dark `--bg`:
+
+| Token | Hex | Contrast |
+| --- | --- | --- |
+| `--bg` | #131316 | — |
+| `--bg-subtle` | #1E1E22 | — |
+| `--text` | #F5F5F7 | 17.0:1 |
+| `--text-secondary` | #A1A1A6 | 7.2:1 |
+| `--text-tertiary` | #7C7C82 | 4.5:1 |
+| `--border` | #2B2B30 | — |
+| `--border-strong` | #3E3E45 | — |
+| `--purple` | #A78BFA | 6.8:1 |
+| `--purple-hover` | #B8A1FB | 8.4:1 |
+| `--purple-pressed` | #9373F5 | 5.3:1 |
+| `--purple-tint` | #2A2244 | — |
+| `--success` | #4CC38A | 8.4:1 |
+| `--warning` | #F0A04B | 8.7:1 |
+| `--danger` | #FF6B6B | 6.7:1 |
+
+In the dark a filled button is the light purple with dark text, and a toast is a light pill with dark text. Every rule below holds in both themes.
+
 ### Type
 
 Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Segoe UI", sans-serif`. Load Inter with `next/font` so Windows and Android users get the same feel; it covers Cyrillic and ʻ. Money and counts use `font-variant-numeric: tabular-nums`.
@@ -163,7 +188,7 @@ Titles use letter-spacing -0.01em.
 
 ### Layout
 
-- Left sidebar, 240 px, `--bg-subtle` at 80% with a 20 px backdrop blur. Top: centre name. Middle: Leads, Students, Groups, Teachers, Finance, Reports. Bottom: Settings (owner only) and the user menu with the language switch.
+- Left sidebar, 240 px, `--bg-subtle` at 80% with a 20 px backdrop blur. Top: centre name. Middle: Leads, Students, Groups, Teachers, Finance, Reports. Bottom: Settings (owner only) and the user menu with the language and theme switches.
 - Active nav item: `--purple-tint` background, `--purple` icon and text.
 - Page header: large title on the left, at most one primary button on the right, search and filters in a row below.
 - Content max width 1200 px. Below 900 px the sidebar becomes a slide-over opened from a menu button.

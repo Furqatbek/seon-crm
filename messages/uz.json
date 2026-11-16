@@ -57,6 +57,12 @@
     "ru": "Русский",
     "en": "English"
   },
+  "theme": {
+    "label": "Mavzu",
+    "system": "Qurilmadagidek",
+    "light": "Yorugʻ",
+    "dark": "Qorongʻi"
+  },
   "userMenu": {
     "label": "Akkaunt menyusi",
     "signOut": "Chiqish",
