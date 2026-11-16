@@ -36,8 +36,10 @@ export function SignInForm() {
     });
   });
 
+  // method="post": if the button is pressed before the page script has loaded,
+  // the browser must not put what was typed into the address bar.
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+    <form method="post" onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
       <Field
         label={t("email")}
         htmlFor="email"

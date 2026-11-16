@@ -12,9 +12,10 @@ import { getCentreName } from "@/lib/centre";
 // second check: the user must also have an active profile. Anyone else is
 // signed out.
 async function SignedIn({ locale, children }: { locale: Locale; children: React.ReactNode }) {
-  const user = await getCurrentUser();
+  // Asked for together: one trip to the database, not two.
+  const [user, name] = await Promise.all([getCurrentUser(), getCentreName()]);
   if (!user) redirect(`/auth/sign-out?locale=${locale}`);
-  const centreName = (await getCentreName()) ?? (await getTranslations({ locale, namespace: "app" }))("name");
+  const centreName = name ?? (await getTranslations({ locale, namespace: "app" }))("name");
   return (
     <AppShell user={user} centreName={centreName}>
       {children}

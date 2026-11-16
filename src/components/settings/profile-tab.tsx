@@ -57,7 +57,7 @@ function PasswordForm() {
 
   return (
     <Section title={t("profile.password")}>
-      <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+      <form method="post" onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         <Field label={t("profile.newPassword")} htmlFor="profile-password" error={message(errors.password?.message)}>
           <Input id="profile-password" type="password" autoComplete="new-password" aria-invalid={errors.password ? true : undefined} {...register("password")} />
         </Field>

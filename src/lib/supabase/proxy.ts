@@ -28,7 +28,9 @@ export async function refreshSession(
     },
   });
 
-  // getUser() checks the token with Supabase Auth; getSession() would trust the cookie.
-  const { data, error } = await supabase.auth.getUser();
-  return !error && data.user !== null;
+  // getClaims() verifies the token's signature and renews an expired session;
+  // getSession() alone would trust the cookie. With asymmetric signing keys the
+  // check needs no call to Supabase Auth, which keeps every page load fast.
+  const { data, error } = await supabase.auth.getClaims();
+  return !error && Boolean(data?.claims?.sub);
 }
