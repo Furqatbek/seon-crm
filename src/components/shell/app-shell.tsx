@@ -2,15 +2,15 @@
 
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
-import { Link, usePathname } from "@/i18n/navigation";
-import type { CurrentUser } from "@/lib/auth";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import type { SignedInUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
-import { BLOCKS, SETTINGS_BLOCK, type Block } from "./blocks";
+import { BLOCKS, SETTINGS_BLOCK, TEACHER_BLOCKS, type Block } from "./blocks";
 import { UserMenu } from "./user-menu";
 
 function NavLink({
@@ -47,7 +47,7 @@ function SidebarContent({
   centreName,
   onNavigate,
 }: {
-  user: CurrentUser;
+  user: SignedInUser;
   centreName: string;
   onNavigate?: () => void;
 }) {
@@ -67,7 +67,7 @@ function SidebarContent({
         aria-label={t("nav.label")}
         className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 py-2"
       >
-        {BLOCKS.map((block) => (
+        {(user.role === "teacher" ? TEACHER_BLOCKS : BLOCKS).map((block) => (
           <NavLink
             key={block.key}
             block={block}
@@ -90,6 +90,8 @@ function SidebarContent({
   );
 }
 
+const TEACHER_HOME = ["/my-groups", "/settings"];
+
 /**
  * Frosted 240 px sidebar on the left; below 900 px it becomes a slide-over
  * opened from a menu button.
@@ -99,13 +101,23 @@ export function AppShell({
   centreName,
   children,
 }: {
-  user: CurrentUser;
+  user: SignedInUser;
   /** From Settings → Centre. */
   centreName: string;
   children: React.ReactNode;
 }) {
   const t = useTranslations();
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // A teacher has their groups and their profile. Any other address shows
+  // them nothing (the pages and the database both refuse), so take them home.
+  const lost =
+    user.role === "teacher" && !TEACHER_HOME.some((home) => pathname === home || pathname.startsWith(`${home}/`));
+  useEffect(() => {
+    if (lost) router.replace("/my-groups");
+  }, [lost, router]);
 
   return (
     <div className="min-h-dvh bg-bg">

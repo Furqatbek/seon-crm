@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -43,14 +43,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { UserRole } from "@/lib/auth";
 import { inviteUser, setUserActive, setUserRole } from "@/lib/settings/actions";
-import type { UserRow } from "@/lib/settings/queries";
+import type { TeacherOption, UserRow } from "@/lib/settings/queries";
 import {
-  ROLES,
+  LOGIN_ROLES,
   TEMPLATE_LANGUAGES,
   inviteSchema,
   type InviteInput,
+  type LoginRole,
   type SettingsErrorKey,
   type SettingsResult,
 } from "@/lib/validation/settings";
@@ -60,7 +60,49 @@ import { Problem } from "./parts";
 type Failure = Extract<SettingsResult, { ok: false }>;
 const TONE = { active: "success", invited: "warning", deactivated: "neutral" } as const;
 
-function InviteForm({ language, onClose }: { language: InviteInput["language"]; onClose: () => void }) {
+/** The teacher a login belongs to: only teachers who have no login yet. */
+function TeacherSelect({
+  id,
+  value,
+  onChange,
+  teachers,
+  invalid,
+}: {
+  id: string;
+  value: string | null | undefined;
+  onChange: (value: string) => void;
+  teachers: TeacherOption[];
+  invalid?: boolean;
+}) {
+  const t = useTranslations("settings");
+  const free = teachers.filter((teacher) => !teacher.hasLogin);
+  return (
+    <Select value={value ?? ""} onValueChange={onChange} disabled={free.length === 0}>
+      <SelectTrigger id={id} aria-invalid={invalid ? true : undefined}>
+        <SelectValue placeholder={free.length === 0 ? t("users.noFreeTeachers") : t("users.chooseTeacher")}>
+          {teachers.find((teacher) => teacher.id === value)?.name}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        {free.map((teacher) => (
+          <SelectItem key={teacher.id} value={teacher.id}>
+            {teacher.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
+function InviteForm({
+  language,
+  teachers,
+  onClose,
+}: {
+  language: InviteInput["language"];
+  teachers: TeacherOption[];
+  onClose: () => void;
+}) {
   const t = useTranslations("settings");
   const tRoles = useTranslations("userMenu.roles");
   const tLanguage = useTranslations("language");
@@ -74,8 +116,9 @@ function InviteForm({ language, onClose }: { language: InviteInput["language"]; 
     formState: { errors },
   } = useForm<InviteInput>({
     resolver: zodResolver(inviteSchema),
-    defaultValues: { email: "", full_name: "", role: "manager", language },
+    defaultValues: { email: "", full_name: "", role: "manager", teacher_id: null, language },
   });
+  const role = useWatch({ control, name: "role" });
   const message = (key: string | undefined) => (key ? t(`errors.${key as SettingsErrorKey}`) : null);
 
   const onSubmit = handleSubmit((values) => {
@@ -107,7 +150,7 @@ function InviteForm({ language, onClose }: { language: InviteInput["language"]; 
                   <SelectValue>{tRoles(field.value)}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  {ROLES.map((role) => (
+                  {LOGIN_ROLES.map((role) => (
                     <SelectItem key={role} value={role}>
                       {tRoles(role)}
                     </SelectItem>
@@ -117,6 +160,28 @@ function InviteForm({ language, onClose }: { language: InviteInput["language"]; 
             )}
           />
         </Field>
+        {role === "teacher" ? (
+          <Field
+            label={t("users.teacher")}
+            htmlFor="invite-teacher"
+            error={message(errors.teacher_id?.message)}
+          >
+            <Controller
+              control={control}
+              name="teacher_id"
+              render={({ field }) => (
+                <TeacherSelect
+                  id="invite-teacher"
+                  value={field.value}
+                  onChange={field.onChange}
+                  teachers={teachers}
+                  invalid={Boolean(errors.teacher_id)}
+                />
+              )}
+            />
+            <p className="text-footnote text-text-secondary">{t("users.teacherHint")}</p>
+          </Field>
+        ) : null}
         <Field label={t("users.language")} htmlFor="invite-language">
           <Controller
             control={control}
@@ -152,7 +217,15 @@ function InviteForm({ language, onClose }: { language: InviteInput["language"]; 
 }
 
 /** Owner only: invite by email, change a role, deactivate or reactivate. */
-export function UsersTab({ users, language }: { users: UserRow[]; language: InviteInput["language"] }) {
+export function UsersTab({
+  users,
+  teachers,
+  language,
+}: {
+  users: UserRow[];
+  teachers: TeacherOption[];
+  language: InviteInput["language"];
+}) {
   const t = useTranslations("settings");
   const tRoles = useTranslations("userMenu.roles");
   const tCommon = useTranslations("common");
@@ -160,11 +233,15 @@ export function UsersTab({ users, language }: { users: UserRow[]; language: Invi
   const [deactivating, setDeactivating] = useState<UserRow | null>(null);
   const [failure, setFailure] = useState<Failure | null>(null);
   const [busy, startTransition] = useTransition();
+  // Making someone a teacher needs one more answer: which teacher they are.
+  const [linking, setLinking] = useState<{ user: UserRow; teacherId: string | null } | null>(null);
 
-  function changeRole(user: UserRow, role: UserRole) {
+  function changeRole(user: UserRow, role: LoginRole, teacherId: string | null = null) {
+    if (role === "teacher" && !teacherId) return setLinking({ user, teacherId: null });
     setFailure(null);
+    setLinking(null);
     startTransition(async () => {
-      const result = await setUserRole({ user_id: user.id, role });
+      const result = await setUserRole({ user_id: user.id, role, teacher_id: teacherId });
       if (!result.ok) setFailure(result);
       else toast(t("users.roleChanged", { name: user.fullName, role: tRoles(role) }));
     });
@@ -213,12 +290,12 @@ export function UsersTab({ users, language }: { users: UserRow[]; language: Invi
                 {user.isSelf || user.status === "deactivated" ? (
                   tRoles(user.role)
                 ) : (
-                  <Select value={user.role} onValueChange={(role) => changeRole(user, role as UserRole)} disabled={busy}>
+                  <Select value={user.role} onValueChange={(role) => changeRole(user, role as LoginRole)} disabled={busy}>
                     <SelectTrigger aria-label={t("users.roleFor", { name: user.fullName })} className="w-36">
                       <SelectValue>{tRoles(user.role)}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      {ROLES.map((role) => (
+                      {LOGIN_ROLES.map((role) => (
                         <SelectItem key={role} value={role}>
                           {tRoles(role)}
                         </SelectItem>
@@ -226,6 +303,11 @@ export function UsersTab({ users, language }: { users: UserRow[]; language: Invi
                     </SelectContent>
                   </Select>
                 )}
+                {user.teacher ? (
+                  <p className="mt-1 text-footnote text-text-secondary" data-slot="linked-teacher">
+                    {user.teacher.name}
+                  </p>
+                ) : null}
               </TableCell>
               <TableCell>
                 <StatusPill tone={TONE[user.status]}>{t(`users.status.${user.status}`)}</StatusPill>
@@ -252,9 +334,38 @@ export function UsersTab({ users, language }: { users: UserRow[]; language: Invi
             <SheetTitle>{t("users.inviteTitle")}</SheetTitle>
             <SheetDescription>{t("users.inviteHint")}</SheetDescription>
           </SheetHeader>
-          {inviting ? <InviteForm language={language} onClose={() => setInviting(false)} /> : null}
+          {inviting ? <InviteForm language={language} teachers={teachers} onClose={() => setInviting(false)} /> : null}
         </SheetContent>
       </Sheet>
+
+      <Dialog open={linking !== null} onOpenChange={(next) => !next && setLinking(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("users.linkTitle", { name: linking?.user.fullName ?? "" })}</DialogTitle>
+            <DialogDescription>{t("users.linkBody")}</DialogDescription>
+          </DialogHeader>
+          <Field label={t("users.teacher")} htmlFor="link-teacher">
+            <TeacherSelect
+              id="link-teacher"
+              value={linking?.teacherId}
+              onChange={(teacherId) => setLinking((current) => (current ? { ...current, teacherId } : current))}
+              teachers={teachers}
+            />
+          </Field>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setLinking(null)}>
+              {tCommon("cancel")}
+            </Button>
+            <Button
+              variant="primary"
+              disabled={busy || !linking?.teacherId}
+              onClick={() => linking && changeRole(linking.user, "teacher", linking.teacherId)}
+            >
+              {t("users.makeTeacher")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={deactivating !== null} onOpenChange={(next) => !next && setDeactivating(null)}>
         <DialogContent>

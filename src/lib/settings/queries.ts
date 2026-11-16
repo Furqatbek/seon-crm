@@ -1,7 +1,7 @@
 import "server-only";
 
 import { appUrl } from "@/lib/app-url";
-import type { UserRole } from "@/lib/auth";
+import type { LoginRole } from "@/lib/validation/settings";
 import type { Template } from "@/lib/notify/reminders";
 import { getTemplates } from "@/lib/notify/store";
 import { getBotStatus, webhookUrl, type BotStatus } from "@/lib/notify/telegram-admin";
@@ -43,7 +43,9 @@ export type UserRow = {
   id: string;
   fullName: string;
   email: string;
-  role: UserRole;
+  role: LoginRole;
+  /** The teacher record a teacher login belongs to. */
+  teacher: { id: string; name: string } | null;
   /** active: can sign in. invited: has not accepted the invitation yet. deactivated: blocked. */
   status: "active" | "invited" | "deactivated";
   isSelf: boolean;
@@ -58,7 +60,7 @@ export async function getUsers(currentUserId: string): Promise<UserRow[]> {
   const supabase = await db();
   const admin = createAdminClient();
   const [profiles, accounts] = await Promise.all([
-    supabase.from("profiles").select("id, full_name, role, is_active").order("full_name"),
+    supabase.from("profiles").select("id, full_name, role, is_active, teacher:teachers (id, full_name)").order("full_name"),
     admin ? admin.auth.admin.listUsers({ perPage: 1000 }) : null,
   ]);
   if (profiles.error) throw new Error(profiles.error.message);
@@ -70,11 +72,27 @@ export async function getUsers(currentUserId: string): Promise<UserRow[]> {
       id: profile.id,
       fullName: profile.full_name,
       email: account?.email ?? "",
-      role: profile.role === "owner" ? "owner" : "manager",
+      role: profile.role,
+      teacher: profile.teacher ? { id: profile.teacher.id, name: profile.teacher.full_name } : null,
       status: !profile.is_active ? "deactivated" : account && !account.last_sign_in_at ? "invited" : "active",
       isSelf: profile.id === currentUserId,
     };
   });
+}
+
+export type TeacherOption = { id: string; name: string; hasLogin: boolean };
+
+/** The teachers a login can be linked to, and whether each already has one. */
+export async function getTeacherOptions(): Promise<TeacherOption[]> {
+  const supabase = await db();
+  const [teachers, linked] = await Promise.all([
+    supabase.from("teachers").select("id, full_name").is("archived_at", null).eq("is_active", true).order("full_name"),
+    supabase.from("profiles").select("teacher_id").not("teacher_id", "is", null),
+  ]);
+  if (teachers.error) throw new Error(teachers.error.message);
+  if (linked.error) throw new Error(linked.error.message);
+  const taken = new Set(linked.data.map((row) => row.teacher_id));
+  return teachers.data.map((teacher) => ({ id: teacher.id, name: teacher.full_name, hasLogin: taken.has(teacher.id) }));
 }
 
 export type Integrations = {

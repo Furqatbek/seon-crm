@@ -27,7 +27,7 @@ These come from your answers and are written into every prompt below.
 | Decision | Answer |
 | --- | --- |
 | Build tool | Claude Code |
-| Who logs in | Owner/Admin and Manager/reception only. Teachers, students and parents have no login. |
+| Who logs in | Owner/Admin and Manager/reception run the centre. A teacher can be given a login that shows only their own groups. Students and parents have no login. |
 | Student fees | Fixed monthly fee per group |
 | Teacher pay | All three models, chosen per teacher: fixed monthly salary, % of group revenue, fixed amount per lesson |
 | Interface languages | Uzbek (Latin), Russian, English. Each user picks their own. |
@@ -68,8 +68,9 @@ Phase 0 saves this as `CLAUDE.md` in the project root. Claude Code reads it at t
 ```markdown
 # Edu CRM
 
-Staff-only CRM for one education centre in Uzbekistan. Owner and Manager log in.
-Teachers, students and parents never log in. Full spec: docs/SPEC.md — read the
+CRM for one education centre in Uzbekistan. Owner and Manager run it. A teacher
+may get a login that shows only their own groups (attendance and coins).
+Students and parents never log in. Full spec: docs/SPEC.md — read the
 section each task names before writing code.
 
 ## Stack
@@ -101,7 +102,7 @@ section each task names before writing code.
 - Secrets only in environment variables. Never commit .env files.
 
 ## Structure
-- src/app/[locale]/(app)/{leads,students,groups,teachers,finance,reports,settings}
+- src/app/[locale]/(app)/{leads,students,groups,teachers,finance,reports,settings,my-groups}
 - src/components/ui = shared primitives; src/components/<block> = block parts
 - src/lib/domain = pure business logic + tests; src/lib/supabase = clients + types
 - supabase/migrations, supabase/seed.sql
@@ -212,7 +213,7 @@ Titles use letter-spacing -0.01em.
 
 ## Data model
 
-Eighteen tables cover all six blocks. A student's balance is never stored: it is always payments minus charges, read from one view. Every table also has `id uuid`, `created_at` and, where marked, `archived_at`.
+Nineteen tables cover all six blocks. A student's balance is never stored: it is always payments minus charges, read from one view. Every table also has `id uuid`, `created_at` and, where marked, `archived_at`.
 
 ```text
 ENUMS
@@ -235,8 +236,9 @@ message_type       payment_due | payment_overdue | lesson_reminder | custom
 message_status     queued | sent | failed | skipped
 
 PEOPLE AND ACCESS
-profiles           id = auth.users.id, full_name, role user_role, language app_language,
-                   is_active bool
+profiles           id = auth.users.id, full_name, role user_role (owner | manager |
+                   teacher), teacher_id → teachers (set exactly when the role is
+                   teacher; one login per teacher), language app_language, is_active bool
 centre_settings    single row: centre_name, billing_day (1), due_day (5),
                    reminders_enabled, lesson_reminder_hours (3),
                    quiet_from (21:00), quiet_to (09:00), telegram_bot_username
@@ -297,6 +299,11 @@ NOTIFICATIONS
 messages           student_id, channel, type, recipient, body, status, error,
                    dedupe_key text unique, sent_at
 
+COINS
+coin_transactions  student_id, group_id (where they were earned; null when spent),
+                   amount (> 0 earned, < 0 spent), reason, created_by
+                   -- a ledger: rows are never edited or removed
+
 VIEWS
 student_balances   student_id, charged, paid, balance (paid − charged), oldest_unpaid_month
 ```
@@ -325,6 +332,20 @@ The owner sees everything; a manager runs the front desk but never sees profit, 
 | Archive any record | Yes | No |
 
 Every credit and voided payment appears in the owner's Finance → Adjustments list with who did it and why.
+
+### Teacher login
+
+A teacher is not staff. A user with the role Teacher is linked to one teacher record and gets nothing from the table above: no table is readable to them except their own profile. They work through database functions that check the group is their own:
+
+| A teacher can | A teacher cannot |
+| --- | --- |
+| See the groups they teach (active or forming): name, days, time, room | See any other group, or a group's fee |
+| See the names of the students in those groups | See phones, parents, balances, payments, notes or a student's other groups |
+| Mark attendance for a lesson of their own group, today and up to 7 days back | Mark a future, cancelled or older lesson; cancel a lesson; set a substitute |
+| Give 1 to 10 coins at a time to a student of their own group | Spend or take away coins |
+| Change their own name, language and password | Open Leads, Students, Groups, Teachers, Finance, Reports or the owner's Settings |
+
+The owner creates a teacher login in Settings → Users, by inviting with the role Teacher or by changing an existing user's role to Teacher, and picks which teacher it is. Deactivating works as for any user.
 
 ## Business rules
 
@@ -375,6 +396,16 @@ Cancelled lessons are not counted. Example: fee 600,000 soʻm, 12 lessons in Nov
 - Saving attendance marks the lesson `held`. The manager opens the lesson, everyone starts as Present, and taps to switch to Late, Absent or Excused.
 - Managers can edit attendance for 7 days; the owner any time. Attendance never changes charges. Attendance rate = (present + late) ÷ (present + late + absent); excused is left out.
 - A substitute teacher can be set on a single lesson; per-lesson pay goes to whoever taught it.
+- A teacher with a login marks attendance for their own groups, for 7 days like a manager.
+
+### Coins
+
+- Coins are points a student earns in class. They are a ledger like money: every change is a row with who, where and why, and rows are never edited.
+- A teacher gives 1 to 10 coins at a time to a student of their own group, with an optional reason. Owner and manager give up to 1,000 at a time.
+- Owner and manager spend a student's coins (a prize) or take coins away (a correction): a reason is required and the balance never goes below zero.
+- A student's balance = everything earned in any group minus everything spent.
+- The ranking in a group is by coins earned in that group; equal counts share a place, and spending does not move anyone down. A student with no coins has no place.
+- Coins have nothing to do with fees, balances or teacher pay.
 
 ### Teacher salaries
 
@@ -425,13 +456,19 @@ Six blocks plus Settings, each a list page and a record page. After sign-in the 
 - All groups tab: name, subject, teacher, days and time, students / capacity, monthly fee, status.
 - New group sheet: name, subject, level, teacher, monthly fee, weekdays as toggle chips, start time, duration, room, capacity, start date. Room is a dropdown of the active rooms, each with its capacity. Capacity defaults to the room's capacity and cannot exceed it.
 - A room holds one group at a time. A group cannot be saved when another group that is active or forming uses the same room on a shared weekday at an overlapping time; the error names the clashing group. Back-to-back lessons (one ends as the next starts) are allowed.
-- Group page tabs: Students (balance, attendance %, joined date, Add student opens the enrol sheet with proration), Attendance (students × lesson dates grid; a date opens that lesson), Lessons (cancel, restore, set substitute), Trials (this week's trial visitors).
+- Group page tabs: Students (balance, attendance %, coins with the place in the group, joined date; the row menu has Coins to give or spend them; Add student opens the enrol sheet with proration), Attendance (students × lesson dates grid; a date opens that lesson), Lessons (cancel, restore, set substitute), Trials (this week's trial visitors).
 - Lesson sheet: one row per student with a Present / Late / Absent / Excused segmented control, then Save.
 
 ### Teachers — `/teachers` and `/teachers/[id]`
 
 - List: Name, Phone, Subjects, Groups, Lessons this month; Pay type column for the owner only.
 - Teacher page: contacts, groups, this month's lessons. Pay tab (owner only): rate history, Set new rate with an effective date, past payouts.
+
+### My groups — `/my-groups` and `/my-groups/[id]` (teacher)
+
+- The teacher's whole app: the sidebar has My groups only, plus the account menu with Profile. Any other address takes them back here.
+- List: one card per group with days, time, room and number of students.
+- Group: Lessons from 7 days back to 14 ahead with a Mark attendance button on those that can be marked (a sheet with Present / Late / Absent / Excused per student); Students and coins, ranked by coins earned in the group, with a Give coins button per student (1, 2, 3, 5 or 10, and an optional reason).
 
 ### Finance — `/finance`
 
@@ -455,7 +492,7 @@ Six blocks plus Settings, each a list page and a record page. After sign-in the 
 
 - Centre (owner): name, billing day, due day.
 - Rooms (owner): list with number, name, capacity and the groups using each room; Add room and Edit room sheets; a room can be archived only when no active or forming group uses it.
-- Users (owner): invite by email, role, deactivate.
+- Users (owner): invite by email, role (Owner, Manager or Teacher; a teacher login also names its teacher), change a role, deactivate.
 - Notifications (owner): on/off, lesson reminder hours, quiet hours, Telegram bot status with Connect webhook, Eskiz status with Send test SMS.
 - Templates (owner): one editor per message type, channel and language, with placeholder chips and a live preview.
 - Profile (everyone): name, interface language, password.

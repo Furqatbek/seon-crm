@@ -11,6 +11,8 @@ export const SEED_PASSWORD = process.env.SEED_PASSWORD ?? "EduCrm-demo-2026";
 export const LOGINS = {
   owner: "owner@demo.educrm.uz",
   manager: "manager@demo.educrm.uz",
+  // Linked to teacher 2, Nodira Saidova: IELTS 6.5 and English Kids.
+  teacher: "teacher@demo.educrm.uz",
 } as const;
 
 /** Fixed ids from supabase/seed.sql: uid(kind, n). */
@@ -19,6 +21,7 @@ export function uid(kind: number, n: number): string {
 }
 export const OWNER_ID = uid(1, 1);
 export const MANAGER_ID = uid(1, 2);
+export const TEACHER_USER_ID = uid(1, 3);
 export const teacherId = (n: number) => uid(2, n);
 export const groupId = (n: number) => uid(3, n);
 export const studentId = (n: number) => uid(4, n);

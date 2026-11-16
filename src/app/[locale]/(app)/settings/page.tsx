@@ -11,7 +11,7 @@ import { UsersTab } from "@/components/settings/users-tab";
 import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import type { Locale } from "@/i18n/routing";
-import { getCurrentUser } from "@/lib/auth";
+import { getSignedInUser } from "@/lib/auth";
 import { tashkentDate } from "@/lib/domain/time";
 import {
   getAllTemplates,
@@ -19,6 +19,7 @@ import {
   getIntegrations,
   getProfile,
   getRooms,
+  getTeacherOptions,
   getUsers,
 } from "@/lib/settings/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
@@ -26,10 +27,10 @@ import { SETTINGS_TABS, settingsSearchSchema, type SettingsTab } from "@/lib/val
 
 async function Settings({ searchParams, locale }: { searchParams: SearchParams; locale: Locale }) {
   const search = settingsSearchSchema.parse(firstValues(await searchParams));
-  const user = await getCurrentUser();
+  const user = await getSignedInUser();
   if (!user) return null;
 
-  // Centre, rooms, users, notifications and templates are the owner's. A manager has
+  // Centre, rooms, users, notifications and templates are the owner's. A manager or a teacher has
   // Profile only: the other tabs are never rendered, and the database would
   // refuse the changes anyway.
   const tabs: readonly SettingsTab[] = user.role === "owner" ? SETTINGS_TABS : ["profile"];
@@ -40,7 +41,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
     <SettingsScreen tab={tab} tabs={tabs}>
       {tab === "centre" && owner ? <CentreTab settings={await getCentreSettings()} /> : null}
       {tab === "rooms" && owner ? <RoomsTab rooms={await getRooms()} /> : null}
-      {tab === "users" && owner ? <UsersTab users={await getUsers(user.id)} language={locale} /> : null}
+      {tab === "users" && owner ? <UsersTab users={await getUsers(user.id)} teachers={await getTeacherOptions()} language={locale} /> : null}
       {tab === "notifications" && owner ? (
         <NotificationsTab settings={await getCentreSettings()} integrations={await getIntegrations()} />
       ) : null}

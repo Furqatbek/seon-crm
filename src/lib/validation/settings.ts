@@ -6,6 +6,24 @@ import { resetPasswordSchema } from "./auth";
 
 const LANGUAGES = ["uz", "ru", "en"] as const;
 export const ROLES = ["owner", "manager"] as const;
+/** Every role a login can have. A teacher is also linked to a teacher record. */
+export const LOGIN_ROLES = [...ROLES, "teacher"] as const;
+export type LoginRole = (typeof LOGIN_ROLES)[number];
+
+/** A teacher login names its teacher; nobody else has one. */
+const roleFields = {
+  role: z.enum(LOGIN_ROLES),
+  teacher_id: z.uuid("teacherRequired").nullish(),
+};
+function teacherLink<T extends { role: LoginRole; teacher_id?: string | null }>(value: T, ctx: z.RefinementCtx) {
+  if (value.role === "teacher" && !value.teacher_id) {
+    ctx.addIssue({ code: "custom", path: ["teacher_id"], message: "teacherRequired" });
+  }
+}
+const withTeacher = <T extends { role: LoginRole; teacher_id?: string | null }>(value: T) => ({
+  ...value,
+  teacher_id: value.role === "teacher" ? (value.teacher_id as string) : null,
+});
 export const MESSAGE_TYPES = ["payment_due", "payment_overdue", "lesson_reminder", "custom"] as const;
 export const MESSAGE_CHANNELS = ["telegram", "sms"] as const;
 export const TEMPLATE_LANGUAGES = LANGUAGES;
@@ -37,15 +55,21 @@ export type RoomInput = z.input<typeof roomSchema>;
 export type RoomValues = z.output<typeof roomSchema>;
 
 /** Invite a user by email. */
-export const inviteSchema = z.object({
-  email: z.email("emailInvalid").max(200, "tooLong"),
-  full_name: name,
-  role: z.enum(ROLES),
-  language: z.enum(LANGUAGES),
-});
+export const inviteSchema = z
+  .object({
+    email: z.email("emailInvalid").max(200, "tooLong"),
+    full_name: name,
+    ...roleFields,
+    language: z.enum(LANGUAGES),
+  })
+  .superRefine(teacherLink)
+  .transform(withTeacher);
 export type InviteInput = z.input<typeof inviteSchema>;
 
-export const userRoleSchema = z.object({ user_id: z.uuid(), role: z.enum(ROLES) });
+export const userRoleSchema = z
+  .object({ user_id: z.uuid(), ...roleFields })
+  .superRefine(teacherLink)
+  .transform(withTeacher);
 export const userActiveSchema = z.object({ user_id: z.uuid(), active: z.boolean() });
 
 /** Notifications: on or off, lesson reminder hours, quiet hours. */
@@ -83,6 +107,8 @@ export type SettingsErrorKey =
   | "hoursInvalid"
   | "emailInvalid"
   | "emailTaken"
+  | "teacherRequired"
+  | "teacherTaken"
   | "phoneInvalid"
   | "textRequired"
   | "numberRequired"

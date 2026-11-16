@@ -3,6 +3,7 @@ import {
   GraduationCap,
   Presentation,
   Settings,
+  Star,
   UserPlus,
   Users,
   Wallet,
@@ -16,9 +17,10 @@ export type BlockKey =
   | "teachers"
   | "finance"
   | "reports"
-  | "settings";
+  | "settings"
+  | "myGroups";
 
-export type Block = { key: BlockKey; href: `/${BlockKey}`; icon: LucideIcon };
+export type Block = { key: BlockKey; href: `/${string}`; icon: LucideIcon };
 
 /** The six blocks, in sidebar order. */
 export const BLOCKS: Block[] = [
@@ -34,3 +36,6 @@ export const BLOCKS: Block[] = [
 export const SETTINGS_BLOCK: Block = { key: "settings", href: "/settings", icon: Settings };
 
 export const ALL_BLOCKS: Block[] = [...BLOCKS, SETTINGS_BLOCK];
+
+/** A teacher's whole sidebar. */
+export const TEACHER_BLOCKS: Block[] = [{ key: "myGroups", href: "/my-groups", icon: Star }];

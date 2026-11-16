@@ -4,7 +4,7 @@ import { refresh } from "next/cache";
 import { z } from "zod";
 
 import { appUrl } from "@/lib/app-url";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, getSignedInUser } from "@/lib/auth";
 import { getProviders } from "@/lib/notify/store";
 import { connectWebhook } from "@/lib/notify/telegram-admin";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -51,6 +51,16 @@ async function session() {
   const [supabase, user] = await Promise.all([createClient(), getCurrentUser()]);
   return supabase && user ? { supabase, user } : null;
 }
+
+/** Anyone signed in, a teacher included: for their own profile only. */
+async function ownSession() {
+  const [supabase, user] = await Promise.all([createClient(), getSignedInUser()]);
+  return supabase && user ? { supabase, user } : null;
+}
+
+/** One login per teacher: the unique index on profiles.teacher_id. */
+const linkFailure = (error: { code?: string; message?: string }): Failure =>
+  error.code === "23505" ? { ok: false, error: "teacherTaken" } : failure(error);
 
 async function ownerSession() {
   const ctx = await session();
@@ -161,7 +171,7 @@ export async function inviteUser(input: unknown): Promise<SettingsResult> {
   if (activated.error || activated.data.length === 0) {
     // Without a usable profile the invitation leads nowhere: take it back.
     await admin.auth.admin.deleteUser(data.user.id);
-    return activated.error ? failure(activated.error) : { ok: false, error: "generic" };
+    return activated.error ? linkFailure(activated.error) : { ok: false, error: "generic" };
   }
   refresh();
   return { ok: true };
@@ -177,10 +187,10 @@ export async function setUserRole(input: unknown): Promise<SettingsResult> {
 
   const { data, error } = await ctx.supabase
     .from("profiles")
-    .update({ role: parsed.data.role })
+    .update({ role: parsed.data.role, teacher_id: parsed.data.teacher_id })
     .eq("id", parsed.data.user_id)
     .select("id");
-  if (error) return failure(error);
+  if (error) return linkFailure(error);
   if (data.length === 0) return { ok: false, error: "notFound" };
   refresh();
   return { ok: true };
@@ -292,7 +302,7 @@ export async function saveTemplate(input: unknown): Promise<SettingsResult> {
 export async function saveProfile(input: unknown): Promise<SettingsResult> {
   const parsed = profileSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
-  const ctx = await session();
+  const ctx = await ownSession();
   if (!ctx) return { ok: false, error: "notAllowed" };
 
   const { data, error } = await ctx.supabase.from("profiles").update(parsed.data).eq("id", ctx.user.id).select("id");
@@ -305,7 +315,7 @@ export async function saveProfile(input: unknown): Promise<SettingsResult> {
 /** The language switch in the account menu: remembered on the profile for next sign-in. */
 export async function saveLanguage(languageInput: unknown): Promise<void> {
   const language = profileSchema.shape.language.safeParse(languageInput);
-  const ctx = await session();
+  const ctx = await ownSession();
   if (!language.success || !ctx) return;
   await ctx.supabase.from("profiles").update({ language: language.data }).eq("id", ctx.user.id);
 }
@@ -313,7 +323,7 @@ export async function saveLanguage(languageInput: unknown): Promise<void> {
 export async function changePassword(input: unknown): Promise<SettingsResult> {
   const parsed = passwordSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
-  const ctx = await session();
+  const ctx = await ownSession();
   if (!ctx) return { ok: false, error: "notAllowed" };
 
   const { error } = await ctx.supabase.auth.updateUser({ password: parsed.data.password });

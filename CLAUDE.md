@@ -1,7 +1,8 @@
 # Edu CRM
 
-Staff-only CRM for one education centre in Uzbekistan. Owner and Manager log in.
-Teachers, students and parents never log in. Full spec: docs/SPEC.md — read the
+CRM for one education centre in Uzbekistan. Owner and Manager run it. A teacher
+may get a login that shows only their own groups (attendance and coins).
+Students and parents never log in. Full spec: docs/SPEC.md — read the
 section each task names before writing code.
 
 ## Stack
@@ -33,7 +34,7 @@ section each task names before writing code.
 - Secrets only in environment variables. Never commit .env files.
 
 ## Structure
-- src/app/[locale]/(app)/{leads,students,groups,teachers,finance,reports,settings}
+- src/app/[locale]/(app)/{leads,students,groups,teachers,finance,reports,settings,my-groups}
 - src/components/ui = shared primitives; src/components/<block> = block parts
 - src/lib/domain = pure business logic + tests; src/lib/supabase = clients + types
 - supabase/migrations, supabase/seed.sql

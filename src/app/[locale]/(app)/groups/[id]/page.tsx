@@ -12,6 +12,7 @@ import { GroupTrialsTab } from "@/components/groups/group-trials-tab";
 import { RecordSkeleton } from "@/components/ui/skeleton";
 import { routing } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth";
+import { getGroupCoins } from "@/lib/coins/queries";
 import { attendanceLock, attendanceRate } from "@/lib/domain/attendance";
 import { balanceState } from "@/lib/domain/ledger";
 import { shiftMonth, tashkentDate } from "@/lib/domain/time";
@@ -45,7 +46,12 @@ async function Students({
   openGroups: OpenGroup[];
   today: string;
 }) {
-  const [students, billing] = await Promise.all([getGroupStudents(group.id), getCentreBilling()]);
+  const [students, billing, coins] = await Promise.all([
+    getGroupStudents(group.id),
+    getCentreBilling(),
+    getGroupCoins(group.id),
+  ]);
+  const coinsOf = new Map(coins.map((row) => [row.studentId, row]));
   return (
     <GroupStudentsTab
       group={group}
@@ -54,6 +60,7 @@ async function Students({
       rows={students.map(({ marks, ...row }) => ({
         ...row,
         rate: attendanceRate(marks),
+        coins: coinsOf.get(row.student.id) ?? { earned: 0, balance: 0, rank: 0 },
         balanceState: balanceState(row.balance, {
           today,
           dueDay: billing.dueDay,

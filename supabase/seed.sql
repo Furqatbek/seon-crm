@@ -2,10 +2,11 @@
 --
 --   psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed.sql
 --
--- Logins (both use the same demo password, "EduCrm-demo-2026" unless you set
+-- Logins (all use the same demo password, "EduCrm-demo-2026" unless you set
 -- another one for this load: PGOPTIONS="-c seed.password=…" psql …):
 --   owner@demo.educrm.uz    — owner
 --   manager@demo.educrm.uz  — manager
+--   teacher@demo.educrm.uz  — teacher (Nodira Saidova: IELTS 6.5 and English Kids)
 --
 -- Everything is dated relative to today, so the current month always has
 -- lessons to mark, fees that are due and a few debtors. The data is
@@ -109,6 +110,32 @@ from seed_cfg c,
     (5, 'Sardor Mirzayev', '+998991112205', array['Dasturlash'], 9, 'Faqat kechki guruhlar'),
     (6, 'Zilola Hamidova', '+998911112206', array['Matematika', 'Fizika'], 12, null)
   ) as t (n, full_name, phone, subjects, months, notes);
+
+-- The teacher login: created after the teacher record it is linked to.
+insert into auth.users (
+  instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+  raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
+  confirmation_token, recovery_token, email_change_token_new, email_change
+)
+select
+  '00000000-0000-0000-0000-000000000000', pg_temp.uid(1, 3), 'authenticated', 'authenticated',
+  'teacher@demo.educrm.uz', extensions.crypt(c.password, extensions.gen_salt('bf')), now(),
+  jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email'),
+    'role', 'teacher', 'teacher_id', pg_temp.uid(2, 2)),
+  jsonb_build_object('full_name', 'Nodira Saidova', 'language', 'uz'),
+  now(), now(), '', '', '', ''
+from seed_cfg c;
+
+insert into auth.identities (
+  id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at
+)
+select
+  gen_random_uuid(), u.id, u.id::text, 'email',
+  jsonb_build_object('sub', u.id::text, 'email', u.email, 'email_verified', true),
+  now(), now(), now()
+from auth.users u
+where u.id = pg_temp.uid(1, 3);
+
 
 -- All three pay models, two teachers each. Two of them have a rate history;
 -- the rise for teacher 6 starts mid-month, so it first pays next month.

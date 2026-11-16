@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { AppShell } from "@/components/shell/app-shell";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import type { Locale } from "@/i18n/routing";
-import { getCurrentUser } from "@/lib/auth";
+import { getSignedInUser } from "@/lib/auth";
 import { getCentreName } from "@/lib/centre";
 
 // The proxy already turns away visitors without a session. This is the
@@ -13,7 +13,7 @@ import { getCentreName } from "@/lib/centre";
 // signed out.
 async function SignedIn({ locale, children }: { locale: Locale; children: React.ReactNode }) {
   // Asked for together: one trip to the database, not two.
-  const [user, name] = await Promise.all([getCurrentUser(), getCentreName()]);
+  const [user, name] = await Promise.all([getSignedInUser(), getCentreName()]);
   if (!user) redirect(`/auth/sign-out?locale=${locale}`);
   const centreName = name ?? (await getTranslations({ locale, namespace: "app" }))("name");
   return (

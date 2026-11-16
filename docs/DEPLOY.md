@@ -298,9 +298,15 @@ There is no public registration, so the first owner is created by hand.
    day. The name appears on the sign-in page, receipts and messages.
 6. Invite everyone else from **Settings → Users**. Do not create further
    accounts by hand.
+7. Teachers get the role **Teacher**, never Manager: a manager sees every
+   student, phone and payment. A teacher login is linked to one teacher from
+   the Teachers list (add the teacher there first) and shows only that
+   teacher's groups, with attendance and coins. An existing user is changed in
+   the Role column of the same screen.
 
 Check: the owner sees all six sections plus Settings; an invited manager gets
-an email, sets a password and lands on Groups.
+an email, sets a password and lands on Groups; a teacher lands on My groups
+and has nothing else in the sidebar.
 
 ---
 

@@ -49,7 +49,8 @@
     "teachers": "Teachers",
     "finance": "Finance",
     "reports": "Reports",
-    "settings": "Settings"
+    "settings": "Settings",
+    "myGroups": "My groups"
   },
   "language": {
     "label": "Language",
@@ -68,7 +69,8 @@
     "signOut": "Sign out",
     "roles": {
       "owner": "Owner",
-      "manager": "Manager"
+      "manager": "Manager",
+      "teacher": "Teacher"
     },
     "profile": "Profile"
   },
@@ -530,7 +532,8 @@
       "empty": "No students in this group yet.",
       "rowActions": "Actions for {name}",
       "transfer": "Transfer to another group",
-      "leave": "Leave group"
+      "leave": "Leave group",
+      "coins": "Coins"
     },
     "actions": {
       "addStudent": "Add student",
@@ -1163,7 +1166,14 @@
       "deactivated": "{name} is deactivated",
       "reactivated": "{name} can sign in again",
       "roleChanged": "{name} is now {role}",
-      "roleFor": "Role of {name}"
+      "roleFor": "Role of {name}",
+      "teacher": "Teacher",
+      "teacherHint": "They see only this teacher's groups: students' names, attendance and coins.",
+      "chooseTeacher": "Choose a teacher",
+      "noFreeTeachers": "Every teacher already has a login",
+      "linkTitle": "Which teacher is {name}?",
+      "linkBody": "As a teacher they see only that teacher's groups: students' names, attendance and coins. Nothing else in the app.",
+      "makeTeacher": "Make teacher"
     },
     "notifications": {
       "enabled": "Send automatic reminders",
@@ -1253,7 +1263,9 @@
       "numberTaken": "Another room already has this number.",
       "capacityInvalid": "Enter a capacity from 1 to 500.",
       "roomInUse": "A group still uses this room.",
-      "capacityBelowGroup": "A group in this room is larger than that. Lower the group's capacity first."
+      "capacityBelowGroup": "A group in this room is larger than that. Lower the group's capacity first.",
+      "teacherRequired": "Choose the teacher.",
+      "teacherTaken": "This teacher already has a login."
     },
     "rooms": {
       "add": "Add room",
@@ -1283,6 +1295,50 @@
       "created": "Room {room} added",
       "saved": "Room {room} saved",
       "empty": "No rooms yet. Add the first one."
+    }
+  },
+  "myGroups": {
+    "title": "My groups",
+    "empty": "You have no groups yet. The centre's owner links groups to you.",
+    "students": "{count, plural, one {# student} other {# students}}",
+    "lessons": "Lessons",
+    "noLessons": "No lessons in the last week or the next two.",
+    "today": "Today",
+    "mark": "Mark attendance",
+    "editMarks": "Change attendance",
+    "ranking": "Students and coins",
+    "attendance": "Attendance",
+    "lessonCancelled": "This lesson is cancelled."
+  },
+  "coins": {
+    "column": "Coins",
+    "place": "Place",
+    "placeShort": "#{place}",
+    "earned": "Earned here",
+    "balance": "To spend",
+    "count": "{count, plural, one {# coin} other {# coins}}",
+    "give": "Give coins",
+    "spend": "Spend coins",
+    "kind": "Give or spend",
+    "howMany": "How many",
+    "reasonOptional": "What for (optional)",
+    "spentOn": "What they were spent on",
+    "giveTitle": "Give coins to {name}",
+    "giveHint": "Up to 10 at a time. Coins decide the place in the group and can be spent at the front desk.",
+    "title": "Coins of {name}",
+    "staffHint": "Give coins, or spend the ones the student has: a prize, or a correction.",
+    "has": "{count, plural, one {# coin to spend} other {# coins to spend}}",
+    "given": "{name}: {count, plural, one {# coin given} other {# coins given}}",
+    "spent": "{name}: {count, plural, one {# coin spent} other {# coins spent}}",
+    "errors": {
+      "amountInvalid": "Enter a whole number of coins within the limit.",
+      "reasonRequired": "Say what the coins were spent on.",
+      "notEnough": "The student does not have that many coins.",
+      "notInGroup": "The student is not in this group.",
+      "tooLong": "This text is too long.",
+      "notFound": "This student no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
+      "generic": "Something went wrong. Try again."
     }
   }
 }

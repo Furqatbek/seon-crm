@@ -16,13 +16,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@/i18n/navigation";
-import type { CurrentUser } from "@/lib/auth";
+import type { SignedInUser } from "@/lib/auth";
 import { signOut } from "@/lib/auth-actions";
 
 import { ThemeRadioGroup } from "./theme-switch";
 import { useSwitchLocale } from "./use-switch-locale";
 
-export function UserMenu({ user }: { user: CurrentUser }) {
+export function UserMenu({ user }: { user: SignedInUser }) {
   const t = useTranslations("userMenu");
   const tLanguage = useTranslations("language");
   const tTheme = useTranslations("theme");

@@ -49,7 +49,8 @@
     "teachers": "Oʻqituvchilar",
     "finance": "Moliya",
     "reports": "Hisobotlar",
-    "settings": "Sozlamalar"
+    "settings": "Sozlamalar",
+    "myGroups": "Guruhlarim"
   },
   "language": {
     "label": "Til",
@@ -68,7 +69,8 @@
     "signOut": "Chiqish",
     "roles": {
       "owner": "Rahbar",
-      "manager": "Menejer"
+      "manager": "Menejer",
+      "teacher": "Oʻqituvchi"
     },
     "profile": "Profil"
   },
@@ -530,7 +532,8 @@
       "empty": "Bu guruhda hali oʻquvchilar yoʻq.",
       "rowActions": "{name} uchun amallar",
       "transfer": "Boshqa guruhga oʻtkazish",
-      "leave": "Guruhdan chiqarish"
+      "leave": "Guruhdan chiqarish",
+      "coins": "Tangalar"
     },
     "actions": {
       "addStudent": "Oʻquvchi qoʻshish",
@@ -1163,7 +1166,14 @@
       "deactivated": "{name} oʻchirildi",
       "reactivated": "{name} yana kira oladi",
       "roleChanged": "{name}: roli «{role}» boʻldi",
-      "roleFor": "{name}: rol"
+      "roleFor": "{name}: rol",
+      "teacher": "Oʻqituvchi",
+      "teacherHint": "Faqat shu oʻqituvchining guruhlarini koʻradi: oʻquvchilar ismi, davomat va tangalar.",
+      "chooseTeacher": "Oʻqituvchini tanlang",
+      "noFreeTeachers": "Barcha oʻqituvchilarda kirish bor",
+      "linkTitle": "{name} qaysi oʻqituvchi?",
+      "linkBody": "Oʻqituvchi faqat shu oʻqituvchining guruhlarini koʻradi: oʻquvchilar ismi, davomat va tangalar. Ilovada boshqa hech narsa koʻrinmaydi.",
+      "makeTeacher": "Oʻqituvchi qilish"
     },
     "notifications": {
       "enabled": "Avtomatik eslatmalarni yuborish",
@@ -1253,7 +1263,9 @@
       "numberTaken": "Bu raqam boshqa xonada bor.",
       "capacityInvalid": "1 dan 500 gacha sigʻim kiriting.",
       "roomInUse": "Bu xonani hali guruh band qilgan.",
-      "capacityBelowGroup": "Bu xonadagi guruh bundan katta. Avval guruh sigʻimini kamaytiring."
+      "capacityBelowGroup": "Bu xonadagi guruh bundan katta. Avval guruh sigʻimini kamaytiring.",
+      "teacherRequired": "Oʻqituvchini tanlang.",
+      "teacherTaken": "Bu oʻqituvchida kirish allaqachon bor."
     },
     "rooms": {
       "add": "Xona qoʻshish",
@@ -1283,6 +1295,50 @@
       "created": "{room} xonasi qoʻshildi",
       "saved": "{room} xonasi saqlandi",
       "empty": "Hali xonalar yoʻq. Birinchisini qoʻshing."
+    }
+  },
+  "myGroups": {
+    "title": "Guruhlarim",
+    "empty": "Sizda hali guruh yoʻq. Guruhlarni markaz egasi biriktiradi.",
+    "students": "{count} ta oʻquvchi",
+    "lessons": "Darslar",
+    "noLessons": "Oʻtgan hafta va keyingi ikki haftada dars yoʻq.",
+    "today": "Bugun",
+    "mark": "Davomatni belgilash",
+    "editMarks": "Davomatni oʻzgartirish",
+    "ranking": "Oʻquvchilar va tangalar",
+    "attendance": "Davomat",
+    "lessonCancelled": "Bu dars bekor qilingan."
+  },
+  "coins": {
+    "column": "Tangalar",
+    "place": "Oʻrin",
+    "placeShort": "{place}-oʻrin",
+    "earned": "Shu guruhda yigʻilgan",
+    "balance": "Sarflash mumkin",
+    "count": "{count} ta tanga",
+    "give": "Tanga berish",
+    "spend": "Tanga sarflash",
+    "kind": "Berish yoki sarflash",
+    "howMany": "Nechta",
+    "reasonOptional": "Nima uchun (ixtiyoriy)",
+    "spentOn": "Nimaga sarflandi",
+    "giveTitle": "{name}ga tanga berish",
+    "giveHint": "Bir martada 10 tagacha. Tangalar guruhdagi oʻrinni belgilaydi, ularni maʼmuriyatda sarflash mumkin.",
+    "title": "{name}: tangalar",
+    "staffHint": "Tanga bering yoki oʻquvchidagi tangalarni sarflang: sovgʻa yoki tuzatish.",
+    "has": "Sarflash mumkin: {count} ta tanga",
+    "given": "{name}ga {count} ta tanga berildi",
+    "spent": "{name}: {count} ta tanga sarflandi",
+    "errors": {
+      "amountInvalid": "Chegaradan oshmaydigan butun son kiriting.",
+      "reasonRequired": "Tangalar nimaga sarflanganini yozing.",
+      "notEnough": "Oʻquvchida buncha tanga yoʻq.",
+      "notInGroup": "Oʻquvchi bu guruhda emas.",
+      "tooLong": "Matn juda uzun.",
+      "notFound": "Bu oʻquvchi endi mavjud emas.",
+      "notAllowed": "Sizga bunga ruxsat yoʻq.",
+      "generic": "Nimadir xato ketdi. Qayta urinib koʻring."
     }
   }
 }
