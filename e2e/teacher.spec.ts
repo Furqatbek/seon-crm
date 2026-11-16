@@ -127,6 +127,8 @@ test("a teacher sees only their groups, marks attendance and gives coins; staff 
     // ── No serious accessibility issues, in the light and the dark theme ──
     for (const colorScheme of ["light", "dark"] as const) {
       await page.emulateMedia({ colorScheme });
+      // Colours ease over 150 ms: measure them once they have settled.
+      await page.waitForTimeout(400);
       const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
       const serious = results.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
       expect(serious.map((v) => `${colorScheme}: ${v.id} — ${v.nodes[0].target.join(" ")}`)).toEqual([]);

@@ -34,11 +34,18 @@ export const getSignedInUser = cache(async (): Promise<SignedInUser | null> => {
   const claims = data?.claims;
   if (error || !claims?.sub) return null;
 
-  const { data: profile } = await supabase
+  const read = await supabase
     .from("profiles")
     .select("full_name, role, is_active, teacher_id")
     .eq("id", claims.sub)
     .maybeSingle();
+  let profile = read.data;
+  if (read.error?.code === "42703") {
+    // The app was deployed before the teacher-login migration was applied:
+    // profiles has no teacher_id yet. Staff must still be able to sign in.
+    const before = await supabase.from("profiles").select("full_name, role, is_active").eq("id", claims.sub).maybeSingle();
+    profile = before.data ? { ...before.data, teacher_id: null } : null;
+  }
   if (!profile || !profile.is_active) return null;
 
   const base = {

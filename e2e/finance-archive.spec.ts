@@ -5,8 +5,6 @@ import { signIn } from "./support/auth";
 import { seedStudentId, withDb } from "./support/db";
 
 const dialog = (page: Page) => page.locator('[data-slot="dialog-content"]');
-const kpi = async (page: Page, name: string) =>
-  Number(await page.locator(`[data-kpi="${name}"]`).getAttribute("data-value"));
 
 // Tashkent is UTC+5 all year.
 const today = new Date(Date.now() + 5 * 60 * 60 * 1000).toISOString().slice(0, 10);
@@ -51,23 +49,25 @@ test("the owner archives a payment, a charge, an expense and a payout", async ({
     await page.goto("/en/finance?tab=payments");
     const payment = page.locator(`[data-payment-row="${made.receipt}"]`);
     await expect(payment).toBeVisible();
-    const collected = await kpi(page, "collected");
     await payment.locator('[data-archive="payment"]').click();
     await expect(dialog(page)).toContainText("Archive this record?");
     await page.screenshot({ path: testInfo.outputPath("archive-payment.png") });
     await dialog(page).getByRole("button", { name: "Archive" }).click();
     await expect(payment).toHaveCount(0);
-    await expect.poll(() => kpi(page, "collected")).toBe(collected - 137_000);
+    // Other tests take payments at the same time, so the totals are checked in
+    // supabase/tests/archive.test.ts; here, that the record itself is archived.
+    const archived = await withDb((db) =>
+      db.query("select voided_at is not null as voided, archived_at is not null as archived from payments where receipt_no = $1", [made.receipt]),
+    );
+    expect(archived.rows).toEqual([{ voided: true, archived: true }]);
 
-    // ── Charge (a credit of −41 000: Billed goes up by it when it is archived) ──
+    // ── Charge ──
     await page.goto("/en/finance?tab=charges");
     const charge = page.locator("[data-charge-row]").filter({ hasText: marker });
     await expect(charge).toBeVisible();
-    const billed = await kpi(page, "billed");
     await charge.locator('[data-archive="charge"]').click();
     await dialog(page).getByRole("button", { name: "Archive" }).click();
     await expect(charge).toHaveCount(0);
-    await expect.poll(() => kpi(page, "billed")).toBe(billed + 41_000);
     await expect(page.getByRole("button", { name: "Archive all charges" })).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath("charges.png") });
 
@@ -75,11 +75,17 @@ test("the owner archives a payment, a charge, an expense and a payout", async ({
     await page.goto("/en/finance?tab=expenses");
     const expense = page.locator("[data-expense-row]").filter({ hasText: marker });
     await expect(expense).toContainText(formatMoney(73_000, "en"));
-    const expenses = await kpi(page, "expenses");
     await expense.locator('[data-archive="expense"]').click();
     await dialog(page).getByRole("button", { name: "Archive" }).click();
     await expect(expense).toHaveCount(0);
-    await expect.poll(() => kpi(page, "expenses")).toBe(expenses - 73_000);
+    const left = await withDb((db) =>
+      db.query(
+        `select (select count(*) from charges where note = $1 and archived_at is null)::int as charges,
+                (select count(*) from expenses where note = $1 and archived_at is null)::int as expenses`,
+        [marker],
+      ),
+    );
+    expect(left.rows).toEqual([{ charges: 0, expenses: 0 }]);
 
     // ── Payout: archived, then Calculate brings a fresh draft ──
     await page.goto(`/en/finance?tab=salaries&month=${salaryMonth}`);
