@@ -115,3 +115,31 @@ export async function getProfile(user: { id: string; email: string }): Promise<P
   if (error) throw new Error(error.message);
   return { fullName: data.full_name, language: data.language, email: user.email };
 }
+
+export type RoomRow = Pick<Tables<"rooms">, "id" | "number" | "name" | "capacity" | "is_active"> & {
+  /** The groups that use the room now: active or forming, not archived. */
+  groups: Array<{ id: string; name: string }>;
+};
+
+/** Every room that is not archived, by number, with the groups using it. */
+export async function getRooms(): Promise<RoomRow[]> {
+  const supabase = await db();
+  const [rooms, groups] = await Promise.all([
+    supabase.from("rooms").select("id, number, name, capacity, is_active").is("archived_at", null),
+    supabase
+      .from("groups")
+      .select("id, name, room_id")
+      .not("room_id", "is", null)
+      .is("archived_at", null)
+      .in("status", ["active", "forming"])
+      .order("name"),
+  ]);
+  if (rooms.error) throw new Error(rooms.error.message);
+  if (groups.error) throw new Error(groups.error.message);
+  return rooms.data
+    .map((room) => ({
+      ...room,
+      groups: groups.data.filter((group) => group.room_id === room.id).map(({ id, name }) => ({ id, name })),
+    }))
+    .sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
+}

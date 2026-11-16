@@ -1,7 +1,3 @@
--- DRAFT, not applied anywhere and not yet approved. It sits outside
--- supabase/migrations/ so that `supabase db push` cannot pick it up. It moves
--- there together with the app code that needs it.
---
 -- Rooms. docs/SPEC.md → "Data model", "Roles and permissions",
 -- "Screens → Groups", "Screens → Settings".
 --

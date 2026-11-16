@@ -462,7 +462,9 @@
       "saved": "Group saved",
       "chooseTeacher": "Choose a teacher",
       "feeHint": "A changed fee applies from the next billing month, never to fees already charged.",
-      "scheduleHint": "Changing the days, time, teacher or dates rebuilds future lessons that have no attendance yet."
+      "scheduleHint": "Changing the days, time, teacher or dates rebuilds future lessons that have no attendance yet.",
+      "noRoom": "No room",
+      "roomOption": "{room} ({capacity, plural, one {# seat} other {# seats}})"
     },
     "today": {
       "empty": "No lessons today.",
@@ -621,7 +623,11 @@
       "attendanceLocked": "This lesson is more than 7 days old. Only the owner can change its attendance.",
       "notFound": "This no longer exists.",
       "notAllowed": "You are not allowed to do this.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "capacityOverRoom": "The room holds {detail}. The group cannot be larger.",
+      "roomInvalid": "Choose a room from the list.",
+      "roomClash": "The room is taken at that time by {detail}.",
+      "roomUnavailable": "This room is no longer available. Choose another."
     }
   },
   "finance": {
@@ -1096,6 +1102,7 @@
   "settings": {
     "tabs": {
       "centre": "Centre",
+      "rooms": "Rooms",
       "users": "Users",
       "notifications": "Notifications",
       "templates": "Templates",
@@ -1218,7 +1225,41 @@
       "notAllowed": "You are not allowed to do this.",
       "notConfigured": "This is not set up on the server yet.",
       "notFound": "This no longer exists.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "numberRequired": "Enter the room number.",
+      "numberTaken": "Another room already has this number.",
+      "capacityInvalid": "Enter a capacity from 1 to 500.",
+      "roomInUse": "A group still uses this room.",
+      "capacityBelowGroup": "A group in this room is larger than that. Lower the group's capacity first."
+    },
+    "rooms": {
+      "add": "Add room",
+      "addTitle": "New room",
+      "editTitle": "Edit room {room}",
+      "number": "Number",
+      "numberHint": "What is on the door: 3, 2A.",
+      "name": "Name",
+      "nameHint": "Optional. Shown after the number: 3 · Big hall.",
+      "capacity": "Capacity",
+      "capacityHint": "How many students fit. A group in this room cannot be larger.",
+      "active": "Available for new groups",
+      "activeHint": "Switch off to keep the room but stop offering it for new groups.",
+      "groups": "Groups",
+      "noGroups": "No groups",
+      "status": "Status",
+      "statusActive": "Active",
+      "statusInactive": "Not offered",
+      "edit": "Edit",
+      "editRoom": "Edit room {room}",
+      "archive": "Archive",
+      "archiveRoom": "Archive room {room}",
+      "archiveTitle": "Archive room {room}?",
+      "archiveBody": "The room leaves this list and can no longer be chosen. Groups that used it in the past keep it in their history.",
+      "archiveBlocked": "In use by a group. Move or finish the group first.",
+      "archived": "Room {room} archived",
+      "created": "Room {room} added",
+      "saved": "Room {room} saved",
+      "empty": "No rooms yet. Add the first one."
     }
   }
 }

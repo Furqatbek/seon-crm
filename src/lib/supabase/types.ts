@@ -217,17 +217,23 @@ isOneToOne: false
                   ]
                 },"groups": {
                   Row: {
-                    "archived_at": string | null,"capacity": number | null,"created_at": string,"days": (number)[],"duration_min": number,"end_date": string | null,"id": string,"level": string | null,"monthly_fee": number,"name": string,"room": string | null,"start_date": string,"start_time": string,"status": Database["public"]['Enums']["group_status"],"subject": string,"teacher_id": string,"updated_at": string
+                    "archived_at": string | null,"capacity": number | null,"created_at": string,"days": (number)[],"duration_min": number,"end_date": string | null,"id": string,"level": string | null,"monthly_fee": number,"name": string,"room_id": string | null,"start_date": string,"start_time": string,"status": Database["public"]['Enums']["group_status"],"subject": string,"teacher_id": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "archived_at"?: string | null,"capacity"?: number | null,"created_at"?: string,"days": (number)[],"duration_min"?: number,"end_date"?: string | null,"id"?: string,"level"?: string | null,"monthly_fee": number,"name": string,"room"?: string | null,"start_date": string,"start_time": string,"status"?: Database["public"]['Enums']["group_status"],"subject": string,"teacher_id": string,"updated_at"?: string
+                    "archived_at"?: string | null,"capacity"?: number | null,"created_at"?: string,"days": (number)[],"duration_min"?: number,"end_date"?: string | null,"id"?: string,"level"?: string | null,"monthly_fee": number,"name": string,"room_id"?: string | null,"start_date": string,"start_time": string,"status"?: Database["public"]['Enums']["group_status"],"subject": string,"teacher_id": string,"updated_at"?: string
                   }
                   Update: {
-                    "archived_at"?: string | null,"capacity"?: number | null,"created_at"?: string,"days"?: (number)[],"duration_min"?: number,"end_date"?: string | null,"id"?: string,"level"?: string | null,"monthly_fee"?: number,"name"?: string,"room"?: string | null,"start_date"?: string,"start_time"?: string,"status"?: Database["public"]['Enums']["group_status"],"subject"?: string,"teacher_id"?: string,"updated_at"?: string
+                    "archived_at"?: string | null,"capacity"?: number | null,"created_at"?: string,"days"?: (number)[],"duration_min"?: number,"end_date"?: string | null,"id"?: string,"level"?: string | null,"monthly_fee"?: number,"name"?: string,"room_id"?: string | null,"start_date"?: string,"start_time"?: string,"status"?: Database["public"]['Enums']["group_status"],"subject"?: string,"teacher_id"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
+      foreignKeyName: "groups_room_id_fkey"
+      columns: ["room_id"]
+isOneToOne: false
+      referencedRelation: "rooms"
+      referencedColumns: ["id"]
+    },{
       foreignKeyName: "groups_teacher_id_fkey"
       columns: ["teacher_id"]
 isOneToOne: false
@@ -447,6 +453,20 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"rooms": {
+                  Row: {
+                    "archived_at": string | null,"capacity": number,"created_at": string,"id": string,"is_active": boolean,"name": string | null,"number": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "archived_at"?: string | null,"capacity": number,"created_at"?: string,"id"?: string,"is_active"?: boolean,"name"?: string | null,"number": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "archived_at"?: string | null,"capacity"?: number,"created_at"?: string,"id"?: string,"is_active"?: boolean,"name"?: string | null,"number"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"students": {
                   Row: {
                     "archived_at": string | null,"birth_date": string | null,"created_at": string,"full_name": string,"id": string,"language": Database["public"]['Enums']["app_language"],"lead_id": string | null,"notes": string | null,"parent_name": string | null,"parent_phone": string | null,"phone": string,"status": Database["public"]['Enums']["student_status"],"telegram_chat_id": number | null,"telegram_link_code": string,"updated_at": string
@@ -602,6 +622,9 @@ isOneToOne: false
 "group_fee_for":
 { Args: { "p_group_id": string,"p_month": string }; Returns: number
                            },
+"group_uses_room":
+{ Args: { "p_archived_at": string,"p_status": Database["public"]['Enums']["group_status"] }; Returns: boolean
+                           },
 "is_api_user":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
@@ -710,6 +733,11 @@ isOneToOne: false
                            },
 "restore_lesson":
 { Args: { "p_lesson_id": string }; Returns: undefined
+                           },
+"room_clashes":
+{ Args: { "p_days": (number)[],"p_duration_min": number,"p_except_group"?: string,"p_room_id": string,"p_start_time": string }; Returns: {
+              "group_id": string,"group_name": string
+            }[]
                            },
 "round_to_thousand":
 { Args: { "denominator"?: number,"numerator": number }; Returns: number

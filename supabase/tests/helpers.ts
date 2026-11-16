@@ -24,6 +24,7 @@ export const groupId = (n: number) => uid(3, n);
 export const studentId = (n: number) => uid(4, n);
 export const enrollmentId = (n: number) => uid(5, n);
 export const leadId = (n: number) => uid(6, n);
+export const roomId = (n: number) => uid(7, n);
 
 export type Attempt =
   | { ok: true; rows: Record<string, unknown>[]; rowCount: number }

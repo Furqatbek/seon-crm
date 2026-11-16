@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { CentreTab } from "@/components/settings/centre-tab";
 import { NotificationsTab } from "@/components/settings/notifications-tab";
 import { ProfileTab } from "@/components/settings/profile-tab";
+import { RoomsTab } from "@/components/settings/rooms-tab";
 import { SettingsScreen } from "@/components/settings/settings-screen";
 import { TemplatesTab } from "@/components/settings/templates-tab";
 import { UsersTab } from "@/components/settings/users-tab";
@@ -17,6 +18,7 @@ import {
   getCentreSettings,
   getIntegrations,
   getProfile,
+  getRooms,
   getUsers,
 } from "@/lib/settings/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
@@ -27,7 +29,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
   const user = await getCurrentUser();
   if (!user) return null;
 
-  // Centre, users, notifications and templates are the owner's. A manager has
+  // Centre, rooms, users, notifications and templates are the owner's. A manager has
   // Profile only: the other tabs are never rendered, and the database would
   // refuse the changes anyway.
   const tabs: readonly SettingsTab[] = user.role === "owner" ? SETTINGS_TABS : ["profile"];
@@ -37,6 +39,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
   return (
     <SettingsScreen tab={tab} tabs={tabs}>
       {tab === "centre" && owner ? <CentreTab settings={await getCentreSettings()} /> : null}
+      {tab === "rooms" && owner ? <RoomsTab rooms={await getRooms()} /> : null}
       {tab === "users" && owner ? <UsersTab users={await getUsers(user.id)} language={locale} /> : null}
       {tab === "notifications" && owner ? (
         <NotificationsTab settings={await getCentreSettings()} integrations={await getIntegrations()} />

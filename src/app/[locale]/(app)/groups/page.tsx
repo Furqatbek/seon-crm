@@ -10,6 +10,7 @@ import { tashkentDate } from "@/lib/domain/time";
 import {
   getGroups,
   getLessonSheet,
+  getRoomOptions,
   getTeacherOptions,
   getTodayLessons,
 } from "@/lib/groups/queries";
@@ -23,10 +24,11 @@ async function Groups({ searchParams }: { searchParams: SearchParams }) {
 
   const now = new Date();
   const today = tashkentDate(now);
-  const [todayLessons, groups, teachers, lesson] = await Promise.all([
+  const [todayLessons, groups, teachers, rooms, lesson] = await Promise.all([
     search.tab === "today" ? getTodayLessons(now) : null,
     search.tab === "all" ? getGroups(search) : null,
     getTeacherOptions(),
+    getRoomOptions(),
     search.lesson ? getLessonSheet(search.lesson) : null,
   ]);
 
@@ -37,6 +39,7 @@ async function Groups({ searchParams }: { searchParams: SearchParams }) {
       todayLessons={todayLessons}
       groups={groups}
       teachers={teachers}
+      rooms={rooms}
       lesson={lesson}
       lessonLock={
         lesson

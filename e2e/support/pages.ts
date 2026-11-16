@@ -28,6 +28,7 @@ export async function appPages(): Promise<Array<{ name: string; path: string }>>
     { name: "finance adjustments", path: "/finance?tab=adjustments" },
     { name: "reports", path: "/reports?period=6" },
     { name: "settings centre", path: "/settings" },
+    { name: "settings rooms", path: "/settings?tab=rooms" },
     { name: "settings users", path: "/settings?tab=users" },
     { name: "settings notifications", path: "/settings?tab=notifications" },
     { name: "settings templates", path: "/settings?tab=templates" },

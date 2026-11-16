@@ -15,6 +15,7 @@ import {
   notificationsSchema,
   passwordSchema,
   profileSchema,
+  roomSchema,
   templateSchema,
   testSmsSchema,
   userActiveSchema,
@@ -30,6 +31,10 @@ import {
 const ERRORS: Record<string, SettingsErrorKey> = {
   "42501": "notAllowed",
   EU001: "lastOwner",
+  // Rooms: supabase/migrations/20261116100000_rooms.sql.
+  "23505": "numberTaken",
+  EM003: "roomInUse",
+  EM004: "capacityBelowGroup",
 };
 
 type Failure = { ok: false; error: SettingsErrorKey; detail?: string };
@@ -63,6 +68,61 @@ export async function saveCentre(input: unknown): Promise<SettingsResult> {
   const { data, error } = await ctx.supabase.from("centre_settings").update(parsed.data).eq("singleton", true).select("id");
   if (error) return failure(error);
   if (data.length === 0) return { ok: false, error: "notAllowed" };
+  refresh();
+  return { ok: true };
+}
+
+// ── Rooms ──
+
+/** Add room. Owner only; the database refuses anyone else. */
+export async function createRoom(input: unknown): Promise<SettingsResult> {
+  const parsed = roomSchema.safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { error } = await ctx.supabase.from("rooms").insert(parsed.data);
+  if (error) return failure(error);
+  refresh();
+  return { ok: true };
+}
+
+/** Edit room. A room cannot be made smaller than a group that uses it. */
+export async function updateRoom(id: unknown, input: unknown): Promise<SettingsResult> {
+  const roomId = z.uuid().safeParse(id);
+  const parsed = roomSchema.safeParse(input);
+  if (!roomId.success) return { ok: false, error: "notFound" };
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("rooms")
+    .update(parsed.data)
+    .eq("id", roomId.data)
+    .is("archived_at", null)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+  refresh();
+  return { ok: true };
+}
+
+/** Archive room: only when no active or forming group uses it (the database checks). */
+export async function archiveRoom(id: unknown): Promise<SettingsResult> {
+  const roomId = z.uuid().safeParse(id);
+  if (!roomId.success) return { ok: false, error: "notFound" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("rooms")
+    .update({ archived_at: new Date().toISOString() })
+    .eq("id", roomId.data)
+    .is("archived_at", null)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
   refresh();
   return { ok: true };
 }

@@ -462,7 +462,9 @@
       "saved": "Guruh saqlandi",
       "chooseTeacher": "Oʻqituvchini tanlang",
       "feeHint": "Yangi narx keyingi oydan amal qiladi va yozilgan hisoblarni oʻzgartirmaydi.",
-      "scheduleHint": "Kunlar, vaqt, oʻqituvchi yoki sanalar oʻzgarsa, davomati belgilanmagan kelgusi darslar qayta yaratiladi."
+      "scheduleHint": "Kunlar, vaqt, oʻqituvchi yoki sanalar oʻzgarsa, davomati belgilanmagan kelgusi darslar qayta yaratiladi.",
+      "noRoom": "Xonasiz",
+      "roomOption": "{room} ({capacity} ta oʻrin)"
     },
     "today": {
       "empty": "Bugun darslar yoʻq.",
@@ -621,7 +623,11 @@
       "attendanceLocked": "Bu darsga 7 kundan koʻp boʻldi. Davomatni faqat rahbar oʻzgartira oladi.",
       "notFound": "Bu endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
-      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "capacityOverRoom": "Xonada {detail} ta oʻrin bor. Guruh bundan katta boʻla olmaydi.",
+      "roomInvalid": "Xonani roʻyxatdan tanlang.",
+      "roomClash": "Bu vaqtda xona «{detail}» guruhi bilan band.",
+      "roomUnavailable": "Bu xona endi mavjud emas. Boshqasini tanlang."
     }
   },
   "finance": {
@@ -1096,6 +1102,7 @@
   "settings": {
     "tabs": {
       "centre": "Markaz",
+      "rooms": "Xonalar",
       "users": "Foydalanuvchilar",
       "notifications": "Bildirishnomalar",
       "templates": "Shablonlar",
@@ -1218,7 +1225,41 @@
       "notAllowed": "Sizga bu amalga ruxsat yoʻq.",
       "notConfigured": "Bu serverda hali sozlanmagan.",
       "notFound": "Bu endi mavjud emas.",
-      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "numberRequired": "Xona raqamini kiriting.",
+      "numberTaken": "Bu raqam boshqa xonada bor.",
+      "capacityInvalid": "1 dan 500 gacha sigʻim kiriting.",
+      "roomInUse": "Bu xonani hali guruh band qilgan.",
+      "capacityBelowGroup": "Bu xonadagi guruh bundan katta. Avval guruh sigʻimini kamaytiring."
+    },
+    "rooms": {
+      "add": "Xona qoʻshish",
+      "addTitle": "Yangi xona",
+      "editTitle": "{room} xonasi",
+      "number": "Raqami",
+      "numberHint": "Eshikda yozilgani: 3, 2A.",
+      "name": "Nomi",
+      "nameHint": "Ixtiyoriy. Raqamdan keyin koʻrsatiladi: 3 · Katta zal.",
+      "capacity": "Sigʻimi",
+      "capacityHint": "Nechta oʻquvchi sigʻadi. Bu xonadagi guruh bundan katta boʻla olmaydi.",
+      "active": "Yangi guruhlar uchun ochiq",
+      "activeHint": "Xonani saqlab qolib, yangi guruhlarga taklif qilmaslik uchun oʻchiring.",
+      "groups": "Guruhlar",
+      "noGroups": "Guruh yoʻq",
+      "status": "Holat",
+      "statusActive": "Faol",
+      "statusInactive": "Taklif qilinmaydi",
+      "edit": "Tahrirlash",
+      "editRoom": "{room} xonasini tahrirlash",
+      "archive": "Arxivlash",
+      "archiveRoom": "{room} xonasini arxivlash",
+      "archiveTitle": "{room} xonasi arxivlansinmi?",
+      "archiveBody": "Xona bu roʻyxatdan chiqadi va uni tanlab boʻlmaydi. Avval shu xonada oʻqigan guruhlar tarixida u saqlanib qoladi.",
+      "archiveBlocked": "Guruh band qilgan. Avval guruhni koʻchiring yoki yakunlang.",
+      "archived": "{room} xonasi arxivlandi",
+      "created": "{room} xonasi qoʻshildi",
+      "saved": "{room} xonasi saqlandi",
+      "empty": "Hali xonalar yoʻq. Birinchisini qoʻshing."
     }
   }
 }

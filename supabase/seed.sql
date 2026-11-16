@@ -130,27 +130,36 @@ from seed_cfg c,
 -- ───────────────────────────── Groups ──────────────────────────────
 -- Nine running groups and one still forming.
 
+-- Five rooms. Fixed ids: uid(7, n).
+insert into public.rooms (id, number, name, capacity)
+values
+  (pg_temp.uid(7, 1), '1', 'Ingliz tili xonasi', 14),
+  (pg_temp.uid(7, 2), '2', 'IELTS xonasi', 12),
+  (pg_temp.uid(7, 3), '3', 'Matematika xonasi', 16),
+  (pg_temp.uid(7, 4), '4', 'Rus tili xonasi', 12),
+  (pg_temp.uid(7, 5), '5', 'Kompyuter xonasi', 12);
+
 insert into public.groups (
   id, name, subject, level, teacher_id, monthly_fee, days, start_time, duration_min,
-  room, capacity, start_date, status
+  room_id, capacity, start_date, status
 )
 select
   pg_temp.uid(3, g.n), g.name, g.subject, g.level, pg_temp.uid(2, g.teacher), g.fee,
-  g.days::smallint[], g.start_time::time, g.duration, g.room, 12,
+  g.days::smallint[], g.start_time::time, g.duration, pg_temp.uid(7, g.room), 12,
   case when g.status = 'forming' then c.today + 14 else (c.m0 - interval '4 months')::date end,
   g.status::public.group_status
 from seed_cfg c,
   (values
-    (1, 'English A2', 'Ingliz tili', 'A2', 1, 500000, '{1,3,5}', '15:00', 90, '1-xona', 'active'),
-    (2, 'English B1', 'Ingliz tili', 'B1', 1, 600000, '{2,4,6}', '16:30', 90, '1-xona', 'active'),
-    (3, 'IELTS 6.5', 'IELTS', 'B2', 2, 900000, '{1,3,5}', '18:00', 120, '2-xona', 'active'),
-    (4, 'English Kids', 'Ingliz tili', 'A1', 2, 400000, '{2,4,6}', '10:00', 60, '2-xona', 'active'),
-    (5, 'Matematika 7-sinf', 'Matematika', '7-sinf', 3, 450000, '{1,3,5}', '14:00', 90, '3-xona', 'active'),
-    (6, 'Matematika 9-sinf', 'Matematika', '9-sinf', 6, 500000, '{2,4,6}', '15:30', 90, '3-xona', 'active'),
-    (7, 'Rus tili boshlangʻich', 'Rus tili', 'A1', 4, 450000, '{1,3,5}', '16:30', 90, '4-xona', 'active'),
-    (8, 'Rus tili davomi', 'Rus tili', 'A2', 4, 500000, '{2,4,6}', '18:00', 90, '4-xona', 'active'),
-    (9, 'Python dasturlash', 'Dasturlash', 'Boshlangʻich', 5, 800000, '{2,4}', '18:30', 120, '5-xona', 'active'),
-    (10, 'Fizika abituriyent', 'Fizika', '11-sinf', 6, 700000, '{1,3,5}', '17:00', 90, '3-xona', 'forming')
+    (1, 'English A2', 'Ingliz tili', 'A2', 1, 500000, '{1,3,5}', '15:00', 90, 1, 'active'),
+    (2, 'English B1', 'Ingliz tili', 'B1', 1, 600000, '{2,4,6}', '16:30', 90, 1, 'active'),
+    (3, 'IELTS 6.5', 'IELTS', 'B2', 2, 900000, '{1,3,5}', '18:00', 120, 2, 'active'),
+    (4, 'English Kids', 'Ingliz tili', 'A1', 2, 400000, '{2,4,6}', '10:00', 60, 2, 'active'),
+    (5, 'Matematika 7-sinf', 'Matematika', '7-sinf', 3, 450000, '{1,3,5}', '14:00', 90, 3, 'active'),
+    (6, 'Matematika 9-sinf', 'Matematika', '9-sinf', 6, 500000, '{2,4,6}', '15:30', 90, 3, 'active'),
+    (7, 'Rus tili boshlangʻich', 'Rus tili', 'A1', 4, 450000, '{1,3,5}', '16:30', 90, 4, 'active'),
+    (8, 'Rus tili davomi', 'Rus tili', 'A2', 4, 500000, '{2,4,6}', '18:00', 90, 4, 'active'),
+    (9, 'Python dasturlash', 'Dasturlash', 'Boshlangʻich', 5, 800000, '{2,4}', '18:30', 120, 5, 'active'),
+    (10, 'Fizika abituriyent', 'Fizika', '11-sinf', 6, 700000, '{1,3,5}', '17:00', 90, 3, 'forming')
   ) as g (n, name, subject, level, teacher, fee, days, start_time, duration, room, status);
 
 -- ──────────────────────────── Students ─────────────────────────────

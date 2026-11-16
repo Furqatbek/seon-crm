@@ -2,8 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { createGroup, updateGroup } from "@/lib/groups/actions";
-import type { TeacherOption } from "@/lib/groups/queries";
+import { roomLabel } from "@/lib/domain/rooms";
+import type { RoomOption, TeacherOption } from "@/lib/groups/queries";
 import type { Tables } from "@/lib/supabase/types";
 import { cn } from "@/lib/utils";
 import {
@@ -40,17 +41,23 @@ import {
 
 import { hhmm, type Weekday } from "./group-meta";
 
-type Group = Tables<"groups">;
+/** The group being edited, with its room when the page has it (it may no longer be an active room). */
+type Group = Tables<"groups"> & { room?: RoomOption | null };
+
+const NO_ROOM = "none";
+type Failure = { error: GroupErrorKey; detail?: string };
 
 function GroupForm({
   group,
   teachers,
+  rooms,
   today,
   onCancel,
   onSaved,
 }: {
   group: Group | null;
   teachers: TeacherOption[];
+  rooms: RoomOption[];
   today: string;
   onCancel: () => void;
   onSaved: (id: string) => void;
@@ -59,14 +66,19 @@ function GroupForm({
   const tCommon = useTranslations("common");
   const tDays = useTranslations("common.weekdays");
   const [pending, startTransition] = useTransition();
-  const [formError, setFormError] = useState<GroupErrorKey | null>(null);
+  const [formError, setFormError] = useState<Failure | null>(null);
+  // The active rooms, and the group's own room even if it has since been switched off.
+  const roomOptions =
+    group?.room && !rooms.some((room) => room.id === group.room?.id) ? [group.room, ...rooms] : rooms;
 
   const {
     register,
     control,
     handleSubmit,
     getValues,
-    formState: { errors },
+    setValue,
+    setError,
+    formState: { errors, dirtyFields },
   } = useForm<GroupFormInput, unknown, GroupFormValues>({
     resolver: zodResolver(groupFormSchema),
     defaultValues: group
@@ -79,7 +91,7 @@ function GroupForm({
           days: group.days,
           start_time: hhmm(group.start_time),
           duration_min: String(group.duration_min),
-          room: group.room ?? "",
+          room_id: group.room_id ?? "",
           capacity: group.capacity === null ? "" : String(group.capacity),
           start_date: group.start_date,
           status: group.status,
@@ -93,7 +105,7 @@ function GroupForm({
           days: [],
           start_time: "",
           duration_min: "90",
-          room: "",
+          room_id: "",
           capacity: "",
           start_date: today,
           // A group whose start date has not come yet is still forming.
@@ -101,15 +113,38 @@ function GroupForm({
         },
   });
 
-  const message = (key: string | undefined) => (key ? t(`errors.${key as GroupErrorKey}`) : null);
+  const roomId = useWatch({ control, name: "room_id" });
+  const room = roomOptions.find((option) => option.id === roomId) ?? null;
+  // The form is longer than a phone screen: an error from the server is
+  // brought into view, or Save would seem to do nothing.
+  const formErrorRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (formError) formErrorRef.current?.scrollIntoView({ block: "nearest" });
+  }, [formError]);
 
-  const onSubmit = handleSubmit(() => {
+  const message = (key: string | undefined, detail = "") =>
+    key ? t(`errors.${key as GroupErrorKey}`, { detail }) : null;
+
+  function chooseRoom(id: string) {
+    setValue("room_id", id, { shouldDirty: true });
+    const chosen = roomOptions.find((option) => option.id === id);
+    // The group is as large as its room unless someone has typed a size of their own.
+    if (chosen && (!dirtyFields.capacity || getValues("capacity") === "")) {
+      setValue("capacity", String(chosen.capacity));
+    }
+  }
+
+  const onSubmit = handleSubmit((values) => {
     setFormError(null);
+    // A group is never larger than its room. The database checks this too.
+    if (room && values.capacity !== null && values.capacity > room.capacity) {
+      return setError("capacity", { message: "capacityOverRoom" });
+    }
     startTransition(async () => {
       const raw = getValues();
       if (group) {
         const result = await updateGroup(group.id, raw);
-        if (!result.ok) return setFormError(result.error);
+        if (!result.ok) return setFormError(result);
         toast(t("form.saved"));
         return onSaved(group.id);
       }
@@ -117,7 +152,7 @@ function GroupForm({
         ...raw,
         status: raw.start_date > today ? "forming" : "active",
       });
-      if (!result.ok) return setFormError(result.error);
+      if (!result.ok) return setFormError(result);
       toast(t("form.created"));
       onSaved(result.data.id);
     });
@@ -242,10 +277,35 @@ function GroupForm({
               {...register("duration_min")}
             />
           </Field>
-          <Field label={t("fields.room")} htmlFor="group-room" error={message(errors.room?.message)}>
-            <Input id="group-room" autoComplete="off" {...register("room")} />
+          <Field label={t("fields.room")} htmlFor="group-room" error={message(errors.room_id?.message)}>
+            <Controller
+              control={control}
+              name="room_id"
+              render={({ field }) => (
+                <Select
+                  value={field.value || NO_ROOM}
+                  onValueChange={(value) => chooseRoom(value === NO_ROOM ? "" : value)}
+                >
+                  <SelectTrigger id="group-room">
+                    <SelectValue>{room ? roomLabel(room) : t("form.noRoom")}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NO_ROOM}>{t("form.noRoom")}</SelectItem>
+                    {roomOptions.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        {t("form.roomOption", { room: roomLabel(option), capacity: option.capacity })}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </Field>
-          <Field label={t("fields.capacity")} htmlFor="group-capacity" error={message(errors.capacity?.message)}>
+          <Field
+            label={t("fields.capacity")}
+            htmlFor="group-capacity"
+            error={message(errors.capacity?.message, room ? String(room.capacity) : "")}
+          >
             <Input
               id="group-capacity"
               inputMode="numeric"
@@ -292,8 +352,8 @@ function GroupForm({
         {group ? <p className="text-footnote text-text-secondary">{t("form.scheduleHint")}</p> : null}
 
         {formError ? (
-          <p role="alert" className="text-footnote text-danger">
-            {t(`errors.${formError}`)}
+          <p ref={formErrorRef} role="alert" className="text-footnote text-danger">
+            {message(formError.error, formError.detail)}
           </p>
         ) : null}
       </SheetBody>
@@ -314,6 +374,7 @@ export function GroupFormSheet({
   open,
   group,
   teachers,
+  rooms,
   today,
   onClose,
   onSaved,
@@ -321,6 +382,7 @@ export function GroupFormSheet({
   open: boolean;
   group: Group | null;
   teachers: TeacherOption[];
+  rooms: RoomOption[];
   today: string;
   onClose: () => void;
   onSaved: (id: string) => void;
@@ -339,6 +401,7 @@ export function GroupFormSheet({
             key={group?.id ?? "new"}
             group={group}
             teachers={teachers}
+            rooms={rooms}
             today={today}
             onCancel={onClose}
             onSaved={onSaved}

@@ -19,6 +19,22 @@ export type AttendanceMark = Tables<"attendance">["status"];
 
 export type TeacherOption = { id: string; full_name: string };
 
+export type RoomRef = Pick<Tables<"rooms">, "id" | "number" | "name">;
+export type RoomOption = RoomRef & Pick<Tables<"rooms">, "capacity" | "is_active">;
+
+/** Rooms a group can be put in: active and not archived, by number. */
+export async function getRoomOptions(): Promise<RoomOption[]> {
+  const supabase = await db();
+  const { data, error } = await supabase
+    .from("rooms")
+    .select("id, number, name, capacity, is_active")
+    .is("archived_at", null)
+    .eq("is_active", true);
+  if (error) throw new Error(error.message);
+  // "2" before "10": numbers are compared as numbers where they are numbers.
+  return data.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
+}
+
 /** Active teachers, for the group form and for a substitute. */
 export async function getTeacherOptions(): Promise<TeacherOption[]> {
   const supabase = await db();
@@ -51,7 +67,7 @@ async function activeCounts(groupIds: string[], onDay?: string): Promise<Map<str
 // ── Today ──
 
 export type TodayLesson = Pick<Lesson, "id" | "start_time" | "status" | "cancel_reason"> & {
-  group: Pick<Group, "id" | "name" | "room" | "duration_min" | "teacher_id">;
+  group: Pick<Group, "id" | "name" | "duration_min" | "teacher_id"> & { room: RoomRef | null };
   teacher: TeacherOption;
   students: number;
 };
@@ -63,7 +79,7 @@ export async function getTodayLessons(now: Date): Promise<TodayLesson[]> {
   const { data, error } = await supabase
     .from("lessons")
     .select(
-      "id, start_time, status, cancel_reason, group:groups!inner(id, name, room, duration_min, teacher_id, archived_at), teacher:teachers!inner(id, full_name)",
+      "id, start_time, status, cancel_reason, group:groups!inner(id, name, duration_min, teacher_id, archived_at, room:rooms(id, number, name)), teacher:teachers!inner(id, full_name)",
     )
     .eq("lesson_date", today)
     .is("group.archived_at", null)
@@ -128,13 +144,18 @@ export async function getOpenGroups(): Promise<OpenGroup[]> {
 
 // ── One group ──
 
-export type GroupDetail = Group & { teacher: TeacherOption | null; students: number };
+export type GroupDetail = Group & {
+  teacher: TeacherOption | null;
+  /** With its capacity and state, so the form can offer it even when it is no longer active. */
+  room: RoomOption | null;
+  students: number;
+};
 
 export async function getGroup(id: string): Promise<GroupDetail | null> {
   const supabase = await db();
   const { data, error } = await supabase
     .from("groups")
-    .select("*, teacher:teachers(id, full_name)")
+    .select("*, teacher:teachers(id, full_name), room:rooms(id, number, name, capacity, is_active)")
     .eq("id", id)
     .is("archived_at", null)
     .maybeSingle();
@@ -292,7 +313,7 @@ export async function getGroupTrials(groupId: string, now: Date): Promise<TrialV
 // ── Lesson sheet ──
 
 export type LessonSheetData = Pick<Lesson, "id" | "lesson_date" | "start_time" | "status" | "cancel_reason"> & {
-  group: Pick<Group, "id" | "name" | "teacher_id">;
+  group: Pick<Group, "id" | "name" | "teacher_id"> & { room: RoomRef | null };
   teacher: TeacherOption;
   /** Everyone in the group on the lesson's day, with their mark if there is one. */
   students: Array<{ id: string; full_name: string; mark: AttendanceMark | null }>;
@@ -303,7 +324,7 @@ export async function getLessonSheet(lessonId: string): Promise<LessonSheetData 
   const lesson = await supabase
     .from("lessons")
     .select(
-      "id, lesson_date, start_time, status, cancel_reason, group:groups!inner(id, name, teacher_id), teacher:teachers!inner(id, full_name)",
+      "id, lesson_date, start_time, status, cancel_reason, group:groups!inner(id, name, teacher_id, room:rooms(id, number, name)), teacher:teachers!inner(id, full_name)",
     )
     .eq("id", lessonId)
     .maybeSingle();

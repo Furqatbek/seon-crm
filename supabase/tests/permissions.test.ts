@@ -265,7 +265,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
           [teacherId(1)],
         );
         allowed(group);
-        allowed(await s.attempt(`update groups set room = '7-xona' where id = $1`, [idOf(group)]));
+        allowed(await s.attempt(`update groups set level = 'B2', capacity = 10 where id = $1`, [idOf(group)]));
 
         allowed(
           await s.attempt(
@@ -739,7 +739,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         for (const table of [
           "leads", "lead_activities", "students", "enrollments", "groups", "lessons", "attendance",
           "teachers", "teacher_pay_rates", "charges", "payments", "expenses", "teacher_payouts",
-          "messages", "message_templates", "profiles", "centre_settings",
+          "messages", "message_templates", "profiles", "centre_settings", "rooms",
         ]) {
           denied(await s.attempt(`delete from ${table}`));
         }
@@ -749,7 +749,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
 
   describe("Outside the table", () => {
     const tables = [
-      "profiles", "centre_settings", "message_templates", "leads", "lead_activities", "teachers",
+      "profiles", "centre_settings", "message_templates", "rooms", "leads", "lead_activities", "teachers",
       "teacher_pay_rates", "students", "groups", "enrollments", "lessons", "attendance", "charges",
       "payments", "expenses", "teacher_payouts", "messages", "student_balances", "student_overview",
     ];

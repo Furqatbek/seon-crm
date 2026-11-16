@@ -25,6 +25,7 @@ import {
 } from "@/lib/domain/attendance";
 import { formatDay } from "@/lib/format";
 import { saveAttendance } from "@/lib/groups/actions";
+import { roomLabel } from "@/lib/domain/rooms";
 import type { LessonSheetData } from "@/lib/groups/queries";
 import type { GroupErrorKey } from "@/lib/validation/groups";
 
@@ -148,6 +149,7 @@ export function LessonSheet({
                   {lesson.teacher.id !== lesson.group.teacher_id ? (
                     <Badge tone="purple">{t("lesson.substitute")}</Badge>
                   ) : null}
+                  {lesson.group.room ? <span data-slot="lesson-room">{roomLabel(lesson.group.room)}</span> : null}
                 </div>
               </SheetDescription>
             </SheetHeader>

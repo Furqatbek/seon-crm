@@ -22,6 +22,20 @@ export const centreSchema = z
 export type CentreInput = z.input<typeof centreSchema>;
 export type CentreValues = z.output<typeof centreSchema>;
 
+/** Add or edit a room. */
+export const roomSchema = z.object({
+  number: z.string().trim().min(1, "numberRequired").max(20, "tooLong"),
+  name: z
+    .string()
+    .trim()
+    .max(60, "tooLong")
+    .transform((value) => value || null),
+  capacity: z.coerce.number("capacityInvalid").int("capacityInvalid").min(1, "capacityInvalid").max(500, "capacityInvalid"),
+  is_active: z.boolean(),
+});
+export type RoomInput = z.input<typeof roomSchema>;
+export type RoomValues = z.output<typeof roomSchema>;
+
 /** Invite a user by email. */
 export const inviteSchema = z.object({
   email: z.email("emailInvalid").max(200, "tooLong"),
@@ -71,6 +85,11 @@ export type SettingsErrorKey =
   | "emailTaken"
   | "phoneInvalid"
   | "textRequired"
+  | "numberRequired"
+  | "numberTaken"
+  | "capacityInvalid"
+  | "roomInUse"
+  | "capacityBelowGroup"
   | "passwordTooShort"
   | "passwordMismatch"
   | "notSelf"
@@ -89,7 +108,7 @@ export type SettingsResult<T = undefined> =
       detail?: string;
     };
 
-export const SETTINGS_TABS = ["centre", "users", "notifications", "templates", "profile"] as const;
+export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "profile"] as const;
 export type SettingsTab = (typeof SETTINGS_TABS)[number];
 
 /** URL state of /settings. */

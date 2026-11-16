@@ -52,7 +52,8 @@ test("a Mon/Wed/Fri 18:00 group: enrol mid-month with the first charge, mark tod
   await sheet(page).getByLabel("Monthly fee").fill("600 000");
   for (const day of days) await sheet(page).locator(`[data-weekday="${day}"]`).click();
   await sheet(page).getByLabel("Start time").fill("18:00");
-  await sheet(page).getByLabel("Room").fill("9-xona");
+  // No room: rooms and their clash rule have their own test (rooms.spec.ts).
+  await expect(sheet(page).getByRole("combobox", { name: "Room" })).toContainText("No room");
   await sheet(page).getByLabel("Capacity").fill("12");
   await sheet(page).getByLabel("Start date").fill(`${month}-01`);
   await page.screenshot({ path: testInfo.outputPath("new-group.png") });
@@ -110,7 +111,7 @@ test("a Mon/Wed/Fri 18:00 group: enrol mid-month with the first charge, mark tod
   await page.goto("/en/groups");
   const lesson = page.locator("[data-today-lesson]").filter({ hasText: name });
   await expect(lesson).toContainText("18:00");
-  await expect(lesson).toContainText("Dilshod Rahimov · 9-xona · 1 student");
+  await expect(lesson).toContainText("Dilshod Rahimov · 1 student");
   await lesson.getByRole("button", { name: "Mark attendance" }).click();
   // Everyone starts as Present; tap to switch.
   const marks = sheet(page).getByRole("radiogroup", { name: "Aziz Sultonov" });

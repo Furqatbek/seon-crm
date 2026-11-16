@@ -22,6 +22,7 @@ import {
   getGroupTrials,
   getLessonSheet,
   getOpenGroups,
+  getRoomOptions,
   getTeacherOptions,
   type OpenGroup,
   type TeacherOption,
@@ -123,9 +124,10 @@ async function Group({ params, searchParams }: Props) {
   if (!user) return null;
   const search = groupSearchSchema.parse(firstValues(await searchParams));
 
-  const [group, teachers, openGroups, lesson] = await Promise.all([
+  const [group, teachers, rooms, openGroups, lesson] = await Promise.all([
     getGroup(id),
     getTeacherOptions(),
+    getRoomOptions(),
     getOpenGroups(),
     search.lesson ? getLessonSheet(search.lesson) : null,
   ]);
@@ -143,6 +145,7 @@ async function Group({ params, searchParams }: Props) {
       tab={search.tab}
       today={today}
       teachers={teachers}
+      rooms={rooms}
       openGroups={openGroups}
       // A lesson of another group does not open here.
       lesson={lesson?.group.id === group.id ? lesson : null}
