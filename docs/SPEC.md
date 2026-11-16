@@ -255,15 +255,18 @@ attendance         lesson_id, student_id, status, note, marked_by, marked_at
 FINANCE
 charges            student_id, enrollment_id, group_id, billing_month date, type,
                    base_amount, discount_amount, amount (negative = credit),
-                   is_prorated, lessons_counted, lessons_in_month, note, created_by
+                   is_prorated, lessons_counted, lessons_in_month, note, created_by,
+                   archived_at
                    unique (enrollment_id, billing_month) where type = monthly_fee
+                   and not archived
 payments           student_id, group_id, amount > 0, method, paid_at, receipt_no serial,
-                   note, received_by, voided_at, void_reason, voided_by
+                   note, received_by, voided_at, void_reason, voided_by, archived_at
 expenses           category, amount, spent_on, note, created_by, archived_at  -- owner only
 teacher_payouts    teacher_id, month, pay_type, basis (lessons or soʻm collected),
                    rate, calculated, bonus, deduction, final_amount,
-                   breakdown jsonb (per group), status, paid_at, paid_by, note
-                   unique (teacher_id, month)                       -- owner only
+                   breakdown jsonb (per group), status, paid_at, paid_by, note,
+                   archived_at
+                   unique (teacher_id, month) where not archived    -- owner only
 
 NOTIFICATIONS
 messages           student_id, channel, type, recipient, body, status, error,
@@ -339,6 +342,7 @@ Cancelled lessons are not counted. Example: fee 600,000 soʻm, 12 lessons in Nov
 - A student is a debtor when the balance is below zero after the due day of the current month. Before the due day an unpaid fee shows as Due.
 - Each payment gets a receipt number and a print view sized for an 80 mm receipt printer and A4.
 - Only the owner can void a payment, with a reason. Voided payments drop out of every total.
+- Archiving (owner only) is how a wrong or test record is removed; nothing is deleted. An archived payment is also voided. An archived charge is no longer owed, and its monthly fee can be generated again. An archived payout leaves the salaries total, even a paid one, and Calculate makes a new draft. Archived records leave every list, balance, total and report, including Adjustments.
 
 ### Lessons and attendance
 
@@ -413,6 +417,7 @@ Six blocks plus Settings, each a list page and a record page. After sign-in the 
 - Expenses tab (owner): list and Add expense sheet.
 - Salaries tab (owner): month picker, Calculate, one row per teacher with an expandable breakdown, bonus and deduction fields, Mark paid.
 - Adjustments tab (owner): every credit and voided payment with who, when and why.
+- Owner: an Archive button on every row of Payments, Charges, Expenses and Salaries, with a confirmation that says what changes; Charges also has Archive all charges for the chosen month.
 
 ### Reports — `/reports`
 

@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/table";
 import { addExpense } from "@/lib/finance/actions";
 import type { ExpenseRow } from "@/lib/finance/queries";
-import { formatDay } from "@/lib/format";
+import { formatDay, formatMoney } from "@/lib/format";
 import { useUrlState } from "@/lib/hooks/use-url-state";
 import {
   EXPENSE_CATEGORIES,
@@ -48,6 +48,8 @@ import {
   type ExpenseValues,
   type FinanceErrorKey,
 } from "@/lib/validation/finance";
+
+import { ArchiveButton } from "./archive-button";
 
 const ALL = "all";
 
@@ -196,6 +198,7 @@ export function ExpensesTab({
                 <TableHead>{t("fields.category")}</TableHead>
                 <TableHead>{t("fields.note")}</TableHead>
                 <TableHead numeric>{t("fields.amount")}</TableHead>
+                <TableHead className="w-px" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -208,6 +211,9 @@ export function ExpensesTab({
                   <TableCell className="min-w-48 text-text-secondary">{row.note ?? "—"}</TableCell>
                   <TableCell numeric>
                     <MoneyText amount={row.amount} />
+                  </TableCell>
+                  <TableCell className="px-1">
+                    <ArchiveButton kind="expense" id={row.id} what={formatMoney(row.amount, locale)} />
                   </TableCell>
                 </TableRow>
               ))}

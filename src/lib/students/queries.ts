@@ -211,11 +211,13 @@ export async function getStudentLedger(
       .select(
         "id, created_at, billing_month, type, amount, is_prorated, lessons_counted, lessons_in_month, note, group:groups(name)",
       )
-      .eq("student_id", id),
+      .eq("student_id", id)
+      .is("archived_at", null),
     supabase
       .from("payments")
       .select("id, paid_at, amount, method, receipt_no, note, voided_at, void_reason, group:groups(name)")
-      .eq("student_id", id),
+      .eq("student_id", id)
+      .is("archived_at", null),
   ]);
   if (charges.error) throw new Error(charges.error.message);
   if (payments.error) throw new Error(payments.error.message);

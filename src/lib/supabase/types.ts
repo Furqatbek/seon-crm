@@ -83,14 +83,14 @@ isOneToOne: false
                   ]
                 },"charges": {
                   Row: {
-                    "amount": number,"base_amount": number,"billing_month": string,"created_at": string,"created_by": string | null,"discount_amount": number,"enrollment_id": string | null,"group_id": string | null,"id": string,"is_prorated": boolean,"lessons_counted": number | null,"lessons_in_month": number | null,"note": string | null,"student_id": string,"type": Database["public"]['Enums']["charge_type"]
+                    "amount": number,"archived_at": string | null,"base_amount": number,"billing_month": string,"created_at": string,"created_by": string | null,"discount_amount": number,"enrollment_id": string | null,"group_id": string | null,"id": string,"is_prorated": boolean,"lessons_counted": number | null,"lessons_in_month": number | null,"note": string | null,"student_id": string,"type": Database["public"]['Enums']["charge_type"]
                   }
                   ComputedFields: never
                   Insert: {
-                    "amount": number,"base_amount"?: number,"billing_month": string,"created_at"?: string,"created_by"?: string | null,"discount_amount"?: number,"enrollment_id"?: string | null,"group_id"?: string | null,"id"?: string,"is_prorated"?: boolean,"lessons_counted"?: number | null,"lessons_in_month"?: number | null,"note"?: string | null,"student_id": string,"type": Database["public"]['Enums']["charge_type"]
+                    "amount": number,"archived_at"?: string | null,"base_amount"?: number,"billing_month": string,"created_at"?: string,"created_by"?: string | null,"discount_amount"?: number,"enrollment_id"?: string | null,"group_id"?: string | null,"id"?: string,"is_prorated"?: boolean,"lessons_counted"?: number | null,"lessons_in_month"?: number | null,"note"?: string | null,"student_id": string,"type": Database["public"]['Enums']["charge_type"]
                   }
                   Update: {
-                    "amount"?: number,"base_amount"?: number,"billing_month"?: string,"created_at"?: string,"created_by"?: string | null,"discount_amount"?: number,"enrollment_id"?: string | null,"group_id"?: string | null,"id"?: string,"is_prorated"?: boolean,"lessons_counted"?: number | null,"lessons_in_month"?: number | null,"note"?: string | null,"student_id"?: string,"type"?: Database["public"]['Enums']["charge_type"]
+                    "amount"?: number,"archived_at"?: string | null,"base_amount"?: number,"billing_month"?: string,"created_at"?: string,"created_by"?: string | null,"discount_amount"?: number,"enrollment_id"?: string | null,"group_id"?: string | null,"id"?: string,"is_prorated"?: boolean,"lessons_counted"?: number | null,"lessons_in_month"?: number | null,"note"?: string | null,"student_id"?: string,"type"?: Database["public"]['Enums']["charge_type"]
                   }
                   Relationships: [
                     {
@@ -391,14 +391,14 @@ isOneToOne: false
                   ]
                 },"payments": {
                   Row: {
-                    "amount": number,"created_at": string,"group_id": string,"id": string,"method": Database["public"]['Enums']["payment_method"],"note": string | null,"paid_at": string,"receipt_no": number,"received_by": string | null,"student_id": string,"void_reason": string | null,"voided_at": string | null,"voided_by": string | null
+                    "amount": number,"archived_at": string | null,"created_at": string,"group_id": string,"id": string,"method": Database["public"]['Enums']["payment_method"],"note": string | null,"paid_at": string,"receipt_no": number,"received_by": string | null,"student_id": string,"void_reason": string | null,"voided_at": string | null,"voided_by": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "amount": number,"created_at"?: string,"group_id": string,"id"?: string,"method": Database["public"]['Enums']["payment_method"],"note"?: string | null,"paid_at"?: string,"receipt_no"?: never,"received_by"?: string | null,"student_id": string,"void_reason"?: string | null,"voided_at"?: string | null,"voided_by"?: string | null
+                    "amount": number,"archived_at"?: string | null,"created_at"?: string,"group_id": string,"id"?: string,"method": Database["public"]['Enums']["payment_method"],"note"?: string | null,"paid_at"?: string,"receipt_no"?: never,"received_by"?: string | null,"student_id": string,"void_reason"?: string | null,"voided_at"?: string | null,"voided_by"?: string | null
                   }
                   Update: {
-                    "amount"?: number,"created_at"?: string,"group_id"?: string,"id"?: string,"method"?: Database["public"]['Enums']["payment_method"],"note"?: string | null,"paid_at"?: string,"receipt_no"?: never,"received_by"?: string | null,"student_id"?: string,"void_reason"?: string | null,"voided_at"?: string | null,"voided_by"?: string | null
+                    "amount"?: number,"archived_at"?: string | null,"created_at"?: string,"group_id"?: string,"id"?: string,"method"?: Database["public"]['Enums']["payment_method"],"note"?: string | null,"paid_at"?: string,"receipt_no"?: never,"received_by"?: string | null,"student_id"?: string,"void_reason"?: string | null,"voided_at"?: string | null,"voided_by"?: string | null
                   }
                   Relationships: [
                     {
@@ -509,14 +509,14 @@ isOneToOne: false
                   ]
                 },"teacher_payouts": {
                   Row: {
-                    "basis": number,"bonus": number,"breakdown": NonNullable<Json>,"calculated": number,"created_at": string,"deduction": number,"final_amount": number,"id": string,"month": string,"note": string | null,"paid_at": string | null,"paid_by": string | null,"pay_type": Database["public"]['Enums']["pay_type"],"rate": number,"status": Database["public"]['Enums']["payout_status"],"teacher_id": string,"updated_at": string
+                    "archived_at": string | null,"basis": number,"bonus": number,"breakdown": NonNullable<Json>,"calculated": number,"created_at": string,"deduction": number,"final_amount": number,"id": string,"month": string,"note": string | null,"paid_at": string | null,"paid_by": string | null,"pay_type": Database["public"]['Enums']["pay_type"],"rate": number,"status": Database["public"]['Enums']["payout_status"],"teacher_id": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "basis"?: number,"bonus"?: number,"breakdown"?: NonNullable<Json>,"calculated"?: number,"created_at"?: string,"deduction"?: number,"final_amount": number,"id"?: string,"month": string,"note"?: string | null,"paid_at"?: string | null,"paid_by"?: string | null,"pay_type": Database["public"]['Enums']["pay_type"],"rate": number,"status"?: Database["public"]['Enums']["payout_status"],"teacher_id": string,"updated_at"?: string
+                    "archived_at"?: string | null,"basis"?: number,"bonus"?: number,"breakdown"?: NonNullable<Json>,"calculated"?: number,"created_at"?: string,"deduction"?: number,"final_amount": number,"id"?: string,"month": string,"note"?: string | null,"paid_at"?: string | null,"paid_by"?: string | null,"pay_type": Database["public"]['Enums']["pay_type"],"rate": number,"status"?: Database["public"]['Enums']["payout_status"],"teacher_id": string,"updated_at"?: string
                   }
                   Update: {
-                    "basis"?: number,"bonus"?: number,"breakdown"?: NonNullable<Json>,"calculated"?: number,"created_at"?: string,"deduction"?: number,"final_amount"?: number,"id"?: string,"month"?: string,"note"?: string | null,"paid_at"?: string | null,"paid_by"?: string | null,"pay_type"?: Database["public"]['Enums']["pay_type"],"rate"?: number,"status"?: Database["public"]['Enums']["payout_status"],"teacher_id"?: string,"updated_at"?: string
+                    "archived_at"?: string | null,"basis"?: number,"bonus"?: number,"breakdown"?: NonNullable<Json>,"calculated"?: number,"created_at"?: string,"deduction"?: number,"final_amount"?: number,"id"?: string,"month"?: string,"note"?: string | null,"paid_at"?: string | null,"paid_by"?: string | null,"pay_type"?: Database["public"]['Enums']["pay_type"],"rate"?: number,"status"?: Database["public"]['Enums']["payout_status"],"teacher_id"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {

@@ -56,6 +56,8 @@ import {
   type PayoutAdjustmentValues,
 } from "@/lib/validation/finance";
 
+import { ArchiveButton } from "./archive-button";
+
 /** The payout's rate, shown the way the teacher's Pay tab shows it. */
 function Rate({ payout }: { payout: PayoutRow }) {
   const percent = payout.pay_type === "percent_of_revenue";
@@ -335,7 +337,9 @@ export function SalariesTab({
                       </StatusPill>
                     </TableCell>
                     <TableCell className="px-1">
-                      {/* A paid payout is locked: nothing is left to do with it. */}
+                      <span className="flex items-center justify-end">
+                      <ArchiveButton kind="payout" id={row.id} what={name} />
+                      {/* A paid payout is locked: all that is left is archiving it. */}
                       {row.status === "draft" ? (
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -356,6 +360,7 @@ export function SalariesTab({
                           </DropdownMenuContent>
                         </DropdownMenu>
                       ) : null}
+                      </span>
                     </TableCell>
                   </TableRow>
                   {open ? (

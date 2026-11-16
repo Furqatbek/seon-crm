@@ -816,6 +816,23 @@
       "credit": "Balansga qaytarildi",
       "void": "Bekor qilingan toʻlov",
       "receipt": "Chek {receipt}"
+    },
+    "archive": {
+      "action": "Arxivlash",
+      "payment": "Arxivlash: {what}-chek",
+      "charge": "Arxivlash: {what} uchun hisoblangan summa",
+      "expense": "Arxivlash: {what} xarajati",
+      "payout": "Arxivlash: {what} maoshi",
+      "title": "Yozuv arxivlansinmi?",
+      "body": "Yozuv oʻchirilmaydi, lekin barcha roʻyxatlar, balanslar, jamlar va hisobotlardan chiqadi. Uni ilovadan qaytarib boʻlmaydi.",
+      "bodyPayment": "Toʻlov bekor qilinadi va yashiriladi: oʻquvchi bu summani yana qarz boʻladi.",
+      "bodyCharge": "Oʻquvchi bu summani endi qarz emas. Oylik toʻlovni keyin qayta hisoblash mumkin.",
+      "bodyPayout": "Maosh jami maoshlardan chiqadi. «Hisoblash» shu oy uchun yangi qoralama yaratadi.",
+      "done": "Arxivlandi",
+      "allCharges": "Hammasini arxivlash",
+      "allChargesTitle": "{month} uchun barcha hisoblangan summalar arxivlansinmi?",
+      "allChargesBody": "Shu oyning {count} ta hisoblangan summasi oʻquvchilar balansidan chiqadi. Toʻlovlarga tegilmaydi. Keyin oyni qayta hisoblash mumkin.",
+      "allChargesDone": "{count} ta summa arxivlandi"
     }
   },
   "teachers": {

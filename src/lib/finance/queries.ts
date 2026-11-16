@@ -50,6 +50,7 @@ export async function getPayments(filters: {
       "id, paid_at, receipt_no, amount, method, note, voided_at, void_reason, student:students(id, full_name), group:groups(name), received:profiles!payments_received_by_fkey(full_name)",
       { count: "exact" },
     )
+    .is("archived_at", null)
     .gte("paid_at", start)
     .lt("paid_at", end)
     .order("paid_at", { ascending: false })
@@ -137,6 +138,7 @@ export async function getMonthCharges(
       { count: "exact" },
     )
     .eq("billing_month", `${month}-01`)
+    .is("archived_at", null)
     .order("created_at", { ascending: false })
     .order("id")
     .range(from, from + PAGE_SIZE - 1);
@@ -163,6 +165,7 @@ export async function getReceipt(id: string): Promise<Receipt | null> {
         "id, paid_at, receipt_no, amount, method, note, voided_at, void_reason, student:students(full_name), group:groups(name), received:profiles!payments_received_by_fkey(full_name)",
       )
       .eq("id", id)
+      .is("archived_at", null)
       .maybeSingle(),
     supabase.from("centre_settings").select("centre_name").maybeSingle(),
   ]);
@@ -226,7 +229,8 @@ export async function getPayouts(month: string, locale: string): Promise<PayoutR
     .select(
       "id, pay_type, basis, rate, calculated, bonus, deduction, final_amount, status, paid_at, note, breakdown, teacher:teachers(id, full_name)",
     )
-    .eq("month", `${month}-01`);
+    .eq("month", `${month}-01`)
+    .is("archived_at", null);
   if (error) throw new Error(error.message);
   return data
     .map((row) => ({ ...row, breakdown: row.breakdown as PayoutLine[] }))

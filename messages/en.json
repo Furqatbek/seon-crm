@@ -816,6 +816,23 @@
       "credit": "Credit",
       "void": "Voided payment",
       "receipt": "Receipt {receipt}"
+    },
+    "archive": {
+      "action": "Archive",
+      "payment": "Archive receipt {what}",
+      "charge": "Archive the charge for {what}",
+      "expense": "Archive the expense of {what}",
+      "payout": "Archive the payout for {what}",
+      "title": "Archive this record?",
+      "body": "It is not deleted, but it leaves every list, balance, total and report. It cannot be brought back from the app.",
+      "bodyPayment": "The payment is voided and hidden: the student owes the amount again.",
+      "bodyCharge": "The student no longer owes this charge. A monthly fee can be generated again afterwards.",
+      "bodyPayout": "The payout leaves the salaries total. Calculate makes a new draft for this month.",
+      "done": "Archived",
+      "allCharges": "Archive all charges",
+      "allChargesTitle": "Archive every charge of {month}?",
+      "allChargesBody": "All {count, plural, one {# charge} other {# charges}} of this month leave the students' balances. Payments are not touched. You can generate the month again afterwards.",
+      "allChargesDone": "{count, plural, one {# charge archived} other {# charges archived}}"
     }
   },
   "teachers": {
