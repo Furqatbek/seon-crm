@@ -711,6 +711,9 @@ isOneToOne: false
               "balance": number,"full_name": string,"groups": Json,"last_payment_at": string,"oldest_unpaid_month": string,"phone": string,"student_id": string,"total": number
             }[]
                            },
+"mark_student_graduated":
+{ Args: { "p_student_id": string }; Returns: undefined
+                           },
 "mark_student_left":
 { Args: { "p_student_id": string }; Returns: undefined
                            },
@@ -843,7 +846,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "app_language": "uz"|"ru"|"en","attendance_status": "present"|"late"|"absent"|"excused","charge_type": "monthly_fee"|"adjustment","enrollment_status": "active"|"left","expense_category": "rent"|"utilities"|"marketing"|"supplies"|"other","group_status": "forming"|"active"|"finished","lead_source": "instagram"|"telegram"|"phone_call"|"walk_in"|"referral"|"website"|"other","lead_status": "new"|"contacted"|"trial"|"won"|"lost","lesson_status": "scheduled"|"held"|"cancelled","message_channel": "telegram"|"sms","message_status": "queued"|"sent"|"failed"|"skipped","message_type": "payment_due"|"payment_overdue"|"lesson_reminder"|"custom","pay_type": "fixed_monthly"|"percent_of_revenue"|"per_lesson","payment_method": "cash"|"card"|"transfer","payout_status": "draft"|"paid","student_status": "active"|"paused"|"left","user_role": "owner"|"manager"|"teacher"
+            "app_language": "uz"|"ru"|"en","attendance_status": "present"|"late"|"absent"|"excused","charge_type": "monthly_fee"|"adjustment","enrollment_status": "active"|"left","expense_category": "rent"|"utilities"|"marketing"|"supplies"|"other","group_status": "forming"|"active"|"finished","lead_source": "instagram"|"telegram"|"phone_call"|"walk_in"|"referral"|"website"|"other","lead_status": "new"|"contacted"|"trial"|"won"|"lost","lesson_status": "scheduled"|"held"|"cancelled","message_channel": "telegram"|"sms","message_status": "queued"|"sent"|"failed"|"skipped","message_type": "payment_due"|"payment_overdue"|"lesson_reminder"|"custom","pay_type": "fixed_monthly"|"percent_of_revenue"|"per_lesson","payment_method": "cash"|"card"|"transfer","payout_status": "draft"|"paid","student_status": "active"|"paused"|"left"|"graduated","user_role": "owner"|"manager"|"teacher"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -963,7 +966,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "app_language": ["uz", "ru", "en"],"attendance_status": ["present", "late", "absent", "excused"],"charge_type": ["monthly_fee", "adjustment"],"enrollment_status": ["active", "left"],"expense_category": ["rent", "utilities", "marketing", "supplies", "other"],"group_status": ["forming", "active", "finished"],"lead_source": ["instagram", "telegram", "phone_call", "walk_in", "referral", "website", "other"],"lead_status": ["new", "contacted", "trial", "won", "lost"],"lesson_status": ["scheduled", "held", "cancelled"],"message_channel": ["telegram", "sms"],"message_status": ["queued", "sent", "failed", "skipped"],"message_type": ["payment_due", "payment_overdue", "lesson_reminder", "custom"],"pay_type": ["fixed_monthly", "percent_of_revenue", "per_lesson"],"payment_method": ["cash", "card", "transfer"],"payout_status": ["draft", "paid"],"student_status": ["active", "paused", "left"],"user_role": ["owner", "manager", "teacher"]
+            "app_language": ["uz", "ru", "en"],"attendance_status": ["present", "late", "absent", "excused"],"charge_type": ["monthly_fee", "adjustment"],"enrollment_status": ["active", "left"],"expense_category": ["rent", "utilities", "marketing", "supplies", "other"],"group_status": ["forming", "active", "finished"],"lead_source": ["instagram", "telegram", "phone_call", "walk_in", "referral", "website", "other"],"lead_status": ["new", "contacted", "trial", "won", "lost"],"lesson_status": ["scheduled", "held", "cancelled"],"message_channel": ["telegram", "sms"],"message_status": ["queued", "sent", "failed", "skipped"],"message_type": ["payment_due", "payment_overdue", "lesson_reminder", "custom"],"pay_type": ["fixed_monthly", "percent_of_revenue", "per_lesson"],"payment_method": ["cash", "card", "transfer"],"payout_status": ["draft", "paid"],"student_status": ["active", "paused", "left", "graduated"],"user_role": ["owner", "manager", "teacher"]
           }
         }
 } as const

@@ -10,6 +10,7 @@ import { PhoneMatches, usePhoneMatches } from "@/components/shared/phone-matches
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Select,
   SelectContent,
@@ -76,7 +77,7 @@ function LeadForm({
         }
       : {
           full_name: "",
-          phone: "+998 ",
+          phone: "",
           subject_interest: "",
           preferred_time: "",
           assigned_to: defaultAssignee,
@@ -127,15 +128,20 @@ function LeadForm({
         </Field>
 
         <Field label={t("fields.phone")} htmlFor="lead-phone" error={message(errors.phone?.message)}>
-          <Input
-            id="lead-phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="off"
-            placeholder="+998 90 123 45 67"
-            aria-invalid={errors.phone ? true : undefined}
-            aria-describedby={matches.length > 0 ? "lead-phone-matches" : undefined}
-            {...register("phone")}
+          <Controller
+            control={control}
+            name="phone"
+            render={({ field }) => (
+              <PhoneInput
+                id="lead-phone"
+                aria-invalid={errors.phone ? true : undefined}
+                aria-describedby={matches.length > 0 ? "lead-phone-matches" : undefined}
+                ref={field.ref}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              />
+            )}
           />
           <PhoneMatches id="lead-phone-matches" matches={matches} />
         </Field>

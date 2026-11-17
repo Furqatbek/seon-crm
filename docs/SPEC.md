@@ -221,7 +221,7 @@ user_role          owner | manager
 app_language       uz | ru | en
 lead_status        new | contacted | trial | won | lost
 lead_source        instagram | telegram | phone_call | walk_in | referral | website | other
-student_status     active | paused | left
+student_status     active | paused | left | graduated
 group_status       forming | active | finished
 enrollment_status  active | left
 lesson_status      scheduled | held | cancelled
@@ -379,6 +379,7 @@ Cancelled lessons are not counted. Example: fee 600,000 soʻm, 12 lessons in Nov
 ### Leaving and transfers
 
 - Marking a student as left from a group sets `left_on`. No refund happens automatically; the manager can add a credit (negative charge, note required).
+- Mark as graduated (owner and manager, by hand) sets the student's status to Graduated and ends every active enrolment today, exactly like leaving; nothing is refunded or written off. Enrolling a student who left or graduated makes them active again.
 - A transfer is one sheet that leaves group A and enrols group B on the same date, showing the optional credit for A and the prorated charge for B together.
 
 ### Payments and balance
@@ -386,6 +387,7 @@ Cancelled lessons are not counted. Example: fee 600,000 soʻm, 12 lessons in Nov
 - A payment needs amount, method, date (default now) and group. The group is pre-selected when the student has one active group.
 - Balance = non-voided payments minus all charges. Below zero is debt, shown in red with a Debt pill. Above zero is credit and simply covers the next charges.
 - A student is a debtor when the balance is below zero after the due day of the current month. Before the due day an unpaid fee shows as Due.
+- A student whose status is Left is not chased: their debt is left out of the Debtors list, the debt totals in Finance and Reports, the debt-age report and the reminders. The balance is unchanged and still shows on the student's own page. A graduate who owes stays a debtor.
 - Each payment gets a receipt number and a print view sized for an 80 mm receipt printer and A4.
 - Only the owner can void a payment, with a reason. Voided payments drop out of every total.
 - Archiving (owner only) is how a wrong or test record is removed; nothing is deleted. An archived payment is also voided. An archived charge is no longer owed, and its monthly fee can be generated again. An archived payout leaves the salaries total, even a paid one, and Calculate makes a new draft. Archived records leave every list, balance, total and report, including Adjustments.
@@ -424,6 +426,7 @@ The owner can add a bonus or deduction with a note, then Mark paid, which locks 
 - Moving a lead to Lost requires a reason: price, schedule, chose another centre, no answer, or other with text.
 - A trial lesson stores a group and date; the group page lists that week's trial visitors.
 - Won opens Convert: it creates the student from the lead, then opens the enrol sheet. The lead becomes read-only with a link to the student.
+- Every phone field shows the country code +998 fixed in front; the person types the nine digits after it. A pasted full number loses its own +998.
 - Saving a phone number that already exists on a lead or student shows a warning with a link to the match.
 - Leads with a next contact date of today or earlier appear in a Follow up today strip.
 
@@ -446,8 +449,9 @@ Six blocks plus Settings, each a list page and a record page. After sign-in the 
 ### Students — `/students` and `/students/[id]`
 
 - List: Name, Phone, Groups (chips), Balance (red when in debt), Status, Telegram linked icon. Filters: status, group, debt only.
+- Students list subtitle under the title: how many students are studying now (status Active), have left and have graduated.
 - New student sheet: name, phone, parent name and phone, birth date, message language, notes; then an optional Enrol step.
-- Student page header: name, status pill, balance as a large number, Take payment (primary), Enrol, Send message, and a menu with Pause and Mark as left.
+- Student page header: name, status pill, balance as a large number, Take payment (primary), Enrol, Send message, and a menu with Pause, Mark as graduated and Mark as left.
 - Tabs: Overview (contacts, groups with fee and discount, Telegram link to copy or show as QR), Ledger (date, description, charge, payment, running balance), Attendance (month grid per group with attendance %), Messages (everything sent and its status).
 
 ### Groups — `/groups` and `/groups/[id]`
@@ -476,7 +480,7 @@ Six blocks plus Settings, each a list page and a record page. After sign-in the 
 - Payments tab: date, receipt no., student, group, method, amount, received by; filters for month and method; Take payment opens a sheet with student search.
 - Debtors tab: student, groups, debt, oldest unpaid month, last payment date, a Remind button per row and Remind all.
 - Charges tab: month picker, billed vs collected, Generate charges with a preview list before confirming (owner).
-- Expenses tab (owner): list and Add expense sheet.
+- Expenses tab (owner): list and Add expense sheet. The owner corrects a wrong expense with Edit on its row (same sheet).
 - Salaries tab (owner): month picker, Calculate, one row per teacher with an expandable breakdown, bonus and deduction fields, Mark paid.
 - Adjustments tab (owner): every credit and voided payment with who, when and why.
 - Owner: an Archive button on every row of Payments, Charges, Expenses and Salaries, with a confirmation that says what changes; Charges also has Archive all charges for the chosen month.

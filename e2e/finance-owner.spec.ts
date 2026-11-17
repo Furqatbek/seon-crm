@@ -60,6 +60,16 @@ test("the owner adds an expense, calculates salaries, adds a bonus and marks a p
     await page.waitForLoadState("networkidle");
     await page.screenshot({ path: testInfo.outputPath("expenses.png") });
 
+    // A wrong amount is corrected with Edit on the row.
+    await expense.getByRole("button", { name: /^Edit expense/ }).click();
+    await expect(sheet(page).getByRole("heading", { name: "Edit expense" })).toBeVisible();
+    await expect(sheet(page).getByLabel("Amount, soʻm")).toHaveValue("185000");
+    await sheet(page).getByLabel("Amount, soʻm").fill("158000");
+    await sheet(page).getByRole("button", { name: "Save" }).click();
+    await expect(sheet(page)).toHaveCount(0);
+    await expect(expense).toContainText(formatMoney(158_000, "en"));
+    await expect.poll(() => kpi(page, "expenses")).toBeGreaterThanOrEqual(expensesBefore + 158_000);
+
     // The category filter.
     await choose(page, page.getByRole("combobox", { name: "Category" }), "Rent");
     await expect(page).toHaveURL(/category=rent/);

@@ -287,6 +287,29 @@ export async function addExpense(input: unknown): Promise<FinanceResult> {
   return { ok: true };
 }
 
+/** Correct an expense entered by mistake. Owner only. */
+export async function updateExpense(id: unknown, input: unknown): Promise<FinanceResult> {
+  const expenseId = z.uuid().safeParse(id);
+  if (!expenseId.success) return { ok: false, error: "notFound" };
+  const parsed = expenseSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  if (parsed.data.spent_on > tashkentDate(new Date())) return { ok: false, error: "dateInFuture" };
+
+  const { data, error } = await ctx.supabase
+    .from("expenses")
+    .update(parsed.data)
+    .eq("id", expenseId.data)
+    .is("archived_at", null)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+
+  refresh();
+  return { ok: true };
+}
+
 /** Calculate: creates or refreshes the month's draft payouts. Owner only. */
 export async function calculatePayouts(monthInput: unknown): Promise<FinanceResult<{ count: number }>> {
   const month = monthSchema.safeParse(monthInput);

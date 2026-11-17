@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, ReceiptText } from "lucide-react";
+import { Pencil, Plus, ReceiptText } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -36,7 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { addExpense } from "@/lib/finance/actions";
+import { addExpense, updateExpense } from "@/lib/finance/actions";
 import type { ExpenseRow } from "@/lib/finance/queries";
 import { formatDay, formatMoney } from "@/lib/format";
 import { useUrlState } from "@/lib/hooks/use-url-state";
@@ -53,7 +53,16 @@ import { ArchiveButton } from "./archive-button";
 
 const ALL = "all";
 
-function ExpenseForm({ today, onClose }: { today: string; onClose: () => void }) {
+function ExpenseForm({
+  today,
+  expense,
+  onClose,
+}: {
+  today: string;
+  /** Set when the owner corrects an expense that is already saved. */
+  expense: ExpenseRow | null;
+  onClose: () => void;
+}) {
   const t = useTranslations("finance");
   const tCommon = useTranslations("common");
   const [pending, startTransition] = useTransition();
@@ -66,30 +75,51 @@ function ExpenseForm({ today, onClose }: { today: string; onClose: () => void })
     formState: { errors },
   } = useForm<ExpenseInput, unknown, ExpenseValues>({
     resolver: zodResolver(expenseSchema),
-    defaultValues: { category: undefined, amount: "", spent_on: today, note: "" },
+    defaultValues: expense
+      ? {
+          category: expense.category,
+          amount: String(expense.amount),
+          spent_on: expense.spent_on,
+          note: expense.note ?? "",
+        }
+      : { category: undefined, amount: "", spent_on: today, note: "" },
   });
-  const message = (key: string | undefined) => (key ? t(`errors.${key as FinanceErrorKey}`) : null);
+  const message = (key: string | undefined) =>
+    key ? t(`errors.${key as FinanceErrorKey}`) : null;
 
   const onSubmit = handleSubmit(() => {
     setFormError(null);
     startTransition(async () => {
-      const result = await addExpense(getValues());
+      const result = expense
+        ? await updateExpense(expense.id, getValues())
+        : await addExpense(getValues());
       if (!result.ok) return setFormError(result.error);
-      toast(t("expenses.done"));
+      toast(t(expense ? "expenses.updated" : "expenses.done"));
       onClose();
     });
   });
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
+    <form
+      onSubmit={onSubmit}
+      noValidate
+      className="flex min-h-0 flex-1 flex-col"
+    >
       <SheetBody>
-        <Field label={t("fields.category")} htmlFor="expense-category" error={message(errors.category?.message)}>
+        <Field
+          label={t("fields.category")}
+          htmlFor="expense-category"
+          error={message(errors.category?.message)}
+        >
           <Controller
             control={control}
             name="category"
             render={({ field }) => (
               <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                <SelectTrigger id="expense-category" aria-invalid={errors.category ? true : undefined}>
+                <SelectTrigger
+                  id="expense-category"
+                  aria-invalid={errors.category ? true : undefined}
+                >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -103,7 +133,11 @@ function ExpenseForm({ today, onClose }: { today: string; onClose: () => void })
             )}
           />
         </Field>
-        <Field label={t("expenses.amount")} htmlFor="expense-amount" error={message(errors.amount?.message)}>
+        <Field
+          label={t("expenses.amount")}
+          htmlFor="expense-amount"
+          error={message(errors.amount?.message)}
+        >
           <Input
             id="expense-amount"
             inputMode="numeric"
@@ -113,7 +147,11 @@ function ExpenseForm({ today, onClose }: { today: string; onClose: () => void })
             {...register("amount")}
           />
         </Field>
-        <Field label={t("fields.date")} htmlFor="expense-date" error={message(errors.spent_on?.message)}>
+        <Field
+          label={t("fields.date")}
+          htmlFor="expense-date"
+          error={message(errors.spent_on?.message)}
+        >
           <Input
             id="expense-date"
             type="date"
@@ -122,7 +160,11 @@ function ExpenseForm({ today, onClose }: { today: string; onClose: () => void })
             {...register("spent_on")}
           />
         </Field>
-        <Field label={t("fields.note")} htmlFor="expense-note" error={message(errors.note?.message)}>
+        <Field
+          label={t("fields.note")}
+          htmlFor="expense-note"
+          error={message(errors.note?.message)}
+        >
           <Input id="expense-note" autoComplete="off" {...register("note")} />
         </Field>
         {formError ? (
@@ -136,7 +178,7 @@ function ExpenseForm({ today, onClose }: { today: string; onClose: () => void })
           {tCommon("cancel")}
         </Button>
         <Button type="submit" variant="primary" disabled={pending}>
-          {t("expenses.save")}
+          {expense ? tCommon("save") : t("expenses.save")}
         </Button>
       </SheetFooter>
     </form>
@@ -160,17 +202,27 @@ export function ExpensesTab({
   const t = useTranslations("finance");
   const locale = useLocale();
   const { setParams } = useUrlState();
-  const [adding, setAdding] = useState(false);
+  // "new" adds an expense; a row corrects that one.
+  const [form, setForm] = useState<"new" | ExpenseRow | null>(null);
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Select
           value={category ?? ALL}
-          onValueChange={(value) => setParams({ category: value === ALL ? null : value, page: null })}
+          onValueChange={(value) =>
+            setParams({ category: value === ALL ? null : value, page: null })
+          }
         >
-          <SelectTrigger aria-label={t("fields.category")} className="w-full sm:w-48">
-            <SelectValue>{category ? t(`expenses.category.${category}`) : t("filters.allCategories")}</SelectValue>
+          <SelectTrigger
+            aria-label={t("fields.category")}
+            className="w-full sm:w-48"
+          >
+            <SelectValue>
+              {category
+                ? t(`expenses.category.${category}`)
+                : t("filters.allCategories")}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>{t("filters.allCategories")}</SelectItem>
@@ -181,7 +233,7 @@ export function ExpensesTab({
             ))}
           </SelectContent>
         </Select>
-        <Button onClick={() => setAdding(true)} className="w-full sm:w-auto">
+        <Button onClick={() => setForm("new")} className="w-full sm:w-auto">
           <Plus aria-hidden />
           {t("expenses.add")}
         </Button>
@@ -207,13 +259,33 @@ export function ExpensesTab({
                   <TableCell className="whitespace-nowrap numeric">
                     {formatDay(row.spent_on, locale, { year: true })}
                   </TableCell>
-                  <TableCell className="whitespace-nowrap">{t(`expenses.category.${row.category}`)}</TableCell>
-                  <TableCell className="min-w-48 text-text-secondary">{row.note ?? "—"}</TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    {t(`expenses.category.${row.category}`)}
+                  </TableCell>
+                  <TableCell className="min-w-48 text-text-secondary">
+                    {row.note ?? "—"}
+                  </TableCell>
                   <TableCell numeric>
                     <MoneyText amount={row.amount} />
                   </TableCell>
                   <TableCell className="px-1">
-                    <ArchiveButton kind="expense" id={row.id} what={formatMoney(row.amount, locale)} />
+                    <div className="flex items-center justify-end">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        aria-label={t("expenses.edit", {
+                          what: formatMoney(row.amount, locale),
+                        })}
+                        onClick={() => setForm(row)}
+                      >
+                        <Pencil aria-hidden />
+                      </Button>
+                      <ArchiveButton
+                        kind="expense"
+                        id={row.id}
+                        what={formatMoney(row.amount, locale)}
+                      />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -222,17 +294,34 @@ export function ExpensesTab({
           <Pagination
             page={page}
             total={total}
-            onPageChange={(next) => setParams({ page: next <= 1 ? null : String(next) })}
+            onPageChange={(next) =>
+              setParams({ page: next <= 1 ? null : String(next) })
+            }
           />
         </>
       )}
 
-      <Sheet open={adding} onOpenChange={(next) => !next && setAdding(false)}>
+      <Sheet
+        open={form !== null}
+        onOpenChange={(next) => !next && setForm(null)}
+      >
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>{t("expenses.title")}</SheetTitle>
+            <SheetTitle>
+              {t(
+                form && form !== "new"
+                  ? "expenses.editTitle"
+                  : "expenses.title",
+              )}
+            </SheetTitle>
           </SheetHeader>
-          {adding ? <ExpenseForm today={today} onClose={() => setAdding(false)} /> : null}
+          {form ? (
+            <ExpenseForm
+              today={today}
+              expense={form === "new" ? null : form}
+              onClose={() => setForm(null)}
+            />
+          ) : null}
         </SheetContent>
       </Sheet>
     </div>

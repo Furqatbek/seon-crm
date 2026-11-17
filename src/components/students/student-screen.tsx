@@ -5,6 +5,7 @@ import {
   BadgeMinus,
   ChevronLeft,
   Ellipsis,
+  GraduationCap,
   LogOut,
   MessageSquare,
   Pause,
@@ -43,7 +44,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import type { UserRole } from "@/lib/auth";
 import type { BalanceState } from "@/lib/domain/ledger";
 import { useUrlState } from "@/lib/hooks/use-url-state";
-import { archiveStudent, markStudentLeft, setStudentStatus } from "@/lib/students/actions";
+import { archiveStudent, markStudentGraduated, markStudentLeft, setStudentStatus } from "@/lib/students/actions";
 import type { OpenGroup } from "@/lib/groups/queries";
 import type { StudentDetail } from "@/lib/students/queries";
 import { STUDENT_TABS, type StudentErrorKey, type StudentTab } from "@/lib/validation/students";
@@ -53,7 +54,7 @@ import { SendMessageSheet } from "./send-message-sheet";
 import { StudentFormSheet } from "./student-form-sheet";
 import { STUDENT_TONE } from "./student-meta";
 
-type Confirm = "left" | "archive";
+type Confirm = "left" | "graduated" | "archive";
 
 /**
  * The student page frame: header with status and balance, actions, and the
@@ -168,11 +169,17 @@ export function StudentScreen({
                     {t("actions.resume")}
                   </DropdownMenuItem>
                 )}
-                {student.status === "left" ? null : (
-                  <DropdownMenuItem onSelect={() => setConfirm("left")}>
-                    <LogOut aria-hidden />
-                    {t("actions.markLeft")}
-                  </DropdownMenuItem>
+                {student.status === "left" || student.status === "graduated" ? null : (
+                  <>
+                    <DropdownMenuItem onSelect={() => setConfirm("graduated")}>
+                      <GraduationCap aria-hidden />
+                      {t("actions.markGraduated")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => setConfirm("left")}>
+                      <LogOut aria-hidden />
+                      {t("actions.markLeft")}
+                    </DropdownMenuItem>
+                  </>
                 )}
                 {role === "owner" ? (
                   <>
@@ -256,24 +263,26 @@ export function StudentScreen({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {t(confirm === "archive" ? "archive.title" : "left.title", { name: student.full_name })}
+              {t(`${confirm ?? "left"}.title`, { name: student.full_name })}
             </DialogTitle>
-            <DialogDescription>{t(confirm === "archive" ? "archive.body" : "left.body")}</DialogDescription>
+            <DialogDescription>{t(`${confirm ?? "left"}.body`)}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="secondary" onClick={() => setConfirm(null)}>
               {tCommon("cancel")}
             </Button>
             <Button
-              variant="destructive-fill"
+              variant={confirm === "graduated" ? "primary" : "destructive-fill"}
               disabled={pending}
               onClick={() =>
                 confirm === "archive"
                   ? run(() => archiveStudent(student.id), t("done.archived"), () => router.push("/students"))
-                  : run(() => markStudentLeft(student.id), t("done.left"))
+                  : confirm === "graduated"
+                    ? run(() => markStudentGraduated(student.id), t("done.graduated"))
+                    : run(() => markStudentLeft(student.id), t("done.left"))
               }
             >
-              {t(confirm === "archive" ? "actions.archive" : "actions.markLeft")}
+              {t(confirm === "archive" ? "actions.archive" : confirm === "graduated" ? "actions.markGraduated" : "actions.markLeft")}
             </Button>
           </DialogFooter>
         </DialogContent>

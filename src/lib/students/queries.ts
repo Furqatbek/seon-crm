@@ -50,6 +50,25 @@ export async function getGroupOptions(): Promise<GroupOption[]> {
   return data;
 }
 
+export type StudentCounts = { studying: number; left: number; graduated: number };
+
+/** How many students are studying now, have left and have graduated. */
+export async function getStudentCounts(): Promise<StudentCounts> {
+  const supabase = await db();
+  const count = async (status: Tables<"students">["status"]) => {
+    const { count, error } = await supabase
+      .from("students")
+      .select("id", { count: "exact", head: true })
+      .is("archived_at", null)
+      .eq("status", status);
+    // 22P02: the database does not know the status yet (a deploy ahead of its migration).
+    if (error && error.code !== "22P02") throw new Error(error.message);
+    return count ?? 0;
+  };
+  const [studying, left, graduated] = await Promise.all([count("active"), count("left"), count("graduated")]);
+  return { studying, left, graduated };
+}
+
 export async function getStudents(
   search: StudentsSearch,
 ): Promise<{ rows: StudentRow[]; total: number }> {

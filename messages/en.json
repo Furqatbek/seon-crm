@@ -259,7 +259,8 @@
     "status": {
       "active": "Active",
       "paused": "Paused",
-      "left": "Left"
+      "left": "Left",
+      "graduated": "Graduated"
     },
     "balance": {
       "debt": "Debt",
@@ -313,13 +314,15 @@
       "markLeft": "Mark as left",
       "archive": "Archive",
       "more": "More actions",
-      "addCredit": "Add credit"
+      "addCredit": "Add credit",
+      "markGraduated": "Mark as graduated"
     },
     "done": {
       "paused": "Student paused",
       "resumed": "Student is active again",
       "left": "Student marked as left",
-      "archived": "Student archived"
+      "archived": "Student archived",
+      "graduated": "Student marked as graduated"
     },
     "left": {
       "title": "Mark {name} as left?",
@@ -418,7 +421,12 @@
       "notFound": "This student no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."
-    }
+    },
+    "graduated": {
+      "title": "Mark {name} as graduated?",
+      "body": "The student finishes every group today and is no longer billed. Anything still owed stays on their balance."
+    },
+    "counts": "Studying now: {studying} · Left: {left} · Graduated: {graduated}"
   },
   "groups": {
     "newGroup": "New group",
@@ -784,7 +792,10 @@
         "marketing": "Marketing",
         "supplies": "Supplies",
         "other": "Other"
-      }
+      },
+      "edit": "Edit expense {what}",
+      "editTitle": "Edit expense",
+      "updated": "Expense changed"
     },
     "salaries": {
       "calculate": "Calculate",

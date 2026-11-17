@@ -11,6 +11,7 @@ import { PhoneMatches, usePhoneMatches } from "@/components/shared/phone-matches
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Select,
   SelectContent,
@@ -77,7 +78,7 @@ function StudentForm({
     resolver: zodResolver(studentFormSchema),
     defaultValues: {
       full_name: student?.full_name ?? lead?.full_name ?? "",
-      phone: formatPhone(student?.phone ?? lead?.phone ?? "") || "+998 ",
+      phone: formatPhone(student?.phone ?? lead?.phone ?? "") ,
       parent_name: student?.parent_name ?? "",
       parent_phone: student?.parent_phone ? formatPhone(student.parent_phone) : "",
       birth_date: student?.birth_date ?? "",
@@ -128,15 +129,20 @@ function StudentForm({
           />
         </Field>
         <Field label={t("fields.phone")} htmlFor="student-phone" error={message(errors.phone?.message)}>
-          <Input
-            id="student-phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="off"
-            placeholder="+998 90 123 45 67"
-            aria-invalid={errors.phone ? true : undefined}
-            aria-describedby={phoneMatches.length > 0 ? "student-phone-matches" : undefined}
-            {...register("phone")}
+          <Controller
+            control={control}
+            name="phone"
+            render={({ field }) => (
+              <PhoneInput
+                id="student-phone"
+                aria-invalid={errors.phone ? true : undefined}
+                aria-describedby={phoneMatches.length > 0 ? "student-phone-matches" : undefined}
+                ref={field.ref}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              />
+            )}
           />
           <PhoneMatches id="student-phone-matches" matches={phoneMatches} />
         </Field>
@@ -154,14 +160,19 @@ function StudentForm({
             htmlFor="student-parent-phone"
             error={message(errors.parent_phone?.message)}
           >
-            <Input
-              id="student-parent-phone"
-              type="tel"
-              inputMode="tel"
-              autoComplete="off"
-              placeholder="+998 90 123 45 67"
-              aria-invalid={errors.parent_phone ? true : undefined}
-              {...register("parent_phone")}
+            <Controller
+              control={control}
+              name="parent_phone"
+              render={({ field }) => (
+                <PhoneInput
+                  id="student-parent-phone"
+                  aria-invalid={errors.parent_phone ? true : undefined}
+                  ref={field.ref}
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                />
+              )}
             />
           </Field>
         </div>

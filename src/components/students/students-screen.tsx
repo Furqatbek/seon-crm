@@ -34,7 +34,7 @@ import { useRouter } from "@/i18n/navigation";
 import { balanceState } from "@/lib/domain/ledger";
 import { formatPhone } from "@/lib/format";
 import { useUrlState } from "@/lib/hooks/use-url-state";
-import type { GroupOption, StudentRow } from "@/lib/students/queries";
+import type { GroupOption, StudentCounts, StudentRow } from "@/lib/students/queries";
 import { STUDENT_STATUSES, type StudentsSearch } from "@/lib/validation/students";
 
 import { BalanceText } from "./balance-text";
@@ -51,6 +51,7 @@ export function StudentsScreen({
   search,
   rows,
   total,
+  counts,
   groups,
   today,
   dueDay,
@@ -58,6 +59,7 @@ export function StudentsScreen({
   search: StudentsSearch;
   rows: StudentRow[];
   total: number;
+  counts: StudentCounts;
   groups: GroupOption[];
   /** "YYYY-MM-DD" in Tashkent. */
   today: string;
@@ -165,6 +167,7 @@ export function StudentsScreen({
     <>
       <PageHeader
         title={tNav("students")}
+        subtitle={<span data-student-counts>{t("counts", counts)}</span>}
         action={
           <Button variant="primary" onClick={() => setForm({ kind: "new" })}>
             <Plus aria-hidden />

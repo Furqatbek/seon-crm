@@ -259,7 +259,8 @@
     "status": {
       "active": "Faol",
       "paused": "Toʻxtatilgan",
-      "left": "Ketgan"
+      "left": "Ketgan",
+      "graduated": "Bitirgan"
     },
     "balance": {
       "debt": "Qarz",
@@ -313,13 +314,15 @@
       "markLeft": "Ketdi deb belgilash",
       "archive": "Arxivlash",
       "more": "Boshqa amallar",
-      "addCredit": "Qaytarish qoʻshish"
+      "addCredit": "Qaytarish qoʻshish",
+      "markGraduated": "Bitirgan deb belgilash"
     },
     "done": {
       "paused": "Oʻquvchi toʻxtatildi",
       "resumed": "Oʻquvchi yana faol",
       "left": "Oʻquvchi ketdi deb belgilandi",
-      "archived": "Oʻquvchi arxivlandi"
+      "archived": "Oʻquvchi arxivlandi",
+      "graduated": "Oʻquvchi bitirgan deb belgilandi"
     },
     "left": {
       "title": "{name} ketdi deb belgilansinmi?",
@@ -418,7 +421,12 @@
       "notFound": "Bu oʻquvchi endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
-    }
+    },
+    "graduated": {
+      "title": "{name} bitirgan deb belgilansinmi?",
+      "body": "Oʻquvchi bugun barcha guruhlarni tugatadi va unga boshqa toʻlov hisoblanmaydi. Qarzi boʻlsa, balansida qoladi."
+    },
+    "counts": "Hozir oʻqiyapti: {studying} · Ketgan: {left} · Bitirgan: {graduated}"
   },
   "groups": {
     "newGroup": "Yangi guruh",
@@ -784,7 +792,10 @@
         "marketing": "Marketing",
         "supplies": "Jihozlar",
         "other": "Boshqa"
-      }
+      },
+      "edit": "{what} xarajatini tahrirlash",
+      "editTitle": "Xarajatni tahrirlash",
+      "updated": "Xarajat oʻzgartirildi"
     },
     "salaries": {
       "calculate": "Hisoblash",

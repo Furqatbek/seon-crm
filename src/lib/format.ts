@@ -89,6 +89,25 @@ export function formatPhone(phone: string): string {
   return `+998 ${operator} ${a} ${b} ${c}`;
 }
 
+export const PHONE_COUNTRY_CODE = "+998";
+
+/**
+ * The digits after +998 in whatever was typed or pasted, nine at most.
+ * "+998 90 123 45 67", "998901234567" and "90 123 45 67" all give "901234567".
+ */
+export function nationalPhoneDigits(input: string): string {
+  const trimmed = input.trim();
+  let digits = trimmed.replace(/\D/g, "");
+  if (trimmed.startsWith("+")) digits = digits.startsWith("998") ? digits.slice(3) : digits;
+  else if (digits.length === 12 && digits.startsWith("998")) digits = digits.slice(3);
+  return digits.slice(0, 9);
+}
+
+/** "901234567" → "90 123 45 67"; a number still being typed is grouped as far as it goes. */
+export function formatNationalPhone(digits: string): string {
+  return [digits.slice(0, 2), digits.slice(2, 5), digits.slice(5, 7), digits.slice(7, 9)].filter(Boolean).join(" ");
+}
+
 // Dates are written out by hand, in Tashkent time (UTC+5, no daylight saving).
 // Intl month names for Uzbek are missing in some browsers, where a date would
 // read "M11 10".
