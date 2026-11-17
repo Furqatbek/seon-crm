@@ -71,14 +71,14 @@ export function isPerfectMonth(
 }
 
 /**
- * Fee paid on time: the month's fee was charged by the end of the due day,
- * and the payments made by then cover everything charged up to that month.
+ * Fee paid on time: the student has a fee for that month, and the payments
+ * made by the end of the due day cover everything charged up to that month.
  * A prorated first month counts like any other fee.
  */
 export function isPaidOnTime(input: {
-  /** Monthly fees of that month charged by the end of the due day, whole soʻm. */
+  /** Monthly fees of that month, whole soʻm. */
   monthFees: readonly number[];
-  /** Everything charged up to and including that month by the end of the due day (credits are negative). */
+  /** Everything charged up to and including that month (credits are negative). */
   chargedByDueDay: number;
   /** Payments that are not voided, made by the end of the due day. */
   paidByDueDay: number;

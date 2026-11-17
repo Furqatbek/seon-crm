@@ -34,3 +34,20 @@ export async function refreshSession(
   const { data, error } = await supabase.auth.getClaims();
   return !error && Boolean(data?.claims?.sub);
 }
+
+/** Whether a /tv/<token> link is the current one. Asked without a session: the token is the key. */
+export async function tvTokenOk(token: string | undefined): Promise<boolean> {
+  const env = getSupabaseEnv();
+  if (!env || !token || !/^[0-9a-f]{32,64}$/.test(token)) return false;
+  try {
+    const response = await fetch(`${env.url}/rest/v1/rpc/tv_token_ok`, {
+      method: "POST",
+      headers: { apikey: env.publishableKey, "content-type": "application/json" },
+      body: JSON.stringify({ p_token: token }),
+      cache: "no-store",
+    });
+    return response.ok && (await response.json()) === true;
+  } catch {
+    return false;
+  }
+}

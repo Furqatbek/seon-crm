@@ -102,6 +102,8 @@ export type StudentPoints = {
   balance: number;
   earnedThisMonth: number;
   earnedAllTime: number;
+  /** Left out of the TV and the bot's top lists; staff still see the rank. */
+  hidden: boolean;
   /** The latest rows, newest first. */
   rows: StudentPointsRow[];
 };
@@ -111,8 +113,9 @@ export const STUDENT_POINTS_ROWS = 200;
 
 export async function getStudentPoints(studentId: string): Promise<StudentPoints> {
   const supabase = await db();
-  const [totals, ledger] = await Promise.all([
+  const [totals, student, ledger] = await Promise.all([
     supabase.from("student_points").select("balance, earned_this_month, earned_all_time").eq("student_id", studentId).maybeSingle(),
+    supabase.from("students").select("leaderboard_hidden").eq("id", studentId).maybeSingle(),
     supabase
       .from("points_ledger")
       .select(
@@ -129,6 +132,7 @@ export async function getStudentPoints(studentId: string): Promise<StudentPoints
     balance: totals.data?.balance ?? 0,
     earnedThisMonth: totals.data?.earned_this_month ?? 0,
     earnedAllTime: totals.data?.earned_all_time ?? 0,
+    hidden: student.data?.leaderboard_hidden ?? false,
     rows: ledger.data.map((row) => ({
       id: row.id,
       at: row.created_at,
@@ -141,4 +145,69 @@ export async function getStudentPoints(studentId: string): Promise<StudentPoints
       by: row.author?.full_name ?? null,
     })),
   };
+}
+
+export type BoardRow = { studentId: string; name: string; points: number; rank: number; hidden: boolean };
+
+/**
+ * A leaderboard: one group or the whole centre, a Tashkent month ("YYYY-MM",
+ * the current one when left out) or all-time. Null when the caller may not
+ * see that board.
+ */
+export async function getLeaderboard(board: {
+  groupId?: string;
+  period: "month" | "all";
+  month?: string;
+}): Promise<BoardRow[] | null> {
+  const supabase = await db();
+  const { data, error } = await supabase.rpc("leaderboard", {
+    p_scope: board.groupId ? "group" : "centre",
+    p_group_id: board.groupId,
+    p_period: board.period,
+    p_month: board.period === "month" && board.month ? `${board.month}-01` : undefined,
+  });
+  if (error) {
+    // 42501: not theirs. PGRST202: the function is missing while a deploy is ahead of its migration.
+    if (error.code === "42501" || error.code === "PGRST202") return null;
+    throw new Error(error.message);
+  }
+  return data.map((row) => ({
+    studentId: row.student_id,
+    name: row.display_name,
+    points: row.points,
+    rank: row.rank,
+    hidden: row.hidden,
+  }));
+}
+
+export type TvSettings = { token: string; language: "uz" | "ru" | "en" };
+
+/** The TV link's secret and language. Owner only: the database refuses anyone else. */
+export async function getTvSettings(): Promise<TvSettings> {
+  const supabase = await db();
+  const [token, settings] = await Promise.all([
+    supabase.rpc("points_tv_token"),
+    supabase.from("points_settings").select("tv_language").single(),
+  ]);
+  if (token.error) throw new Error(token.error.message);
+  if (settings.error) throw new Error(settings.error.message);
+  return { token: token.data, language: settings.data.tv_language };
+}
+
+export type TvRow = { name: string; points: number; rank: number };
+export type TvBoard = {
+  centre_name: string;
+  language: "uz" | "ru" | "en";
+  /** The month on show, "YYYY-MM". */
+  month: string;
+  centre: TvRow[];
+  groups: Array<{ name: string; rows: TvRow[] }>;
+};
+
+/** What the TV shows, or null when the token is wrong. No login: the token is the key. */
+export async function getTvBoard(token: string): Promise<TvBoard | null> {
+  const supabase = await db();
+  const { data, error } = await supabase.rpc("tv_board", { p_token: token });
+  if (error) return null;
+  return (data as TvBoard | null) ?? null;
 }

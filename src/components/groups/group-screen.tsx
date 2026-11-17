@@ -178,7 +178,7 @@ export function GroupScreen({
         onValueChange={(value) =>
           startTabChange(() => {
             showTab(value as GroupTab);
-            setParams({ tab: value === "students" ? null : value, month: null, lesson: null });
+            setParams({ tab: value === "students" ? null : value, month: null, lesson: null, period: null });
           })
         }
         className="gap-6"

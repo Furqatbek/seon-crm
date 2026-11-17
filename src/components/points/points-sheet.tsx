@@ -1,7 +1,9 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMemo, useState, useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -12,7 +14,13 @@ import { Sheet, SheetBody, SheetContent, SheetDescription, SheetHeader, SheetTit
 import { UNDO_SECONDS } from "@/lib/domain/points";
 import { awardPoints, undoPoints } from "@/lib/points/actions";
 import type { PointPreset } from "@/lib/points/queries";
-import type { PointsErrorKey, PresetKind } from "@/lib/validation/points";
+import {
+  customPointsSchema,
+  type CustomPointsInput,
+  type CustomPointsValues,
+  type PointsErrorKey,
+  type PresetKind,
+} from "@/lib/validation/points";
 
 import { presetLabel } from "./preset-label";
 
@@ -69,8 +77,17 @@ function Choices({
   const locale = useLocale();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<{ key: PointsErrorKey; detail?: number } | null>(null);
-  const [amount, setAmount] = useState("1");
-  const [reason, setReason] = useState("");
+  const schema = useMemo(() => customPointsSchema(maxPerAction), [maxPerAction]);
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CustomPointsInput, unknown, CustomPointsValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { amount: "1", reason: "" },
+  });
+  const message = (key: string | undefined) => (key ? t(`errors.${key as PointsErrorKey}`) : null);
   const award = target.kind === "award";
   const sign = award ? 1 : -1;
   const name = target.student.name;
@@ -103,8 +120,6 @@ function Choices({
 
   // Up to five quick choices; a larger limit gets a number field.
   const quick = maxPerAction <= 5;
-  const custom = Number(amount);
-  const customOk = Number.isInteger(custom) && custom >= 1 && custom <= maxPerAction && reason.trim() !== "";
 
   return (
     <SheetBody className="gap-4 pb-6">
@@ -132,33 +147,30 @@ function Choices({
       <form
         noValidate
         className="flex flex-col gap-3 border-t border-border pt-4"
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (customOk) send({ points: custom, reason: reason.trim() });
-        }}
+        onSubmit={handleSubmit((values) => send({ points: values.amount, reason: values.reason }))}
       >
         <h3 className="text-headline text-text">{t("custom")}</h3>
-        <Field label={t("howMany")} htmlFor="points-amount">
+        <Field label={t("howMany")} htmlFor="points-amount" error={message(errors.amount?.message)}>
           {quick ? (
-            <SegmentedControl
-              aria-label={t("howMany")}
-              fullWidth
-              value={amount}
-              onValueChange={setAmount}
-              options={Array.from({ length: maxPerAction }, (_, index) => ({ value: `${index + 1}`, label: `${index + 1}` }))}
+            <Controller
+              control={control}
+              name="amount"
+              render={({ field }) => (
+                <SegmentedControl
+                  aria-label={t("howMany")}
+                  fullWidth
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  options={Array.from({ length: maxPerAction }, (_, index) => ({ value: `${index + 1}`, label: `${index + 1}` }))}
+                />
+              )}
             />
           ) : (
-            <Input
-              id="points-amount"
-              inputMode="numeric"
-              className="numeric"
-              value={amount}
-              onChange={(event) => setAmount(event.target.value.replace(/\D/g, ""))}
-            />
+            <Input id="points-amount" inputMode="numeric" className="numeric" aria-invalid={errors.amount ? true : undefined} {...register("amount")} />
           )}
         </Field>
-        <Field label={t("reason")} htmlFor="points-reason">
-          <Input id="points-reason" value={reason} maxLength={200} autoComplete="off" onChange={(event) => setReason(event.target.value)} />
+        <Field label={t("reason")} htmlFor="points-reason" error={message(errors.reason?.message)}>
+          <Input id="points-reason" maxLength={200} autoComplete="off" aria-invalid={errors.reason ? true : undefined} {...register("reason")} />
         </Field>
         {error ? (
           <p role="alert" className="text-footnote text-danger">
@@ -167,7 +179,7 @@ function Choices({
               : t(`errors.${error.key}`)}
           </p>
         ) : null}
-        <Button type="submit" variant={award ? "primary" : "destructive-fill"} disabled={pending || !customOk}>
+        <Button type="submit" variant={award ? "primary" : "destructive-fill"} disabled={pending}>
           {t(award ? "give" : "take")}
         </Button>
       </form>

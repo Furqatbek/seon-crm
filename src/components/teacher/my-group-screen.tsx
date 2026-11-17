@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { CoinsText } from "@/components/coins/coins-text";
+import { BoardPeriodControl, Leaderboard } from "@/components/points/leaderboard";
 import { PointsSheet, type PointsTarget } from "@/components/points/points-sheet";
 import { PointsText } from "@/components/points/points-text";
 import { LESSON_TONE, hhmm, type Weekday } from "@/components/groups/group-meta";
@@ -31,7 +32,7 @@ import type { CoinRow } from "@/lib/coins/queries";
 import { ATTENDANCE_STATUSES, type AttendanceStatus } from "@/lib/domain/attendance";
 import { roomLabel } from "@/lib/domain/rooms";
 import { formatDay } from "@/lib/format";
-import type { PointPreset } from "@/lib/points/queries";
+import type { BoardRow, PointPreset } from "@/lib/points/queries";
 import { saveMyAttendance } from "@/lib/teacher/actions";
 import type { MyGroup, MyLesson, MyLessonSheet } from "@/lib/teacher/queries";
 import { TEACHER_COIN_CHOICES, type CoinsErrorKey } from "@/lib/validation/coins";
@@ -100,7 +101,8 @@ function AttendanceForm({
               <li key={student.id} className="flex flex-col gap-2 py-3" data-lesson-student={student.id}>
                 <span className="flex items-center gap-2">
                   <span className="min-w-0 flex-1 text-body text-text">{student.full_name}</span>
-                  {points ? (
+                  {/* Only students still in the group have a total, and only they can be given points. */}
+                  {points && student.id in points.month ? (
                     <>
                       <PointsText
                         value={points.month[student.id] ?? 0}
@@ -230,9 +232,12 @@ export function MyGroupScreen({
   students,
   lesson,
   points,
+  board,
   today,
 }: {
   group: MyGroup;
+  /** The group's points leaderboard; null when it cannot be read. */
+  board: { rows: BoardRow[]; period: "month" | "all" } | null;
   lessons: MyLesson[];
   students: CoinRow[];
   /** Null when the points programme is off, or no lesson is open. */
@@ -244,6 +249,7 @@ export function MyGroupScreen({
   const t = useTranslations("myGroups");
   const tGroups = useTranslations("groups");
   const tCoins = useTranslations("coins");
+  const tPoints = useTranslations("points");
   const tDays = useTranslations("common.weekdays");
   const locale = useLocale();
   const router = useRouter();
@@ -307,6 +313,18 @@ export function MyGroupScreen({
           </ul>
         )}
       </section>
+
+      {board ? (
+        <section aria-labelledby="my-board" className="mb-8">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+            <h2 id="my-board" className="text-headline text-text">
+              {tPoints("board.title")}
+            </h2>
+            <BoardPeriodControl period={board.period} month={today.slice(0, 7)} currentMonth={today.slice(0, 7)} months={false} />
+          </div>
+          <Leaderboard rows={board.rows} staff={false} />
+        </section>
+      ) : null}
 
       <section aria-labelledby="my-students">
         <h2 id="my-students" className="mb-3 text-headline text-text">

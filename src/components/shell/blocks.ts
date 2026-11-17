@@ -5,6 +5,7 @@ import {
   Presentation,
   Settings,
   Star,
+  Trophy,
   UserPlus,
   Users,
   Wallet,
@@ -15,6 +16,7 @@ export type BlockKey =
   | "leads"
   | "students"
   | "groups"
+  | "points"
   | "teachers"
   | "finance"
   | "reports"
@@ -24,11 +26,12 @@ export type BlockKey =
 
 export type Block = { key: BlockKey; href: `/${string}`; icon: LucideIcon };
 
-/** The six blocks, in sidebar order. */
+/** The blocks, in sidebar order. */
 export const BLOCKS: Block[] = [
   { key: "leads", href: "/leads", icon: UserPlus },
   { key: "students", href: "/students", icon: GraduationCap },
   { key: "groups", href: "/groups", icon: Users },
+  { key: "points", href: "/points", icon: Trophy },
   { key: "teachers", href: "/teachers", icon: Presentation },
   { key: "finance", href: "/finance", icon: Wallet },
   { key: "reports", href: "/reports", icon: ChartColumn },

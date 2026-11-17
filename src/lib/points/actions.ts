@@ -7,6 +7,7 @@ import { getSignedInUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import {
   POINTS_ERRORS,
+  TV_LANGUAGES,
   adjustSchema,
   awardSchema,
   pointsSettingsSchema,
@@ -127,7 +128,8 @@ export async function savePreset(input: unknown): Promise<PointsResult> {
     if (data.length === 0) return { ok: false, error: "notFound" };
   } else {
     // New presets go to the end of their list.
-    const { error } = await ctx.supabase.from("point_presets").insert({ ...values, sort: Math.floor(Date.now() / 1000) });
+    const last = await ctx.supabase.from("point_presets").select("sort").order("sort", { ascending: false }).limit(1).maybeSingle();
+    const { error } = await ctx.supabase.from("point_presets").insert({ ...values, sort: (last.data?.sort ?? 0) + 1 });
     if (error) return failure(error);
   }
 
@@ -150,6 +152,48 @@ export async function archivePreset(presetId: unknown): Promise<PointsResult> {
   if (error) return failure(error);
   if (data.length === 0) return { ok: false, error: "notFound" };
 
+  refresh();
+  return { ok: true };
+}
+
+/** A new TV link: every old one stops working. Owner only. */
+export async function regenerateTvToken(): Promise<PointsResult<{ token: string }>> {
+  const ctx = await session("owner");
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { data, error } = await ctx.supabase.rpc("regenerate_tv_token");
+  if (error) return failure(error);
+  refresh();
+  return { ok: true, data: { token: data } };
+}
+
+/** The language of the TV screen. Owner only. */
+export async function saveTvLanguage(language: unknown): Promise<PointsResult> {
+  const parsed = z.enum(TV_LANGUAGES).safeParse(language);
+  if (!parsed.success) return { ok: false, error: "generic" };
+  const ctx = await session("owner");
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { data, error } = await ctx.supabase.from("points_settings").update({ tv_language: parsed.data }).eq("singleton", true).select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notAllowed" };
+  refresh();
+  return { ok: true };
+}
+
+/** Hide a student from the TV and the bot's top lists, or show them again. Owner and manager. */
+export async function setLeaderboardHidden(studentId: unknown, hidden: unknown): Promise<PointsResult> {
+  const id = z.uuid().safeParse(studentId);
+  const value = z.boolean().safeParse(hidden);
+  if (!id.success || !value.success) return { ok: false, error: "notFound" };
+  const [user, supabase] = await Promise.all([getSignedInUser(), createClient()]);
+  if (!supabase || !user || user.role === "teacher") return { ok: false, error: "notAllowed" };
+  const { data, error } = await supabase
+    .from("students")
+    .update({ leaderboard_hidden: value.data })
+    .eq("id", id.data)
+    .is("archived_at", null)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
   refresh();
   return { ok: true };
 }

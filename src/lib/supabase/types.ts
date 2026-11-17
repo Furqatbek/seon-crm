@@ -627,14 +627,14 @@ isOneToOne: false
                   ]
                 },"points_settings": {
                   Row: {
-                    "created_at": string,"enabled": boolean,"id": string,"late": number,"max_per_action": number,"on_time": number,"perfect_month": number,"perfect_month_min_lessons": number,"present": number,"referral": number,"singleton": boolean,"started_at": string,"teacher_daily_cap": number,"updated_at": string
+                    "created_at": string,"enabled": boolean,"id": string,"late": number,"max_per_action": number,"on_time": number,"perfect_month": number,"perfect_month_min_lessons": number,"present": number,"referral": number,"singleton": boolean,"started_at": string,"teacher_daily_cap": number,"tv_language": Database["public"]['Enums']["app_language"],"tv_token": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"enabled"?: boolean,"id"?: string,"late"?: number,"max_per_action"?: number,"on_time"?: number,"perfect_month"?: number,"perfect_month_min_lessons"?: number,"present"?: number,"referral"?: number,"singleton"?: boolean,"started_at"?: string,"teacher_daily_cap"?: number,"updated_at"?: string
+                    "created_at"?: string,"enabled"?: boolean,"id"?: string,"late"?: number,"max_per_action"?: number,"on_time"?: number,"perfect_month"?: number,"perfect_month_min_lessons"?: number,"present"?: number,"referral"?: number,"singleton"?: boolean,"started_at"?: string,"teacher_daily_cap"?: number,"tv_language"?: Database["public"]['Enums']["app_language"],"tv_token"?: string,"updated_at"?: string
                   }
                   Update: {
-                    "created_at"?: string,"enabled"?: boolean,"id"?: string,"late"?: number,"max_per_action"?: number,"on_time"?: number,"perfect_month"?: number,"perfect_month_min_lessons"?: number,"present"?: number,"referral"?: number,"singleton"?: boolean,"started_at"?: string,"teacher_daily_cap"?: number,"updated_at"?: string
+                    "created_at"?: string,"enabled"?: boolean,"id"?: string,"late"?: number,"max_per_action"?: number,"on_time"?: number,"perfect_month"?: number,"perfect_month_min_lessons"?: number,"present"?: number,"referral"?: number,"singleton"?: boolean,"started_at"?: string,"teacher_daily_cap"?: number,"tv_language"?: Database["public"]['Enums']["app_language"],"tv_token"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     
@@ -872,6 +872,16 @@ isOneToOne: false
 "is_user_request":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
+"leaderboard":
+{ Args: { "p_group_id"?: string,"p_month"?: string,"p_period"?: string,"p_scope": string }; Returns: {
+              "display_name": string,"hidden": boolean,"points": number,"rank": number,"student_id": string
+            }[]
+                           },
+"leaderboard_rows":
+{ Args: { "p_group_id": string,"p_month": string,"p_period": string,"p_scope": string }; Returns: {
+              "full_name": string,"hidden": boolean,"points": number,"rank": number,"student_id": string
+            }[]
+                           },
 "leave_group":
 { Args: { "p_credit_amount"?: number,"p_credit_note"?: string,"p_enrollment_id": string,"p_left_on": string }; Returns: undefined
                            },
@@ -922,6 +932,9 @@ isOneToOne: false
 "points_sync_attendance":
 { Args: { "p_lesson_id": string,"p_student_id": string }; Returns: undefined
                            },
+"points_tv_token":
+{ Args: Record<PropertyKey, never>; Returns: string
+                           },
 "preview_monthly_charges":
 { Args: { "p_month": string }; Returns: {
               "amount": number,"base_amount": number,"discount_amount": number,"enrollment_id": string,"group_id": string,"group_name": string,"student_id": string,"student_name": string
@@ -939,6 +952,9 @@ isOneToOne: false
                            },
 "rebuild_future_lessons":
 { Args: { "p_group_id": string }; Returns: number
+                           },
+"regenerate_tv_token":
+{ Args: Record<PropertyKey, never>; Returns: string
                            },
 "report_active_students":
 { Args: { "p_day": string }; Returns: number
@@ -1040,6 +1056,15 @@ isOneToOne: false
                            },
 "transfer_student":
 { Args: { "p_charge_mode"?: string,"p_charge_note"?: string,"p_credit_amount"?: number,"p_credit_note"?: string,"p_custom_amount"?: number,"p_discount_kind"?: string,"p_discount_value"?: number,"p_enrollment_id": string,"p_on": string,"p_to_group_id": string }; Returns: string
+                           },
+"tv_board":
+{ Args: { "p_token": string }; Returns: Json
+                           },
+"tv_name":
+{ Args: { "p_full_name": string }; Returns: string
+                           },
+"tv_token_ok":
+{ Args: { "p_token": string }; Returns: boolean
                            },
 "undo_points":
 { Args: { "p_ledger_id": string }; Returns: number

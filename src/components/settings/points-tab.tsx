@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil, Plus } from "lucide-react";
+import { Copy, Pencil, Plus, RefreshCw } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -9,6 +9,8 @@ import { toast } from "sonner";
 
 import { presetLabel } from "@/components/points/preset-label";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SegmentedControl } from "@/components/ui/segmented-control";
@@ -16,10 +18,11 @@ import { Sheet, SheetBody, SheetContent, SheetFooter, SheetHeader, SheetTitle } 
 import { StatusPill } from "@/components/ui/status-pill";
 import { Switch } from "@/components/ui/switch";
 import type { PointsSettings } from "@/lib/domain/points";
-import { archivePreset, savePointsSettings, savePreset } from "@/lib/points/actions";
-import type { PointPreset } from "@/lib/points/queries";
+import { archivePreset, regenerateTvToken, savePointsSettings, savePreset, saveTvLanguage } from "@/lib/points/actions";
+import type { PointPreset, TvSettings } from "@/lib/points/queries";
 import {
   PRESET_KINDS,
+  TV_LANGUAGES,
   pointsSettingsSchema,
   presetSchema,
   type PointsErrorKey,
@@ -123,6 +126,80 @@ function SettingsForm({ settings }: { settings: PointsSettings }) {
         {tCommon("save")}
       </Button>
     </form>
+  );
+}
+
+const LANGUAGE_NAMES = { uz: "Oʻzbekcha", ru: "Русский", en: "English" } as const;
+
+/** The TV screen: its language, and the secret link with Copy and Regenerate. */
+function TvSection({ tv, origin }: { tv: TvSettings; origin: string }) {
+  const t = useTranslations("points");
+  const tCommon = useTranslations("common");
+  const [pending, startTransition] = useTransition();
+  const [confirming, setConfirming] = useState(false);
+  // The link opens in the TV's language.
+  const link = `${origin}/${tv.language}/tv/${tv.token}`;
+
+  const run = (action: () => Promise<{ ok: boolean; error?: PointsErrorKey }>, done: string) =>
+    startTransition(async () => {
+      const result = await action();
+      setConfirming(false);
+      toast(result.ok ? done : t(`errors.${result.error ?? "generic"}`));
+    });
+
+  return (
+    <Section title={t("tv.title")}>
+      <p className="text-footnote text-text-secondary">{t("tv.hint")}</p>
+      <Field label={t("tv.language")} htmlFor="tv-language" className="sm:max-w-xs">
+        <Select value={tv.language} disabled={pending} onValueChange={(value) => run(() => saveTvLanguage(value), t("tv.languageSaved"))}>
+          <SelectTrigger id="tv-language">
+            <SelectValue>{LANGUAGE_NAMES[tv.language]}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {TV_LANGUAGES.map((language) => (
+              <SelectItem key={language} value={language}>
+                {LANGUAGE_NAMES[language]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </Field>
+      <Field label={t("tv.link")} htmlFor="tv-link">
+        <Input id="tv-link" readOnly value={link} className="numeric" onFocus={(event) => event.target.select()} />
+      </Field>
+      <div className="flex flex-wrap gap-2">
+        <Button
+          onClick={async () => {
+            await navigator.clipboard.writeText(link);
+            toast(t("tv.copied"));
+          }}
+        >
+          <Copy aria-hidden />
+          {t("tv.copy")}
+        </Button>
+        <Button disabled={pending} onClick={() => setConfirming(true)}>
+          <RefreshCw aria-hidden />
+          {t("tv.regenerate")}
+        </Button>
+      </div>
+
+      <Dialog open={confirming} onOpenChange={setConfirming}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("tv.regenerateTitle")}</DialogTitle>
+            <DialogDescription>{t("tv.regenerateBody")}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setConfirming(false)}>
+              {tCommon("cancel")}
+            </Button>
+            <Button variant="destructive-fill" disabled={pending} onClick={() => run(regenerateTvToken, t("tv.regenerated"))}>
+              {t("tv.regenerate")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </Section>
   );
 }
 
@@ -241,7 +318,18 @@ function PresetForm({ preset, kind, onClose }: { preset: PointPreset | null; kin
 }
 
 /** Owner only: the programme switch, every point value, the limits and the presets. */
-export function PointsTab({ settings, presets }: { settings: PointsSettings; presets: PointPreset[] }) {
+export function PointsTab({
+  settings,
+  presets,
+  tv,
+  origin,
+}: {
+  settings: PointsSettings;
+  presets: PointPreset[];
+  tv: TvSettings;
+  /** The site's address, for the TV link. */
+  origin: string;
+}) {
   const t = useTranslations("points");
   const locale = useLocale();
   const [form, setForm] = useState<{ preset: PointPreset | null; kind: PresetKind } | null>(null);
@@ -249,6 +337,8 @@ export function PointsTab({ settings, presets }: { settings: PointsSettings; pre
   return (
     <div className="flex flex-col gap-10">
       <SettingsForm settings={settings} />
+
+      <TvSection tv={tv} origin={origin} />
 
       <Section title={t("presets.title")}>
         <p className="text-footnote text-text-secondary">{t("presets.hint")}</p>

@@ -32,6 +32,39 @@ export const awardSchema = z
     if (!value.reason) ctx.addIssue({ code: "custom", path: ["reason"], message: "reasonRequired" });
   });
 
+/** The Custom part of a teacher's + / − sheet: 1 to the per-action limit, with a reason. */
+export const customPointsSchema = (maxPerAction: number) =>
+  z.object({
+    amount: z.string().transform((value, ctx) => {
+      const amount = Number(value);
+      if (!Number.isInteger(amount) || amount < 1 || amount > maxPerAction) {
+        ctx.addIssue({ code: "custom", message: "amountInvalid" });
+        return z.NEVER;
+      }
+      return amount;
+    }),
+    reason: reason.min(1, "reasonRequired"),
+  });
+export type CustomPointsInput = { amount: string; reason: string };
+export type CustomPointsValues = { amount: number; reason: string };
+
+export const BOARD_PERIODS = ["month", "all"] as const;
+export type BoardPeriod = (typeof BOARD_PERIODS)[number];
+
+/** URL state of /points and of the leaderboards on the group pages. */
+export const boardSearchSchema = z.object({
+  group: z.uuid().optional().catch(undefined),
+  period: z.enum(BOARD_PERIODS).catch("month"),
+  // A past month, "YYYY-MM".
+  month: z
+    .string()
+    .regex(/^\d{4}-(0[1-9]|1[0-2])$/)
+    .optional()
+    .catch(undefined),
+});
+
+export const TV_LANGUAGES = ["uz", "ru", "en"] as const;
+
 /** Owner adjustment: any amount, reason required. */
 export const adjustSchema = z.object({
   student_id: z.uuid(),

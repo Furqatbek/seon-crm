@@ -9,6 +9,11 @@ export function tashkentDate(instant: Date | string): string {
   return new Date(date.getTime() + TASHKENT_OFFSET_MS).toISOString().slice(0, 10);
 }
 
+/** The time of day in Tashkent as "HH:MM". */
+export function tashkentTime(instant: Date): string {
+  return new Date(instant.getTime() + TASHKENT_OFFSET_MS).toISOString().slice(11, 16);
+}
+
 /** Start of a Tashkent calendar day, `days` from the day of `now`, as an ISO instant. */
 export function tashkentDayStart(now: Date, days = 0): string {
   const day = new Date(`${tashkentDate(now)}T00:00:00+05:00`);

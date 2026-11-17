@@ -51,7 +51,8 @@
     "reports": "Hisobotlar",
     "settings": "Sozlamalar",
     "myGroups": "Guruhlarim",
-    "pointsHistory": "Tarix"
+    "pointsHistory": "Tarix",
+    "points": "Ballar"
   },
   "language": {
     "label": "Til",
@@ -446,7 +447,8 @@
       "students": "Oʻquvchilar",
       "attendance": "Davomat",
       "lessons": "Darslar",
-      "trials": "Sinov darslari"
+      "trials": "Sinov darslari",
+      "leaderboard": "Reyting"
     },
     "status": {
       "forming": "Yigʻilmoqda",
@@ -1476,6 +1478,45 @@
       "saved": "Sabab saqlandi",
       "removed": "Sabab oʻchirildi",
       "remove": "Oʻchirish"
+    },
+    "board": {
+      "title": "Reyting",
+      "subtitle": "Toʻplangan ballar. Ballarni sovgʻaga sarflash oʻrinni pasaytirmaydi.",
+      "scope": "Markaz yoki guruh",
+      "centre": "Butun markaz",
+      "period": "Davr",
+      "periods": {
+        "month": "Shu oy",
+        "all": "Butun davr"
+      },
+      "place": "Oʻrin",
+      "hidden": "TVda yashirilgan",
+      "empty": "Bu yerda hali oʻquvchilar yoʻq."
+    },
+    "hide": {
+      "label": "Ochiq reytinglarda yashirish",
+      "hint": "Oʻquvchi TV ekranida va botdagi eng yaxshilar roʻyxatida koʻrinmaydi. Xodimlar uning oʻrnini koʻradi.",
+      "hidden": "TVda yashirildi",
+      "shown": "TVda yana koʻrinadi"
+    },
+    "tv": {
+      "title": "TV ekrani",
+      "hint": "Bu havolani markazdagi televizorda oching. Kirish shart emas, ism va familiyaning bosh harfi koʻrsatiladi. Havolasi bor har kim koʻra oladi.",
+      "language": "TV tili",
+      "languageSaved": "TV tili saqlandi",
+      "link": "TV havolasi",
+      "copy": "Havoladan nusxa olish",
+      "copied": "Havoladan nusxa olindi",
+      "regenerate": "Yangi havola",
+      "regenerateTitle": "Yangi TV havolasi yaratilsinmi?",
+      "regenerateBody": "Eski havola darhol ishlamay qoladi. Yangi havolani har bir televizorda oching.",
+      "regenerated": "Yangi havola yaratildi"
     }
+  },
+  "tv": {
+    "centreTitle": "Shu oyning eng yaxshi 10 taligi",
+    "groupSubtitle": "Eng yaxshi 5 talik · {month}",
+    "updated": "Yangilandi: {time}",
+    "empty": "Shu oyda hali ball yoʻq"
   }
 }

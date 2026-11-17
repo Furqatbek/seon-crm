@@ -61,19 +61,24 @@ export async function updateLead(id: unknown, input: unknown): Promise<LeadResul
   const ctx = await session();
   if (!ctx) return { ok: false, error: "notAllowed" };
 
-  const { next_contact, ...fields } = parsed.data;
+  const { next_contact, referred_by_student_id, ...fields } = parsed.data;
   // A won lead is read-only: the filter leaves it untouched.
-  const { data, error } = await ctx.supabase
-    .from("leads")
-    .update({
-      ...fields,
-      next_contact_at: next_contact ? nextContactTimestamp(next_contact) : null,
-    })
-    .eq("id", leadId.data)
-    .neq("status", "won")
-    .is("archived_at", null)
-    .select("id");
-  if (error) return failure(error);
+  const save = (withReferrer: boolean) =>
+    ctx.supabase
+      .from("leads")
+      .update({
+        ...fields,
+        ...(withReferrer ? { referred_by_student_id } : {}),
+        next_contact_at: next_contact ? nextContactTimestamp(next_contact) : null,
+      })
+      .eq("id", leadId.data)
+      .neq("status", "won")
+      .is("archived_at", null)
+      .select("id");
+  let { data, error } = await save(true);
+  // "Referred by" is missing while a deploy is ahead of its migration: save the rest.
+  if (error?.code === "PGRST204" && !referred_by_student_id) ({ data, error } = await save(false));
+  if (error || !data) return failure(error);
   if (data.length === 0) return { ok: false, error: "notFound" };
 
   refresh();

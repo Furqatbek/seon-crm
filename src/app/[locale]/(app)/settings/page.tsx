@@ -12,8 +12,9 @@ import { UsersTab } from "@/components/settings/users-tab";
 import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import type { Locale } from "@/i18n/routing";
+import { appUrl } from "@/lib/app-url";
 import { getSignedInUser } from "@/lib/auth";
-import { getPointPresets, getPointsSettings } from "@/lib/points/queries";
+import { getPointPresets, getPointsSettings, getTvSettings } from "@/lib/points/queries";
 import { tashkentDate } from "@/lib/domain/time";
 import {
   getAllTemplates,
@@ -55,11 +56,21 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
         />
       ) : null}
       {tab === "points" && owner ? (
-        <PointsTab settings={await getPointsSettings()} presets={await getPointPresets({ activeOnly: false })} />
+        <Points />
       ) : null}
       {tab === "profile" ? <ProfileTab profile={await getProfile(user)} /> : null}
     </SettingsScreen>
   );
+}
+
+async function Points() {
+  const [settings, presets, tv, origin] = await Promise.all([
+    getPointsSettings(),
+    getPointPresets({ activeOnly: false }),
+    getTvSettings(),
+    appUrl(),
+  ]);
+  return <PointsTab settings={settings} presets={presets} tv={tv} origin={origin} />;
 }
 
 function Fallback() {

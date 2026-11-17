@@ -254,7 +254,7 @@ export const groupsSearchSchema = z.object({
 });
 export type GroupsSearch = z.output<typeof groupsSearchSchema>;
 
-export const GROUP_TABS = ["students", "attendance", "lessons", "trials"] as const;
+export const GROUP_TABS = ["students", "attendance", "lessons", "leaderboard", "trials"] as const;
 export type GroupTab = (typeof GROUP_TABS)[number];
 
 export const groupSearchSchema = z.object({
@@ -265,4 +265,6 @@ export const groupSearchSchema = z.object({
     .optional()
     .catch(undefined),
   lesson: z.uuid().optional().catch(undefined),
+  // Leaderboard tab: this month (or `month`) or all-time.
+  period: z.enum(["month", "all"]).catch("month"),
 });

@@ -128,7 +128,8 @@ test("a teacher sees only their groups, marks attendance and gives coins; staff 
     await pupil.getByRole("button", { name: `Take points from ${pupilName}` }).click();
     await expect(choices(page).locator("[data-preset]")).toHaveCount(3);
     // A custom amount needs its reason.
-    await expect(choices(page).getByRole("button", { name: "Take points" })).toBeDisabled();
+    await choices(page).getByRole("button", { name: "Take points" }).click();
+    await expect(choices(page).getByText("Write the reason.")).toBeVisible();
     await choices(page).getByRole("radio", { name: "3", exact: true }).click();
     await choices(page).getByLabel("Reason").fill("Talking in class");
     await choices(page).getByRole("button", { name: "Take points" }).click();
@@ -158,6 +159,19 @@ test("a teacher sees only their groups, marks attendance and gives coins; staff 
     await expect(page.getByRole("heading", { level: 1, name: "Tarix" })).toBeVisible();
     await expect(page.locator("[data-history-row]").filter({ hasText: "Uy vazifasi bajarilgan" }).first()).toBeVisible();
     await page.goto(`/en/my-groups/${data.group}`);
+
+    // ── The group's leaderboard: the pupil with 4 points leads; all-time is one tap away ──
+    await expect(page.getByRole("heading", { level: 2, name: "Leaderboard" })).toBeVisible();
+    const leader = page.locator("[data-board-row]").first();
+    await expect(leader).toContainText(pupilName);
+    await expect(leader).toHaveAttribute("data-rank", "1");
+    await expect(leader).toHaveAttribute("data-points", "4");
+    // Names only: a teacher gets no link to the student.
+    await expect(page.locator('[data-slot="leaderboard"]').getByRole("link")).toHaveCount(0);
+    await page.getByRole("radio", { name: "All-time" }).click();
+    await expect(page).toHaveURL(/period=all/);
+    await expect(page.locator("[data-board-row]").first()).toContainText(pupilName);
+    await page.getByRole("radio", { name: "This month" }).click();
 
     // ── Coins: 5 to one student, who takes first place ──
     const target = students.nth(1);

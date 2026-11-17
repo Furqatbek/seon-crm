@@ -8,6 +8,7 @@ import { GroupAttendanceTab } from "@/components/groups/group-attendance-tab";
 import { GroupLessonsTab } from "@/components/groups/group-lessons-tab";
 import { GroupScreen } from "@/components/groups/group-screen";
 import { GroupStudentsTab } from "@/components/groups/group-students-tab";
+import { BoardPeriodControl, Leaderboard } from "@/components/points/leaderboard";
 import { GroupTrialsTab } from "@/components/groups/group-trials-tab";
 import { RecordSkeleton } from "@/components/ui/skeleton";
 import { routing } from "@/i18n/routing";
@@ -28,6 +29,7 @@ import {
   type OpenGroup,
   type TeacherOption,
 } from "@/lib/groups/queries";
+import { getLeaderboard } from "@/lib/points/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
 import { getCentreBilling } from "@/lib/students/queries";
 import { groupSearchSchema } from "@/lib/validation/groups";
@@ -177,8 +179,31 @@ async function Group({ params, searchParams }: Props) {
           teachers={teachers}
         />
       ) : null}
+      {search.tab === "leaderboard" ? (
+        <Board groupId={group.id} period={search.period} month={month > currentMonth ? currentMonth : month} currentMonth={currentMonth} />
+      ) : null}
       {search.tab === "trials" ? <Trials groupId={group.id} /> : null}
     </GroupScreen>
+  );
+}
+
+async function Board({
+  groupId,
+  period,
+  month,
+  currentMonth,
+}: {
+  groupId: string;
+  period: "month" | "all";
+  month: string;
+  currentMonth: string;
+}) {
+  const rows = await getLeaderboard({ groupId, period, month });
+  return (
+    <div className="flex flex-col gap-4">
+      <BoardPeriodControl period={period} month={month} currentMonth={currentMonth} />
+      <Leaderboard rows={rows ?? []} staff />
+    </div>
   );
 }
 

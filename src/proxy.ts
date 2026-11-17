@@ -2,7 +2,7 @@ import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { routing } from "@/i18n/routing";
-import { refreshSession } from "@/lib/supabase/proxy";
+import { refreshSession, tvTokenOk } from "@/lib/supabase/proxy";
 
 const handleI18n = createIntlMiddleware(routing);
 
@@ -35,6 +35,16 @@ export default async function proxy(request: NextRequest) {
   if (!locale) return response;
 
   const path = pathname.slice(locale.length + 1) || "/";
+
+  // The TV screen has no login: its secret link is the key. A wrong or old
+  // link is a 404 and shows nothing.
+  if (matches(path, ["/tv"])) {
+    if (await tvTokenOk(path.split("/")[2])) return response;
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}/tv`;
+    return NextResponse.rewrite(url, { status: 404 });
+  }
+
   const signedIn = await refreshSession(request, response);
 
   if (process.env.NODE_ENV === "development" && matches(path, DEV_PATHS)) {

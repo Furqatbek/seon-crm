@@ -1262,8 +1262,9 @@ correctness. Fix them and run every test.
 > - Awards and deductions each have their own daily allowance per teacher and student (10 by default); an undone row gives its allowance back. Undo is accepted for 15 seconds on the server; the button shows for 10.
 > - The owner's adjustment is refused, not reduced, when it would take the balance below zero.
 > - `points_settings.started_at`: nothing from before the programme existed earns points. Perfect month is posted for the first month that ends after the start; fee on time for the first due day after it.
-> - Fee on time counts a month's fee only if it was charged by the end of the due day; a student who joins after the due day can earn it from the next month.
-> - Not built yet (later phases): leaderboards and ranks, the TV screen, rewards (`redemptions`, `points_ledger.redemption_id`), the two Telegram links, points messages and reports, the Hide from leaderboards switch (the column exists).
+> - Phase 15, leaderboards: `/points` is one page (the Leaderboard) until Phase 16 adds the Rewards and Requests tabs. The TV link is `/<language>/tv/<token>` and a link in another language is sent to the TV language chosen in Settings; a wrong or old token is a 404. The TV shows at most 10 and 5 lines, cutting a tie at the end by name, and leaves out students with no points. A teacher sees each of their groups' boards on the group's page; the centre board is open to them in the database but has no teacher screen yet. The Hide from public leaderboards switch is on the student's Points tab (owner and manager).
+> - Fee on time (changed in Phase 15): the month's fee counts whenever it was written, so fees generated after the due day do not block the points; what matters is that payments made by the end of the due day cover everything charged up to that month.
+> - Not built yet (later phases): rewards (`redemptions`, `points_ledger.redemption_id`), the two Telegram links, points messages and reports, ranks on the student's Points tab.
 
 ## Sources
 

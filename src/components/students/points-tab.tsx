@@ -15,10 +15,11 @@ import { Input } from "@/components/ui/input";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import { Sheet, SheetBody, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { StatusPill } from "@/components/ui/status-pill";
+import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { UserRole } from "@/lib/auth";
 import { formatDateTime } from "@/lib/format";
-import { adjustPoints } from "@/lib/points/actions";
+import { adjustPoints, setLeaderboardHidden } from "@/lib/points/actions";
 import type { StudentPoints, StudentPointsRow } from "@/lib/points/queries";
 import { adjustSchema, type AdjustInput, type AdjustValues, type PointsErrorKey } from "@/lib/validation/points";
 
@@ -115,6 +116,14 @@ export function PointsTab({
   const t = useTranslations("points");
   const locale = useLocale();
   const [adjusting, setAdjusting] = useState(false);
+  const [hiding, startHiding] = useTransition();
+
+  function setHidden(hidden: boolean) {
+    startHiding(async () => {
+      const result = await setLeaderboardHidden(studentId, hidden);
+      toast(result.ok ? t(hidden ? "hide.hidden" : "hide.shown") : t(`errors.${result.error}`));
+    });
+  }
 
   const detail = (row: StudentPointsRow) =>
     row.preset ? presetLabel(row.preset, locale) : row.source === "referral" && row.reason ? t("friend", { name: row.reason }) : row.reason;
@@ -140,6 +149,14 @@ export function PointsTab({
             {t("adjust.action")}
           </Button>
         ) : null}
+      </div>
+
+      <div className="flex max-w-xl items-center justify-between gap-4 rounded-card border border-border p-4">
+        <label htmlFor="leaderboard-hidden" className="flex flex-col gap-1">
+          <span className="text-body font-medium text-text">{t("hide.label")}</span>
+          <span className="text-footnote text-text-secondary">{t("hide.hint")}</span>
+        </label>
+        <Switch id="leaderboard-hidden" checked={points.hidden} disabled={hiding} onCheckedChange={setHidden} />
       </div>
 
       {enabled ? null : (

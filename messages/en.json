@@ -51,7 +51,8 @@
     "reports": "Reports",
     "settings": "Settings",
     "myGroups": "My groups",
-    "pointsHistory": "History"
+    "pointsHistory": "History",
+    "points": "Points"
   },
   "language": {
     "label": "Language",
@@ -446,7 +447,8 @@
       "students": "Students",
       "attendance": "Attendance",
       "lessons": "Lessons",
-      "trials": "Trials"
+      "trials": "Trials",
+      "leaderboard": "Leaderboard"
     },
     "status": {
       "forming": "Forming",
@@ -1476,6 +1478,45 @@
       "saved": "Reason saved",
       "removed": "Reason removed",
       "remove": "Remove"
+    },
+    "board": {
+      "title": "Leaderboard",
+      "subtitle": "Points earned. Spending points on a reward does not lower the place.",
+      "scope": "Centre or group",
+      "centre": "Whole centre",
+      "period": "Period",
+      "periods": {
+        "month": "This month",
+        "all": "All-time"
+      },
+      "place": "Place",
+      "hidden": "Hidden from TV",
+      "empty": "No students here yet."
+    },
+    "hide": {
+      "label": "Hide from public leaderboards",
+      "hint": "The student is left out of the TV screen and the bot's top lists. Staff still see their place.",
+      "hidden": "Hidden from the TV",
+      "shown": "Shown on the TV again"
+    },
+    "tv": {
+      "title": "TV screen",
+      "hint": "Open this link on the TV in the centre. It needs no login and shows first names with a last initial. Anyone with the link can see it.",
+      "language": "TV language",
+      "languageSaved": "TV language saved",
+      "link": "TV link",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "regenerate": "New link",
+      "regenerateTitle": "Make a new TV link?",
+      "regenerateBody": "The old link stops working at once. Open the new link on every TV.",
+      "regenerated": "New link made"
     }
+  },
+  "tv": {
+    "centreTitle": "Top 10 this month",
+    "groupSubtitle": "Top 5 · {month}",
+    "updated": "Updated {time}",
+    "empty": "No points yet this month"
   }
 }
