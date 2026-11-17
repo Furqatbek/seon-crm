@@ -8,9 +8,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { DB_URL, admin, as, connect, disconnect, studentId, type Session } from "./helpers";
 
 const month = `date_trunc('month', public.tashkent_today())::date`;
-// Seeded: an active student who owes 646 000 soʻm.
+// Seeded: an active student in debt. The amount is read, not assumed.
 const DEBTOR = studentId(1);
-const DEBT = 646_000;
 
 const debts = async (s: Session) => {
   const [finance] = await s.rows<{ debt: number }>(`select debt::float8 as debt from public.finance_month_summary(${month})`);
@@ -29,6 +28,8 @@ describe.skipIf(!DB_URL)("Students who left or graduated", () => {
   it("a student who left drops out of Debtors and every debt total, but keeps the balance", async () => {
     await as("owner", async (s) => {
       const before = await debts(s);
+      const DEBT = -(await balance(s));
+      expect(DEBT).toBeGreaterThan(0);
       expect(before.listed).toBe(1);
       expect(before.finance).toBe(before.report);
       expect(before.aged).toBe(before.finance);
@@ -58,13 +59,15 @@ describe.skipIf(!DB_URL)("Students who left or graduated", () => {
     await as("manager", async (s) => {
       const active = await s.count("enrollments", `student_id = '${DEBTOR}' and status = 'active'`);
       expect(active).toBeGreaterThan(0);
+      const DEBT = -(await balance(s));
+      const endedToday = await s.count("enrollments", `student_id = '${DEBTOR}' and left_on = public.tashkent_today()`);
       const [{ n: listedBefore }] = await s.rows<{ n: number }>(`select count(*)::int as n from public.list_debtors(1000, 0) where student_id = $1`, [DEBTOR]);
 
       await s.rows(`select public.mark_student_graduated($1)`, [DEBTOR]);
 
       expect(await s.rows(`select status from students where id = $1`, [DEBTOR])).toEqual([{ status: "graduated" }]);
       expect(await s.count("enrollments", `student_id = '${DEBTOR}' and status = 'active'`)).toBe(0);
-      expect(await s.count("enrollments", `student_id = '${DEBTOR}' and left_on = public.tashkent_today()`)).toBe(active);
+      expect(await s.count("enrollments", `student_id = '${DEBTOR}' and left_on = public.tashkent_today()`)).toBe(endedToday + active);
       const [{ n: listedAfter }] = await s.rows<{ n: number }>(`select count(*)::int as n from public.list_debtors(1000, 0) where student_id = $1`, [DEBTOR]);
       expect(listedAfter).toBe(listedBefore);
       expect(await balance(s)).toBe(-DEBT);
