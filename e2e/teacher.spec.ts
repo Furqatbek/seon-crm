@@ -7,6 +7,7 @@ import { withDb } from "./support/db";
 // The teacher login and coins — docs/SPEC.md → "Screens → My groups".
 
 const sheet = (page: Page) => page.locator('[data-slot="sheet-content"][data-side="right"]');
+const choices = (page: Page) => page.locator('[data-slot="sheet-content"][data-side="bottom"]');
 const TEACHER_USER = "00000001-0000-4000-8000-000000000003";
 const TEACHER = "00000002-0000-4000-8000-000000000002";
 
@@ -28,6 +29,9 @@ async function fixture(groupName: string) {
     await db.query("delete from attendance where lesson_id = $1", [lesson.id]);
     await db.query("update lessons set status = 'scheduled' where id = $1", [lesson.id]);
     await db.query("delete from coin_transactions where student_id in (select student_id from enrollments where group_id = $1)", [group]);
+    // No points in the group either, so this month's totals and the teacher's daily allowance start from zero.
+    await db.query("delete from points_ledger where group_id = $1", [group]);
+    await db.query("update points_settings set enabled = true");
     return { group, other: others[0].id as string, lesson, marks };
   });
 }
@@ -36,6 +40,7 @@ async function restore(data: Awaited<ReturnType<typeof fixture>>) {
   await withDb(async (db) => {
     await db.query("delete from coin_transactions where student_id in (select student_id from enrollments where group_id = $1)", [data.group]);
     await db.query("delete from attendance where lesson_id = $1", [data.lesson.id]);
+    await db.query("delete from points_ledger where group_id = $1", [data.group]);
     for (const mark of data.marks) {
       await db.query(
         "insert into attendance (lesson_id, student_id, status, marked_by, marked_at) values ($1, $2, $3, $4, $5)",
@@ -61,7 +66,7 @@ test("a teacher sees only their groups, marks attendance and gives coins; staff 
     await expect(page.locator("[data-my-group]").filter({ hasText: "English Kids" })).toBeVisible();
     if (phone) await page.getByRole("button", { name: "Open menu" }).click();
     const nav = page.getByRole("navigation", { name: "Main navigation" }).locator("visible=true");
-    await expect(nav.getByRole("link")).toHaveText(["My groups"]);
+    await expect(nav.getByRole("link")).toHaveText(["My groups", "History"]);
     await expect(page.getByRole("link", { name: "Settings" })).toHaveCount(0);
     await expect(page.locator('[data-slot="user-menu"]:visible')).toContainText("Teacher");
     if (phone) await page.keyboard.press("Escape");
@@ -104,6 +109,55 @@ test("a teacher sees only their groups, marks attendance and gives coins; staff 
       db.query("select student_id, status, marked_by from attendance where lesson_id = $1 and status = 'absent'", [data.lesson.id]),
     );
     expect(saved.rows).toEqual([{ student_id: absentee, status: "absent", marked_by: TEACHER_USER }]);
+
+    // ── Points, from the lesson: a preset award, a custom deduction, and Undo ──
+    await lesson.getByRole("button", { name: /^Change attendance/ }).click();
+    const pupil = sheet(page).locator("[data-lesson-student]").nth(1);
+    const pupilName = (await pupil.locator("span").first().innerText()).split("\n")[0].trim();
+    const monthPoints = pupil.locator('[data-slot="points-text"]');
+    // Present at this lesson: 2 points already.
+    await expect(monthPoints).toHaveAttribute("data-value", "2");
+    await pupil.getByRole("button", { name: `Give points to ${pupilName}` }).click();
+    await expect(choices(page).getByRole("heading", { name: `Give points to ${pupilName}` })).toBeVisible();
+    await expect(choices(page).locator("[data-preset]")).toHaveCount(4);
+    await page.screenshot({ path: testInfo.outputPath("give-points.png") });
+    await choices(page).getByRole("button", { name: /Homework done/ }).click();
+    await expect(page.locator('[data-slot="points-toast"]')).toContainText(`${pupilName}: +2 points`);
+    await expect(monthPoints).toHaveAttribute("data-value", "4");
+
+    await pupil.getByRole("button", { name: `Take points from ${pupilName}` }).click();
+    await expect(choices(page).locator("[data-preset]")).toHaveCount(3);
+    // A custom amount needs its reason.
+    await expect(choices(page).getByRole("button", { name: "Take points" })).toBeDisabled();
+    await choices(page).getByRole("radio", { name: "3", exact: true }).click();
+    await choices(page).getByLabel("Reason").fill("Talking in class");
+    await choices(page).getByRole("button", { name: "Take points" }).click();
+    const taken = page.locator('[data-slot="points-toast"]').filter({ hasText: `${pupilName}: −3 points` });
+    await expect(taken).toBeVisible();
+    await expect(monthPoints).toHaveAttribute("data-value", "1");
+    await taken.getByRole("button", { name: "Undo" }).click();
+    await expect(page.getByText("Undone", { exact: true })).toBeVisible();
+    await expect(monthPoints).toHaveAttribute("data-value", "4");
+    await page.screenshot({ path: testInfo.outputPath("lesson-points.png") });
+    await sheet(page).getByRole("button", { name: "Cancel" }).click();
+    await expect(sheet(page)).toBeHidden();
+
+    // ── History: the award, the deduction and its undo ──
+    if (phone) await page.getByRole("button", { name: "Open menu" }).click();
+    await page.getByRole("navigation", { name: "Main navigation" }).locator("visible=true").getByRole("link", { name: "History" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "History" })).toBeVisible();
+    // The other screen size runs at the same time in the teacher's other group.
+    const history = page.locator("[data-history-row]").filter({ hasText: groupName });
+    await expect(history).toHaveCount(3);
+    await expect(history.filter({ hasText: "Homework done" })).toHaveAttribute("data-history-row", "2");
+    await expect(history.filter({ hasText: "Undone" })).toHaveAttribute("data-history-row", "3");
+    await expect(page.locator("main")).not.toContainText("+998");
+    await page.waitForLoadState("networkidle");
+    await page.screenshot({ path: testInfo.outputPath("history.png") });
+    await page.goto("/uz/my-groups/history");
+    await expect(page.getByRole("heading", { level: 1, name: "Tarix" })).toBeVisible();
+    await expect(page.locator("[data-history-row]").filter({ hasText: "Uy vazifasi bajarilgan" }).first()).toBeVisible();
+    await page.goto(`/en/my-groups/${data.group}`);
 
     // ── Coins: 5 to one student, who takes first place ──
     const target = students.nth(1);

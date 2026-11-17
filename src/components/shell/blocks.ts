@@ -1,6 +1,7 @@
 import {
   ChartColumn,
   GraduationCap,
+  History,
   Presentation,
   Settings,
   Star,
@@ -18,7 +19,8 @@ export type BlockKey =
   | "finance"
   | "reports"
   | "settings"
-  | "myGroups";
+  | "myGroups"
+  | "pointsHistory";
 
 export type Block = { key: BlockKey; href: `/${string}`; icon: LucideIcon };
 
@@ -38,4 +40,7 @@ export const SETTINGS_BLOCK: Block = { key: "settings", href: "/settings", icon:
 export const ALL_BLOCKS: Block[] = [...BLOCKS, SETTINGS_BLOCK];
 
 /** A teacher's whole sidebar. */
-export const TEACHER_BLOCKS: Block[] = [{ key: "myGroups", href: "/my-groups", icon: Star }];
+export const TEACHER_BLOCKS: Block[] = [
+  { key: "myGroups", href: "/my-groups", icon: Star },
+  { key: "pointsHistory", href: "/my-groups/history", icon: History },
+];

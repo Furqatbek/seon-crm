@@ -31,7 +31,11 @@ export type LeadActivity = Pick<
   "id" | "kind" | "body" | "from_status" | "to_status" | "created_by" | "created_at"
 >;
 
-export type LeadDetail = Tables<"leads"> & { activities: LeadActivity[] };
+export type LeadDetail = Tables<"leads"> & {
+  activities: LeadActivity[];
+  /** The student who referred this lead, if any. */
+  referrer: { id: string; full_name: string; phone: string } | null;
+};
 
 export type StaffOption = { id: string; full_name: string };
 export type GroupOption = { id: string; name: string };
@@ -121,7 +125,12 @@ export async function getFollowUps(now: Date): Promise<LeadSummary[]> {
 export async function getLead(id: string): Promise<LeadDetail | null> {
   const supabase = await db();
   const [lead, activities] = await Promise.all([
-    supabase.from("leads").select("*").eq("id", id).is("archived_at", null).maybeSingle(),
+    supabase
+      .from("leads")
+      .select("*, referrer:students!leads_referred_by_student_id_fkey(id, full_name, phone)")
+      .eq("id", id)
+      .is("archived_at", null)
+      .maybeSingle(),
     supabase
       .from("lead_activities")
       .select("id, kind, body, from_status, to_status, created_by, created_at")
@@ -129,8 +138,13 @@ export async function getLead(id: string): Promise<LeadDetail | null> {
       .order("created_at", { ascending: false })
       .order("id", { ascending: false }),
   ]);
-  if (lead.error) throw new Error(lead.error.message);
   if (activities.error) throw new Error(activities.error.message);
+  if (lead.error) {
+    // "Referred by" is missing while a deploy is ahead of its migration: read the lead without it.
+    const plain = await supabase.from("leads").select("*").eq("id", id).is("archived_at", null).maybeSingle();
+    if (plain.error) throw new Error(lead.error.message);
+    return plain.data ? { ...plain.data, referrer: null, activities: activities.data } : null;
+  }
   return lead.data ? { ...lead.data, activities: activities.data } : null;
 }
 

@@ -187,7 +187,7 @@ test("the owner invites a manager, who signs in and sees only manager screens; d
 test("the owner's settings: centre, notifications and templates", async ({ page }, testInfo) => {
   await signIn(page, "owner");
   await page.goto("/en/settings");
-  await expect(page.getByRole("tab")).toHaveText(["Centre", "Rooms", "Users", "Notifications", "Templates", "Profile"]);
+  await expect(page.getByRole("tab")).toHaveText(["Centre", "Rooms", "Users", "Notifications", "Templates", "Points", "Profile"]);
 
   // ── Centre: the due day cannot be before the billing day ──
   await expect(page.getByLabel("Centre name")).not.toHaveValue("");

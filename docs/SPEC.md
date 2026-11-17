@@ -872,6 +872,399 @@ On <page> the <uz|ru|en> text "<current text>" is <wrong|missing|too long>. Fix 
 messages/<lang>.json only and keep the keys identical across all three files.
 ```
 
+## Points and rewards add-on
+
+Students earn points automatically and from teachers, compete on monthly leaderboards, and spend points on rewards such as a branded T-shirt. Build it after Phase 12 as Phases 13–18. It also gives teachers their own login and moves attendance to them.
+
+### Decisions locked in
+
+| Decision | Answer |
+| --- | --- |
+| How teachers award points | Their own web login, limited to their own groups |
+| Attendance | Teachers mark it for their own lessons; managers and the owner can still correct it |
+| Automatic points | Attending a lesson, a full month with no absences, fee paid on time, a friend who enrols |
+| Teacher points | Teachers can award points and take them away; taking away needs a reason |
+| Where students see points | Telegram bot commands, a weekly Telegram summary, a TV screen in the centre |
+| Who gets messages | Student and parent, each through their own Telegram link |
+| Leaderboard | Monthly race that restarts on the 1st, plus all-time; ranked inside each group and across the centre |
+
+### Defaults to confirm
+
+| Area | Default | Change it if |
+| --- | --- | --- |
+| Point values | Present 2, late 1, perfect month 10, fee on time 10, friend enrols 50. The owner can change every value in Settings. | Rewards come too fast or too slow |
+| Rank vs spending | The leaderboard ranks points earned. Redeeming a reward lowers the spendable balance, not the rank. | Spending should drop a student's rank |
+| Teacher limits | 1–5 points per award or deduction; at most 10 points per student per day from one teacher | Teachers need more room |
+| Balance floor | A deduction never takes the balance below 0 | Negative balances are fine |
+| Expiry | Points never expire | You want a yearly reset of balances |
+| Redeeming | Student asks in the bot or at reception; points are held at once; a manager hands over the reward and marks it given, or rejects it and the points return | Only reception should redeem |
+| Group ranking | Counts only points earned in that group (attendance and teacher points there). The centre ranking counts everything. |  |
+| Names on the TV | First name and last initial; a parent can ask to hide their child | Full names are fine |
+| Referral | Points arrive when the friend's first payment is recorded, not when the lead is created |  |
+| Teacher privacy | Teachers see student names, attendance and points, not phones, balances or fees | Teachers need parent phones |
+| Points messages | Telegram only, never SMS; weekly summary on Sunday at 18:00 |  |
+
+At these values a student with perfect attendance in a 12-lesson month who pays on time earns 44 points, plus whatever teachers award. A 100-point T-shirt then takes about two months of good work.
+
+### Point rules
+
+All points live in one append-only ledger, like money. Rows are never edited or deleted; a correction is a new row. Earned points (for ranking) = every row except reward rows. Spendable balance = every row.
+
+| Source | Default points | When it is posted | Counts for group |
+| --- | --- | --- | --- |
+| Present at a lesson | +2 | When attendance is saved | That group |
+| Late to a lesson | +1 | When attendance is saved | That group |
+| Perfect month | +10 | On the 1st, for last month, per group with at least 4 held lessons and no Absent (Late and Excused allowed) | That group |
+| Fee paid on time | +10 | The day after the due day, if that month's charges were covered by the end of the due day | None |
+| Friend enrols | +50 | When the referred student's first payment is recorded | None |
+| Teacher award | +1 to +5 | Teacher picks a preset or types a reason | That group |
+| Teacher deduction | −1 to −5 | Teacher picks a preset or types a reason (required) | That group |
+| Owner adjustment | Any | Owner, with a reason | Optional |
+| Reward requested | − reward cost | Bot or reception request | None, not earned |
+| Reward rejected or cancelled | + cost back | Manager rejects or cancels | None, not earned |
+
+- Every automatic row has a unique `dedupe_key` (for example `attendance:<lesson>:<student>`), so jobs can run twice safely.
+- Editing attendance posts only the difference: Present → Absent posts −2. Cancelling a lesson reverses its attendance points.
+- Teacher points go through one database function, `award_points()`, which checks: the caller teaches that group today (or is the lesson's substitute), the student is actively enrolled, the amount is 1–5, today's total from that teacher to that student stays at or under 10, and a deduction never takes the balance below 0 (it is reduced to the balance, and the teacher is told).
+- Seeded presets, editable by the owner: Active in class +2, Homework done +2, Great test result +5, Helped a classmate +3; Homework not done −2, Disrupted the lesson −3, Phone in class −2.
+- Changing a point value applies from that moment on, never to rows already posted.
+- Turning the programme off in Settings stops new points; existing points and rewards stay.
+
+### Leaderboard rules
+
+- Monthly boards use rows posted in that calendar month, Tashkent time. All-time boards use every row.
+- Group board: only that group's rows, only students actively enrolled in it. Centre board: all earned points, all active students.
+- Ties share a rank (1, 2, 2, 4) and are then listed by name.
+- A student marked as hidden is left out of the TV and the bot's top lists, but staff still see their rank.
+
+### Teacher role
+
+A teacher sees only the groups they teach, works mostly from a phone during class, and never sees money or contact details. The owner gives a teacher a login from the teacher's page; the invite links the new profile to that teacher record.
+
+| Area | Owner | Manager | Teacher |
+| --- | --- | --- | --- |
+| Groups and lessons | All | All | Groups they teach, plus single lessons where they are the substitute |
+| Students | Everything | Everything | Name, attendance, points and rank in their groups only |
+| Attendance | Edit any time | Edit for 7 days | Mark own lessons; edit until 23:59 the next day |
+| Award or deduct points | Owner adjustment, any amount, reason required | No | 1–5 per action within the daily limit, own groups only |
+| Leaderboards | All | All | Their groups and the centre board |
+| Rewards | Catalogue and settings | Handle requests, hand over rewards | View catalogue |
+| Points settings | Yes | No | No |
+| Points reports | All | All | Their own groups |
+| Leads, Finance, Teachers, Settings | As before | As before | No access, except their own Profile |
+
+Teachers land on `/teach` after sign-in. They see how many lessons they taught this month but never pay rates or payouts. All of this is enforced with RLS: a teacher querying `payments`, `charges`, `leads` or another group's students gets zero rows.
+
+### Data model additions
+
+Six new tables and a few changed columns. The existing single Telegram link per student becomes the parent link, and each student gets a second link of their own.
+
+```text
+CHANGED
+user_role          owner | manager | teacher
+profiles           + teacher_id → teachers (set only when role = teacher)
+students           − telegram_chat_id, telegram_link_code (moved, see telegram_links)
+                   + student_link_code, parent_link_code (22 chars, unique)
+                   + leaderboard_hidden bool default false
+leads              + referred_by_student_id → students
+message_type       + points_weekly | points_deduction | points_month_result | reward_update
+
+NEW ENUMS
+points_source      attendance | perfect_month | on_time_payment | referral | teacher_award
+                   | teacher_deduction | owner_adjustment | reward_hold | reward_return
+link_role          student | parent
+preset_kind        award | deduction
+redemption_status  requested | given | rejected | cancelled
+
+NEW TABLES
+telegram_links     student_id, role link_role, chat_id bigint, language, linked_at
+                   unique (student_id, role)
+points_settings    single row: enabled, present (2), late (1), perfect_month (10),
+                   perfect_month_min_lessons (4), on_time (10), referral (50),
+                   max_per_action (5), teacher_daily_cap (10),
+                   weekly_day (7 = Sunday), weekly_time (18:00), tv_token, tv_language (uz)
+point_presets      kind, points, label_uz, label_ru, label_en, sort, is_active
+points_ledger      student_id, delta int <> 0, source, group_id, lesson_id, preset_id,
+                   redemption_id, reason, created_by, created_at,
+                   dedupe_key text unique                  -- insert only
+rewards            name, description, photo_path, cost int > 0,
+                   stock int (null = unlimited), is_active, archived_at
+redemptions        student_id, reward_id, cost, status, via (bot | desk),
+                   requested_by (student | parent | staff), handled_by, handled_at, note
+
+VIEWS AND FUNCTIONS
+student_points     student_id, balance, earned_this_month, earned_all_time
+leaderboard(scope group | centre, group_id, period month | all, month)
+                   → student_id, display_name, points, rank
+award_points(student_id, group_id, points, preset_id, reason, lesson_id)
+request_reward(student_id, reward_id, via) · handle_redemption(id, action, note)
+```
+
+The migration moves each existing `telegram_chat_id` into a parent row of `telegram_links` and keeps the old code as `parent_link_code`, so linked parents do not need to relink. One parent link per student; a second parent is out of scope.
+
+### Screens
+
+Teachers get a phone-first workspace; staff get a new Points item in the sidebar, after Groups; the centre gets a TV page.
+
+**Teacher workspace — `/teach`** (designed at 390 px first)
+
+- Bottom tab bar on phones, sidebar on desktop: Today, My groups, History, Profile.
+- Today: one card per lesson with time, group, room and student count.
+- Lesson screen: one row per student with name, this month's points in the group, a Present / Late / Absent / Excused control (all Present to start), and + and − buttons. Save attendance is a sticky button at the bottom.
+- - opens a bottom sheet of award presets plus Custom (1–5 with a reason). − opens deduction presets plus Custom (reason required). Points post at once with a toast and a 10-second Undo, which posts a reversing row.
+- My groups: each group's leaderboard, this month and all-time. History: every point this teacher gave this month.
+
+**Staff: student page**
+
+- New Points tab: balance, earned this month, rank in each group and in the centre, and the ledger (date, source, reason, by whom, ± points).
+- Buttons: Redeem reward (opens the catalogue, posts a desk request) and Adjust points (owner only, reason required).
+- Overview now shows two Telegram links, Student and Parent, each with its QR code and linked or not linked.
+- A Hide from public leaderboards switch.
+
+**Staff: Points — `/points`**
+
+- Leaderboard tab: Centre or a chosen group, This month or All-time, month picker for past months.
+- Rewards tab: cards with photo, name, cost and stock. The owner adds, edits and archives rewards.
+- Requests tab: date, student, reward, cost, from bot or desk, status. Give marks it handed over; Reject needs a reason and returns the points and the stock. The sidebar shows a count of open requests.
+- Group page gets its own Leaderboard tab as well.
+
+**TV screen — `/tv/<token>`**
+
+- No login; the secret token comes from Settings, and regenerating it kills old links.
+- Full screen at 1920 × 1080, white background, names at 32 px or larger. Shows the centre's top 10 this month, then rotates through each active group's top 5 every 15 seconds.
+- First name and last initial, hidden students left out, data refreshed every 60 seconds, "Updated hh:mm" and the centre name in the footer. Purple marks only first place.
+- The owner picks the TV language in Settings (default uz).
+
+**Settings → Points** (owner)
+
+- Programme on or off, every point value, per-action limit, teacher daily cap, presets editor in three languages, weekly summary day and time, TV link with Copy and Regenerate.
+
+**Reports → Points tab**
+
+- Uses the same period picker as other reports. KPIs: points earned, points deducted, points spent on rewards, unspent points across all students, rewards given, active students with no points this month.
+- Charts: points earned by source per month; awards and deductions per teacher, to spot inflation; top 10 students; rewards given by reward; average points per student by group.
+- Export CSV per chart. Owner and manager see everything; a teacher sees the same tab filtered to their groups from `/teach`.
+
+### Telegram for students and parents
+
+The bot becomes the students' window into the programme: each student and each parent links their own chat, checks points with commands, and gets progress messages. Points messages are never sent by SMS.
+
+**Linking**
+
+- The student page shows two links: `https://t.me/<bot>?start=s_<student_link_code>` and `?start=p_<parent_link_code>`, each with a QR code.
+- Start saves a `telegram_links` row with that role and replies in the student's language. `/stop` removes only that chat's link.
+- A parent linked to several children is asked "Which child?" with buttons before any command answers.
+
+**Who gets what**
+
+| Message | Student chat | Parent chat | SMS if no Telegram |
+| --- | --- | --- | --- |
+| Payment due and overdue | No | Yes | Yes, to the parent phone |
+| Lesson reminder | Yes | Only if the student has no link | No |
+| Weekly points summary | Yes | Yes | No |
+| Points taken away | Yes | Yes | No |
+| Month results | Yes | Yes | No |
+| Reward request updates | Yes | Yes | No |
+
+Awards are not messaged one by one; they appear in the weekly summary, so families are not spammed.
+
+**Bot commands** (registered with `setMyCommands` in uz, ru and en)
+
+- `/points` — balance, earned this month, this month's rank in each group and in the centre, last 5 entries, and the nearest reward ("8 more points for the T-shirt").
+- `/top` — the centre's top 10 this month, the student's group top 5, and the student's own rank. Hidden students are left out.
+- `/rewards` — the catalogue with cost and stock. Rewards the student can afford have a Request button with a confirm step; the request holds the points and one unit of stock and appears in staff Requests.
+- `/language` — switch this chat's language. `/stop` — unlink.
+
+**Scheduled points messages**
+
+- Weekly summary, Sunday 18:00 by default: points this week and the top reason, balance, this month's ranks, next reward goal. Sent only for active students.
+- Points taken away: sent as soon as it happens (held until 09:00 during quiet hours), with the group and the reason.
+- Month results, on the 1st at 10:00: last month's points, final rank in each group and the centre, and the perfect-month bonus if earned.
+- Reward updates: request received, reward handed over, request rejected with the reason.
+- Each message has a `dedupe_key` such as `weekly:<student>:<role>:<week>` and goes through the existing quiet hours and message log.
+
+New template placeholders: `{week_points}`, `{balance}`, `{group_rank}`, `{centre_rank}`, `{reason}`, `{reward}`, `{points_needed}`. Weekly summary, as an example:
+
+| Language | Text |
+| --- | --- |
+| uz | {student} bu hafta {week\_points} ball to'pladi. Jami: {balance} ball. Oy reytingi: {group} guruhida {group\_rank}-o'rin, markazda {centre\_rank}-o'rin. {reward} uchun yana {points\_needed} ball kerak. |
+| ru | {student} заработал(а) {week\_points} баллов за неделю. Всего: {balance}. Рейтинг за месяц: {group\_rank}-е место в группе {group}, {centre\_rank}-е в центре. До «{reward}» осталось {points\_needed}. |
+| en | {student} earned {week\_points} points this week. Total: {balance}. This month: #{group\_rank} in {group}, #{centre\_rank} in the centre. {points\_needed} more for {reward}. |
+
+## Build prompts — points and rewards
+
+First export this doc again and overwrite docs/SPEC.md, so Claude Code can read the add-on. Then run six more phases the same way as before: `/clear`, plan mode, paste, review the plan, check, commit. Each of your six deliverables maps to these phases:
+
+| Deliverable | Phases |
+| --- | --- |
+| 1. Points and ranking system | 14, 15 |
+| 2. Automatic points for students | 14 |
+| 3. Teachers can award points | 13, 14 |
+| 4. Student leaderboard | 15 |
+| 5. Redeem points for rewards | 16 |
+| 6. Points reports and notifications to students and parents | 17, 18 |
+
+### Phase 13 — Teacher login and attendance
+
+```text
+Phase 13: Teacher role. Read docs/SPEC.md: "Points and rewards add-on → Decisions locked
+in" and "Teacher role", plus "Roles and permissions" and "Business rules → Lessons and
+attendance".
+
+First update CLAUDE.md: Owner, Manager and Teacher log in; teachers see only their own
+groups; students and parents never log in and use the Telegram bot.
+
+Build:
+- Migration: add teacher to user_role and profiles.teacher_id → teachers. RLS matching
+  the Teacher column in "Teacher role": groups they teach, lessons where they substitute,
+  students through a view teacher_students with names only (no phones, birth date,
+  parents or balances), attendance writes for their own lessons until 23:59 the next day,
+  Tashkent time.
+- Teacher page: Give login (owner) invites the teacher by email and links the profile.
+- /teach, phone-first: Today, Lesson screen with attendance (no points yet), My groups,
+  Profile; bottom tab bar under 900 px. Teachers land on /teach and are redirected away
+  from every staff route.
+
+Do not build points yet.
+Check: a Vitest RLS suite signed in as a teacher proves zero rows from payments, charges,
+leads, teacher_pay_rates and other groups' students, no phone column in teacher_students,
+and attendance edits refused after the window. e2e at 390 px: a teacher marks today's
+attendance and the manager sees it on the group page. Screenshots at 390 and 1440 px.
+```
+
+### Phase 14 — Points engine and teacher awards
+
+```text
+Phase 14: Points engine. Read docs/SPEC.md, in the points add-on: "Defaults to confirm",
+"Point rules", "Data model additions", "Screens → Teacher workspace", "Staff: student
+page" and "Settings → Points".
+
+Build:
+- Migrations: points_settings (seeded with the defaults), point_presets (seeded in uz, ru,
+  en), points_ledger (insert only: revoke update and delete from every role), the
+  points_source and preset_kind enums, leads.referred_by_student_id,
+  students.leaderboard_hidden, the student_points view.
+- Automatic points, all idempotent through dedupe_key: an attendance trigger that posts
+  the difference whenever attendance is saved or changed and reverses points when a lesson
+  is cancelled; perfect month and fee on time in a daily Supabase Cron job at 00:20
+  Tashkent time; referral when the referred student's first non-voided payment is recorded.
+- award_points() as SECURITY DEFINER with every check in "Point rules". Undo posts a
+  reversing row within 10 seconds.
+- Teacher lesson screen: points per student, + and − bottom sheets with presets and
+  Custom; History tab.
+- Lead form: "Referred by" student search. Student page Points tab with balance, ledger and
+  owner-only Adjust points. Settings → Points: on/off, values, limits, presets editor.
+- Rules live in src/lib/domain/points.ts (pure) and are mirrored in SQL.
+
+Unit tests: Present → Absent posts −2; running every job twice posts nothing new; perfect
+month needs at least 4 held lessons and allows Late and Excused; fee on time with a
+prorated first month; referral only after the first non-voided payment; the 10-per-day
+teacher cap; 1–5 per action; a deduction reduced to the balance; programme off posts
+nothing; changed values never touch old rows.
+Check: as a teacher, award_points for a student outside their groups is refused.
+Run /code-review.
+```
+
+### Phase 15 — Leaderboards and TV screen
+
+```text
+Phase 15: Leaderboards. Read docs/SPEC.md, in the points add-on: "Leaderboard rules",
+"Screens → Staff: Points" and "Screens → TV screen".
+
+Build:
+- SQL leaderboard(scope, group_id, period, month) following "Leaderboard rules": Tashkent
+  months, group boards count only that group's rows, ties share a rank, hidden students
+  flagged.
+- /points Leaderboard tab (centre or group, month or all-time, past months), a Leaderboard
+  tab on the group page, and leaderboards in the teacher's My groups.
+- /tv/[token]: public route checked against points_settings.tv_token that exposes nothing
+  else; 1920 × 1080 layout; centre top 10, then each group's top 5, rotating every 15 s;
+  data refresh every 60 s; first name + last initial; TV language setting; Copy and
+  Regenerate link in Settings → Points.
+
+Check: unit tests for ranking: ties give 1, 2, 2, 4; the month boundary is 00:00 Tashkent;
+a student in two groups is ranked separately in each. e2e: a wrong token returns 404; a
+hidden student is missing from the TV but visible on the staff board. Screenshot the TV
+page at 1920 × 1080.
+```
+
+### Phase 16 — Rewards and redemption
+
+```text
+Phase 16: Rewards. Read docs/SPEC.md, in the points add-on: "Point rules" (reward rows),
+"Screens → Staff: Points" (Rewards and Requests tabs) and "Defaults to confirm →
+Redeeming".
+
+Build:
+- rewards and redemptions tables, the redemption_status enum, reward photos in a Supabase
+  Storage bucket (owner uploads, signed-in users read).
+- request_reward(): refuses when the balance is below the cost or stock is 0; posts a
+  reward_hold row and takes one unit of stock in the same transaction.
+- handle_redemption(): Give (status given, handled_by, handled_at) or Reject / Cancel
+  (reason required, reward_return row, stock restored). Given is final.
+- Rewards tab (owner edits, others view), Requests tab with an open-request count in the
+  sidebar, Redeem reward button on the student page for desk requests.
+- Seed rewards: Branded T-shirt 100 points, Notebook set 40, Free lesson 150 (unlimited).
+
+Check: unit tests that two simultaneous requests cannot overspend a balance or take the
+last unit twice (use row locks), that Reject returns points and stock, and that redeeming
+does not change leaderboard rank. e2e: a manager redeems a T-shirt at the desk and marks
+it given.
+```
+
+### Phase 17 — Telegram for students and parents
+
+```text
+Phase 17: Telegram for students and parents. Read docs/SPEC.md: "Telegram for students
+and parents" in the points add-on, and "Notifications".
+
+Build:
+- telegram_links and the link_role enum. The migration moves each
+  students.telegram_chat_id into a parent link and keeps the old code as parent_link_code;
+  add student_link_code. The student page shows both links with QR codes.
+- Webhook: /start s_<code>, /start p_<code>, /stop, /language, and a child picker for
+  parents with several children.
+- Commands /points, /top and /rewards (Request with a confirm step through
+  request_reward(via = bot)), registered with setMyCommands in uz, ru and en.
+- Re-route existing reminders to match the "Who gets what" table.
+- New message types with uz/ru/en templates: weekly summary (Sunday 18:00 by default),
+  points taken away (immediately, quiet hours respected), month results (the 1st at
+  10:00), reward updates. Telegram only, a dedupe_key on each.
+
+Unit tests with the FakeProvider: the routing table, a parent with two children, quiet
+hours for deductions, no weekly summary for inactive students, no SMS for points messages,
+dedupe.
+Then give me a script that links my own Telegram as a test student and sends one of each
+new message, and wait for me to run it.
+```
+
+### Phase 18 — Points reports and final review
+
+```text
+Phase 18: Points reports. Read docs/SPEC.md, in the points add-on: "Screens → Reports →
+Points tab" and "Teacher role".
+
+Build the Points tab in /reports: period picker, KPIs and the five charts, one SQL
+function each, following our chart rules (purple main series, dark grey comparison,
+greys after that, no gradients). Export CSV per chart. Teachers get the same tab inside
+/teach, filtered to their groups by RLS.
+
+Check: report totals equal sums from points_ledger for the same period, and awards per
+teacher match each teacher's History tab. Then use a subagent to review Phases 13–18
+against the points add-on in docs/SPEC.md and report only gaps that break the spec or
+correctness. Fix them and run every test.
+```
+
+> **Built so far (Phase 14), and where it differs from the text above.** On the owner's instruction, what already worked was kept:
+>
+> - The teacher area is `/my-groups` (not `/teach`): the lesson's attendance sheet has the + and − buttons, and History is `/my-groups/history`. A teacher login is given in Settings → Users, a teacher edits attendance for 7 days, and the earlier Coins feature stays next to points.
+> - `award_points()` also accepts a substitute for a lesson they teach today, but the `/my-groups` screens show a teacher only their own groups.
+> - Awards and deductions each have their own daily allowance per teacher and student (10 by default); an undone row gives its allowance back. Undo is accepted for 15 seconds on the server; the button shows for 10.
+> - The owner's adjustment is refused, not reduced, when it would take the balance below zero.
+> - `points_settings.started_at`: nothing from before the programme existed earns points. Perfect month is posted for the first month that ends after the start; fee on time for the first due day after it.
+> - Fee on time counts a month's fee only if it was charged by the end of the due day; a student who joins after the due day can earn it from the next month.
+> - Not built yet (later phases): leaderboards and ranks, the TV screen, rewards (`redemptions`, `points_ledger.redemption_id`), the two Telegram links, points messages and reports, the Hide from leaderboards switch (the column exists).
+
 ## Sources
 
 - [Claude Code best practices](https://code.claude.com/docs/en/best-practices.md) — plan mode, `/clear`, CLAUDE.md, verification, `/code-review`

@@ -5,11 +5,11 @@
  */
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { DB_URL, admin, as, connect, disconnect, studentId, type Session } from "./helpers";
+import { DB_URL, admin, as, connect, disconnect, type Session } from "./helpers";
 
 const month = `date_trunc('month', public.tashkent_today())::date`;
-// Seeded: an active student in debt. The amount is read, not assumed.
-const DEBTOR = studentId(1);
+// An active student in debt who is on the Debtors list, found before the tests run.
+let DEBTOR: string;
 
 const debts = async (s: Session) => {
   const [finance] = await s.rows<{ debt: number }>(`select debt::float8 as debt from public.finance_month_summary(${month})`);
@@ -22,7 +22,18 @@ const balance = async (s: Session) =>
   (await s.rows<{ balance: number }>(`select balance::float8 as balance from student_balances where student_id = $1`, [DEBTOR]))[0].balance;
 
 describe.skipIf(!DB_URL)("Students who left or graduated", () => {
-  beforeAll(connect);
+  beforeAll(async () => {
+    await connect();
+    await admin(async (s) => {
+      [{ student_id: DEBTOR }] = await s.rows<{ student_id: string }>(
+        `select b.student_id from student_balances b
+         join students s on s.id = b.student_id and s.status = 'active' and s.archived_at is null
+         where b.balance < 0
+           and exists (select 1 from enrollments e where e.student_id = s.id and e.status = 'active')
+         order by b.student_id limit 1`,
+      );
+    });
+  });
   afterAll(disconnect);
 
   it("a student who left drops out of Debtors and every debt total, but keeps the balance", async () => {

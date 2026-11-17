@@ -70,7 +70,7 @@ export const studentsSearchSchema = z.object({
 });
 export type StudentsSearch = z.output<typeof studentsSearchSchema>;
 
-export const STUDENT_TABS = ["overview", "ledger", "attendance", "messages"] as const;
+export const STUDENT_TABS = ["overview", "ledger", "attendance", "points", "messages"] as const;
 export type StudentTab = (typeof STUDENT_TABS)[number];
 
 /** URL state of /students/[id]. */

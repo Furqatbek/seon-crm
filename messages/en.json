@@ -50,7 +50,8 @@
     "finance": "Finance",
     "reports": "Reports",
     "settings": "Settings",
-    "myGroups": "My groups"
+    "myGroups": "My groups",
+    "pointsHistory": "History"
   },
   "language": {
     "label": "Language",
@@ -169,7 +170,9 @@
       "created": "Created",
       "trial": "Trial lesson",
       "lostReason": "Lost because",
-      "unassigned": "Nobody"
+      "unassigned": "Nobody",
+      "referredBy": "Referred by",
+      "referredByHint": "The student who sent this lead. They get points when the lead enrols and makes a first payment."
     },
     "form": {
       "created": "Lead added",
@@ -272,7 +275,8 @@
       "overview": "Overview",
       "ledger": "Ledger",
       "attendance": "Attendance",
-      "messages": "Messages"
+      "messages": "Messages",
+      "points": "Points"
     },
     "fields": {
       "name": "Name",
@@ -1143,7 +1147,8 @@
       "users": "Users",
       "notifications": "Notifications",
       "templates": "Templates",
-      "profile": "Profile"
+      "profile": "Profile",
+      "points": "Points"
     },
     "saved": "Saved",
     "centre": {
@@ -1350,6 +1355,127 @@
       "notFound": "This student no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."
+    }
+  },
+  "points": {
+    "count": "{count, plural, one {# point} other {# points}}",
+    "giveTitle": "Give points to {name}",
+    "takeTitle": "Take points from {name}",
+    "giveHint": "Pick a reason, or give 1 to {max} points of your own.",
+    "takeHint": "Pick a reason, or take 1 to {max} points with a reason of your own. The student and parent are told.",
+    "custom": "Custom",
+    "howMany": "How many",
+    "reason": "Reason",
+    "give": "Give points",
+    "take": "Take points",
+    "giveTo": "Give points to {name}",
+    "takeFrom": "Take points from {name}",
+    "given": "{name}: +{count, plural, one {# point} other {# points}}",
+    "taken": "{name}: −{count, plural, one {# point} other {# points}}",
+    "takenReduced": "{name} had only {count, plural, one {# point} other {# points}}: all taken",
+    "nothingToTake": "{name} has no points to take",
+    "undo": "Undo",
+    "undone": "Undone",
+    "friend": "Friend: {name}",
+    "programmeOff": "The points programme is switched off in Settings. Points already earned stay.",
+    "errors": {
+      "programmeOff": "The points programme is switched off.",
+      "amountInvalid": "Enter a whole number of points within the limit.",
+      "reasonRequired": "Write the reason.",
+      "dailyLimit": "The daily limit for this student is reached.",
+      "dailyLimitLeft": "The daily limit for this student is reached: {count, plural, =0 {nothing} one {# point} other {# points}} left today.",
+      "notInGroup": "The student is not in this group.",
+      "undoTooLate": "Too late to undo.",
+      "notEnough": "The student does not have that many points.",
+      "valueInvalid": "Enter a whole number.",
+      "valueRange": "Enter a whole number from {min} to {max}.",
+      "labelRequired": "Write the name in all three languages.",
+      "tooLong": "Too long.",
+      "notAllowed": "You are not allowed to do this.",
+      "notFound": "Not found. It may have been removed.",
+      "generic": "Something went wrong. Try again."
+    },
+    "history": {
+      "title": "History",
+      "subtitle": "Every point you gave or took this month.",
+      "empty": "You have not given or taken any points this month.",
+      "undone": "Undone"
+    },
+    "totals": {
+      "balance": "To spend",
+      "earnedThisMonth": "Earned this month",
+      "earnedAllTime": "Earned in total"
+    },
+    "adjust": {
+      "action": "Adjust points",
+      "title": "Adjust points of {name}",
+      "hint": "{count, plural, one {# point} other {# points}} to spend now. The reason is kept in the ledger.",
+      "kind": "Add or take",
+      "add": "Add",
+      "take": "Take away",
+      "done": "Points adjusted"
+    },
+    "ledger": {
+      "empty": "No points yet.",
+      "date": "Date",
+      "what": "What for",
+      "by": "By",
+      "points": "Points",
+      "automatic": "Automatic"
+    },
+    "source": {
+      "attendance": "Attendance",
+      "perfect_month": "Perfect month",
+      "on_time_payment": "Fee paid on time",
+      "referral": "Friend enrolled",
+      "teacher_award": "Teacher award",
+      "teacher_deduction": "Teacher deduction",
+      "owner_adjustment": "Owner adjustment",
+      "reward_hold": "Reward requested",
+      "reward_return": "Reward returned"
+    },
+    "settings": {
+      "enabled": "Points programme",
+      "enabledHint": "Off stops new points. Points already earned stay.",
+      "values": "Point values",
+      "valuesHint": "A new value applies from now on, never to points already given.",
+      "limits": "Teacher limits",
+      "limitsHint": "How much a teacher can give or take.",
+      "present": "Present at a lesson",
+      "late": "Late to a lesson",
+      "perfect_month": "Perfect month",
+      "perfect_month_min_lessons": "Lessons needed for a perfect month",
+      "on_time": "Fee paid on time",
+      "referral": "Friend enrols",
+      "max_per_action": "Most points per award or deduction",
+      "teacher_daily_cap": "Most points per student per day"
+    },
+    "presets": {
+      "title": "Reasons for teachers",
+      "hint": "Teachers pick from these when they give or take points. Reasons worth more than the per-action limit are not offered.",
+      "kind": "Kind",
+      "kinds": {
+        "award": "Awards",
+        "deduction": "Deductions"
+      },
+      "points": "Points",
+      "label": {
+        "uz": "Name in Uzbek",
+        "ru": "Name in Russian",
+        "en": "Name in English"
+      },
+      "active": "Offered to teachers",
+      "off": "Off",
+      "edit": "Edit {name}",
+      "add": {
+        "award": "Add award",
+        "deduction": "Add deduction"
+      },
+      "editTitle": "Edit reason",
+      "newTitle": "New reason",
+      "saved": "Reason saved",
+      "removed": "Reason removed",
+      "remove": "Remove"
     }
   }
 }

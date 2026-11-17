@@ -1,11 +1,13 @@
 "use client";
 
-import { ArrowLeft, CalendarDays, Coins, UserPlus } from "lucide-react";
+import { ArrowLeft, CalendarDays, Coins, Minus, Plus, UserPlus } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { CoinsText } from "@/components/coins/coins-text";
+import { PointsSheet, type PointsTarget } from "@/components/points/points-sheet";
+import { PointsText } from "@/components/points/points-text";
 import { LESSON_TONE, hhmm, type Weekday } from "@/components/groups/group-meta";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -29,6 +31,7 @@ import type { CoinRow } from "@/lib/coins/queries";
 import { ATTENDANCE_STATUSES, type AttendanceStatus } from "@/lib/domain/attendance";
 import { roomLabel } from "@/lib/domain/rooms";
 import { formatDay } from "@/lib/format";
+import type { PointPreset } from "@/lib/points/queries";
 import { saveMyAttendance } from "@/lib/teacher/actions";
 import type { MyGroup, MyLesson, MyLessonSheet } from "@/lib/teacher/queries";
 import { TEACHER_COIN_CHOICES, type CoinsErrorKey } from "@/lib/validation/coins";
@@ -36,10 +39,29 @@ import type { GroupErrorKey } from "@/lib/validation/groups";
 
 type CoinChoice = `${(typeof TEACHER_COIN_CHOICES)[number]}`;
 
+/** What the lesson screen needs to give and take points; null while the programme is off. */
+export type LessonPoints = {
+  maxPerAction: number;
+  presets: PointPreset[];
+  /** This month's points in the group: student id → points. */
+  month: Record<string, number>;
+};
+
 /** Present / Late / Absent / Excused for everyone in the lesson, then Save. */
-function AttendanceForm({ lesson, onClose }: { lesson: MyLessonSheet; onClose: () => void }) {
+function AttendanceForm({
+  lesson,
+  points,
+  onClose,
+}: {
+  lesson: MyLessonSheet;
+  points: LessonPoints | null;
+  onClose: () => void;
+}) {
+  // The + / − sheet opens inside this one, so choosing in it does not close the lesson.
+  const [pointsTarget, onPoints] = useState<PointsTarget | null>(null);
   const t = useTranslations("groups");
   const tMine = useTranslations("myGroups");
+  const tPoints = useTranslations("points");
   const tCommon = useTranslations("common");
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<GroupErrorKey | null>(null);
@@ -76,7 +98,33 @@ function AttendanceForm({ lesson, onClose }: { lesson: MyLessonSheet; onClose: (
           <ul className="divide-y divide-border">
             {lesson.students.map((student) => (
               <li key={student.id} className="flex flex-col gap-2 py-3" data-lesson-student={student.id}>
-                <span className="text-body text-text">{student.full_name}</span>
+                <span className="flex items-center gap-2">
+                  <span className="min-w-0 flex-1 text-body text-text">{student.full_name}</span>
+                  {points ? (
+                    <>
+                      <PointsText
+                        value={points.month[student.id] ?? 0}
+                        className="text-footnote text-text-secondary"
+                      />
+                      <Button
+                        size="icon"
+                        aria-label={tPoints("takeFrom", { name: student.full_name })}
+                        data-points="deduction"
+                        onClick={() => onPoints({ student: { id: student.id, name: student.full_name }, kind: "deduction" })}
+                      >
+                        <Minus aria-hidden />
+                      </Button>
+                      <Button
+                        size="icon"
+                        aria-label={tPoints("giveTo", { name: student.full_name })}
+                        data-points="award"
+                        onClick={() => onPoints({ student: { id: student.id, name: student.full_name }, kind: "award" })}
+                      >
+                        <Plus aria-hidden />
+                      </Button>
+                    </>
+                  ) : null}
+                </span>
                 <SegmentedControl
                   aria-label={student.full_name}
                   fullWidth
@@ -95,6 +143,16 @@ function AttendanceForm({ lesson, onClose }: { lesson: MyLessonSheet; onClose: (
           </p>
         ) : null}
       </SheetBody>
+      {points ? (
+        <PointsSheet
+          target={pointsTarget}
+          groupId={lesson.groupId}
+          lessonId={lesson.id}
+          presets={points.presets}
+          maxPerAction={points.maxPerAction}
+          onClose={() => onPoints(null)}
+        />
+      ) : null}
       <SheetFooter>
         <Button variant="secondary" onClick={onClose}>
           {tCommon(locked ? "close" : "cancel")}
@@ -171,11 +229,14 @@ export function MyGroupScreen({
   lessons,
   students,
   lesson,
+  points,
   today,
 }: {
   group: MyGroup;
   lessons: MyLesson[];
   students: CoinRow[];
+  /** Null when the points programme is off, or no lesson is open. */
+  points: LessonPoints | null;
   /** The lesson whose attendance sheet is open (?lesson=…), or null. */
   lesson: MyLessonSheet | null;
   today: string;
@@ -297,7 +358,7 @@ export function MyGroupScreen({
                   {group.name} · {formatDay(lesson.lesson_date, locale, { month: "long" })} · {hhmm(lesson.start_time)}
                 </SheetDescription>
               </SheetHeader>
-              <AttendanceForm key={lesson.id} lesson={lesson} onClose={closeLesson} />
+              <AttendanceForm key={lesson.id} lesson={lesson} points={points} onClose={closeLesson} />
             </>
           ) : null}
         </SheetContent>

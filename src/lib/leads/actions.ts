@@ -35,11 +35,13 @@ export async function createLead(input: unknown): Promise<LeadResult<{ id: strin
   const ctx = await session();
   if (!ctx) return { ok: false, error: "notAllowed" };
 
-  const { next_contact, ...fields } = parsed.data;
+  const { next_contact, referred_by_student_id, ...fields } = parsed.data;
   const { data, error } = await ctx.supabase
     .from("leads")
     .insert({
       ...fields,
+      // Left out when empty, so a new lead saves even before the column exists.
+      ...(referred_by_student_id ? { referred_by_student_id } : {}),
       next_contact_at: next_contact ? nextContactTimestamp(next_contact) : null,
       created_by: ctx.user.id,
     })

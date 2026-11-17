@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
+import { StudentPicker } from "@/components/enrolments/student-picker";
 import { PhoneMatches, usePhoneMatches } from "@/components/shared/phone-matches";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
@@ -31,6 +32,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { LEAD_SOURCES, tashkentDate } from "@/lib/domain/leads";
 import { formatPhone } from "@/lib/format";
 import { createLead, updateLead } from "@/lib/leads/actions";
+import type { StudentOption } from "@/lib/groups/actions";
 import type { LeadDetail, StaffOption } from "@/lib/leads/queries";
 import {
   leadFormSchema,
@@ -60,6 +62,7 @@ function LeadForm({
   const {
     register,
     control,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<LeadFormInput, unknown, LeadFormValues>({
@@ -73,6 +76,7 @@ function LeadForm({
           preferred_time: lead.preferred_time ?? "",
           assigned_to: lead.assigned_to ?? "",
           next_contact: lead.next_contact_at ? tashkentDate(lead.next_contact_at) : "",
+          referred_by_student_id: lead.referred_by_student_id ?? "",
           notes: lead.notes ?? "",
         }
       : {
@@ -82,6 +86,7 @@ function LeadForm({
           preferred_time: "",
           assigned_to: defaultAssignee,
           next_contact: "",
+          referred_by_student_id: "",
           notes: "",
         },
   });
@@ -89,6 +94,9 @@ function LeadForm({
   // Warn when the number already belongs to a lead or a student. It does not block saving.
   const phone = useWatch({ control, name: "phone" });
   const matches = usePhoneMatches(phone, { leadId: lead?.id });
+
+  // The picker shows the chosen student; the form keeps only the id.
+  const [referrer, setReferrer] = useState<StudentOption | null>(lead?.referrer ?? null);
 
   const message = (key: string | undefined) => (key ? t(`errors.${key as LeadErrorKey}`) : null);
 
@@ -100,6 +108,7 @@ function LeadForm({
         ...values,
         assigned_to: values.assigned_to ?? "",
         next_contact: values.next_contact ?? "",
+        referred_by_student_id: values.referred_by_student_id ?? "",
         subject_interest: values.subject_interest ?? "",
         preferred_time: values.preferred_time ?? "",
         notes: values.notes ?? "",
@@ -216,6 +225,18 @@ function LeadForm({
             <Input id="lead-next" type="date" {...register("next_contact")} />
           </Field>
         </div>
+
+        <Field label={t("fields.referredBy")} htmlFor="lead-referrer">
+          <StudentPicker
+            id="lead-referrer"
+            value={referrer}
+            onChange={(student) => {
+              setReferrer(student);
+              setValue("referred_by_student_id", student?.id ?? "", { shouldDirty: true });
+            }}
+          />
+          <p className="text-footnote text-text-secondary">{t("fields.referredByHint")}</p>
+        </Field>
 
         <Field label={t("fields.notes")} htmlFor="lead-notes" error={message(errors.notes?.message)}>
           <Textarea id="lead-notes" {...register("notes")} />

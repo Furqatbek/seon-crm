@@ -50,7 +50,8 @@
     "finance": "Moliya",
     "reports": "Hisobotlar",
     "settings": "Sozlamalar",
-    "myGroups": "Guruhlarim"
+    "myGroups": "Guruhlarim",
+    "pointsHistory": "Tarix"
   },
   "language": {
     "label": "Til",
@@ -169,7 +170,9 @@
       "created": "Yaratilgan",
       "trial": "Sinov darsi",
       "lostReason": "Rad etish sababi",
-      "unassigned": "Hech kim"
+      "unassigned": "Hech kim",
+      "referredBy": "Kim tavsiya qildi",
+      "referredByHint": "Bu lidni olib kelgan oʻquvchi. Lid yozilib, birinchi toʻlovni qilganda unga ball beriladi."
     },
     "form": {
       "created": "Lid qoʻshildi",
@@ -272,7 +275,8 @@
       "overview": "Umumiy",
       "ledger": "Hisob-kitob",
       "attendance": "Davomat",
-      "messages": "Xabarlar"
+      "messages": "Xabarlar",
+      "points": "Ballar"
     },
     "fields": {
       "name": "Ism",
@@ -1143,7 +1147,8 @@
       "users": "Foydalanuvchilar",
       "notifications": "Bildirishnomalar",
       "templates": "Shablonlar",
-      "profile": "Profil"
+      "profile": "Profil",
+      "points": "Ballar"
     },
     "saved": "Saqlandi",
     "centre": {
@@ -1350,6 +1355,127 @@
       "notFound": "Bu oʻquvchi endi mavjud emas.",
       "notAllowed": "Sizga bunga ruxsat yoʻq.",
       "generic": "Nimadir xato ketdi. Qayta urinib koʻring."
+    }
+  },
+  "points": {
+    "count": "{count} ball",
+    "giveTitle": "{name}ga ball berish",
+    "takeTitle": "{name}dan ball olish",
+    "giveHint": "Sababni tanlang yoki oʻz sababingiz bilan 1 dan {max} gacha ball bering.",
+    "takeHint": "Sababni tanlang yoki oʻz sababingiz bilan 1 dan {max} gacha ball oling. Oʻquvchi va ota-onaga xabar boradi.",
+    "custom": "Boshqa sabab",
+    "howMany": "Nechta",
+    "reason": "Sabab",
+    "give": "Ball berish",
+    "take": "Ball olish",
+    "giveTo": "{name}ga ball berish",
+    "takeFrom": "{name}dan ball olish",
+    "given": "{name}: +{count} ball",
+    "taken": "{name}: −{count} ball",
+    "takenReduced": "{name}da faqat {count} ball bor edi: hammasi olindi",
+    "nothingToTake": "{name}da olinadigan ball yoʻq",
+    "undo": "Bekor qilish",
+    "undone": "Bekor qilindi",
+    "friend": "Doʻsti: {name}",
+    "programmeOff": "Ballar dasturi sozlamalarda oʻchirilgan. Toʻplangan ballar saqlanadi.",
+    "errors": {
+      "programmeOff": "Ballar dasturi oʻchirilgan.",
+      "amountInvalid": "Limit doirasida butun son kiriting.",
+      "reasonRequired": "Sababni yozing.",
+      "dailyLimit": "Bu oʻquvchi uchun kunlik limit tugadi.",
+      "dailyLimitLeft": "Bu oʻquvchi uchun kunlik limit tugadi: bugun {count} ball qoldi.",
+      "notInGroup": "Oʻquvchi bu guruhda emas.",
+      "undoTooLate": "Endi bekor qilib boʻlmaydi.",
+      "notEnough": "Oʻquvchida buncha ball yoʻq.",
+      "valueInvalid": "Butun son kiriting.",
+      "valueRange": "{min} dan {max} gacha butun son kiriting.",
+      "labelRequired": "Nomini uchala tilda yozing.",
+      "tooLong": "Juda uzun.",
+      "notAllowed": "Sizda bunga ruxsat yoʻq.",
+      "notFound": "Topilmadi. Oʻchirilgan boʻlishi mumkin.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    },
+    "history": {
+      "title": "Tarix",
+      "subtitle": "Shu oyda siz bergan yoki olgan barcha ballar.",
+      "empty": "Shu oyda hali ball bermadingiz va olmadingiz.",
+      "undone": "Bekor qilindi"
+    },
+    "totals": {
+      "balance": "Sarflash mumkin",
+      "earnedThisMonth": "Shu oyda toʻplandi",
+      "earnedAllTime": "Jami toʻplandi"
+    },
+    "adjust": {
+      "action": "Ballarni oʻzgartirish",
+      "title": "{name} ballarini oʻzgartirish",
+      "hint": "Hozir sarflash mumkin: {count} ball. Sabab tarixda saqlanadi.",
+      "kind": "Qoʻshish yoki olish",
+      "add": "Qoʻshish",
+      "take": "Olish",
+      "done": "Ballar oʻzgartirildi"
+    },
+    "ledger": {
+      "empty": "Hali ball yoʻq.",
+      "date": "Sana",
+      "what": "Nima uchun",
+      "by": "Kim",
+      "points": "Ball",
+      "automatic": "Avtomatik"
+    },
+    "source": {
+      "attendance": "Davomat",
+      "perfect_month": "Qoldirilmagan oy",
+      "on_time_payment": "Oʻz vaqtida toʻlov",
+      "referral": "Doʻsti yozildi",
+      "teacher_award": "Oʻqituvchidan",
+      "teacher_deduction": "Oʻqituvchi oldi",
+      "owner_adjustment": "Rahbar oʻzgartirdi",
+      "reward_hold": "Sovgʻa soʻraldi",
+      "reward_return": "Sovgʻa qaytarildi"
+    },
+    "settings": {
+      "enabled": "Ballar dasturi",
+      "enabledHint": "Oʻchirilsa, yangi ball berilmaydi. Toʻplangan ballar saqlanadi.",
+      "values": "Nima uchun necha ball",
+      "valuesHint": "Yangi qiymat shu paytdan amal qiladi, berilgan ballar oʻzgarmaydi.",
+      "limits": "Oʻqituvchilar uchun limitlar",
+      "limitsHint": "Oʻqituvchi qancha ball berishi yoki olishi mumkin.",
+      "present": "Darsda qatnashdi",
+      "late": "Darsga kechikdi",
+      "perfect_month": "Qoldirilmagan oy",
+      "perfect_month_min_lessons": "Qoldirilmagan oy uchun darslar soni",
+      "on_time": "Oʻz vaqtida toʻlov",
+      "referral": "Doʻsti yozildi",
+      "max_per_action": "Bir martada eng koʻp ball",
+      "teacher_daily_cap": "Bir oʻquvchiga kuniga eng koʻp ball"
+    },
+    "presets": {
+      "title": "Oʻqituvchilar uchun sabablar",
+      "hint": "Oʻqituvchilar ball berganda yoki olganda shu roʻyxatdan tanlaydi. Bir martalik limitdan qimmat sabablar taklif qilinmaydi.",
+      "kind": "Turi",
+      "kinds": {
+        "award": "Ragʻbatlar",
+        "deduction": "Jarimalar"
+      },
+      "points": "Ball",
+      "label": {
+        "uz": "Oʻzbekcha nomi",
+        "ru": "Ruscha nomi",
+        "en": "Inglizcha nomi"
+      },
+      "active": "Oʻqituvchilarga taklif qilinadi",
+      "off": "Oʻchiq",
+      "edit": "Tahrirlash: {name}",
+      "add": {
+        "award": "Ragʻbat qoʻshish",
+        "deduction": "Jarima qoʻshish"
+      },
+      "editTitle": "Sababni tahrirlash",
+      "newTitle": "Yangi sabab",
+      "saved": "Sabab saqlandi",
+      "removed": "Sabab oʻchirildi",
+      "remove": "Oʻchirish"
     }
   }
 }

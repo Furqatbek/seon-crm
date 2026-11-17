@@ -53,8 +53,11 @@ function SidebarContent({
 }) {
   const t = useTranslations();
   const pathname = usePathname();
+  const blocks = user.role === "teacher" ? TEACHER_BLOCKS : BLOCKS;
+  const matches = (block: Block) => pathname === block.href || pathname.startsWith(`${block.href}/`);
+  // /my-groups/history is under /my-groups: only the longest match is lit.
   const isActive = (block: Block) =>
-    pathname === block.href || pathname.startsWith(`${block.href}/`);
+    matches(block) && !blocks.some((other) => other.href.length > block.href.length && matches(other));
 
   return (
     <div className="flex h-full flex-col">
@@ -67,7 +70,7 @@ function SidebarContent({
         aria-label={t("nav.label")}
         className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 py-2"
       >
-        {(user.role === "teacher" ? TEACHER_BLOCKS : BLOCKS).map((block) => (
+        {blocks.map((block) => (
           <NavLink
             key={block.key}
             block={block}

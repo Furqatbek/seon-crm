@@ -10,6 +10,7 @@ import { routing } from "@/i18n/routing";
 import { getTeacherUser } from "@/lib/auth";
 import { getGroupCoins } from "@/lib/coins/queries";
 import { tashkentDate } from "@/lib/domain/time";
+import { getGroupMonthPoints, getPointPresets, getPointsSettings } from "@/lib/points/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
 import { getMyGroups, getMyLessonSheet, getMyLessons } from "@/lib/teacher/queries";
 
@@ -32,20 +33,32 @@ async function MyGroup({ params, searchParams }: Props) {
   const group = (await getMyGroups()).find((candidate) => candidate.id === id);
   if (!group) notFound();
 
-  const [lessons, students, sheet] = await Promise.all([
+  const [lessons, students, sheet, settings] = await Promise.all([
     getMyLessons(id),
     getGroupCoins(id),
     search.lesson ? getMyLessonSheet(search.lesson) : null,
+    getPointsSettings(),
   ]);
   if (!lessons) notFound();
+  // A lesson of another group is not opened here.
+  const lesson = sheet && sheet.groupId === id ? sheet : null;
+  // Points are given from the open lesson, while the programme is on.
+  const points =
+    lesson && settings.enabled
+      ? await Promise.all([getPointPresets({ activeOnly: true }), getGroupMonthPoints(id)]).then(([presets, month]) => ({
+          maxPerAction: settings.max_per_action,
+          presets,
+          month,
+        }))
+      : null;
 
   return (
     <MyGroupScreen
       group={group}
       lessons={lessons}
       students={students}
-      // A lesson of another group is not opened here.
-      lesson={sheet && sheet.groupId === id ? sheet : null}
+      lesson={lesson}
+      points={points}
       today={tashkentDate(new Date())}
     />
   );

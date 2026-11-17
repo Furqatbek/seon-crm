@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
 import { CentreTab } from "@/components/settings/centre-tab";
+import { PointsTab } from "@/components/settings/points-tab";
 import { NotificationsTab } from "@/components/settings/notifications-tab";
 import { ProfileTab } from "@/components/settings/profile-tab";
 import { RoomsTab } from "@/components/settings/rooms-tab";
@@ -12,6 +13,7 @@ import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import type { Locale } from "@/i18n/routing";
 import { getSignedInUser } from "@/lib/auth";
+import { getPointPresets, getPointsSettings } from "@/lib/points/queries";
 import { tashkentDate } from "@/lib/domain/time";
 import {
   getAllTemplates,
@@ -30,7 +32,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
   const user = await getSignedInUser();
   if (!user) return null;
 
-  // Centre, rooms, users, notifications and templates are the owner's. A manager or a teacher has
+  // Centre, rooms, users, notifications, templates and points are the owner's. A manager or a teacher has
   // Profile only: the other tabs are never rendered, and the database would
   // refuse the changes anyway.
   const tabs: readonly SettingsTab[] = user.role === "owner" ? SETTINGS_TABS : ["profile"];
@@ -52,6 +54,9 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
           today={tashkentDate(new Date())}
         />
       ) : null}
+      {tab === "points" && owner ? (
+        <PointsTab settings={await getPointsSettings()} presets={await getPointPresets({ activeOnly: false })} />
+      ) : null}
       {tab === "profile" ? <ProfileTab profile={await getProfile(user)} /> : null}
     </SettingsScreen>
   );
@@ -59,7 +64,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
 
 function Fallback() {
   const t = useTranslations("nav");
-  return <ListSkeleton title={t("settings")} tabs={5} filters={false} />;
+  return <ListSkeleton title={t("settings")} tabs={7} filters={false} />;
 }
 
 export default async function SettingsPage({

@@ -32,6 +32,7 @@ function SheetOverlay({
 /**
  * Right side, 480 px, full screen on phones: create, edit and record previews.
  * side="left" is the navigation slide-over below 900 px.
+ * side="bottom" is a short list of choices that rises from the bottom edge.
  */
 function SheetContent({
   className,
@@ -39,9 +40,10 @@ function SheetContent({
   side = "right",
   showCloseButton = true,
   onCloseAutoFocus,
+  onInteractOutside,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
-  side?: "left" | "right";
+  side?: "left" | "right" | "bottom";
   showCloseButton?: boolean;
 }) {
   const t = useTranslations("common");
@@ -56,12 +58,19 @@ function SheetContent({
           "fixed inset-y-0 z-50 flex h-dvh flex-col bg-bg text-text shadow-float outline-none motion-sheet data-open:animate-in data-closed:animate-out",
           side === "right" &&
             "right-0 w-full sm:max-w-sheet sm:rounded-l-sheet data-open:slide-in-from-right data-closed:slide-out-to-right",
+          side === "bottom" &&
+            "inset-x-0 top-auto bottom-0 h-auto max-h-[85dvh] w-full rounded-t-sheet sm:left-auto sm:max-w-sheet sm:rounded-tr-none data-open:slide-in-from-bottom data-closed:slide-out-to-bottom",
           side === "left" &&
             "left-0 w-sidebar max-w-[85vw] rounded-r-sheet data-open:slide-in-from-left data-closed:slide-out-to-left",
           className,
         )}
         {...props}
         onCloseAutoFocus={focus.onCloseAutoFocus}
+        // A toast sits outside the sheet: pressing its button (Undo) must not close the sheet.
+        onInteractOutside={(event) => {
+          if ((event.target as Element | null)?.closest?.("[data-sonner-toaster]")) event.preventDefault();
+          onInteractOutside?.(event);
+        }}
       >
         {focus.marker}
         {children}

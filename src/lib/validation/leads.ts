@@ -30,6 +30,8 @@ export const leadFormSchema = z.object({
   preferred_time: optionalText(120),
   assigned_to: z.union([z.uuid(), z.literal("")]).transform((value) => value || null),
   next_contact: z.union([day, z.literal("")]).transform((value) => value || null),
+  // The student who sent this lead: they get the referral points when the lead enrols and pays.
+  referred_by_student_id: z.union([z.uuid(), z.literal("")]).transform((value) => value || null),
   notes: optionalText(2000),
 });
 export type LeadFormInput = z.input<typeof leadFormSchema>;
