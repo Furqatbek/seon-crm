@@ -1,8 +1,8 @@
 # Edu CRM
 
-CRM for one education centre in Uzbekistan. Owner and Manager run it. A teacher
-may get a login that shows only their own groups (attendance and coins).
-Students and parents never log in. Full spec: docs/SPEC.md — read the
+CRM for one education centre in Uzbekistan. Owner, Manager and Teacher log in.
+Teachers see only their own groups. Students and parents never log in; they use
+the Telegram bot. Full spec: docs/SPEC.md — read the
 section each task names before writing code.
 
 ## Stack
