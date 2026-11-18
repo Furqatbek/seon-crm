@@ -17,7 +17,7 @@ export type TelegramUpdate = {
     id?: string;
     data?: string;
     from?: { language_code?: string };
-    message?: { chat?: { id?: number; type?: string } };
+    message?: { message_id?: number; chat?: { id?: number; type?: string } };
   };
 };
 
@@ -35,8 +35,12 @@ export interface BotStore {
   summary(studentId: string): Promise<PointsSummary | null>;
   top(studentId: string): Promise<BotTop | null>;
   rewards(): Promise<RewardOffer[]>;
-  /** Holds the points and one unit of stock: request_reward(via = bot). */
-  requestReward(studentId: string, rewardId: string, role: LinkRole): Promise<RequestOutcome>;
+  /**
+   * Holds the points and one unit of stock: request_reward(via = bot). `key`
+   * names the confirm message that was answered, so pressing Yes twice, or
+   * Telegram delivering the press twice, makes one request.
+   */
+  requestReward(studentId: string, rewardId: string, role: LinkRole, key: string | null): Promise<RequestOutcome>;
 }
 
 export type Button = { text: string; data: string };
@@ -178,7 +182,9 @@ export async function handleUpdate(update: TelegramUpdate, store: BotStore, text
           ],
         ]);
       }
-      const outcome = await store.requestReward(link.studentId, reward.id, link.role);
+      const confirmed = callback.message?.message_id;
+      const key = typeof confirmed === "number" ? `bot:${chatId}:${confirmed}` : null;
+      const outcome = await store.requestReward(link.studentId, reward.id, link.role, key);
       return reply(outcome === "ok" ? t("request.done", { reward: reward.name, centre }) : t(`request.${outcome}`));
     }
     if (kind === "rn") return reply(t("request.cancelled"));

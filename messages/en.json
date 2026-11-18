@@ -1458,7 +1458,8 @@
     "editMarks": "Change attendance",
     "ranking": "Students and coins",
     "attendance": "Attendance",
-    "lessonCancelled": "This lesson is cancelled."
+    "lessonCancelled": "This lesson is cancelled.",
+    "taught": "{count, plural, one {# lesson taught this month} other {# lessons taught this month}}"
   },
   "coins": {
     "column": "Coins",

@@ -10,14 +10,21 @@ import { roomLabel } from "@/lib/domain/rooms";
 import type { MyGroup } from "@/lib/teacher/queries";
 
 /** A teacher's start page: one card per group they teach. */
-export function MyGroupsScreen({ groups }: { groups: MyGroup[] }) {
+export function MyGroupsScreen({
+  groups,
+  taught,
+}: {
+  groups: MyGroup[];
+  /** Held lessons the teacher taught this month. Never pay. */
+  taught: number;
+}) {
   const t = useTranslations("myGroups");
   const tGroups = useTranslations("groups");
   const tDays = useTranslations("common.weekdays");
 
   return (
     <>
-      <PageHeader title={t("title")} />
+      <PageHeader title={t("title")} subtitle={<span data-lessons-taught={taught}>{t("taught", { count: taught })}</span>} />
       {groups.length === 0 ? (
         <EmptyState icon={Star}>{t("empty")}</EmptyState>
       ) : (

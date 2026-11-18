@@ -33,7 +33,7 @@ const summary = (student: typeof AZIZA, balance: number): PointsSummary => ({
 
 function world(balances: Record<string, number> = { [AZIZA.id]: 120, [BOBUR.id]: 10 }) {
   const links: Link[] = [];
-  const requests: Array<{ studentId: string; rewardId: string; role: LinkRole }> = [];
+  const requests: Array<{ studentId: string; rewardId: string; role: LinkRole; key: string | null }> = [];
   const students = [AZIZA, BOBUR];
   const store: BotStore = {
     async link(role, code, chatId) {
@@ -61,15 +61,20 @@ function world(balances: Record<string, number> = { [AZIZA.id]: 120, [BOBUR.id]:
       groups: [{ name: "English B1", rows: [{ name: "Aziza K.", points: 30, rank: 1 }], own: { rank: 1, points: 30 } }],
     }),
     rewards: async () => [NOTEBOOK, TSHIRT, LESSON],
-    async requestReward(studentId, rewardId, role) {
-      requests.push({ studentId, rewardId, role });
+    async requestReward(studentId, rewardId, role, key) {
+      // As the database does: a key seen before is the same request.
+      if (!key || !requests.some((request) => request.key === key)) requests.push({ studentId, rewardId, role, key });
       return "ok";
     },
   };
   const send = (text: string, chatId = 501, language = "en") =>
     handleUpdate({ message: { text, chat: { id: chatId, type: "private" }, from: { language_code: language } } }, store, botTexts);
   const press = (data: string, chatId = 501) =>
-    handleUpdate({ callback_query: { id: "cb1", data, message: { chat: { id: chatId, type: "private" } }, from: { language_code: "en" } } }, store, botTexts);
+    handleUpdate(
+      { callback_query: { id: "cb1", data, message: { message_id: 77, chat: { id: chatId, type: "private" } }, from: { language_code: "en" } } },
+      store,
+      botTexts,
+    );
   return { store, links, requests, send, press };
 }
 
@@ -205,7 +210,10 @@ describe("/points, /top and /rewards", () => {
     const done = await press(`ry:${ids}`, 900);
     expect(done?.text).toBe("Запрос принят: «T-shirt». Заберите на ресепшене Seon.");
     // request_reward(via = bot), asked by the parent.
-    expect(requests).toEqual([{ studentId: AZIZA.id, rewardId: TSHIRT.id, role: "parent" }]);
+    expect(requests).toEqual([{ studentId: AZIZA.id, rewardId: TSHIRT.id, role: "parent", key: "bot:900:77" }]);
+    // Yes pressed again on the same message, or the press delivered twice: still one request.
+    expect((await press(`ry:${ids}`, 900))?.text).toBe("Запрос принят: «T-shirt». Заберите на ресепшене Seon.");
+    expect(requests).toHaveLength(1);
   });
 
   it("says why a request did not go through", async () => {

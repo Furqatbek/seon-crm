@@ -66,7 +66,9 @@ test("a teacher sees only their groups, marks attendance and gives coins; staff 
     await expect(page.locator("[data-my-group]").filter({ hasText: "English Kids" })).toBeVisible();
     if (phone) await page.getByRole("button", { name: "Open menu" }).click();
     const nav = page.getByRole("navigation", { name: "Main navigation" }).locator("visible=true");
-    await expect(nav.getByRole("link")).toHaveText(["My groups", "History"]);
+    await expect(nav.getByRole("link")).toHaveText(["My groups", "History", "Reports"]);
+    // How many lessons they taught this month, and never what they are paid.
+    await expect(page.locator("[data-lessons-taught]")).toHaveText(/^\d+ lessons? taught this month$/);
     await expect(page.getByRole("link", { name: "Settings" })).toHaveCount(0);
     await expect(page.locator('[data-slot="user-menu"]:visible')).toContainText("Teacher");
     if (phone) await page.keyboard.press("Escape");

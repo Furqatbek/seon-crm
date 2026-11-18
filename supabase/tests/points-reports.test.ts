@@ -83,11 +83,8 @@ describe.skipIf(!DB_URL)("Points reports", () => {
       expect(kpis.deducted).toBe(9);
       expect(kpis.spent).toBe(20);
       expect(kpis.rewards_given).toBe(1);
-      // Unspent is the balance of every active student today, whatever the period.
-      const unspent = await one<{ n: number }>(
-        s,
-        `select coalesce(sum(l.delta), 0)::int as n from points_ledger l join students st on st.id = l.student_id where st.status = 'active' and st.archived_at is null`,
-      );
+      // Unspent is every point in the ledger today, whatever the period and whoever holds it.
+      const unspent = await one<{ n: number }>(s, `select coalesce(sum(delta), 0)::int as n from points_ledger`);
       expect(kpis.unspent).toBe(unspent.n);
       const without = await one<{ n: number }>(
         s,
@@ -178,9 +175,9 @@ describe.skipIf(!DB_URL)("Points reports", () => {
   it("a teacher gets the same report narrowed to their own groups", async () => {
     await as("teacher", async (s) => {
       // The ledger is closed to a teacher: these come from the report only.
-      const kpis = await one<{ earned: number; deducted: number; spent: number; rewards_given: number }>(
+      const kpis = await one<{ earned: number; deducted: number; spent: number | null; unspent: number | null; rewards_given: number | null }>(
         s,
-        `select earned::int, deducted::int, spent::int, rewards_given from public.report_points_kpis(${args})`,
+        `select earned::int, deducted::int, spent::int, unspent::int, rewards_given from public.report_points_kpis(${args})`,
       );
       const groups = await s.rows<{ group_id: string; points: number }>(`select group_id, points::int from public.report_points_by_group(${args})`);
       const top = await s.rows<{ student_name: string; points: number }>(`select student_name, points::int from public.report_points_top_students(${args})`);
@@ -189,9 +186,10 @@ describe.skipIf(!DB_URL)("Points reports", () => {
       // Only points that count for their groups: the 10 and the 30 − 6 with no group are left out.
       expect(kpis.earned - kpis.deducted).toBe(groups.reduce((sum, row) => sum + row.points, 0));
       expect(kpis.deducted).toBe(3);
-      expect(kpis.spent).toBe(0);
-      // Their student's reward still counts as given.
-      expect(kpis.rewards_given).toBe(1);
+      // Spending and balances belong to no group: a teacher's report has none of them,
+      // however many points their students hold or spent elsewhere.
+      expect([kpis.spent, kpis.unspent, kpis.rewards_given]).toEqual([null, null, null]);
+      expect(await s.rows(`select * from public.report_rewards_given(${args})`)).toEqual([]);
       expect(top.find((row) => row.student_name === "Report Test")).toEqual({ student_name: "Report Test", points: 5 + 4 - 4 - 3 });
       const read = await s.attempt(`select 1 from points_ledger`);
       expect(read.ok ? read.rowCount : 0).toBe(0);

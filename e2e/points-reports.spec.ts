@@ -90,8 +90,11 @@ test("a teacher gets the same report for their own groups only", async ({ page }
   await page.getByRole("navigation", { name: "Main navigation" }).locator("visible=true").getByRole("link", { name: "Reports" }).click();
   await expect(page).toHaveURL(/\/en\/my-groups\/reports$/);
   await expect(page.getByRole("heading", { level: 1, name: "Points in my groups" })).toBeVisible();
-  await expect(page.locator("[data-points-kpi]")).toHaveCount(6);
-  for (const id of CHARTS) await expect(chart(page, id)).toBeVisible();
+  // Spending and balances belong to no group: a teacher has neither those three figures nor the rewards chart.
+  await expect(page.locator("[data-points-kpi]")).toHaveCount(3);
+  for (const key of ["spent", "unspent", "rewardsGiven"]) await expect(page.locator(`[data-points-kpi="${key}"]`)).toHaveCount(0);
+  await expect(chart(page, "points-rewards")).toHaveCount(0);
+  for (const id of CHARTS.filter((name) => name !== "points-rewards")) await expect(chart(page, id)).toBeVisible();
 
   // Only the points that count for the groups this teacher teaches.
   await expect(async () => {

@@ -1458,7 +1458,8 @@
     "editMarks": "Davomatni oʻzgartirish",
     "ranking": "Oʻquvchilar va tangalar",
     "attendance": "Davomat",
-    "lessonCancelled": "Bu dars bekor qilingan."
+    "lessonCancelled": "Bu dars bekor qilingan.",
+    "taught": "Shu oyda {count} ta dars oʻtildi"
   },
   "coins": {
     "column": "Tangalar",

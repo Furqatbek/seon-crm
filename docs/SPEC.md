@@ -1273,6 +1273,13 @@ correctness. Fix them and run every test.
 >   - A one-off message from staff by Telegram goes to the parent's chat, or to the student's own when no parent is linked.
 >   - After deploying, press Settings → Notifications → Connect webhook once more: it now also asks Telegram for button presses and registers the command menu in uz, ru and en.
 > - Phase 18, points reports: Reports has two tabs, Overview and Points. A teacher's report is at `/my-groups/reports`; the database narrows it to their groups (points that count for those groups, the students in them, their own awards and deductions). Definitions: earned is every non-reward row except teacher deductions and negative owner adjustments, corrections included; deducted is those two as a positive number; earned minus deducted is what the leaderboards count. "Unspent points" is today's total, whatever the period; "Students with no points" counts active students with nothing earned in the period.
+> - After the review of Phases 13–18:
+>   - While the programme is off nothing new is given, but points that are no longer deserved are still taken back (a mark changed to Absent, a lesson cancelled).
+>   - The daily job also settles fee on time for last month, so a due day that ends as the next month starts is not missed.
+>   - A reward request from the bot is made once per confirm message; stock returns on reject only if the request took a unit; editing a reward changes its stock only when the owner types a different number.
+>   - `/top` counts the student's own place the same way as the list above it.
+>   - A teacher's report has no spending or balances (they belong to no group): three KPIs and four charts. For staff, Unspent points is every point in the ledger.
+>   - A teacher sees how many lessons they taught this month on My groups.
 > - Still not built: ranks on the student's Points tab.
 
 ## Sources

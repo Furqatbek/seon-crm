@@ -94,6 +94,8 @@ export const rewardSchema = z.object({
     }
     return stock;
   }),
+  /** The stock field as the form loaded it: stock is saved only when the owner changed it. */
+  stock_loaded: z.string().optional(),
   is_active: z.boolean(),
   // The photo's name in the bucket; set by the upload, never typed.
   photo_path: z

@@ -41,7 +41,7 @@ export function PointsReport({ report, range, locale }: { report: Report; range:
 
   return (
     <>
-      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6" data-slot="points-kpi-row">
+      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-3" data-slot="points-kpi-row">
         {(
           [
             ["earned", kpis.earned],
@@ -51,13 +51,15 @@ export function PointsReport({ report, range, locale }: { report: Report; range:
             ["rewardsGiven", kpis.rewardsGiven],
             ["studentsWithoutPoints", kpis.studentsWithoutPoints],
           ] as const
-        ).map(([key, value]) => (
+        ).flatMap(([key, value]) =>
+          // A teacher's report has no spending or balances: those cards are left out.
+          value === null ? [] : [
           <KpiCard key={key} label={t(`kpi.${key}`)}>
             <span data-points-kpi={key} data-value={value}>
               {value}
             </span>
-          </KpiCard>
-        ))}
+          </KpiCard>,
+        ])}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -143,7 +145,8 @@ export function PointsReport({ report, range, locale }: { report: Report; range:
           </ResponsiveContainer>
         </ChartCard>
 
-        {/* 4. Rewards given by reward */}
+        {/* 4. Rewards given by reward: staff only */}
+        {kpis.rewardsGiven === null ? null : (
         <ChartCard
           id="points-rewards"
           title={t("rewards.title")}
@@ -165,6 +168,7 @@ export function PointsReport({ report, range, locale }: { report: Report; range:
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
+        )}
 
         {/* 5. Average points per student by group */}
         <ChartCard

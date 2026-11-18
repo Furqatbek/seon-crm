@@ -124,9 +124,10 @@ export type PointsReport = {
   kpis: {
     earned: number;
     deducted: number;
-    spent: number;
-    unspent: number;
-    rewardsGiven: number;
+    /** Spending and balances belong to no group: null in a teacher's report. */
+    spent: number | null;
+    unspent: number | null;
+    rewardsGiven: number | null;
     studentsWithoutPoints: number;
   };
   /** One row per month, with the points earned from each source. */

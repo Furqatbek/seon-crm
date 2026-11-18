@@ -72,7 +72,7 @@ function RewardForm({ reward, onClose }: { reward: Reward | null; onClose: () =>
         description: values.description ?? "",
         stock: values.stock === null ? "" : String(values.stock),
         photo_path: photoPath,
-        ...(reward ? { id: reward.id } : {}),
+        ...(reward ? { id: reward.id, stock_loaded: reward.stock === null ? "" : String(reward.stock) } : {}),
       });
       if (!result.ok) return setError(result.error);
       toast(t("rewards.saved"));

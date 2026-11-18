@@ -87,3 +87,11 @@ export async function getMyLessonSheet(lessonId: string): Promise<MyLessonSheet 
     students: sheet.data.map((row) => ({ id: row.student_id, full_name: row.full_name, mark: row.mark })),
   };
 }
+
+/** Held lessons the signed-in teacher taught this month, substitutions included. */
+export async function getMyLessonsThisMonth(): Promise<number> {
+  const supabase = await db();
+  const { data, error } = await supabase.rpc("teacher_lessons_this_month");
+  // 0 while a deploy is ahead of its migration.
+  return error ? 0 : data;
+}

@@ -30,12 +30,13 @@ const stock = async (s: Session, reward: string) =>
 const request = (s: Session, student: string, reward: string) =>
   s.attempt(`select public.request_reward($1, $2) as id`, [student, reward]);
 
+let student = "";
+let reward = "";
+
 describe.skipIf(!DB_URL)("Rewards and redemption", () => {
   beforeAll(connect);
   afterAll(disconnect);
 
-  let student = "";
-  let reward = "";
   const setup = (points: number, cost: number, units: number | null) => async (s: Session) => {
     student = await newStudent(s, "Reward Test", points);
     reward = await newReward(s, cost, units);
@@ -257,6 +258,49 @@ describe.skipIf(!DB_URL)("Rewards and redemption", () => {
         [reward, second],
       );
       expect(rows).toEqual([{ stock: 0, requests: 1, second_balance: 100 }]);
+    });
+  });
+});
+
+// ── Fixes from the review of Phases 13–18 ──
+describe.skipIf(!DB_URL)("Rewards: one request per confirmation, and stock that was never taken", () => {
+  beforeAll(connect);
+  afterAll(disconnect);
+
+  it("the same request key makes one request, however often it is sent", async () => {
+    await admin(async (s) => {
+      const student = await newStudent(s, "Double Tap", 200);
+      const reward = await newReward(s, 100, 3);
+      const ask = (key: string) =>
+        s.rows<{ id: string }>(`select public.request_reward($1, $2, 'bot', 'student', $3) as id`, [student, reward, key]);
+      const [first] = await ask("bot:501:77");
+      const [again] = await ask("bot:501:77");
+      expect(again.id).toBe(first.id);
+      expect(await balance(s, student)).toBe(100);
+      expect(await stock(s, reward)).toBe(2);
+      // A different confirm message is a different request.
+      const [second] = await ask("bot:501:78");
+      expect(second.id).not.toBe(first.id);
+      expect(await balance(s, student)).toBe(0);
+      expect(await s.rows(`select via, requested_by from redemptions where id = $1`, [first.id])).toEqual([{ via: "bot", requested_by: "student" }]);
+    });
+  });
+
+  it("rejecting a request made while stock was unlimited adds no unit when stock was limited since", async () => {
+    await as("owner", async (s) => {
+      const unlimited = await request(s, student, reward);
+      const id = unlimited.ok ? (unlimited.rows[0].id as string) : "";
+      await s.rows(`update rewards set stock = 5 where id = $1`, [reward]);
+      const limited = await request(s, student, reward);
+      expect(await stock(s, reward)).toBe(4);
+      await s.rows(`select public.handle_redemption($1, 'reject', 'Changed mind')`, [id]);
+      expect(await stock(s, reward)).toBe(4);
+      await s.rows(`select public.handle_redemption($1, 'reject', 'Changed mind')`, [limited.ok ? limited.rows[0].id : ""]);
+      expect(await stock(s, reward)).toBe(5);
+      expect(await balance(s, student)).toBe(200);
+    }, async (s) => {
+      student = await newStudent(s, "Reward Test", 200);
+      reward = await newReward(s, 100, null);
     });
   });
 });

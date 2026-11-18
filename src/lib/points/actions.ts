@@ -232,9 +232,18 @@ export async function saveReward(input: unknown): Promise<PointsResult> {
   const ctx = await session("owner");
   if (!ctx) return { ok: false, error: "notAllowed" };
 
-  const { id, ...values } = parsed.data;
+  const { id, stock_loaded: loaded, ...values } = parsed.data;
   if (id) {
-    const { data, error } = await ctx.supabase.from("rewards").update(values).eq("id", id).is("archived_at", null).select("id");
+    // Requests take and return units while the form is open: the stock is
+    // written only when the owner typed a different number.
+    const { stock, ...rest } = values;
+    const changed = loaded === undefined || loaded.trim() !== (stock === null ? "" : String(stock));
+    const { data, error } = await ctx.supabase
+      .from("rewards")
+      .update(changed ? values : rest)
+      .eq("id", id)
+      .is("archived_at", null)
+      .select("id");
     if (error) return failure(error);
     if (data.length === 0) return { ok: false, error: "notFound" };
   } else {

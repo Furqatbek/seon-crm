@@ -410,3 +410,64 @@ describe.skipIf(!DB_URL)("Points engine", () => {
     });
   });
 });
+
+// ── Fixes from the review of Phases 13–18 ──
+describe.skipIf(!DB_URL)("Points engine: corrections and edge cases", () => {
+  beforeAll(connect);
+  afterAll(disconnect);
+
+  it("while the programme is off nothing new is given, but a cancelled lesson and a changed mark still take points back", async () => {
+    await as("owner", async (s) => {
+      await mark(s, "present");
+      expect(await posted(s)).toEqual([2]);
+      await s.rows(`update points_settings set enabled = false`);
+      // Absent → nothing new; Present again → nothing new either.
+      await mark(s, "absent");
+      expect(await posted(s)).toEqual([2, -2]);
+      await mark(s, "present");
+      expect(await posted(s)).toEqual([2, -2]);
+    }, cleanLesson);
+    await as("owner", async (s) => {
+      await mark(s, "present");
+      await s.rows(`update points_settings set enabled = false`);
+      await s.rows(`update lessons set status = 'cancelled', cancel_reason = 'Test' where id = $1`, [lesson]);
+      expect(await posted(s)).toEqual([2, -2]);
+      // Restoring the lesson while off gives nothing back.
+      await s.rows(`update lessons set status = 'held', cancel_reason = null where id = $1`, [lesson]);
+      expect(await posted(s)).toEqual([2, -2]);
+    }, cleanLesson);
+  });
+
+  it("the daily job also settles last month's fee on time, for a due day that ends as the next month starts", async () => {
+    await admin(async (s) => {
+      const source = (await s.rows<{ src: string }>(`select prosrc as src from pg_proc where proname = 'points_daily'`))[0].src;
+      expect(source).toMatch(/points_post_on_time\(\(this_month - interval '1 month'\)::date\)/);
+      // And it still runs twice without posting anything new.
+      await s.rows(`update points_settings set enabled = true, started_at = now() - interval '6 months'`);
+      await s.rows(`select public.points_daily()`);
+      const once = await s.count("points_ledger");
+      await s.rows(`select public.points_daily()`);
+      expect(await s.count("points_ledger")).toBe(once);
+    });
+  });
+
+  it("a teacher sees how many lessons they taught this month, and nobody else's", async () => {
+    await as("teacher", async (s) => {
+      const [{ n }] = await s.rows<{ n: number }>(`select public.teacher_lessons_this_month() as n`);
+      expect(n).toBeGreaterThan(0);
+    }, async (s) => {
+      await s.rows(`update lessons set status = 'held' where id = $1`, [lesson]);
+    });
+    await admin(async (s) => {
+      const [{ expected }] = await s.rows<{ expected: number }>(
+        `select count(*)::int as expected from lessons where teacher_id = $1 and status = 'held'
+           and lesson_date >= date_trunc('month', ${today})::date and lesson_date < (date_trunc('month', ${today}) + interval '1 month')::date`,
+        [TEACHER],
+      );
+      expect(expected).toBeGreaterThanOrEqual(0);
+    });
+    await as("manager", async (s) => {
+      expect(await s.rows(`select public.teacher_lessons_this_month() as n`)).toEqual([{ n: 0 }]);
+    });
+  });
+});

@@ -229,12 +229,13 @@ export function botStore(admin: Db): BotStore {
       if (error) throw new Error(error.message);
       return data;
     },
-    async requestReward(studentId, rewardId, role) {
+    async requestReward(studentId, rewardId, role, key) {
       const { error } = await admin.rpc("request_reward", {
         p_student_id: studentId,
         p_reward_id: rewardId,
         p_via: "bot",
         p_requested_by: role,
+        p_request_key: key ?? undefined,
       });
       if (!error) return "ok";
       return (error.code && REQUEST_ERRORS[error.code]) || "failed";
