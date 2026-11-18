@@ -63,7 +63,8 @@ test("staff see the leaderboards; a hidden student is missing from the TV but vi
     if (phone) await page.getByRole("button", { name: "Open menu" }).click();
     await page.getByRole("navigation", { name: "Main navigation" }).locator("visible=true").getByRole("link", { name: "Points" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Points" })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "Leaderboard" })).toBeVisible();
+    // Since Phase 16 the board is the first of three tabs.
+    await expect(page.getByRole("tab", { name: "Leaderboard" })).toHaveAttribute("data-state", "active");
     const row = page.locator(`[data-board-row="${id}"]`);
     await expect(row).toHaveAttribute("data-points", String(totals.centre));
     // Both screen sizes run at once, each with a student of its own at the top.
@@ -96,9 +97,9 @@ test("staff see the leaderboards; a hidden student is missing from the TV but vi
 
     // The same board in Uzbek and Russian.
     await page.goto("/uz/points");
-    await expect(page.getByRole("heading", { level: 2, name: "Reyting" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "Reyting" })).toHaveAttribute("data-state", "active");
     await page.goto("/ru/points");
-    await expect(page.getByRole("heading", { level: 2, name: "Рейтинг" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "Рейтинг" })).toHaveAttribute("data-state", "active");
 
     // The TV is designed for one large screen: the rest runs at the desktop size only.
     if (phone) {

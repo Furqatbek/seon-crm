@@ -6,6 +6,7 @@ import { z } from "zod";
 import { appUrl } from "@/lib/app-url";
 import { getCurrentUser, getSignedInUser } from "@/lib/auth";
 import { getProviders } from "@/lib/notify/store";
+import { botCommands } from "@/lib/notify/bot-texts";
 import { connectWebhook } from "@/lib/notify/telegram-admin";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -255,6 +256,7 @@ export async function connectTelegramWebhook(): Promise<SettingsResult<{ usernam
     token: process.env.TELEGRAM_BOT_TOKEN,
     secret: process.env.TELEGRAM_WEBHOOK_SECRET,
     appUrl: await appUrl(),
+    commands: botCommands(),
   });
   if (!result.ok) return { ok: false, error: "generic", detail: result.error };
 

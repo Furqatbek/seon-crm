@@ -1,6 +1,6 @@
-import { dedupeKey, fallsBackToSms } from "./rules";
-import { forChannel } from "./templates";
-import type { Channel, MessageType, Providers } from "./types";
+import { dedupeKey, fallsBackToSms } from "./rules.ts";
+import { forChannel } from "./templates.ts";
+import type { Channel, MessageType, Providers } from "./types.ts";
 
 export type Outgoing = {
   studentId: string;

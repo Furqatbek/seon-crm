@@ -71,11 +71,13 @@ test("a lead is converted into a student, linked both ways", async ({ page }, te
   await expect(page.getByText("Test Parent")).toBeVisible();
   await expect(page.getByText("Русский")).toBeVisible();
 
-  // The Telegram link carries a 22-character code and can be shown as a QR code.
-  const link = page.locator("[data-telegram-link]");
-  await expect(link).toHaveText(/^https:\/\/t\.me\/ziyo_markaz_demo_bot\?start=[A-Za-z0-9]{22}$/);
-  await page.getByRole("button", { name: "Show QR code" }).click();
-  await expect(page.getByRole("img", { name: "QR code with the Telegram link" })).toBeVisible();
+  // Two Telegram links, the student's own (s_) and the parent's (p_), each with a 22-character code and a QR code.
+  await expect(page.locator('[data-telegram-link="student"]')).toHaveText(/^https:\/\/t\.me\/ziyo_markaz_demo_bot\?start=s_[A-Za-z0-9]{22}$/);
+  await expect(page.locator('[data-telegram-link="parent"]')).toHaveText(/^https:\/\/t\.me\/ziyo_markaz_demo_bot\?start=p_[A-Za-z0-9]{22}$/);
+  await expect(page.locator("[data-telegram-role]")).toHaveCount(2);
+  await expect(page.locator('[data-telegram-role="parent"]')).toHaveAttribute("data-linked", "false");
+  await page.locator('[data-telegram-role="parent"]').getByRole("button", { name: /^Show QR code/ }).click();
+  await expect(page.getByRole("img", { name: "QR code with the Telegram link: Parent's link" })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("student.png"), fullPage: true });
 
   // ── Linked both ways: student → lead → student ──

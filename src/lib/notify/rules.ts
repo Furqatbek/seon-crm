@@ -1,4 +1,4 @@
-import type { Channel, MessageType } from "./types";
+import { POINTS_MESSAGE_TYPES, type Channel, type Language, type LinkRole, type MessageType } from "./types.ts";
 
 // When messages go out and to whom. All times are Tashkent wall-clock
 // ("HH:MM"), all days "YYYY-MM-DD".
@@ -72,36 +72,61 @@ export function lessonReminderDue(minutesUntilLesson: number, hoursBefore: numbe
   return minutesUntilLesson <= lead && minutesUntilLesson > lead - LESSON_WINDOW_MINUTES;
 }
 
+/** One linked Telegram chat and the language it is written to. */
+export type ChatLink = { chatId: number | string; language: Language };
+
+/** How a student and their parent can be reached. */
 export type Reach = {
-  telegramChatId: number | string | null;
+  /** The student's own chat. */
+  studentChat: ChatLink | null;
+  /** The parent's chat. */
+  parentChat: ChatLink | null;
   parentPhone: string | null;
   phone: string | null;
 };
 
 /** SMS goes to the parent's phone when there is one, otherwise the student's. */
-export function smsRecipient(reach: Reach): string | null {
+export function smsRecipient(reach: Pick<Reach, "parentPhone" | "phone">): string | null {
   return reach.parentPhone || reach.phone || null;
 }
 
-/**
- * Where a message goes.
- * - Payment messages and Remind: Telegram when linked, else SMS.
- * - Lesson reminders: Telegram only.
- * - Custom: the channel staff chose, if the student can be reached on it.
- */
-export function chooseChannel(
-  type: MessageType,
-  reach: Reach,
-  requested?: Channel,
-): { channel: Channel; recipient: string } | null {
-  const telegram = reach.telegramChatId !== null && reach.telegramChatId !== "" ? String(reach.telegramChatId) : null;
-  const sms = smsRecipient(reach);
-  const viaTelegram = telegram ? { channel: "telegram" as const, recipient: telegram } : null;
-  const viaSms = sms ? { channel: "sms" as const, recipient: sms } : null;
+export type Route = {
+  channel: Channel;
+  recipient: string;
+  /** Whose chat it is; null for an SMS. */
+  role: LinkRole | null;
+  /** The chat's language; null for an SMS, which uses the student's. */
+  language: Language | null;
+};
 
-  if (type === "custom" && requested) return requested === "telegram" ? viaTelegram : viaSms;
-  if (type === "lesson_reminder") return viaTelegram;
-  return viaTelegram ?? viaSms;
+const isPointsMessage = (type: MessageType) => (POINTS_MESSAGE_TYPES as readonly string[]).includes(type);
+
+/**
+ * Who gets what — docs/SPEC.md → "Telegram for students and parents".
+ *
+ * | Message                         | Student chat | Parent chat             | SMS             |
+ * | Payment due, overdue, Remind    | no           | yes                     | if no parent chat |
+ * | Lesson reminder                 | yes          | only if no student chat | no              |
+ * | Weekly, taken away, month, reward | yes        | yes                     | no              |
+ * | Custom (staff)                  | the channel staff chose: the parent's chat, else the student's; or SMS |
+ */
+export function routesFor(type: MessageType, reach: Reach, requested?: Channel): Route[] {
+  const chat = (link: ChatLink | null, role: LinkRole): Route[] =>
+    link && link.chatId !== "" ? [{ channel: "telegram", recipient: String(link.chatId), role, language: link.language }] : [];
+  const student = chat(reach.studentChat, "student");
+  const parent = chat(reach.parentChat, "parent");
+  const phone = smsRecipient(reach);
+  const sms: Route[] = phone ? [{ channel: "sms", recipient: phone, role: null, language: null }] : [];
+
+  if (isPointsMessage(type)) return [...student, ...parent];
+  if (type === "lesson_reminder") return student.length > 0 ? student : parent;
+  if (type === "custom" && requested) return requested === "sms" ? sms : parent.length > 0 ? parent : student;
+  return parent.length > 0 ? parent : sms;
+}
+
+/** The first place a message goes, or null when the student cannot be reached for it. */
+export function chooseChannel(type: MessageType, reach: Reach, requested?: Channel): Route | null {
+  return routesFor(type, reach, requested)[0] ?? null;
 }
 
 /** Whether a failed Telegram message is tried again by SMS. Lesson reminders are Telegram only. */
@@ -117,6 +142,11 @@ export const dedupeKey = {
   /** Remind: at most once per student per day. */
   remind: (studentId: string, day: string) => `remind:${studentId}:${day}`,
   custom: (id: string) => `custom:${id}`,
+  /** Points messages: one per student, chat and event. `week` is the Monday, "YYYY-MM-DD". */
+  weekly: (studentId: string, role: LinkRole, week: string) => `weekly:${studentId}:${role}:${week}`,
+  monthResult: (studentId: string, role: LinkRole, month: string) => `month_result:${studentId}:${role}:${month}`,
+  deduction: (ledgerId: string, role: LinkRole) => `deduction:${ledgerId}:${role}`,
+  reward: (redemptionId: string, update: string, role: LinkRole) => `reward:${redemptionId}:${update}:${role}`,
   /** The SMS sent because the Telegram message with this key failed. */
   smsFallback: (key: string) => `${key}:sms`,
 };

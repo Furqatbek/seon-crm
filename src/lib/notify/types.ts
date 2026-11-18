@@ -3,7 +3,19 @@
 // scripts/ can load the providers directly.
 
 export type Channel = "telegram" | "sms";
-export type MessageType = "payment_due" | "payment_overdue" | "lesson_reminder" | "custom";
+export type MessageType =
+  | "payment_due"
+  | "payment_overdue"
+  | "lesson_reminder"
+  | "custom"
+  | "points_weekly"
+  | "points_deduction"
+  | "points_month_result"
+  | "reward_update";
+/** The four points messages: Telegram only, to the student and the parent. */
+export const POINTS_MESSAGE_TYPES = ["points_weekly", "points_deduction", "points_month_result", "reward_update"] as const;
+/** Whose chat a Telegram link is. */
+export type LinkRole = "student" | "parent";
 export type Language = "uz" | "ru" | "en";
 
 export type SendResult =

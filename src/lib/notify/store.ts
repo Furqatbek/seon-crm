@@ -4,20 +4,23 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/lib/supabase/types";
 
-import type { BotStore } from "./bot";
+import type { BotStore, RequestOutcome } from "./bot";
 import type { MessageLog } from "./deliver";
 import { EskizProvider } from "./eskiz";
+import type { BotTop, PointsSummary } from "./points-data";
+import type { Chats, DeductionEvent, PointsMessageData, RewardEvent } from "./points-messages";
 import type { LessonCandidate, NotifySettings, ReminderData, Template } from "./reminders";
+import type { ChatLink } from "./rules";
 import { TelegramProvider } from "./telegram";
-import type { Providers } from "./types";
+import type { Language, LinkRole, Providers } from "./types";
 
 type Db = SupabaseClient<Database>;
 
 // One Eskiz provider per server instance, so its token is logged in for once.
-let providers: Providers | undefined;
+let providers: (Providers & { telegram: TelegramProvider }) | undefined;
 
 /** The real providers, from the environment. Unconfigured ones fail every send with a clear error. */
-export function getProviders(): Providers {
+export function getProviders(): Providers & { telegram: TelegramProvider } {
   providers ??= {
     telegram: new TelegramProvider({ token: process.env.TELEGRAM_BOT_TOKEN }),
     sms: new EskizProvider({
@@ -88,6 +91,25 @@ export async function getTemplates(db: Db): Promise<Template[]> {
   return data;
 }
 
+const chat = (chatId: number | null, language: Language | null): ChatLink | null =>
+  chatId === null ? null : { chatId, language: language ?? "uz" };
+
+/** A student's two chats, from their telegram_links rows. */
+function chatsOf(links: Array<{ role: LinkRole; chat_id: number; language: Language }>): Chats {
+  const of = (role: LinkRole) => {
+    const link = links.find((entry) => entry.role === role);
+    return link ? { chatId: link.chat_id, language: link.language } : null;
+  };
+  return { studentChat: of("student"), parentChat: of("parent") };
+}
+
+/** Both chats of one student, as staff may read them (the Send message sheet, Remind). */
+export async function getChats(db: Db, studentId: string): Promise<Chats> {
+  const { data, error } = await db.from("telegram_links").select("role, chat_id, language").eq("student_id", studentId);
+  if (error) throw new Error(error.message);
+  return chatsOf(data);
+}
+
 /** What the reminders job reads, with the service role. */
 export function reminderData(admin: Db): ReminderData {
   return {
@@ -100,7 +122,9 @@ export function reminderData(admin: Db): ReminderData {
         id: row.student_id,
         fullName: row.full_name,
         language: row.language,
-        telegramChatId: row.telegram_chat_id,
+        // Payment messages never go to the student's own chat.
+        studentChat: null,
+        parentChat: chat(row.parent_chat_id, row.parent_chat_language),
         parentPhone: row.parent_phone,
         phone: row.phone,
         debt: row.debt,
@@ -127,9 +151,11 @@ export function reminderData(admin: Db): ReminderData {
           id: row.student_id,
           fullName: row.full_name,
           language: row.language,
-          telegramChatId: row.telegram_chat_id,
-          parentPhone: row.parent_phone,
-          phone: row.phone,
+          studentChat: chat(row.student_chat_id, row.student_chat_language),
+          parentChat: chat(row.parent_chat_id, row.parent_chat_language),
+          // Lesson reminders are never sent by SMS.
+          parentPhone: null,
+          phone: null,
         });
       }
       return [...lessons.values()];
@@ -137,32 +163,189 @@ export function reminderData(admin: Db): ReminderData {
   };
 }
 
+const REQUEST_ERRORS: Record<string, RequestOutcome> = { ER001: "notEnough", ER002: "outOfStock", ER005: "notOnOffer" };
+
 /** What the Telegram bot reads and writes, with the service role. */
 export function botStore(admin: Db): BotStore {
   return {
-    async link(code, chatId) {
-      const { data, error } = await admin
+    async link(role, code, chatId) {
+      const student = await admin
         .from("students")
-        .update({ telegram_chat_id: chatId })
-        .eq("telegram_link_code", code)
+        .select("id, full_name, language")
+        .eq(role === "student" ? "student_link_code" : "parent_link_code", code)
         .is("archived_at", null)
-        .select("full_name, language")
         .maybeSingle();
+      if (student.error) throw new Error(student.error.message);
+      if (!student.data) return null;
+      const { error } = await admin
+        .from("telegram_links")
+        .upsert(
+          { student_id: student.data.id, role, chat_id: chatId, language: student.data.language, linked_at: new Date().toISOString() },
+          { onConflict: "student_id,role" },
+        );
       if (error) throw new Error(error.message);
-      return data ? { fullName: data.full_name, language: data.language } : null;
+      return { fullName: student.data.full_name, language: student.data.language };
     },
     async unlink(chatId) {
-      const { data, error } = await admin
-        .from("students")
-        .update({ telegram_chat_id: null })
-        .eq("telegram_chat_id", chatId)
-        .select("language");
+      const { data, error } = await admin.from("telegram_links").delete().eq("chat_id", chatId).select("id");
       if (error) throw new Error(error.message);
-      return data.map((row) => row.language);
+      return data.length;
+    },
+    async links(chatId) {
+      const { data, error } = await admin
+        .from("telegram_links")
+        .select("student_id, role, chat_id, language, student:students(full_name, archived_at)")
+        .eq("chat_id", chatId)
+        .order("linked_at");
+      if (error) throw new Error(error.message);
+      return data
+        .filter((row) => row.student.archived_at === null)
+        .map((row) => ({ studentId: row.student_id, fullName: row.student.full_name, role: row.role, chatId: row.chat_id, language: row.language }));
+    },
+    async setLanguage(chatId, language) {
+      const { error } = await admin.from("telegram_links").update({ language }).eq("chat_id", chatId);
+      if (error) throw new Error(error.message);
     },
     async centreName() {
       const { data } = await admin.from("centre_settings").select("centre_name").maybeSingle();
       return data?.centre_name ?? "";
+    },
+    async summary(studentId) {
+      const { data, error } = await admin.rpc("points_summary", { p_student_id: studentId });
+      return error ? null : ((data as PointsSummary | null) ?? null);
+    },
+    async top(studentId) {
+      const { data, error } = await admin.rpc("bot_top", { p_student_id: studentId });
+      return error ? null : ((data as BotTop | null) ?? null);
+    },
+    async rewards() {
+      const { data, error } = await admin
+        .from("rewards")
+        .select("id, name, cost, stock")
+        .eq("is_active", true)
+        .is("archived_at", null)
+        .order("cost")
+        .order("name");
+      if (error) throw new Error(error.message);
+      return data;
+    },
+    async requestReward(studentId, rewardId, role) {
+      const { error } = await admin.rpc("request_reward", {
+        p_student_id: studentId,
+        p_reward_id: rewardId,
+        p_via: "bot",
+        p_requested_by: role,
+      });
+      if (!error) return "ok";
+      return (error.code && REQUEST_ERRORS[error.code]) || "failed";
+    },
+  };
+}
+
+/** What the points messages read, with the service role. */
+export function pointsMessageData(admin: Db): PointsMessageData {
+  /** The chats of these students, by student. */
+  async function chatsFor(studentIds: string[]): Promise<Map<string, Chats>> {
+    const byStudent = new Map<string, Chats>();
+    if (studentIds.length === 0) return byStudent;
+    const { data, error } = await admin.from("telegram_links").select("student_id, role, chat_id, language").in("student_id", studentIds);
+    if (error) throw new Error(error.message);
+    for (const id of new Set(studentIds)) byStudent.set(id, chatsOf(data.filter((row) => row.student_id === id)));
+    return byStudent;
+  }
+  const none: Chats = { studentChat: null, parentChat: null };
+
+  return {
+    async settings() {
+      const [centre, points] = await Promise.all([
+        getNotifySettings(admin),
+        admin.from("points_settings").select("enabled, weekly_day, weekly_time").single(),
+      ]);
+      if (points.error) throw new Error(points.error.message);
+      return {
+        centreName: centre.centreName,
+        remindersEnabled: centre.remindersEnabled,
+        quietFrom: centre.quietFrom,
+        quietTo: centre.quietTo,
+        pointsEnabled: points.data.enabled,
+        weeklyDay: points.data.weekly_day,
+        weeklyTime: points.data.weekly_time.slice(0, 5),
+      };
+    },
+    templates: () => getTemplates(admin),
+    async linkedStudents() {
+      const { data, error } = await admin
+        .from("telegram_links")
+        .select("student_id, role, chat_id, language, student:students(status, archived_at)");
+      if (error) throw new Error(error.message);
+      const active = data.filter((row) => row.student.status === "active" && row.student.archived_at === null);
+      return [...new Set(active.map((row) => row.student_id))].map((id) => ({
+        id,
+        ...chatsOf(active.filter((row) => row.student_id === id)),
+      }));
+    },
+    async summary(studentId, month) {
+      const { data, error } = await admin.rpc("points_summary", {
+        p_student_id: studentId,
+        p_month: month ? `${month}-01` : undefined,
+      });
+      return error ? null : ((data as PointsSummary | null) ?? null);
+    },
+    async deductions(since, until) {
+      const { data, error } = await admin
+        .from("points_ledger")
+        .select("id, student_id, delta, reason, group:groups(name), preset:point_presets(label_uz, label_ru, label_en)")
+        .eq("source", "teacher_deduction")
+        .lt("delta", 0)
+        .is("dedupe_key", null)
+        .gte("created_at", since.toISOString())
+        .lte("created_at", until.toISOString())
+        .order("created_at");
+      if (error) throw new Error(error.message);
+      if (data.length === 0) return [];
+      // A deduction that was undone is not announced.
+      const undone = await admin.from("points_ledger").select("dedupe_key").in("dedupe_key", data.map((row) => `undo:${row.id}`));
+      if (undone.error) throw new Error(undone.error.message);
+      const gone = new Set(undone.data.map((row) => row.dedupe_key));
+      const kept = data.filter((row) => !gone.has(`undo:${row.id}`));
+      const chats = await chatsFor(kept.map((row) => row.student_id));
+      return kept.map(
+        (row): DeductionEvent => ({
+          ledgerId: row.id,
+          studentId: row.student_id,
+          points: -row.delta,
+          groupName: row.group?.name ?? null,
+          reason: row.reason,
+          preset: row.preset ? { uz: row.preset.label_uz, ru: row.preset.label_ru, en: row.preset.label_en } : null,
+          ...(chats.get(row.student_id) ?? none),
+        }),
+      );
+    },
+    async rewardEvents(since) {
+      const from = since.toISOString();
+      const { data, error } = await admin
+        .from("redemptions")
+        .select("id, student_id, cost, status, note, created_at, handled_at, reward:rewards(name)")
+        .or(`created_at.gte.${from},handled_at.gte.${from}`)
+        .order("created_at");
+      if (error) throw new Error(error.message);
+      const chats = await chatsFor(data.map((row) => row.student_id));
+      const events: RewardEvent[] = [];
+      for (const row of data) {
+        const base = {
+          redemptionId: row.id,
+          studentId: row.student_id,
+          reward: row.reward.name,
+          cost: row.cost,
+          note: row.note,
+          ...(chats.get(row.student_id) ?? none),
+        };
+        if (row.created_at >= from) events.push({ ...base, update: "requested" });
+        if (row.handled_at && row.handled_at >= from && row.status !== "requested") {
+          events.push({ ...base, update: row.status === "given" ? "given" : "rejected" });
+        }
+      }
+      return events;
     },
   };
 }

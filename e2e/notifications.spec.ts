@@ -14,11 +14,13 @@ const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET ?? "e2e-webhook-secre
 const student = (n: number) =>
   withDb(async (db) => {
     const { rows } = await db.query(
-      "select id, full_name, telegram_link_code, telegram_chat_id from students where id = $1",
+      "select id, full_name, student_link_code, parent_link_code from students where id = $1",
       [seedStudentId(n)],
     );
-    return rows[0] as { id: string; full_name: string; telegram_link_code: string; telegram_chat_id: string | null };
+    return rows[0] as { id: string; full_name: string; student_link_code: string; parent_link_code: string };
   });
+/** Removes every Telegram link of a student. */
+const unlink = (id: string) => withDb((db) => db.query("delete from telegram_links where student_id = $1", [id]));
 
 test("the reminders job needs the cron secret", async ({ request }) => {
   expect((await request.post("/api/jobs/reminders")).status()).toBe(401);
@@ -30,42 +32,72 @@ test("the reminders job needs the cron secret", async ({ request }) => {
   expect(response.status()).toBe(200);
   // Reminders are switched off for the test run (e2e/support/global-setup.ts),
   // so the job answers and sends nothing.
-  expect(await response.json()).toEqual({ sent: 0, failed: 0, skipped: 0, duplicate: 0, idle: "reminders_off" });
+  expect(await response.json()).toEqual({
+    sent: 0,
+    failed: 0,
+    skipped: 0,
+    duplicate: 0,
+    idle: "reminders_off",
+    // The points messages ride on the same run and stop with the same switch.
+    points: { sent: 0, failed: 0, duplicate: 0, idle: "reminders_off" },
+  });
 });
 
-test("the Telegram webhook checks its secret, links on /start <code> and unlinks on /stop", async ({ request }, testInfo) => {
-  // Each screen size has its own student and chat.
+test("the Telegram webhook checks its secret, links the student's and the parent's chat, and /stop unlinks", async ({ request }, testInfo) => {
+  // Each screen size has its own student and chats.
   const phone = testInfo.project.name.startsWith("phone");
-  const chatId = phone ? 990000002 : 990000001;
-  const { id, telegram_link_code: code } = await student(phone ? 62 : 61);
-  await withDb((db) => db.query("update students set telegram_chat_id = null where id = $1", [id]));
-  const update = (text: string) => ({ update_id: 1, message: { text, chat: { id: chatId, type: "private" }, from: { language_code: "uz" } } });
-  const post = (text: string, secret?: string) =>
+  const chats = phone ? { student: 990000002, parent: 990000012 } : { student: 990000001, parent: 990000011 };
+  const { id, student_link_code: own, parent_link_code: parent } = await student(phone ? 62 : 61);
+  await unlink(id);
+  const post = (text: string, chatId: number, secret?: string) =>
     request.post("/api/telegram/webhook", {
-      data: update(text),
+      data: { update_id: 1, message: { text, chat: { id: chatId, type: "private" }, from: { language_code: "uz" } } },
       headers: secret ? { "x-telegram-bot-api-secret-token": secret } : {},
     });
-  const linked = async () => (await student(phone ? 62 : 61)).telegram_chat_id;
+  const linked = () =>
+    withDb(async (db) => {
+      const { rows } = await db.query("select role, chat_id::text as chat from telegram_links where student_id = $1 order by role", [id]);
+      return rows as Array<{ role: string; chat: string }>;
+    });
 
   // Without the secret token nothing happens.
-  expect((await post(`/start ${code}`)).status()).toBe(403);
-  expect((await post(`/start ${code}`, "wrong")).status()).toBe(403);
-  expect(await linked()).toBeNull();
+  expect((await post(`/start s_${own}`, chats.student)).status()).toBe(403);
+  expect((await post(`/start s_${own}`, chats.student, "wrong")).status()).toBe(403);
+  expect(await linked()).toEqual([]);
 
-  expect((await post("/start Wrong000000000000000000", WEBHOOK_SECRET)).status()).toBe(200);
-  expect(await linked()).toBeNull();
+  // A wrong code, and a student's code used as a parent's, link nothing.
+  expect((await post("/start s_Wrong000000000000000000", chats.student, WEBHOOK_SECRET)).status()).toBe(200);
+  expect((await post(`/start p_${own}`, chats.student, WEBHOOK_SECRET)).status()).toBe(200);
+  expect(await linked()).toEqual([]);
 
-  expect((await post(`/start ${code}`, WEBHOOK_SECRET)).status()).toBe(200);
-  expect(String(await linked())).toBe(String(chatId));
+  // s_<code> is the student's own chat; a bare code, as on links from before, is the parent's.
+  expect((await post(`/start s_${own}`, chats.student, WEBHOOK_SECRET)).status()).toBe(200);
+  expect((await post(`/start ${parent}`, chats.parent, WEBHOOK_SECRET)).status()).toBe(200);
+  expect(await linked()).toEqual([
+    { role: "student", chat: String(chats.student) },
+    { role: "parent", chat: String(chats.parent) },
+  ]);
+  // Commands and buttons are answered (no bot is configured here, so nothing is sent).
+  expect((await post("/points", chats.student, WEBHOOK_SECRET)).status()).toBe(200);
+  const button = await request.post("/api/telegram/webhook", {
+    data: { update_id: 2, callback_query: { id: "1", data: "lang:ru", message: { chat: { id: chats.parent, type: "private" } } } },
+    headers: { "x-telegram-bot-api-secret-token": WEBHOOK_SECRET },
+  });
+  expect(button.status()).toBe(200);
+  const language = await withDb((db) => db.query("select role, language from telegram_links where student_id = $1 order by role", [id]));
+  expect(language.rows.find((row) => row.role === "parent")).toMatchObject({ language: "ru" });
 
-  expect((await post("/stop", WEBHOOK_SECRET)).status()).toBe(200);
-  expect(await linked()).toBeNull();
+  // /stop removes only that chat's link.
+  expect((await post("/stop", chats.parent, WEBHOOK_SECRET)).status()).toBe(200);
+  expect(await linked()).toEqual([{ role: "student", chat: String(chats.student) }]);
+  expect((await post("/stop", chats.student, WEBHOOK_SECRET)).status()).toBe(200);
+  expect(await linked()).toEqual([]);
 });
 
 test("Send message from the student page is logged on the Messages tab", async ({ page }, testInfo) => {
   const target = await student(testInfo.project.name.startsWith("phone") ? 64 : 63);
   const text = `E2E message ${testInfo.project.name} ${Date.now()}`;
-  await withDb((db) => db.query("update students set telegram_chat_id = null where id = $1", [target.id]));
+  await unlink(target.id);
 
   await signIn(page, "manager");
   await page.goto(`/en/students/${target.id}`);

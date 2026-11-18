@@ -152,10 +152,11 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         expect(await s.count("students")).toBeGreaterThanOrEqual(80);
         const student = await s.attempt(
           `insert into students (full_name, phone) values ('Test Student', '+998900000002')
-           returning id, telegram_link_code`,
+           returning id, parent_link_code, student_link_code`,
         );
         allowed(student);
-        expect(student.ok && student.rows[0].telegram_link_code).toMatch(/^[A-Za-z0-9]{22}$/);
+        expect(student.ok && student.rows[0].parent_link_code).toMatch(/^[A-Za-z0-9]{22}$/);
+        expect(student.ok && student.rows[0].student_link_code).toMatch(/^[A-Za-z0-9]{22}$/);
         const id = idOf(student);
 
         allowed(await s.attempt(`update students set parent_name = 'Test Parent' where id = $1`, [id]));
@@ -188,7 +189,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
           [leadId(1)],
         );
         expect(
-          await s.rows(`select lead_id, language, status, length(telegram_link_code) as code from students where id = $1`, [id]),
+          await s.rows(`select lead_id, language, status, length(parent_link_code) as code from students where id = $1`, [id]),
         ).toEqual([{ lead_id: leadId(1), language: "ru", status: "active", code: 22 }]);
         expect(
           await s.rows(`select status, converted_student_id, next_contact_at from leads where id = $1`, [leadId(1)]),

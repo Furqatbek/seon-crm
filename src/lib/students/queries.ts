@@ -77,7 +77,7 @@ export async function getStudents(
 
   let query = supabase
     .from("student_overview")
-    .select("id, full_name, phone, status, telegram_chat_id, balance, oldest_unpaid_month", {
+    .select("id, full_name, phone, status, balance, oldest_unpaid_month", {
       count: "exact",
     })
     .is("archived_at", null)
@@ -117,12 +117,13 @@ export async function getStudents(
   const ids = rows.flatMap((row) => (row.id ? [row.id] : []));
   if (ids.length === 0) return { rows: [], total: students.count ?? 0 };
 
-  const enrolments = await supabase
-    .from("enrollments")
-    .select("student_id, group:groups(id, name)")
-    .in("student_id", ids)
-    .eq("status", "active");
+  const [enrolments, links] = await Promise.all([
+    supabase.from("enrollments").select("student_id, group:groups(id, name)").in("student_id", ids).eq("status", "active"),
+    // Read apart from the view, so the list still loads while a deploy is ahead of its migration.
+    supabase.from("telegram_links").select("student_id").in("student_id", ids),
+  ]);
   if (enrolments.error) throw new Error(enrolments.error.message);
+  const linked = new Set((links.data ?? []).map((row) => row.student_id));
 
   return {
     total: students.count ?? rows.length,
@@ -132,7 +133,7 @@ export async function getStudents(
       full_name: row.full_name!,
       phone: row.phone!,
       status: row.status!,
-      telegramLinked: row.telegram_chat_id !== null,
+      telegramLinked: linked.has(row.id!),
       balance: row.balance ?? 0,
       oldestUnpaidMonth: row.oldest_unpaid_month,
       groups: enrolments.data
@@ -182,7 +183,12 @@ export type StudentMessage = Pick<
   "id" | "created_at" | "sent_at" | "channel" | "type" | "status" | "body" | "error"
 >;
 
+/** One of a student's two Telegram links: the code in its link, and whether a chat is linked. */
+export type TelegramLink = { code: string; linked: boolean };
+
 export type StudentDetail = Tables<"students"> & {
+  /** The student's own link and the parent's. */
+  telegram: { student: TelegramLink; parent: TelegramLink };
   balance: number;
   oldestUnpaidMonth: string | null;
   enrolments: StudentEnrolment[];
@@ -190,8 +196,9 @@ export type StudentDetail = Tables<"students"> & {
 
 export async function getStudent(id: string): Promise<StudentDetail | null> {
   const supabase = await db();
-  const [student, balance, enrolments] = await Promise.all([
+  const [student, links, balance, enrolments] = await Promise.all([
     supabase.from("students").select("*").eq("id", id).is("archived_at", null).maybeSingle(),
+    supabase.from("telegram_links").select("role").eq("student_id", id),
     supabase
       .from("student_balances")
       .select("balance, oldest_unpaid_month")
@@ -211,8 +218,18 @@ export async function getStudent(id: string): Promise<StudentDetail | null> {
   if (enrolments.error) throw new Error(enrolments.error.message);
   if (!student.data) return null;
 
+  // Before the two-link migration a student had one code and one chat: the parent's.
+  const legacy = student.data as { telegram_link_code?: string; telegram_chat_id?: number | null };
+  const roles = new Set((links.data ?? []).map((row) => row.role));
   return {
     ...student.data,
+    telegram: {
+      student: { code: student.data.student_link_code ?? "", linked: roles.has("student") },
+      parent: {
+        code: student.data.parent_link_code ?? legacy.telegram_link_code ?? "",
+        linked: roles.has("parent") || Boolean(legacy.telegram_chat_id),
+      },
+    },
     balance: balance.data?.balance ?? 0,
     oldestUnpaidMonth: balance.data?.oldest_unpaid_month ?? null,
     enrolments: enrolments.data,

@@ -207,7 +207,7 @@ select
 
 insert into public.students (
   id, full_name, phone, parent_name, parent_phone, birth_date, language,
-  telegram_chat_id, status, notes, created_at
+  status, notes, created_at
 )
 select
   pg_temp.uid(4, i),
@@ -225,12 +225,25 @@ select
   end,
   date '2008-01-15' + (i * 97) % 3650,
   (case when i % 13 = 0 then 'en' when i % 4 = 0 then 'ru' else 'uz' end)::public.app_language,
-  case when i % 5 in (1, 2) then 500000000 + i * 7919 end,
   (case when i >= 78 then 'left' when i >= 75 then 'paused' else 'active' end)::public.student_status,
   case when i = 75 then 'Yozgi taʼtilga ketgan, keyingi oy qaytadi'
        when i = 78 then 'Boshqa shaharga koʻchdi' end,
   pg_temp.tashkent((c.m0 - interval '3 months')::date - 10 + i % 20, '11:00')
 from seed_cfg c, seed_names n, generate_series(1, 80) as i;
+
+-- Two in five families have linked Telegram as a parent; half of those
+-- students have linked their own chat too.
+insert into public.telegram_links (student_id, role, chat_id, language)
+select pg_temp.uid(4, i), 'parent', 500000000 + i * 7919, s.language
+from generate_series(1, 80) as i
+join public.students s on s.id = pg_temp.uid(4, i)
+where i % 5 in (1, 2);
+
+insert into public.telegram_links (student_id, role, chat_id, language)
+select pg_temp.uid(4, i), 'student', 600000000 + i * 7919, s.language
+from generate_series(1, 80) as i
+join public.students s on s.id = pg_temp.uid(4, i)
+where i % 5 = 1;
 
 -- ─────────────────────────── Enrolments ────────────────────────────
 -- Everyone has one group; every 8th student has a second one. Eight students

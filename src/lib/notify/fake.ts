@@ -1,4 +1,4 @@
-import type { Channel, MessageProvider, SendResult, SmsProvider } from "./types";
+import type { Channel, MessageProvider, SendResult, SmsProvider } from "./types.ts";
 
 /**
  * A provider for tests: remembers what it was asked to send and sends nothing.

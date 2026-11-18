@@ -349,13 +349,20 @@
       "linked": "Linked",
       "linkedShort": "Linked",
       "notLinked": "Not linked",
-      "hint": "Send this link to the student or parent. When they press Start in the bot, reminders will arrive in Telegram.",
+      "hint": {
+        "student": "For the student's own Telegram: lesson reminders and their points. Not payment reminders.",
+        "parent": "For a parent's Telegram: payment reminders and the child's points."
+      },
       "copy": "Copy link",
       "copied": "Copied",
       "showQr": "Show QR code",
       "hideQr": "Hide QR code",
-      "qrLabel": "QR code with the Telegram link",
-      "noBot": "The Telegram bot is not connected yet. The owner connects it in Settings."
+      "qrLabel": "QR code with the Telegram link: {role}",
+      "noBot": "The Telegram bot is not connected yet. The owner connects it in Settings.",
+      "role": {
+        "student": "Student's own link",
+        "parent": "Parent's link"
+      }
     },
     "ledger": {
       "empty": "No charges or payments yet.",
@@ -403,7 +410,11 @@
         "payment_due": "Payment due",
         "payment_overdue": "Payment overdue",
         "lesson_reminder": "Lesson reminder",
-        "custom": "One-off message"
+        "custom": "One-off message",
+        "points_weekly": "Weekly points summary",
+        "points_deduction": "Points taken away",
+        "points_month_result": "Month results",
+        "reward_update": "Reward update"
       },
       "channels": {
         "telegram": "Telegram",
@@ -1102,11 +1113,75 @@
     }
   },
   "bot": {
-    "linked": "{student} is now linked. Payment and lesson reminders from {centre} will come here. Send /stop to unlink.",
+    "linked": "{student} is now linked as a parent. Payment reminders and points news from {centre} will come here. Commands: /points /top /rewards /language /stop",
+    "linkedStudent": "{student}, you are linked. Lesson reminders and your points from {centre} will come here. Commands: /points /top /rewards /language /stop",
     "unknownCode": "This link is not valid. Ask {centre} for a new one.",
-    "stopped": "Unlinked. You will get no more messages from {centre}.",
+    "stopped": "Unlinked. You will get no more messages from {centre} in this chat.",
     "nothingLinked": "Nothing is linked to this chat.",
-    "help": "This bot sends reminders from {centre}. Open the personal link the centre gave you to connect."
+    "notLinked": "This chat is not linked yet. Open the personal link {centre} gave you.",
+    "help": "This bot sends reminders and points news from {centre}. Open the personal link the centre gave you to connect. Commands: /points /top /rewards /language /stop",
+    "chooseLanguage": "Choose the language of this chat:",
+    "languageSet": "Done. This chat is now in English.",
+    "whichChild": "Which child?",
+    "failed": "Something went wrong. Try again in a minute.",
+    "pointsCount": "{points, plural, one {# point} other {# points}}",
+    "goal": "{points, plural, one {# more point} other {# more points}} for “{reward}”.",
+    "bonus": "Perfect month bonus: +{points}.",
+    "points": {
+      "title": "{student}",
+      "balance": "To spend: {points}",
+      "month": "Earned this month: {points}",
+      "centreRank": "Centre: place {rank}",
+      "groupRank": "{group}: place {rank} ({points})",
+      "last": "Latest:"
+    },
+    "top": {
+      "centre": "Centre, top 10 this month",
+      "group": "{group}, top 5",
+      "own": "{student}: place {rank} ({points})",
+      "empty": "No points yet this month."
+    },
+    "rewards": {
+      "title": "Rewards. {student} has {points} to spend.",
+      "empty": "There are no rewards right now.",
+      "outOfStock": "out of stock",
+      "left": "{count} left",
+      "request": "Request: {reward}"
+    },
+    "request": {
+      "confirm": "Request “{reward}” for {points} points for {student}? The points are held at once.",
+      "yes": "Yes, request",
+      "no": "No",
+      "done": "Request received: “{reward}”. Collect it at the front desk of {centre}.",
+      "cancelled": "Nothing was requested.",
+      "notEnough": "Not enough points for this reward.",
+      "outOfStock": "This reward is out of stock.",
+      "notOnOffer": "This reward is no longer on offer.",
+      "failed": "The request did not go through. Try again in a minute."
+    },
+    "reward": {
+      "requested": "request received, {points} points are held. Collect it at the front desk.",
+      "given": "handed over. Enjoy!",
+      "rejected": "the request was declined ({reason}). {points} points are back."
+    },
+    "source": {
+      "attendance": "Attendance",
+      "perfect_month": "Perfect month",
+      "on_time_payment": "Fee paid on time",
+      "referral": "Friend enrolled",
+      "teacher_award": "Teacher",
+      "teacher_deduction": "Taken by teacher",
+      "owner_adjustment": "Adjustment",
+      "reward_hold": "Reward requested",
+      "reward_return": "Reward returned"
+    },
+    "commands": {
+      "points": "My points and places",
+      "top": "Top students this month",
+      "rewards": "Rewards and requests",
+      "language": "Change the language",
+      "stop": "Unlink this chat"
+    }
   },
   "notify": {
     "send": {
@@ -1246,7 +1321,19 @@
         "amount": "Amount",
         "due_date": "Due date",
         "time": "Lesson time",
-        "centre": "Centre name"
+        "centre": "Centre name",
+        "week_points": "Points this week",
+        "month_points": "Points in the month",
+        "points": "Points",
+        "balance": "Points to spend",
+        "group_rank": "Place in the group",
+        "centre_rank": "Place in the centre",
+        "reason": "Reason",
+        "reward": "Reward",
+        "points_needed": "Points still needed",
+        "goal": "Next reward to save for (a sentence)",
+        "bonus": "Perfect-month bonus (a sentence)",
+        "update": "What happened to the request (a sentence)"
       }
     },
     "profile": {

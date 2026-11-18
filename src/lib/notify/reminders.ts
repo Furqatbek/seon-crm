@@ -94,15 +94,17 @@ export function paymentMessage(
 ): Outgoing | null {
   const target = chooseChannel(type, student);
   if (!target) return null;
-  const body = compose(templates, type, target.channel, student.language, {
+  // A chat is written to in its own language, an SMS in the student's.
+  const language = target.language ?? student.language;
+  const body = compose(templates, type, target.channel, language, {
     student: student.fullName,
-    month: monthValue(month, student.language),
+    month: monthValue(month, language),
     amount: amountValue(student.debt),
-    due_date: dateValue(dueDate(month, settings.dueDay), student.language),
+    due_date: dateValue(dueDate(month, settings.dueDay), language),
     centre: settings.centreName,
   });
   if (body === null) return null;
-  return { studentId: student.id, type, ...target, body, dedupeKey: key };
+  return { studentId: student.id, type, channel: target.channel, recipient: target.recipient, body, dedupeKey: key };
 }
 
 export type ReminderSummary = {
@@ -186,7 +188,7 @@ export async function runReminders(
     for (const student of lesson.students) {
       const target = chooseChannel("lesson_reminder", student);
       if (!target) continue;
-      const body = compose(templates, "lesson_reminder", target.channel, student.language, {
+      const body = compose(templates, "lesson_reminder", target.channel, target.language ?? student.language, {
         student: student.fullName,
         group: lesson.groupName,
         time: lesson.startTime,
@@ -196,7 +198,8 @@ export async function runReminders(
       const message: Outgoing = {
         studentId: student.id,
         type: "lesson_reminder",
-        ...target,
+        channel: target.channel,
+        recipient: target.recipient,
         body,
         dedupeKey: dedupeKey.lesson(lesson.lessonId, student.id),
       };

@@ -24,7 +24,18 @@ const withTeacher = <T extends { role: LoginRole; teacher_id?: string | null }>(
   ...value,
   teacher_id: value.role === "teacher" ? (value.teacher_id as string) : null,
 });
-export const MESSAGE_TYPES = ["payment_due", "payment_overdue", "lesson_reminder", "custom"] as const;
+export const MESSAGE_TYPES = [
+  "payment_due",
+  "payment_overdue",
+  "lesson_reminder",
+  "custom",
+  "points_weekly",
+  "points_deduction",
+  "points_month_result",
+  "reward_update",
+] as const;
+/** Points messages are never sent by SMS: they have a Telegram template only. */
+export const TELEGRAM_ONLY_TYPES: readonly string[] = ["points_weekly", "points_deduction", "points_month_result", "reward_update"];
 export const MESSAGE_CHANNELS = ["telegram", "sms"] as const;
 export const TEMPLATE_LANGUAGES = LANGUAGES;
 
@@ -85,12 +96,17 @@ export type NotificationsValues = z.output<typeof notificationsSchema>;
 export const testSmsSchema = z.object({ phone: z.string().regex(/^\+998\d{9}$/, "phoneInvalid") });
 
 /** One template: a message type on a channel in a language. */
-export const templateSchema = z.object({
-  type: z.enum(MESSAGE_TYPES),
-  channel: z.enum(MESSAGE_CHANNELS),
-  language: z.enum(LANGUAGES),
-  body: z.string().trim().min(1, "textRequired").max(1000, "tooLong"),
-});
+export const templateSchema = z
+  .object({
+    type: z.enum(MESSAGE_TYPES),
+    channel: z.enum(MESSAGE_CHANNELS),
+    language: z.enum(LANGUAGES),
+    body: z.string().trim().min(1, "textRequired").max(1000, "tooLong"),
+  })
+  .refine((value) => value.channel === "telegram" || !TELEGRAM_ONLY_TYPES.includes(value.type), {
+    path: ["channel"],
+    message: "notAllowed",
+  });
 
 /** Profile: name and interface language. */
 export const profileSchema = z.object({ full_name: name, language: z.enum(LANGUAGES) });

@@ -1,6 +1,8 @@
+import { botTexts } from "@/lib/notify/bot-texts";
+import { runPointsMessages } from "@/lib/notify/points-messages";
 import { runReminders } from "@/lib/notify/reminders";
 import { secretMatches } from "@/lib/notify/secret";
-import { getProviders, messageLog, reminderData } from "@/lib/notify/store";
+import { getProviders, messageLog, pointsMessageData, reminderData } from "@/lib/notify/store";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 // Sending a batch of messages can take a while.
@@ -8,8 +10,9 @@ export const maxDuration = 60;
 
 /**
  * Supabase Cron calls this every 15 minutes with
- * `Authorization: Bearer <CRON_SECRET>`. It finds what is due, fills the
- * templates, sends and logs. Safe to call twice: every message has a dedupe key.
+ * `Authorization: Bearer <CRON_SECRET>`. It finds what is due (payment and
+ * lesson reminders, then the points messages), fills the templates, sends
+ * and logs. Safe to call twice: every message has a dedupe key.
  */
 export async function POST(request: Request) {
   const header = request.headers.get("authorization");
@@ -20,10 +23,10 @@ export async function POST(request: Request) {
   const admin = createAdminClient();
   if (!admin) return new Response("Not configured", { status: 503 });
 
-  const summary = await runReminders(new Date(), {
-    data: reminderData(admin),
-    log: messageLog(admin, admin),
-    providers: getProviders(),
-  });
-  return Response.json(summary);
+  const now = new Date();
+  const log = messageLog(admin, admin);
+  const summary = await runReminders(now, { data: reminderData(admin), log, providers: getProviders() });
+  // The points messages for students and parents ride on the same run.
+  const points = await runPointsMessages(now, { data: pointsMessageData(admin), log, providers: getProviders(), texts: botTexts });
+  return Response.json({ ...summary, points });
 }

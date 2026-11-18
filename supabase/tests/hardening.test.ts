@@ -152,7 +152,7 @@ describe.skipIf(!DB_URL)("Hardening", () => {
   describe("message templates come with the schema", () => {
     it("every type, channel and language is there, and SMS texts are plain Latin where they can be", async () => {
       await admin(async (s) => {
-        expect(await s.rows(`select count(*)::int as n, count(distinct (type, channel, language))::int as distinct_n from message_templates`)).toEqual([{ n: 24, distinct_n: 24 }]);
+        expect(await s.rows(`select count(*)::int as n, count(distinct (type, channel, language))::int as distinct_n from message_templates`)).toEqual([{ n: 36, distinct_n: 36 }]);
         const sms = await s.rows<{ language: string; body: string }>(`select language, body from message_templates where channel = 'sms' and language in ('uz', 'en')`);
         expect(sms.every((row) => /^[\x20-\x7E]+$/.test(row.body))).toBe(true);
         const telegram = await s.rows<{ body: string }>(`select body from message_templates where channel = 'telegram' and language = 'uz' and type = 'payment_due'`);

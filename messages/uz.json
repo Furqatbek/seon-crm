@@ -349,13 +349,20 @@
       "linked": "Ulangan",
       "linkedShort": "Ulangan",
       "notLinked": "Ulanmagan",
-      "hint": "Bu havolani oʻquvchi yoki ota-onaga yuboring. Ular botda «Start» tugmasini bosgach, eslatmalar Telegramga keladi.",
+      "hint": {
+        "student": "Oʻquvchining oʻz Telegrami uchun: dars eslatmalari va ballari. Toʻlov eslatmalari kelmaydi.",
+        "parent": "Ota-ona Telegrami uchun: toʻlov eslatmalari va farzandining ballari."
+      },
       "copy": "Havolani nusxalash",
       "copied": "Nusxalandi",
       "showQr": "QR-kodni koʻrsatish",
       "hideQr": "QR-kodni yashirish",
-      "qrLabel": "Telegram havolasi bilan QR-kod",
-      "noBot": "Telegram-bot hali ulanmagan. Rahbar uni sozlamalarda ulaydi."
+      "qrLabel": "Telegram havolasi QR kodi: {role}",
+      "noBot": "Telegram-bot hali ulanmagan. Rahbar uni sozlamalarda ulaydi.",
+      "role": {
+        "student": "Oʻquvchining havolasi",
+        "parent": "Ota-ona havolasi"
+      }
     },
     "ledger": {
       "empty": "Hozircha hisob yoki toʻlovlar yoʻq.",
@@ -403,7 +410,11 @@
         "payment_due": "Toʻlov vaqti",
         "payment_overdue": "Toʻlov kechikdi",
         "lesson_reminder": "Dars eslatmasi",
-        "custom": "Bir martalik xabar"
+        "custom": "Bir martalik xabar",
+        "points_weekly": "Haftalik ballar xulosasi",
+        "points_deduction": "Ball olindi",
+        "points_month_result": "Oy yakunlari",
+        "reward_update": "Sovgʻa holati"
       },
       "channels": {
         "telegram": "Telegram",
@@ -1102,11 +1113,75 @@
     }
   },
   "bot": {
-    "linked": "{student} ulandi. {centre} toʻlov va dars eslatmalarini shu yerga yuboradi. Uzish uchun /stop yuboring.",
+    "linked": "{student}: chat ota-ona sifatida ulandi. {centre} toʻlov eslatmalari va ballar haqidagi xabarlarni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",
+    "linkedStudent": "{student}, chat ulandi. {centre} dars eslatmalari va ballaringizni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",
     "unknownCode": "Bu havola yaroqsiz. {centre}dan yangisini soʻrang.",
-    "stopped": "Uzildi. {centre}dan boshqa xabar kelmaydi.",
+    "stopped": "Uzildi. Bu chatga {centre}dan boshqa xabar kelmaydi.",
     "nothingLinked": "Bu chatga hech narsa ulanmagan.",
-    "help": "Bu bot {centre} eslatmalarini yuboradi. Ulanish uchun markaz bergan shaxsiy havolani oching."
+    "notLinked": "Bu chat hali ulanmagan. {centre} bergan shaxsiy havolani oching.",
+    "help": "Bu bot {centre}dan eslatmalar va ballar haqida xabar yuboradi. Ulanish uchun markaz bergan shaxsiy havolani oching. Buyruqlar: /points /top /rewards /language /stop",
+    "chooseLanguage": "Shu chat tilini tanlang:",
+    "languageSet": "Tayyor. Endi bu chat oʻzbek tilida.",
+    "whichChild": "Qaysi farzand?",
+    "failed": "Xatolik yuz berdi. Bir daqiqadan soʻng urinib koʻring.",
+    "pointsCount": "{points} ball",
+    "goal": "“{reward}” uchun yana {points} ball kerak.",
+    "bonus": "Qoldirilmagan oy uchun bonus: +{points}.",
+    "points": {
+      "title": "{student}",
+      "balance": "Sarflash mumkin: {points}",
+      "month": "Shu oyda toʻplandi: {points}",
+      "centreRank": "Markaz: {rank}-oʻrin",
+      "groupRank": "{group}: {rank}-oʻrin ({points})",
+      "last": "Soʻnggilari:"
+    },
+    "top": {
+      "centre": "Markaz, shu oyning eng yaxshi 10 taligi",
+      "group": "{group}, eng yaxshi 5 talik",
+      "own": "{student}: {rank}-oʻrin ({points})",
+      "empty": "Shu oyda hali ball yoʻq."
+    },
+    "rewards": {
+      "title": "Sovgʻalar. {student}da sarflash uchun {points} ball bor.",
+      "empty": "Hozircha sovgʻalar yoʻq.",
+      "outOfStock": "tugagan",
+      "left": "{count} ta qoldi",
+      "request": "Soʻrash: {reward}"
+    },
+    "request": {
+      "confirm": "{student} uchun “{reward}” {points} ballga soʻralsinmi? Ballar darhol ushlab qolinadi.",
+      "yes": "Ha, soʻrash",
+      "no": "Yoʻq",
+      "done": "Soʻrov qabul qilindi: “{reward}”. {centre} qabulxonasidan oling.",
+      "cancelled": "Hech narsa soʻralmadi.",
+      "notEnough": "Bu sovgʻa uchun ball yetarli emas.",
+      "outOfStock": "Bu sovgʻa tugagan.",
+      "notOnOffer": "Bu sovgʻa endi taklif qilinmaydi.",
+      "failed": "Soʻrov oʻtmadi. Bir daqiqadan soʻng urinib koʻring."
+    },
+    "reward": {
+      "requested": "soʻrov qabul qilindi, {points} ball ushlab qolindi. Qabulxonadan oling.",
+      "given": "topshirildi. Tabriklaymiz!",
+      "rejected": "soʻrov rad etildi ({reason}). {points} ball qaytarildi."
+    },
+    "source": {
+      "attendance": "Davomat",
+      "perfect_month": "Qoldirilmagan oy",
+      "on_time_payment": "Oʻz vaqtida toʻlov",
+      "referral": "Doʻsti yozildi",
+      "teacher_award": "Oʻqituvchidan",
+      "teacher_deduction": "Oʻqituvchi oldi",
+      "owner_adjustment": "Oʻzgartirish",
+      "reward_hold": "Sovgʻa soʻraldi",
+      "reward_return": "Sovgʻa qaytarildi"
+    },
+    "commands": {
+      "points": "Ballarim va oʻrinlarim",
+      "top": "Oyning eng yaxshi oʻquvchilari",
+      "rewards": "Sovgʻalar va soʻrovlar",
+      "language": "Tilni oʻzgartirish",
+      "stop": "Bu chatni uzish"
+    }
   },
   "notify": {
     "send": {
@@ -1246,7 +1321,19 @@
         "amount": "Summa",
         "due_date": "Toʻlov muddati",
         "time": "Dars vaqti",
-        "centre": "Markaz nomi"
+        "centre": "Markaz nomi",
+        "week_points": "Haftalik ball",
+        "month_points": "Oylik ball",
+        "points": "Ball",
+        "balance": "Sarflash mumkin boʻlgan ball",
+        "group_rank": "Guruhdagi oʻrin",
+        "centre_rank": "Markazdagi oʻrin",
+        "reason": "Sabab",
+        "reward": "Sovgʻa",
+        "points_needed": "Yana kerak ball",
+        "goal": "Keyingi sovgʻa (gap)",
+        "bonus": "Qoldirilmagan oy bonusi (gap)",
+        "update": "Soʻrov holati (gap)"
       }
     },
     "profile": {
