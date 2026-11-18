@@ -17,6 +17,11 @@ import type { FinanceTab } from "@/lib/validation/finance";
 
 import { TakePaymentContext, TakePaymentSheet } from "./take-payment-sheet";
 
+// On a phone six stacked cards would push the tabs off the screen: there each
+// figure is one row, label on the left and amount on the right.
+const STRIP_CARD =
+  "max-sm:flex-row max-sm:flex-wrap max-sm:items-baseline max-sm:justify-between max-sm:gap-x-3 max-sm:px-4 max-sm:py-2.5 max-sm:[&>span:last-child]:text-headline";
+
 /**
  * The Finance frame: month, the owner's month strip, Take payment and the
  * tab bar. The active tab's content is rendered on the server and passed in.
@@ -83,36 +88,36 @@ export function FinanceScreen({
 
       {role === "owner" && summary ? (
         <div className="mb-6 flex flex-col gap-2" data-slot="month-strip">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <KpiCard label={t("strip.billed")}>
+          <div className="grid gap-2 sm:grid-cols-3 sm:gap-4">
+            <KpiCard className={STRIP_CARD} label={t("strip.billed")}>
               <span data-kpi="billed" data-value={summary.billed}>
                 <MoneyText amount={summary.billed} />
               </span>
             </KpiCard>
-            <KpiCard label={t("strip.paid")}>
+            <KpiCard className={STRIP_CARD} label={t("strip.paid")}>
               <span data-kpi="paid" data-value={summary.paid}>
                 <MoneyText amount={summary.paid} className={summary.paid > 0 ? "text-success" : undefined} />
               </span>
             </KpiCard>
-            <KpiCard label={t("strip.unpaid")}>
+            <KpiCard className={STRIP_CARD} label={t("strip.unpaid")}>
               <span data-kpi="unpaid" data-value={summary.unpaid}>
                 <MoneyText amount={summary.unpaid} className={summary.unpaid > 0 ? "text-danger" : undefined} />
               </span>
             </KpiCard>
           </div>
           <p className="mb-2 text-footnote text-text-secondary">{t("strip.rule")}</p>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <KpiCard label={t("strip.collected")}>
+          <div className="grid gap-2 sm:grid-cols-3 sm:gap-4">
+            <KpiCard className={STRIP_CARD} label={t("strip.collected")}>
               <span data-kpi="collected" data-value={summary.collected}>
                 <MoneyText amount={summary.collected} />
               </span>
             </KpiCard>
-            <KpiCard label={t("strip.debt")}>
+            <KpiCard className={STRIP_CARD} label={t("strip.debt")}>
               <span data-kpi="debt" data-value={summary.debt}>
                 <MoneyText amount={summary.debt} className={summary.debt > 0 ? "text-danger" : undefined} />
               </span>
             </KpiCard>
-            <KpiCard label={t("strip.expenses")}>
+            <KpiCard className={STRIP_CARD} label={t("strip.expenses")}>
               <span data-kpi="expenses" data-value={summary.expenses}>
                 <MoneyText amount={summary.expenses} />
               </span>

@@ -24,7 +24,7 @@
   --brand-ink: #a34a05;
   --brand-ink-hover: #863c03;
   --on-brand: #1d1d1f;
-  --success: #0a7d3c;
+  --success: #086b33;
   --warning: #8a5a00;
   --danger: #c81e1e;
 
@@ -95,7 +95,7 @@
     --brand-tint: light-dark(#fff0dc, #3a2710);
     --brand-ink: light-dark(#a34a05, #ffb866);
     --brand-ink-hover: light-dark(#863c03, #ffc98a);
-    --success: light-dark(#0a7d3c, #4cc38a);
+    --success: light-dark(#086b33, #4cc38a);
     --warning: light-dark(#8a5a00, #f5c451);
     --danger: light-dark(#c81e1e, #ff6b6b);
     --scrim: light-dark(rgba(29, 29, 31, 0.25), rgba(0, 0, 0, 0.6));
