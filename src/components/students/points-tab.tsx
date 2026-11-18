@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SlidersHorizontal } from "lucide-react";
+import { Gift, SlidersHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import { toast } from "sonner";
 
 import { PointsText } from "@/components/points/points-text";
 import { presetLabel } from "@/components/points/preset-label";
+import { RedeemSheet } from "@/components/points/redeem-sheet";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -20,7 +21,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import type { UserRole } from "@/lib/auth";
 import { formatDateTime } from "@/lib/format";
 import { adjustPoints, setLeaderboardHidden } from "@/lib/points/actions";
-import type { StudentPoints, StudentPointsRow } from "@/lib/points/queries";
+import type { Reward, StudentPoints, StudentPointsRow } from "@/lib/points/queries";
 import { adjustSchema, type AdjustInput, type AdjustValues, type PointsErrorKey } from "@/lib/validation/points";
 
 function AdjustForm({ studentId, balance, onClose }: { studentId: string; balance: number; onClose: () => void }) {
@@ -103,12 +104,15 @@ export function PointsTab({
   studentId,
   studentName,
   points,
+  rewards,
   role,
   enabled,
 }: {
   studentId: string;
   studentName: string;
   points: StudentPoints;
+  /** The rewards on offer, for a desk request. */
+  rewards: Reward[];
   role: UserRole;
   /** False while the programme is switched off in Settings. */
   enabled: boolean;
@@ -116,6 +120,7 @@ export function PointsTab({
   const t = useTranslations("points");
   const locale = useLocale();
   const [adjusting, setAdjusting] = useState(false);
+  const [redeeming, setRedeeming] = useState(false);
   const [hiding, startHiding] = useTransition();
 
   function setHidden(hidden: boolean) {
@@ -143,12 +148,18 @@ export function PointsTab({
             <span className="text-title text-text numeric">{value}</span>
           </div>
         ))}
-        {role === "owner" && enabled ? (
-          <Button onClick={() => setAdjusting(true)} className="self-end sm:ml-auto">
-            <SlidersHorizontal aria-hidden />
-            {t("adjust.action")}
+        <div className="flex flex-wrap items-end gap-2 self-end sm:ml-auto">
+          <Button variant="primary" onClick={() => setRedeeming(true)}>
+            <Gift aria-hidden />
+            {t("redeem.open")}
           </Button>
-        ) : null}
+          {role === "owner" && enabled ? (
+            <Button onClick={() => setAdjusting(true)}>
+              <SlidersHorizontal aria-hidden />
+              {t("adjust.action")}
+            </Button>
+          ) : null}
+        </div>
       </div>
 
       <div className="flex max-w-xl items-center justify-between gap-4 rounded-card border border-border p-4">
@@ -199,6 +210,14 @@ export function PointsTab({
           </TableBody>
         </Table>
       )}
+
+      <RedeemSheet
+        open={redeeming}
+        student={{ id: studentId, name: studentName }}
+        balance={points.balance}
+        rewards={rewards}
+        onClose={() => setRedeeming(false)}
+      />
 
       <Sheet open={adjusting} onOpenChange={(open) => !open && setAdjusting(false)}>
         <SheetContent>

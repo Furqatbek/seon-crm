@@ -17,7 +17,7 @@ import { attendanceRate } from "@/lib/domain/attendance";
 import { balanceState, buildLedger } from "@/lib/domain/ledger";
 import { tashkentDate } from "@/lib/domain/time";
 import { getOpenGroups } from "@/lib/groups/queries";
-import { getPointsSettings, getStudentPoints } from "@/lib/points/queries";
+import { getPointsSettings, getRewards, getStudentPoints } from "@/lib/points/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
 import {
   getCentreBilling,
@@ -70,9 +70,20 @@ async function Attendance({
 }
 
 async function Points({ student, role }: { student: StudentDetail; role: UserRole }) {
-  const [points, settings] = await Promise.all([getStudentPoints(student.id), getPointsSettings()]);
+  const [points, settings, rewards] = await Promise.all([
+    getStudentPoints(student.id),
+    getPointsSettings(),
+    getRewards({ activeOnly: true }),
+  ]);
   return (
-    <PointsTab studentId={student.id} studentName={student.full_name} points={points} role={role} enabled={settings.enabled} />
+    <PointsTab
+      studentId={student.id}
+      studentName={student.full_name}
+      points={points}
+      rewards={rewards}
+      role={role}
+      enabled={settings.enabled}
+    />
   );
 }
 

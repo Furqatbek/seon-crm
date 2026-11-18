@@ -52,7 +52,8 @@
     "settings": "Sozlamalar",
     "myGroups": "Guruhlarim",
     "pointsHistory": "Tarix",
-    "points": "Ballar"
+    "points": "Ballar",
+    "openRequests": "Kutayotgan sovgʻa soʻrovlari:"
   },
   "language": {
     "label": "Til",
@@ -1395,7 +1396,14 @@
       "tooLong": "Juda uzun.",
       "notAllowed": "Sizda bunga ruxsat yoʻq.",
       "notFound": "Topilmadi. Oʻchirilgan boʻlishi mumkin.",
-      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "nameRequired": "Nomini kiriting.",
+      "costInvalid": "1 dan 100 000 gacha narx kiriting.",
+      "stockInvalid": "Butun son kiriting yoki boʻsh qoldiring.",
+      "outOfStock": "Bu sovgʻa tugagan.",
+      "alreadyHandled": "Bu soʻrov allaqachon koʻrib chiqilgan.",
+      "notOnOffer": "Bu sovgʻa endi taklif qilinmaydi.",
+      "photoInvalid": "2 MB gacha JPG, PNG yoki WebP rasm tanlang."
     },
     "history": {
       "title": "Tarix",
@@ -1511,6 +1519,66 @@
       "regenerateTitle": "Yangi TV havolasi yaratilsinmi?",
       "regenerateBody": "Eski havola darhol ishlamay qoladi. Yangi havolani har bir televizorda oching.",
       "regenerated": "Yangi havola yaratildi"
+    },
+    "tabs": {
+      "leaderboard": "Reyting",
+      "rewards": "Sovgʻalar",
+      "requests": "Soʻrovlar"
+    },
+    "rewards": {
+      "add": "Sovgʻa qoʻshish",
+      "edit": "Tahrirlash",
+      "empty": "Hali sovgʻalar yoʻq.",
+      "off": "Oʻchiq",
+      "unlimited": "Cheklanmagan",
+      "outOfStock": "Tugagan",
+      "left": "{count} ta qoldi",
+      "newTitle": "Yangi sovgʻa",
+      "editTitle": "Sovgʻani tahrirlash",
+      "name": "Nomi",
+      "description": "Tavsifi",
+      "cost": "Narxi, ball",
+      "stock": "Mavjud soni",
+      "stockHint": "Cheklanmagan boʻlsa, boʻsh qoldiring.",
+      "photo": "Rasm",
+      "photoHint": "JPG, PNG yoki WebP, 2 MB gacha. Yangi rasm eskisini almashtiradi.",
+      "active": "Taklif qilinadi",
+      "saved": "Sovgʻa saqlandi",
+      "archived": "Sovgʻa arxivlandi",
+      "archive": "Arxivlash"
+    },
+    "requests": {
+      "empty": "Hali sovgʻa soʻrovlari yoʻq.",
+      "date": "Sana",
+      "student": "Oʻquvchi",
+      "reward": "Sovgʻa",
+      "cost": "Ball",
+      "from": "Qayerdan",
+      "status": "Holat",
+      "via": {
+        "bot": "Bot",
+        "desk": "Qabulxona"
+      },
+      "statuses": {
+        "requested": "Kutmoqda",
+        "given": "Berildi",
+        "rejected": "Rad etildi",
+        "cancelled": "Bekor qilindi"
+      },
+      "give": "Berish",
+      "reject": "Rad etish",
+      "given": "{name}: sovgʻa berildi",
+      "rejected": "{name}: soʻrov rad etildi, ballar qaytarildi",
+      "rejectTitle": "{name} soʻrovi rad etilsinmi?",
+      "rejectBody": "Oʻquvchiga {count} ball qaytadi, sovgʻa esa zaxiraga qaytadi."
+    },
+    "redeem": {
+      "open": "Sovgʻa berish",
+      "title": "{name} uchun sovgʻa",
+      "hint": "Sarflash mumkin: {count} ball. Ballar darhol ushlab qolinadi; sovgʻani Ballar → Soʻrovlar boʻlimida bering.",
+      "action": "Almashtirish",
+      "short": "Yana {count} ball kerak",
+      "done": "{reward}: soʻrov yaratildi, ballar ushlab qolindi"
     }
   },
   "tv": {

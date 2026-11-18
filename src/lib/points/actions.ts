@@ -6,8 +6,13 @@ import { z } from "zod";
 import { getSignedInUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import {
+  PHOTO_MAX_BYTES,
+  PHOTO_TYPES,
   POINTS_ERRORS,
   TV_LANGUAGES,
+  handleRedemptionSchema,
+  requestRewardSchema,
+  rewardSchema,
   adjustSchema,
   awardSchema,
   pointsSettingsSchema,
@@ -194,6 +199,99 @@ export async function setLeaderboardHidden(studentId: unknown, hidden: unknown):
     .select("id");
   if (error) return failure(error);
   if (data.length === 0) return { ok: false, error: "notFound" };
+  refresh();
+  return { ok: true };
+}
+
+// ── Rewards — docs/SPEC.md → "Defaults to confirm → Redeeming" ──
+
+async function staffSession() {
+  const [user, supabase] = await Promise.all([getSignedInUser(), createClient()]);
+  return supabase && user && user.role !== "teacher" ? { user, supabase } : null;
+}
+
+/** Stores a reward's photo and returns its name in the bucket. Owner only: the bucket refuses anyone else. */
+export async function uploadRewardPhoto(form: FormData): Promise<PointsResult<{ path: string }>> {
+  const file = form.get("photo");
+  if (!(file instanceof File) || !(file.type in PHOTO_TYPES) || file.size === 0 || file.size > PHOTO_MAX_BYTES) {
+    return { ok: false, error: "photoInvalid" };
+  }
+  const ctx = await session("owner");
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const path = `${crypto.randomUUID()}.${PHOTO_TYPES[file.type as keyof typeof PHOTO_TYPES]}`;
+  const { error } = await ctx.supabase.storage.from("reward-photos").upload(path, file, { contentType: file.type });
+  if (error) return { ok: false, error: "photoInvalid" };
+  return { ok: true, data: { path } };
+}
+
+/** Add or change a reward. Owner only. */
+export async function saveReward(input: unknown): Promise<PointsResult> {
+  const parsed = rewardSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const ctx = await session("owner");
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { id, ...values } = parsed.data;
+  if (id) {
+    const { data, error } = await ctx.supabase.from("rewards").update(values).eq("id", id).is("archived_at", null).select("id");
+    if (error) return failure(error);
+    if (data.length === 0) return { ok: false, error: "notFound" };
+  } else {
+    const { error } = await ctx.supabase.from("rewards").insert(values);
+    if (error) return failure(error);
+  }
+
+  refresh();
+  return { ok: true };
+}
+
+/** Take a reward out of the catalogue. Requests already made keep it. Owner only. */
+export async function archiveReward(rewardId: unknown): Promise<PointsResult> {
+  const id = z.uuid().safeParse(rewardId);
+  if (!id.success) return { ok: false, error: "notFound" };
+  const ctx = await session("owner");
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase.from("rewards").update({ archived_at: new Date().toISOString() }).eq("id", id.data).select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+
+  refresh();
+  return { ok: true };
+}
+
+/** A desk request: the points and one unit of stock are held at once. Owner and manager. */
+export async function requestReward(input: unknown): Promise<PointsResult> {
+  const parsed = requestRewardSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "notFound" };
+  const ctx = await staffSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { error } = await ctx.supabase.rpc("request_reward", {
+    p_student_id: parsed.data.student_id,
+    p_reward_id: parsed.data.reward_id,
+  });
+  if (error) return failure(error);
+
+  refresh();
+  return { ok: true };
+}
+
+/** Give (final), or reject / cancel with a reason: the points and the stock return. Owner and manager. */
+export async function handleRedemption(input: unknown): Promise<PointsResult> {
+  const parsed = handleRedemptionSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const ctx = await staffSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { error } = await ctx.supabase.rpc("handle_redemption", {
+    p_id: parsed.data.id,
+    p_action: parsed.data.action,
+    p_note: parsed.data.note || undefined,
+  });
+  if (error) return failure(error);
+
   refresh();
   return { ok: true };
 }

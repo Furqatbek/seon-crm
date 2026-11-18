@@ -211,3 +211,88 @@ export async function getTvBoard(token: string): Promise<TvBoard | null> {
   if (error) return null;
   return (data as TvBoard | null) ?? null;
 }
+
+export type Reward = Pick<Tables<"rewards">, "id" | "name" | "description" | "cost" | "stock" | "is_active" | "photo_path"> & {
+  /** A link to the photo that works for an hour, or null without a photo. */
+  photoUrl: string | null;
+};
+
+/** The catalogue, cheapest first. Staff get the rewards that are switched off too; archived ones never. */
+export async function getRewards(options: { activeOnly: boolean }): Promise<Reward[]> {
+  const supabase = await db();
+  let query = supabase
+    .from("rewards")
+    .select("id, name, description, cost, stock, is_active, photo_path")
+    .is("archived_at", null)
+    .order("cost")
+    .order("name");
+  if (options.activeOnly) query = query.eq("is_active", true);
+  const { data, error } = await query;
+  if (error) {
+    // The table is missing while a deploy is ahead of its migration.
+    if (error.code === "PGRST205" || error.code === "42P01") return [];
+    throw new Error(error.message);
+  }
+
+  const paths = data.flatMap((reward) => (reward.photo_path ? [reward.photo_path] : []));
+  const links = new Map<string, string>();
+  if (paths.length > 0) {
+    const signed = await supabase.storage.from("reward-photos").createSignedUrls(paths, 60 * 60);
+    for (const link of signed.data ?? []) if (link.path && link.signedUrl) links.set(link.path, link.signedUrl);
+  }
+  return data.map((reward) => ({ ...reward, photoUrl: (reward.photo_path && links.get(reward.photo_path)) || null }));
+}
+
+export type RedemptionRow = {
+  id: string;
+  at: string;
+  student: { id: string; name: string };
+  reward: string;
+  cost: number;
+  via: "bot" | "desk";
+  status: Enums<"redemption_status">;
+  note: string | null;
+  handledBy: string | null;
+};
+
+/** The most requests shown on the Requests tab. */
+export const REQUESTS_SHOWN = 100;
+
+/** Reward requests: the open ones first (oldest first), then the latest handled ones. */
+export async function getRedemptions(): Promise<RedemptionRow[]> {
+  const supabase = await db();
+  const { data, error } = await supabase
+    .from("redemptions")
+    .select(
+      "id, created_at, cost, via, status, note, student:students(id, full_name), reward:rewards(name), handler:profiles!redemptions_handled_by_fkey(full_name)",
+    )
+    .order("created_at", { ascending: false })
+    .limit(REQUESTS_SHOWN);
+  if (error) {
+    if (error.code === "PGRST205" || error.code === "42P01") return [];
+    throw new Error(error.message);
+  }
+  const rows = data.map((row) => ({
+    id: row.id,
+    at: row.created_at,
+    student: { id: row.student.id, name: row.student.full_name },
+    reward: row.reward.name,
+    cost: row.cost,
+    via: row.via as "bot" | "desk",
+    status: row.status,
+    note: row.note,
+    handledBy: row.handler?.full_name ?? null,
+  }));
+  const open = rows.filter((row) => row.status === "requested").reverse();
+  return [...open, ...rows.filter((row) => row.status !== "requested")];
+}
+
+/** How many reward requests wait for staff: the number beside Points in the sidebar. 0 for a teacher. */
+export async function getOpenRequestCount(): Promise<number> {
+  const supabase = await db();
+  const { count, error } = await supabase
+    .from("redemptions")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "requested");
+  return error ? 0 : (count ?? 0);
+}

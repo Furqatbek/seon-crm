@@ -16,10 +16,13 @@ import { UserMenu } from "./user-menu";
 function NavLink({
   block,
   active,
+  count,
   onNavigate,
 }: {
   block: Block;
   active: boolean;
+  /** A count beside the name: reward requests waiting for staff. */
+  count?: number;
   onNavigate?: () => void;
 }) {
   const t = useTranslations("nav");
@@ -38,6 +41,12 @@ function NavLink({
     >
       <Icon aria-hidden />
       <span className="truncate">{t(block.key)}</span>
+      {count ? (
+        <span className="ml-auto rounded-full bg-purple px-1.5 text-caption font-medium text-bg numeric" data-nav-count={count}>
+          <span className="sr-only">{t("openRequests")} </span>
+          {count}
+        </span>
+      ) : null}
     </Link>
   );
 }
@@ -45,10 +54,12 @@ function NavLink({
 function SidebarContent({
   user,
   centreName,
+  openRequests,
   onNavigate,
 }: {
   user: SignedInUser;
   centreName: string;
+  openRequests: number;
   onNavigate?: () => void;
 }) {
   const t = useTranslations();
@@ -75,6 +86,7 @@ function SidebarContent({
             key={block.key}
             block={block}
             active={isActive(block)}
+            count={block.key === "points" ? openRequests : undefined}
             onNavigate={onNavigate}
           />
         ))}
@@ -102,11 +114,14 @@ const TEACHER_HOME = ["/my-groups", "/settings"];
 export function AppShell({
   user,
   centreName,
+  openRequests = 0,
   children,
 }: {
   user: SignedInUser;
   /** From Settings → Centre. */
   centreName: string;
+  /** Reward requests waiting for staff; shown beside Points. */
+  openRequests?: number;
   children: React.ReactNode;
 }) {
   const t = useTranslations();
@@ -125,7 +140,7 @@ export function AppShell({
   return (
     <div className="min-h-dvh bg-bg">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-sidebar border-r border-border bg-bg-subtle/80 backdrop-blur-frost shell:block">
-        <SidebarContent user={user} centreName={centreName} />
+        <SidebarContent user={user} centreName={centreName} openRequests={openRequests} />
       </aside>
 
       <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-bg-subtle/80 px-2 backdrop-blur-frost shell:hidden">
@@ -149,7 +164,7 @@ export function AppShell({
         >
           <SheetTitle className="sr-only">{t("nav.label")}</SheetTitle>
           <SheetDescription className="sr-only">{centreName}</SheetDescription>
-          <SidebarContent user={user} centreName={centreName} onNavigate={() => setMenuOpen(false)} />
+          <SidebarContent user={user} centreName={centreName} openRequests={openRequests} onNavigate={() => setMenuOpen(false)} />
         </SheetContent>
       </Sheet>
 

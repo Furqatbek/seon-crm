@@ -52,7 +52,8 @@
     "settings": "Settings",
     "myGroups": "My groups",
     "pointsHistory": "History",
-    "points": "Points"
+    "points": "Points",
+    "openRequests": "Reward requests waiting:"
   },
   "language": {
     "label": "Language",
@@ -1395,7 +1396,14 @@
       "tooLong": "Too long.",
       "notAllowed": "You are not allowed to do this.",
       "notFound": "Not found. It may have been removed.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "nameRequired": "Enter a name.",
+      "costInvalid": "Enter a cost from 1 to 100,000 points.",
+      "stockInvalid": "Enter a whole number, or leave it empty for unlimited.",
+      "outOfStock": "This reward is out of stock.",
+      "alreadyHandled": "This request was already handled.",
+      "notOnOffer": "This reward is no longer on offer.",
+      "photoInvalid": "Choose a JPG, PNG or WebP photo of up to 2 MB."
     },
     "history": {
       "title": "History",
@@ -1511,6 +1519,66 @@
       "regenerateTitle": "Make a new TV link?",
       "regenerateBody": "The old link stops working at once. Open the new link on every TV.",
       "regenerated": "New link made"
+    },
+    "tabs": {
+      "leaderboard": "Leaderboard",
+      "rewards": "Rewards",
+      "requests": "Requests"
+    },
+    "rewards": {
+      "add": "Add reward",
+      "edit": "Edit",
+      "empty": "No rewards yet.",
+      "off": "Off",
+      "unlimited": "Unlimited",
+      "outOfStock": "Out of stock",
+      "left": "{count, plural, one {# left} other {# left}}",
+      "newTitle": "New reward",
+      "editTitle": "Edit reward",
+      "name": "Name",
+      "description": "Description",
+      "cost": "Cost, points",
+      "stock": "In stock",
+      "stockHint": "Leave empty for unlimited.",
+      "photo": "Photo",
+      "photoHint": "JPG, PNG or WebP, up to 2 MB. A new photo replaces the old one.",
+      "active": "On offer",
+      "saved": "Reward saved",
+      "archived": "Reward archived",
+      "archive": "Archive"
+    },
+    "requests": {
+      "empty": "No reward requests yet.",
+      "date": "Date",
+      "student": "Student",
+      "reward": "Reward",
+      "cost": "Points",
+      "from": "From",
+      "status": "Status",
+      "via": {
+        "bot": "Bot",
+        "desk": "Desk"
+      },
+      "statuses": {
+        "requested": "Waiting",
+        "given": "Given",
+        "rejected": "Rejected",
+        "cancelled": "Cancelled"
+      },
+      "give": "Give",
+      "reject": "Reject",
+      "given": "{name}: reward given",
+      "rejected": "{name}: request rejected, points returned",
+      "rejectTitle": "Reject the request of {name}?",
+      "rejectBody": "{count, plural, one {# point returns} other {# points return}} to the student, and the reward goes back in stock."
+    },
+    "redeem": {
+      "open": "Redeem reward",
+      "title": "Reward for {name}",
+      "hint": "{count, plural, one {# point} other {# points}} to spend. The points are held at once; hand the reward over from Points → Requests.",
+      "action": "Redeem",
+      "short": "{count, plural, one {# more point needed} other {# more points needed}}",
+      "done": "{reward}: request made, points held"
     }
   },
   "tv": {

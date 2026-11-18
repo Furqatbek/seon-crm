@@ -65,6 +65,58 @@ export const boardSearchSchema = z.object({
 
 export const TV_LANGUAGES = ["uz", "ru", "en"] as const;
 
+export const POINTS_TABS = ["leaderboard", "rewards", "requests"] as const;
+export type PointsTab = (typeof POINTS_TABS)[number];
+
+/** URL state of /points: the tab, plus the leaderboard's own filters. */
+export const pointsSearchSchema = boardSearchSchema.extend({ tab: z.enum(POINTS_TABS).catch("leaderboard") });
+
+/** Reward photos: what the bucket accepts. */
+export const PHOTO_TYPES = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" } as const;
+export const PHOTO_MAX_BYTES = 2 * 1024 * 1024;
+
+/** Add or edit a reward. An empty stock means unlimited. */
+export const rewardSchema = z.object({
+  id: z.uuid().optional(),
+  name: z.string().trim().min(1, "nameRequired").max(80, "tooLong"),
+  description: z
+    .string()
+    .trim()
+    .max(300, "tooLong")
+    .transform((value) => value || null),
+  cost: z.coerce.number("costInvalid").int("costInvalid").min(1, "costInvalid").max(100_000, "costInvalid"),
+  stock: z.string().transform((value, ctx) => {
+    if (value.trim() === "") return null;
+    const stock = Number(value);
+    if (!Number.isInteger(stock) || stock < 0 || stock > 100_000) {
+      ctx.addIssue({ code: "custom", message: "stockInvalid" });
+      return z.NEVER;
+    }
+    return stock;
+  }),
+  is_active: z.boolean(),
+  // The photo's name in the bucket; set by the upload, never typed.
+  photo_path: z
+    .string()
+    .regex(/^[0-9a-f-]{36}\.(jpg|png|webp)$/)
+    .nullable(),
+});
+export type RewardInput = z.input<typeof rewardSchema>;
+export type RewardValues = z.output<typeof rewardSchema>;
+
+/** Give, or reject / cancel with a reason. */
+export const handleRedemptionSchema = z
+  .object({
+    id: z.uuid(),
+    action: z.enum(["give", "reject", "cancel"]),
+    note: reason,
+  })
+  .superRefine((value, ctx) => {
+    if (value.action !== "give" && !value.note) ctx.addIssue({ code: "custom", path: ["note"], message: "reasonRequired" });
+  });
+
+export const requestRewardSchema = z.object({ student_id: z.uuid(), reward_id: z.uuid() });
+
 /** Owner adjustment: any amount, reason required. */
 export const adjustSchema = z.object({
   student_id: z.uuid(),
@@ -116,6 +168,13 @@ export type PointsErrorKey =
   | "valueInvalid"
   | "labelRequired"
   | "tooLong"
+  | "nameRequired"
+  | "costInvalid"
+  | "stockInvalid"
+  | "outOfStock"
+  | "alreadyHandled"
+  | "notOnOffer"
+  | "photoInvalid"
   | "notAllowed"
   | "notFound"
   | "generic";
@@ -129,6 +188,11 @@ export const POINTS_ERRORS: Record<string, PointsErrorKey> = {
   EP005: "notInGroup",
   EP006: "undoTooLate",
   EP007: "notEnough",
+  ER001: "notEnough",
+  ER002: "outOfStock",
+  ER003: "alreadyHandled",
+  ER004: "reasonRequired",
+  ER005: "notOnOffer",
   "42501": "notAllowed",
   P0002: "notFound",
 };

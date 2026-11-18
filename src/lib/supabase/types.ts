@@ -565,14 +565,14 @@ isOneToOne: false
                   ]
                 },"points_ledger": {
                   Row: {
-                    "created_at": string,"created_by": string | null,"dedupe_key": string | null,"delta": number,"group_id": string | null,"id": string,"lesson_id": string | null,"preset_id": string | null,"reason": string | null,"source": Database["public"]['Enums']["points_source"],"student_id": string
+                    "created_at": string,"created_by": string | null,"dedupe_key": string | null,"delta": number,"group_id": string | null,"id": string,"lesson_id": string | null,"preset_id": string | null,"reason": string | null,"redemption_id": string | null,"source": Database["public"]['Enums']["points_source"],"student_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"created_by"?: string | null,"dedupe_key"?: string | null,"delta": number,"group_id"?: string | null,"id"?: string,"lesson_id"?: string | null,"preset_id"?: string | null,"reason"?: string | null,"source": Database["public"]['Enums']["points_source"],"student_id": string
+                    "created_at"?: string,"created_by"?: string | null,"dedupe_key"?: string | null,"delta": number,"group_id"?: string | null,"id"?: string,"lesson_id"?: string | null,"preset_id"?: string | null,"reason"?: string | null,"redemption_id"?: string | null,"source": Database["public"]['Enums']["points_source"],"student_id": string
                   }
                   Update: {
-                    "created_at"?: string,"created_by"?: string | null,"dedupe_key"?: string | null,"delta"?: number,"group_id"?: string | null,"id"?: string,"lesson_id"?: string | null,"preset_id"?: string | null,"reason"?: string | null,"source"?: Database["public"]['Enums']["points_source"],"student_id"?: string
+                    "created_at"?: string,"created_by"?: string | null,"dedupe_key"?: string | null,"delta"?: number,"group_id"?: string | null,"id"?: string,"lesson_id"?: string | null,"preset_id"?: string | null,"reason"?: string | null,"redemption_id"?: string | null,"source"?: Database["public"]['Enums']["points_source"],"student_id"?: string
                   }
                   Relationships: [
                     {
@@ -598,6 +598,12 @@ isOneToOne: false
       columns: ["preset_id"]
 isOneToOne: false
       referencedRelation: "point_presets"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "points_ledger_redemption_id_fkey"
+      columns: ["redemption_id"]
+isOneToOne: false
+      referencedRelation: "redemptions"
       referencedColumns: ["id"]
     },{
       foreignKeyName: "points_ledger_student_id_fkey"
@@ -658,6 +664,76 @@ isOneToOne: false
       referencedRelation: "teachers"
       referencedColumns: ["id"]
     }
+                  ]
+                },"redemptions": {
+                  Row: {
+                    "cost": number,"created_at": string,"created_by": string | null,"handled_at": string | null,"handled_by": string | null,"id": string,"note": string | null,"requested_by": string,"reward_id": string,"status": Database["public"]['Enums']["redemption_status"],"student_id": string,"via": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cost": number,"created_at"?: string,"created_by"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"requested_by": string,"reward_id": string,"status"?: Database["public"]['Enums']["redemption_status"],"student_id": string,"via": string
+                  }
+                  Update: {
+                    "cost"?: number,"created_at"?: string,"created_by"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"requested_by"?: string,"reward_id"?: string,"status"?: Database["public"]['Enums']["redemption_status"],"student_id"?: string,"via"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "redemptions_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "redemptions_handled_by_fkey"
+      columns: ["handled_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "redemptions_reward_id_fkey"
+      columns: ["reward_id"]
+isOneToOne: false
+      referencedRelation: "rewards"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "redemptions_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "student_balances"
+      referencedColumns: ["student_id"]
+    },{
+      foreignKeyName: "redemptions_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "student_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "redemptions_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "student_points"
+      referencedColumns: ["student_id"]
+    },{
+      foreignKeyName: "redemptions_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"rewards": {
+                  Row: {
+                    "archived_at": string | null,"cost": number,"created_at": string,"description": string | null,"id": string,"is_active": boolean,"name": string,"photo_path": string | null,"stock": number | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "archived_at"?: string | null,"cost": number,"created_at"?: string,"description"?: string | null,"id"?: string,"is_active"?: boolean,"name": string,"photo_path"?: string | null,"stock"?: number | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "archived_at"?: string | null,"cost"?: number,"created_at"?: string,"description"?: string | null,"id"?: string,"is_active"?: boolean,"name"?: string,"photo_path"?: string | null,"stock"?: number | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
                   ]
                 },"rooms": {
                   Row: {
@@ -860,6 +936,9 @@ isOneToOne: false
 "group_uses_room":
 { Args: { "p_archived_at": string,"p_status": Database["public"]['Enums']["group_status"] }; Returns: boolean
                            },
+"handle_redemption":
+{ Args: { "p_action": string,"p_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["redemption_status"]
+                           },
 "is_api_user":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
@@ -1003,6 +1082,9 @@ isOneToOne: false
               "active": number,"joined": number,"left_count": number,"month": string
             }[]
                            },
+"request_reward":
+{ Args: { "p_requested_by"?: string,"p_reward_id": string,"p_student_id": string,"p_via"?: string }; Returns: string
+                           },
 "restore_lesson":
 { Args: { "p_lesson_id": string }; Returns: undefined
                            },
@@ -1071,7 +1153,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "app_language": "uz"|"ru"|"en","attendance_status": "present"|"late"|"absent"|"excused","charge_type": "monthly_fee"|"adjustment","enrollment_status": "active"|"left","expense_category": "rent"|"utilities"|"marketing"|"supplies"|"other","group_status": "forming"|"active"|"finished","lead_source": "instagram"|"telegram"|"phone_call"|"walk_in"|"referral"|"website"|"other","lead_status": "new"|"contacted"|"trial"|"won"|"lost","lesson_status": "scheduled"|"held"|"cancelled","message_channel": "telegram"|"sms","message_status": "queued"|"sent"|"failed"|"skipped","message_type": "payment_due"|"payment_overdue"|"lesson_reminder"|"custom","pay_type": "fixed_monthly"|"percent_of_revenue"|"per_lesson","payment_method": "cash"|"card"|"transfer","payout_status": "draft"|"paid","points_source": "attendance"|"perfect_month"|"on_time_payment"|"referral"|"teacher_award"|"teacher_deduction"|"owner_adjustment"|"reward_hold"|"reward_return","preset_kind": "award"|"deduction","student_status": "active"|"paused"|"left"|"graduated","user_role": "owner"|"manager"|"teacher"
+            "app_language": "uz"|"ru"|"en","attendance_status": "present"|"late"|"absent"|"excused","charge_type": "monthly_fee"|"adjustment","enrollment_status": "active"|"left","expense_category": "rent"|"utilities"|"marketing"|"supplies"|"other","group_status": "forming"|"active"|"finished","lead_source": "instagram"|"telegram"|"phone_call"|"walk_in"|"referral"|"website"|"other","lead_status": "new"|"contacted"|"trial"|"won"|"lost","lesson_status": "scheduled"|"held"|"cancelled","message_channel": "telegram"|"sms","message_status": "queued"|"sent"|"failed"|"skipped","message_type": "payment_due"|"payment_overdue"|"lesson_reminder"|"custom","pay_type": "fixed_monthly"|"percent_of_revenue"|"per_lesson","payment_method": "cash"|"card"|"transfer","payout_status": "draft"|"paid","points_source": "attendance"|"perfect_month"|"on_time_payment"|"referral"|"teacher_award"|"teacher_deduction"|"owner_adjustment"|"reward_hold"|"reward_return","preset_kind": "award"|"deduction","redemption_status": "requested"|"given"|"rejected"|"cancelled","student_status": "active"|"paused"|"left"|"graduated","user_role": "owner"|"manager"|"teacher"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -1191,7 +1273,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "app_language": ["uz", "ru", "en"],"attendance_status": ["present", "late", "absent", "excused"],"charge_type": ["monthly_fee", "adjustment"],"enrollment_status": ["active", "left"],"expense_category": ["rent", "utilities", "marketing", "supplies", "other"],"group_status": ["forming", "active", "finished"],"lead_source": ["instagram", "telegram", "phone_call", "walk_in", "referral", "website", "other"],"lead_status": ["new", "contacted", "trial", "won", "lost"],"lesson_status": ["scheduled", "held", "cancelled"],"message_channel": ["telegram", "sms"],"message_status": ["queued", "sent", "failed", "skipped"],"message_type": ["payment_due", "payment_overdue", "lesson_reminder", "custom"],"pay_type": ["fixed_monthly", "percent_of_revenue", "per_lesson"],"payment_method": ["cash", "card", "transfer"],"payout_status": ["draft", "paid"],"points_source": ["attendance", "perfect_month", "on_time_payment", "referral", "teacher_award", "teacher_deduction", "owner_adjustment", "reward_hold", "reward_return"],"preset_kind": ["award", "deduction"],"student_status": ["active", "paused", "left", "graduated"],"user_role": ["owner", "manager", "teacher"]
+            "app_language": ["uz", "ru", "en"],"attendance_status": ["present", "late", "absent", "excused"],"charge_type": ["monthly_fee", "adjustment"],"enrollment_status": ["active", "left"],"expense_category": ["rent", "utilities", "marketing", "supplies", "other"],"group_status": ["forming", "active", "finished"],"lead_source": ["instagram", "telegram", "phone_call", "walk_in", "referral", "website", "other"],"lead_status": ["new", "contacted", "trial", "won", "lost"],"lesson_status": ["scheduled", "held", "cancelled"],"message_channel": ["telegram", "sms"],"message_status": ["queued", "sent", "failed", "skipped"],"message_type": ["payment_due", "payment_overdue", "lesson_reminder", "custom"],"pay_type": ["fixed_monthly", "percent_of_revenue", "per_lesson"],"payment_method": ["cash", "card", "transfer"],"payout_status": ["draft", "paid"],"points_source": ["attendance", "perfect_month", "on_time_payment", "referral", "teacher_award", "teacher_deduction", "owner_adjustment", "reward_hold", "reward_return"],"preset_kind": ["award", "deduction"],"redemption_status": ["requested", "given", "rejected", "cancelled"],"student_status": ["active", "paused", "left", "graduated"],"user_role": ["owner", "manager", "teacher"]
           }
         }
 } as const
