@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { formDocumentSchema, visitorLanguage, type FormDocument } from "../forms/document";
 import { FORM_TEMPLATES } from "../forms/templates";
-import { submitIntake, type IntakeStore } from "./intake";
+import { submitIntake, type IntakeInput, type IntakeStore } from "./intake";
 import { MAX_FILL_MS, MIN_FILL_MS, checkTrap, hashVisitor, issueToken } from "./trap";
 import { buildAnswersSchema, checkAnswers, leadFromAnswers, normalizeIntakePhone } from "./validator";
 
@@ -183,7 +183,7 @@ describe("the intake function", () => {
     };
     return { calls, deps: { store, secret: SECRET } };
   };
-  const input = (over: Partial<Parameters<typeof submitIntake>[0]> = {}) => ({
+  const input = (over: Partial<Extract<IntakeInput, { form: unknown }>> = {}) => ({
     channel: "form" as const,
     form: { id: FORM_ID, status: "live" as const, document: course },
     values: good,

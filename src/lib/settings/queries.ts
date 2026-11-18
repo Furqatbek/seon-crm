@@ -181,3 +181,39 @@ export async function getAlertSettings(user: { id: string }): Promise<AlertSetti
     alertSound: switches.data.alert_sound,
   };
 }
+
+// ── Lead sources (owner): keys for websites that post leads ──
+
+export type LeadSource = {
+  id: string;
+  name: string;
+  /** The part of the key that may be shown: "lk_ab12cd34". */
+  keyPrefix: string;
+  fieldMap: Record<string, string>;
+  formId: string | null;
+  isActive: boolean;
+  lastUsedAt: string | null;
+};
+export type LeadSourcesData = { sources: LeadSource[]; forms: Array<{ id: string; name: string }> };
+
+/** The sources and the funnels one can be tied to. Null while the intake migration is not applied. */
+export async function getLeadSources(): Promise<LeadSourcesData | null> {
+  const supabase = await db();
+  const [sources, forms] = await Promise.all([
+    supabase.from("intake_sources").select("id, name, key_prefix, field_map, form_id, is_active, last_used_at").order("created_at"),
+    supabase.from("lead_forms").select("id, name").is("archived_at", null).order("name"),
+  ]);
+  if (sources.error || forms.error) return null;
+  return {
+    sources: sources.data.map((row) => ({
+      id: row.id,
+      name: row.name,
+      keyPrefix: row.key_prefix,
+      fieldMap: row.field_map && typeof row.field_map === "object" && !Array.isArray(row.field_map) ? (row.field_map as Record<string, string>) : {},
+      formId: row.form_id,
+      isActive: row.is_active,
+      lastUsedAt: row.last_used_at,
+    })),
+    forms: forms.data,
+  };
+}

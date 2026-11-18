@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { appUrl } from "@/lib/app-url";
 import { getCurrentUser, getSignedInUser } from "@/lib/auth";
+import { generateKey } from "@/lib/intake/keys";
 import { getProviders } from "@/lib/notify/store";
 import { botCommands } from "@/lib/notify/bot-texts";
 import { connectWebhook } from "@/lib/notify/telegram-admin";
@@ -23,6 +24,7 @@ import {
   userRoleSchema,
   type SettingsErrorKey,
   type SettingsResult,
+  leadSourceSchema,
 } from "@/lib/validation/settings";
 
 // Everything here is written as the signed-in user, so Row Level Security and
@@ -297,6 +299,89 @@ export async function saveTemplate(input: unknown): Promise<SettingsResult> {
   if (error) return failure(error);
   refresh();
   return { ok: true };
+}
+
+// ── Lead sources: keys for websites that post leads. Owner only; the database refuses anyone else. ──
+
+const fieldMapOf = (rows: Array<{ from: string; to: string }>) => Object.fromEntries(rows.map((row) => [row.from, row.to]));
+
+/**
+ * A new source and its key. The key is returned here once and never again:
+ * the database keeps only its hash and a short prefix.
+ */
+export async function createLeadSource(input: unknown): Promise<SettingsResult<{ key: string }>> {
+  const parsed = leadSourceSchema.safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { key, prefix, hash } = generateKey();
+  const { error } = await ctx.supabase.from("intake_sources").insert({
+    name: parsed.data.name,
+    form_id: parsed.data.form_id,
+    field_map: fieldMapOf(parsed.data.fields),
+    key_prefix: prefix,
+    key_hash: hash,
+  });
+  if (error) return error.code === "42501" ? { ok: false, error: "notAllowed" } : { ok: false, error: "generic" };
+  refresh();
+  return { ok: true, data: { key } };
+}
+
+/** Name, funnel and field map of a source. Its key stays as it is. */
+export async function updateLeadSource(id: unknown, input: unknown): Promise<SettingsResult> {
+  const sourceId = z.uuid().safeParse(id);
+  const parsed = leadSourceSchema.safeParse(input);
+  if (!sourceId.success) return { ok: false, error: "notFound" };
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("intake_sources")
+    .update({ name: parsed.data.name, form_id: parsed.data.form_id, field_map: fieldMapOf(parsed.data.fields) })
+    .eq("id", sourceId.data)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+  refresh();
+  return { ok: true };
+}
+
+/** Switch a source on or off. Off: its key is refused at once. */
+export async function setLeadSourceActive(id: unknown, active: unknown): Promise<SettingsResult> {
+  const sourceId = z.uuid().safeParse(id);
+  if (!sourceId.success || typeof active !== "boolean") return { ok: false, error: "notFound" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { data, error } = await ctx.supabase.from("intake_sources").update({ is_active: active }).eq("id", sourceId.data).select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+  refresh();
+  return { ok: true };
+}
+
+export type SourceLogRow = { id: string; receivedAt: string; outcome: string; detail: string | null; leadId: string | null; leadName: string | null };
+
+/** The last 100 requests of a source, newest first. */
+export async function getLeadSourceLog(id: unknown): Promise<SettingsResult<SourceLogRow[]>> {
+  const sourceId = z.uuid().safeParse(id);
+  if (!sourceId.success) return { ok: false, error: "notFound" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { data, error } = await ctx.supabase.rpc("intake_source_log", { p_source_id: sourceId.data });
+  if (error) return failure(error);
+  return {
+    ok: true,
+    data: (data ?? []).map((row) => ({
+      id: row.id,
+      receivedAt: row.received_at,
+      outcome: row.outcome,
+      detail: row.detail,
+      leadId: row.lead_id,
+      leadName: row.lead_name,
+    })),
+  };
 }
 
 // ── Profile: everyone, for themselves ──

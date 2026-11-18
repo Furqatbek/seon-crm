@@ -5,6 +5,8 @@ import { CentreTab } from "@/components/settings/centre-tab";
 import { PointsTab } from "@/components/settings/points-tab";
 import { NotificationsTab } from "@/components/settings/notifications-tab";
 import { ProfileTab } from "@/components/settings/profile-tab";
+import { SourcesTab } from "@/components/settings/sources-tab";
+import { formsBaseUrl } from "@/lib/forms/url";
 import { RoomsTab } from "@/components/settings/rooms-tab";
 import { SettingsScreen } from "@/components/settings/settings-screen";
 import { TemplatesTab } from "@/components/settings/templates-tab";
@@ -21,6 +23,7 @@ import {
   getAllTemplates,
   getCentreSettings,
   getIntegrations,
+  getLeadSources,
   getProfile,
   getRooms,
   getTeacherOptions,
@@ -34,7 +37,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
   const user = await getSignedInUser();
   if (!user) return null;
 
-  // Centre, rooms, users, notifications, templates and points are the owner's. A manager or a teacher has
+  // Centre, rooms, users, notifications, templates, points and lead sources are the owner's. A manager or a teacher has
   // Profile only: the other tabs are never rendered, and the database would
   // refuse the changes anyway.
   const tabs: readonly SettingsTab[] = user.role === "owner" ? SETTINGS_TABS : ["profile"];
@@ -58,6 +61,12 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
       ) : null}
       {tab === "points" && owner ? (
         <Points />
+      ) : null}
+      {tab === "sources" && owner ? (
+        <SourcesTab
+          data={await getLeadSources()}
+          endpoint={formsBaseUrl(process.env.FORMS_HOST) ? `${formsBaseUrl(process.env.FORMS_HOST)}/api/v1/leads` : null}
+        />
       ) : null}
       {tab === "profile" ? (
         <ProfileTab profile={await getProfile(user)} alerts={user.role === "teacher" ? null : await getAlertSettings(user)} />

@@ -152,10 +152,33 @@ export type SettingsResult<T = undefined> =
       detail?: string;
     };
 
-export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "points", "profile"] as const;
+export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "points", "sources", "profile"] as const;
 export type SettingsTab = (typeof SETTINGS_TABS)[number];
 
 /** URL state of /settings. */
 export const settingsSearchSchema = z.object({
   tab: z.enum(SETTINGS_TABS).optional().catch(undefined),
 });
+
+// ── Lead sources: keys for websites that post leads (docs/SPEC.md → "Public intake URL") ──
+
+/** Where an incoming field of a website goes. The same list as src/lib/intake/field-map.ts. */
+export const SOURCE_MAP_TARGETS = ["name", "phone", "subject", "preferred_time", "notes", "language", "answer", "ignore"] as const;
+
+/** Add or edit a lead source. */
+export const leadSourceSchema = z.object({
+  name: z.string().trim().min(1, "nameRequired").max(80, "tooLong"),
+  /** The funnel its leads count in; empty for none. */
+  form_id: z
+    .union([z.uuid(), z.literal("")])
+    .nullish()
+    .transform((value) => value || null),
+  /** One row per incoming field name. Rows with no name are dropped. */
+  fields: z
+    .array(z.object({ from: z.string().trim().max(80, "tooLong"), to: z.enum(SOURCE_MAP_TARGETS) }))
+    .max(40)
+    .default([])
+    .transform((rows) => rows.filter((row) => row.from !== "")),
+});
+export type LeadSourceInput = z.input<typeof leadSourceSchema>;
+export type LeadSourceValues = z.output<typeof leadSourceSchema>;

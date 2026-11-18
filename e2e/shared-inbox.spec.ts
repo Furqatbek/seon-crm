@@ -166,18 +166,15 @@ test("the owner assigns a waiting lead to a manager; a teacher has no inbox", as
 });
 
 test("Profile: link Telegram, alerts and sound switches", async ({ page }) => {
-  const before = await withDb(async (db) => {
-    const { rows } = await db.query("select telegram_bot_username from centre_settings");
-    await db.query("update centre_settings set telegram_bot_username = 'seon_e2e_bot'");
-    return rows[0].telegram_bot_username as string | null;
-  });
-  try {
+  // The centre's bot, as the seed set it. (Not changed here: other tests read it too.)
+  const bot = await withDb(async (db) => (await db.query("select telegram_bot_username from centre_settings")).rows[0].telegram_bot_username as string);
+  {
     await signIn(page, "manager");
     await page.goto("/en/settings");
     const section = page.locator("section").filter({ has: page.getByRole("heading", { name: "Lead alerts" }) });
     await expect(section).toContainText("Your Telegram is not linked yet.");
     const code = await withDb(async (db) => (await db.query("select staff_link_code from profiles p join auth.users u on u.id = p.id where u.email = $1", [LOGINS.manager])).rows[0].staff_link_code as string);
-    await expect(section.locator("[data-telegram-link]")).toHaveAttribute("href", `https://t.me/seon_e2e_bot?start=u_${code}`);
+    await expect(section.locator("[data-telegram-link]")).toHaveAttribute("href", `https://t.me/${bot}?start=u_${code}`);
 
     // The two switches are on by default and saved as soon as they are changed.
     const settings = () =>
@@ -201,8 +198,6 @@ test("Profile: link Telegram, alerts and sound switches", async ({ page }) => {
     await section.getByRole("button", { name: "Unlink" }).click();
     await expect(page.getByText("Telegram is unlinked")).toBeVisible();
     await expect(section).toContainText("Your Telegram is not linked yet.");
-  } finally {
-    await withDb((db) => db.query("update centre_settings set telegram_bot_username = $1", [before]));
   }
 });
 

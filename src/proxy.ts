@@ -50,8 +50,9 @@ export default async function proxy(request: NextRequest) {
     url.pathname = `/form/${slug}`;
     return NextResponse.rewrite(url);
   }
-  // And a form page is a 404 on the staff host.
+  // And a form page, the intake API and the Meta webhook are a 404 on the staff host.
   if (pathname === "/form" || pathname.startsWith("/form/")) return notFound();
+  if (/^\/api\/(v1|meta)(\/|$)/.test(pathname)) return notFound();
   // API routes and the auth callback look after themselves.
   if (pathname.startsWith("/api") || pathname.startsWith("/auth")) return NextResponse.next();
 

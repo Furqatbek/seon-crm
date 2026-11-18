@@ -373,6 +373,38 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "leads"
       referencedColumns: ["id"]
+    },{
+      foreignKeyName: "intake_log_source_id_fkey"
+      columns: ["source_id"]
+isOneToOne: false
+      referencedRelation: "intake_sources"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"intake_sources": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"field_map": NonNullable<Json>,"form_id": string | null,"id": string,"is_active": boolean,"key_hash": string,"key_prefix": string,"last_used_at": string | null,"name": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"field_map"?: NonNullable<Json>,"form_id"?: string | null,"id"?: string,"is_active"?: boolean,"key_hash": string,"key_prefix": string,"last_used_at"?: string | null,"name": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"field_map"?: NonNullable<Json>,"form_id"?: string | null,"id"?: string,"is_active"?: boolean,"key_hash"?: string,"key_prefix"?: string,"last_used_at"?: string | null,"name"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "intake_sources_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "intake_sources_form_id_fkey"
+      columns: ["form_id"]
+isOneToOne: false
+      referencedRelation: "lead_forms"
+      referencedColumns: ["id"]
     }
                   ]
                 },"lead_activities": {
@@ -1120,10 +1152,20 @@ isOneToOne: false
 { Args: { "p_action": string,"p_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["redemption_status"]
                            },
 "intake_reject":
-{ Args: { "p_channel": Database["public"]['Enums']["intake_channel"],"p_detail": string,"p_form_id": string,"p_ip_hash": string,"p_outcome": Database["public"]['Enums']["intake_outcome"] }; Returns: undefined
+{ Args: { "p_channel": Database["public"]['Enums']["intake_channel"],"p_detail": string,"p_form_id": string,"p_ip_hash": string,"p_outcome": Database["public"]['Enums']["intake_outcome"],"p_source_id"?: string }; Returns: undefined
+                           },
+"intake_source_check":
+{ Args: { "p_key_hash": string }; Returns: {
+              "field_map": Json,"form_id": string,"id": string,"limited": boolean,"name": string
+            }[]
+                           },
+"intake_source_log":
+{ Args: { "p_source_id": string }; Returns: {
+              "detail": string,"id": string,"lead_id": string,"lead_name": string,"outcome": Database["public"]['Enums']["intake_outcome"],"received_at": string
+            }[]
                            },
 "intake_submit":
-{ Args: { "p_answers"?: Json,"p_channel": Database["public"]['Enums']["intake_channel"],"p_form_id": string,"p_full_name": string,"p_ip_hash": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_notes"?: string,"p_phone": string,"p_preferred_time"?: string,"p_subject"?: string }; Returns: {
+{ Args: { "p_answers"?: Json,"p_channel": Database["public"]['Enums']["intake_channel"],"p_form_id": string,"p_full_name": string,"p_ip_hash": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_notes"?: string,"p_phone": string,"p_preferred_time"?: string,"p_source_id"?: string,"p_subject"?: string }; Returns: {
               "lead_id": string,"outcome": Database["public"]['Enums']["intake_outcome"]
             }[]
                            },
