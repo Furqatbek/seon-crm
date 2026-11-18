@@ -5,8 +5,9 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
-  // A reward photo (up to 2 MB) is sent through a server action.
-  experimental: { serverActions: { bodySizeLimit: "3mb" } },
+  // Pictures are sent through server actions: a reward photo (up to 2 MB) and
+  // a form's logo or background (up to 5 MB).
+  experimental: { serverActions: { bodySizeLimit: "6mb" } },
   partialPrefetching: true,
   turbopack: {
     rules: {

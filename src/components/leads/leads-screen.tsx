@@ -21,6 +21,7 @@ import { LeadBoard } from "./lead-board";
 import { LeadFormSheet } from "./lead-form-sheet";
 import { LeadList } from "./lead-list";
 import { LeadSheet } from "./lead-sheet";
+import { LeadsTabs } from "./leads-tabs";
 import { LeadsToolbar } from "./leads-toolbar";
 import { MoveDialog, type PendingMove } from "./move-dialog";
 import { useLeadsUrl } from "./use-leads-url";
@@ -105,6 +106,7 @@ export function LeadsScreen({
           </Button>
         }
       >
+        <LeadsTabs active="leads" />
         <LeadsToolbar search={search} staff={activeStaff} />
       </PageHeader>
 

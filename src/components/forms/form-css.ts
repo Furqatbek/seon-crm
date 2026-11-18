@@ -1,10 +1,13 @@
 // The public form's own style sheet. The page is plain HTML with no framework
 // script, so its styles travel with it; the editor preview adds the same text.
 // Every colour comes from the form's design, set as --lf-* on the root.
+// The layout follows the width of the form's own box (container queries), so
+// the editor's Phone, Tablet and Desktop frames show what each device gets.
 
 export const FORM_CSS = `
+.lf-root{container-type:inline-size}
 .lf,.lf *{box-sizing:border-box}
-.lf{position:relative;min-height:100dvh;margin:0;padding:24px 16px 40px;color:var(--lf-text);background:var(--lf-bg);background-size:cover;background-position:center;font-family:var(--lf-font);font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
+.lf{position:relative;min-height:var(--lf-min-h,100dvh);margin:0;padding:24px 16px 40px;color:var(--lf-text);background:var(--lf-bg);background-size:cover;background-position:center;font-family:var(--lf-font);font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
 .lf-wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 .lf-top{display:flex;justify-content:flex-end}
 .lf-langs{display:flex;gap:4px;padding:4px;border-radius:var(--lf-r-input);background:color-mix(in srgb,var(--lf-text) 10%,transparent)}
@@ -44,9 +47,11 @@ textarea.lf-input{min-height:112px;resize:vertical;border-radius:var(--lf-r-area
 .lf-done h2{margin:0;font-size:22px;line-height:1.25}
 .lf-done p{margin:0;white-space:pre-line}
 .lf-done svg{width:56px;height:56px;color:var(--lf-button)}
+.lf a{color:inherit}
+.lf-embed{--lf-min-h:0px}
 .lf-hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 .lf-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-@media (min-width:560px){
+@container (min-width:560px){
 .lf{padding:40px 24px 64px}
 .lf-card{padding:28px}
 .lf-fields{grid-template-columns:1fr 1fr}
@@ -54,7 +59,7 @@ textarea.lf-input{min-height:112px;resize:vertical;border-radius:var(--lf-r-area
 .lf-field.lf-half{grid-column:span 1}
 .lf-title{font-size:34px}
 }
-@media (min-width:960px){
+@container (min-width:960px){
 .lf-split .lf-wrap{max-width:1080px;display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"top top" "head card";column-gap:56px;align-items:start}
 .lf-split .lf-top{grid-area:top}
 .lf-split .lf-head{grid-area:head;padding-top:48px}
@@ -65,7 +70,8 @@ textarea.lf-input{min-height:112px;resize:vertical;border-radius:var(--lf-r-area
 `;
 
 /**
- * Keeps what was typed when the visitor changes language, and stops a second
- * tap on the button from sending twice. The form works without it.
+ * Keeps what was typed when the visitor changes language, stops a second tap
+ * on the button from sending twice, and, when the form is embedded in another
+ * website, tells that page its height so the frame fits. The form works without it.
  */
-export const FORM_SCRIPT = `(function(){var f=document.querySelector('form.lf-form');if(!f)return;var k='lf:'+location.pathname;try{var s=sessionStorage.getItem(k);if(s){sessionStorage.removeItem(k);JSON.parse(s).forEach(function(p){var e=f.querySelectorAll('[name="'+p[0]+'"]');for(var i=0;i<e.length;i++){var x=e[i];if(x.type==='checkbox'||x.type==='radio'){if(x.value===p[1])x.checked=true}else if(x.type!=='hidden')x.value=p[1]}})}}catch(e){}var l=document.querySelectorAll('.lf-langs a');for(var i=0;i<l.length;i++)l[i].addEventListener('click',function(){try{var d=[];new FormData(f).forEach(function(v,n){if(typeof v==='string'&&n!=='ts'&&n!=='website'&&n!=='lang')d.push([n,v])});sessionStorage.setItem(k,JSON.stringify(d))}catch(e){}});f.addEventListener('submit',function(){var b=f.querySelector('.lf-button');if(b)setTimeout(function(){b.disabled=true},0)})})();`;
+export const FORM_SCRIPT = `(function(){if(window.parent!==window){var h=function(){try{window.parent.postMessage({type:'lead-form-height',slug:location.pathname.slice(1),height:document.documentElement.scrollHeight},'*')}catch(e){}};h();window.addEventListener('load',h);if(window.ResizeObserver)new ResizeObserver(h).observe(document.body)}var f=document.querySelector('form.lf-form');if(!f)return;var k='lf:'+location.pathname;try{var s=sessionStorage.getItem(k);if(s){sessionStorage.removeItem(k);JSON.parse(s).forEach(function(p){var e=f.querySelectorAll('[name="'+p[0]+'"]');for(var i=0;i<e.length;i++){var x=e[i];if(x.type==='checkbox'||x.type==='radio'){if(x.value===p[1])x.checked=true}else if(x.type!=='hidden')x.value=p[1]}})}}catch(e){}var l=document.querySelectorAll('.lf-langs a');for(var i=0;i<l.length;i++)l[i].addEventListener('click',function(){try{var d=[];new FormData(f).forEach(function(v,n){if(typeof v==='string'&&n!=='ts'&&n!=='website'&&n!=='lang'&&n!=='embed')d.push([n,v])});sessionStorage.setItem(k,JSON.stringify(d))}catch(e){}});f.addEventListener('submit',function(){var b=f.querySelector('.lf-button');if(b)setTimeout(function(){b.disabled=true},0)})})();`;

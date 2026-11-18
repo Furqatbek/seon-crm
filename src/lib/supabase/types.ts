@@ -1127,6 +1127,11 @@ isOneToOne: false
 "is_user_request":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
+"lead_forms_overview":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "conversion": number,"has_changes": boolean,"id": string,"leads": number,"name": string,"slug": string,"status": Database["public"]['Enums']["form_status"],"updated_at": string,"updated_by_name": string,"views": number,"won": number
+            }[]
+                           },
 "leaderboard":
 { Args: { "p_group_id"?: string,"p_month"?: string,"p_period"?: string,"p_scope": string }; Returns: {
               "display_name": string,"hidden": boolean,"points": number,"rank": number,"student_id": string
@@ -1210,6 +1215,9 @@ isOneToOne: false
                            },
 "public_form":
 { Args: { "p_slug": string }; Returns: Json
+                           },
+"publish_lead_form":
+{ Args: { "p_id": string }; Returns: number
                            },
 "rebuild_future_lessons":
 { Args: { "p_group_id": string }; Returns: number

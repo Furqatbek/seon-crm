@@ -111,6 +111,8 @@ describe.skipIf(!DB_URL)("Public lead forms", () => {
 
   it("a submission creates an unassigned new lead with the form, answers, language, source and tags", async () => {
     await admin(async (s) => {
+      // Whatever earlier runs left in the log is not this test's business.
+      await s.rows(`delete from intake_log`);
       const form = await formId(s);
       const before =
         (await s.rows<{ n: number }>(`select submissions as n from form_daily_stats where form_id = $1 and day = public.tashkent_today()`, [form]))[0]?.n ?? 0;
@@ -200,6 +202,8 @@ describe.skipIf(!DB_URL)("Public lead forms", () => {
 
   it("rate limit: 5 per visitor per form per 10 minutes", async () => {
     await admin(async (s) => {
+      // Whatever earlier runs left in the log is not this test's business.
+      await s.rows(`delete from intake_log`);
       const form = await formId(s);
       const other = await formId(s, "consultation");
       for (let n = 0; n < 5; n += 1) expect((await submit(s, form, `+99890888000${n}`)).outcome, `submission ${n + 1}`).toBe("created");
@@ -246,6 +250,8 @@ describe.skipIf(!DB_URL)("Public lead forms", () => {
 
   it("a closed, draft or archived form takes nothing", async () => {
     await admin(async (s) => {
+      // Whatever earlier runs left in the log is not this test's business.
+      await s.rows(`delete from intake_log`);
       const form = await formId(s);
       await s.rows(`update lead_forms set status = 'closed' where id = $1`, [form]);
       expect(await submit(s, form, "+998908882000")).toEqual({ outcome: "invalid", lead_id: null });

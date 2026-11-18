@@ -48,7 +48,7 @@ const escape = (value: string) =>
 
 const notFound = () => new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
 
-async function page(form: PublicForm, language: FormLanguage, state: FormRendererState, token: string, status = 200) {
+async function page(form: PublicForm, language: FormLanguage, state: FormRendererState, token: string, embed: boolean, status = 200) {
   const { document, slug } = form;
   const text = (value: Parameters<typeof pick>[0]) => pick(value, language, document.default_language);
   // Loaded when needed: this module may not be imported at the top of a route.
@@ -62,7 +62,8 @@ async function page(form: PublicForm, language: FormLanguage, state: FormRendere
       state,
       action: `/${slug}`,
       token,
-      languageHref: (code) => `/${slug}?lang=${code}`,
+      languageHref: (code) => `/${slug}?lang=${code}${embed ? "&embed=1" : ""}`,
+      embed,
     }),
   );
 
@@ -71,6 +72,8 @@ async function page(form: PublicForm, language: FormLanguage, state: FormRendere
   const image = document.share.image_asset ? form.assets[document.share.image_asset] : undefined;
   const host = process.env.FORMS_HOST;
   const font = document.design.font.replace(/ /g, "+");
+  // PT Sans has no semibold: asking for a weight a font lacks fails the whole request.
+  const weights = document.design.font === "PT Sans" ? "400;700" : "400;600;700";
   const head = [
     `<meta charset="utf-8">`,
     `<meta name="viewport" content="width=device-width, initial-scale=1">`,
@@ -88,7 +91,7 @@ async function page(form: PublicForm, language: FormLanguage, state: FormRendere
     `<meta name="theme-color" content="${document.design.background.color}">`,
     `<link rel="preconnect" href="https://fonts.googleapis.com">`,
     `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
-    `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=${font}:wght@400;600;700&amp;display=swap">`,
+    `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=${font}:wght@${weights}&amp;display=swap">`,
     `<style>html,body{margin:0}${FORM_CSS}</style>`,
   ].join("");
 
@@ -106,14 +109,15 @@ export async function GET(request: NextRequest, { params }: Context) {
 
   const query = request.nextUrl.searchParams;
   const language = visitorLanguage(form.document, query.get("lang"), request.headers.get("accept-language"));
-  if (form.status === "closed") return page(form, language, { kind: "closed" }, "");
-  if (query.get("done") === "1") return page(form, language, { kind: "thanks" }, "");
+  const embed = query.get("embed") === "1";
+  if (form.status === "closed") return page(form, language, { kind: "closed" }, "", embed);
+  if (query.get("done") === "1") return page(form, language, { kind: "thanks" }, "", embed);
 
   // Counted on the server after the page is on its way. No cookie, no visitor id.
   if (request.method === "GET" && request.headers.get("purpose") !== "prefetch") {
     after(() => countFormView(form.id).catch(() => undefined));
   }
-  return page(form, language, { kind: "form" }, issueToken(secret, form.id, new Date()));
+  return page(form, language, { kind: "form" }, issueToken(secret, form.id, new Date()), embed);
 }
 
 export async function POST(request: NextRequest, { params }: Context) {
@@ -131,6 +135,7 @@ export async function POST(request: NextRequest, { params }: Context) {
   };
 
   const language = visitorLanguage(form.document, string("lang"), request.headers.get("accept-language"));
+  const embed = string("embed") === "1";
   const values: Record<string, string | string[]> = {};
   for (const field of form.document.fields) {
     if (!isAnswered(field)) continue;
@@ -156,14 +161,14 @@ export async function POST(request: NextRequest, { params }: Context) {
   if (result.status === "accepted") {
     const { after_submit: afterSubmit } = form.document;
     const location =
-      afterSubmit.mode === "redirect" && isHttpUrl(afterSubmit.url) ? afterSubmit.url : `/${slug}?lang=${language}&done=1`;
+      afterSubmit.mode === "redirect" && isHttpUrl(afterSubmit.url) ? afterSubmit.url : `/${slug}?lang=${language}&done=1${embed ? "&embed=1" : ""}`;
     return new Response(null, { status: 303, headers: { location, "cache-control": "no-store" } });
   }
-  if (result.status === "closed") return page(form, language, { kind: "closed" }, "", 410);
+  if (result.status === "closed") return page(form, language, { kind: "closed" }, "", embed, 410);
 
   const token = issueToken(secret, form.id, now);
-  if (result.status === "invalid") return page(form, language, { kind: "form", values, errors: result.errors }, token, 422);
-  if (result.status === "expired") return page(form, language, { kind: "form", values, notice: "expired" }, token, 422);
-  if (result.status === "rate_limited") return page(form, language, { kind: "form", values, notice: "rate_limited" }, token, 429);
-  return page(form, language, { kind: "form", values, notice: "failed" }, token, 500);
+  if (result.status === "invalid") return page(form, language, { kind: "form", values, errors: result.errors }, token, embed, 422);
+  if (result.status === "expired") return page(form, language, { kind: "form", values, notice: "expired" }, token, embed, 422);
+  if (result.status === "rate_limited") return page(form, language, { kind: "form", values, notice: "rate_limited" }, token, embed, 429);
+  return page(form, language, { kind: "form", values, notice: "failed" }, token, embed, 500);
 }
