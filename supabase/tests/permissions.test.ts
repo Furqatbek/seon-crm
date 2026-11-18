@@ -257,6 +257,20 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
   });
 
   describe("Groups and lessons — owner: full · manager: create, edit, cancel a lesson, mark attendance", () => {
+    // Attendance is marked on the day of the lesson only, and the seed may hold
+    // no marks for today: the latest marked lesson is brought to today.
+    const markedToday = async (a: Session) => {
+      await a.rows(
+        `update lessons set lesson_date = ${today}
+         where id = (
+           select l.id from lessons l
+           where l.lesson_date < ${today} and exists (select 1 from attendance m where m.lesson_id = l.id)
+             and not exists (select 1 from lessons t where t.group_id = l.group_id and t.lesson_date = ${today})
+           order by l.lesson_date desc limit 1)
+           and not exists (select 1 from attendance m join lessons t on t.id = m.lesson_id where t.lesson_date = ${today})`,
+      );
+    };
+
     it.each(BOTH)("%s creates and edits a group, cancels a lesson and marks attendance", async (who) => {
       await as(who, async (s) => {
         expect(await s.count("groups")).toBeGreaterThanOrEqual(10);
@@ -278,7 +292,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         // A lesson held in the last few days: change one mark, then mark a new student.
         const [recent] = await s.rows<{ lesson_id: string; student_id: string }>(
           `select a.lesson_id, a.student_id from attendance a join lessons l on l.id = a.lesson_id
-           where l.lesson_date >= ${today} - 5 order by l.lesson_date desc limit 1`,
+           where l.lesson_date = ${today} limit 1`,
         );
         allowed(
           await s.attempt(
@@ -289,7 +303,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
             [recent.lesson_id, recent.student_id],
           ),
         );
-      });
+      }, markedToday);
     });
 
     const oldMark = `select a.lesson_id, a.student_id from attendance a join lessons l on l.id = a.lesson_id
@@ -335,9 +349,10 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
             `update attendance set marked_by = $1
              where (lesson_id, student_id) in (
                select a.lesson_id, a.student_id from attendance a join lessons l on l.id = a.lesson_id
-               where l.lesson_date >= ${today} - 5 limit 1)`,
+               where l.lesson_date = ${today} limit 1)`,
             [OWNER_ID],
           ),
+          markedToday,
         ),
       );
     });

@@ -152,7 +152,9 @@
       "walk_in": "Walk-in",
       "referral": "Referral",
       "website": "Website",
-      "other": "Other"
+      "other": "Other",
+      "facebook": "Facebook",
+      "web_form": "Web form"
     },
     "lostReason": {
       "price": "Price",
@@ -206,7 +208,8 @@
       "call": "Call",
       "note": "Note",
       "statusChange": "{from} → {to}",
-      "reason": "Reason: {reason}"
+      "reason": "Reason: {reason}",
+      "formResubmitted": "Submitted “{form}” again"
     },
     "lost": {
       "title": "Mark {name} as lost?",
@@ -1722,5 +1725,24 @@
     "groupSubtitle": "Top 5 · {month}",
     "updated": "Updated {time}",
     "empty": "No points yet this month"
+  },
+  "publicForm": {
+    "errors": {
+      "required": "This field is required.",
+      "phone": "Enter a phone number, for example +998 90 123 45 67.",
+      "email": "Enter an email address, for example name@example.com.",
+      "number": "Enter a number.",
+      "date": "Choose a date.",
+      "choice": "Choose one of the options.",
+      "too_long": "This answer is too long."
+    },
+    "summary": "Please check the marked fields.",
+    "expired": "This page was open for too long. Please send the form again.",
+    "rateLimited": "Too many requests. Please try again later.",
+    "failed": "Something went wrong. Please try again.",
+    "choose": "Choose…",
+    "required": "required",
+    "language": "Language",
+    "leaveEmpty": "Leave this field empty"
   }
 }

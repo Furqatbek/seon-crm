@@ -146,7 +146,9 @@ function TimelineItem({ activity, author }: { activity: LeadActivity; author: st
                 from: t(`status.${activity.from_status}`),
                 to: t(`status.${activity.to_status}`),
               })
-            : t(`timeline.${activity.kind === "call" ? "call" : "note"}`)}
+            : activity.kind === "form_resubmitted"
+              ? t("timeline.formResubmitted", { form: activity.body ?? "" })
+              : t(`timeline.${activity.kind === "call" ? "call" : "note"}`)}
         </p>
         {reason ? (
           <p className="text-body break-words text-text-secondary">
@@ -154,7 +156,7 @@ function TimelineItem({ activity, author }: { activity: LeadActivity; author: st
               reason: isLostReasonCode(reason) ? t(`lostReason.${reason}`) : reason,
             })}
           </p>
-        ) : activity.kind !== "status_change" && activity.body ? (
+        ) : activity.kind !== "status_change" && activity.kind !== "form_resubmitted" && activity.body ? (
           <p className="text-body break-words whitespace-pre-wrap text-text-secondary">{activity.body}</p>
         ) : null}
         <p className="text-footnote text-text-secondary">

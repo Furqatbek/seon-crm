@@ -1,8 +1,10 @@
 import {
   Camera,
   CircleEllipsis,
+  ClipboardList,
   Footprints,
   Globe,
+  Megaphone,
   Phone,
   Send,
   UsersRound,
@@ -27,5 +29,7 @@ export const SOURCE_ICON: Record<LeadSource, LucideIcon> = {
   walk_in: Footprints,
   referral: UsersRound,
   website: Globe,
+  web_form: ClipboardList,
+  facebook: Megaphone,
   other: CircleEllipsis,
 };

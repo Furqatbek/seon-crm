@@ -24,10 +24,39 @@ function redirectTo(request: NextRequest, response: NextResponse, pathname: stri
   return redirect;
 }
 
+const notFound = () => new NextResponse("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
+
+/**
+ * Whether the request came to the public forms address (FORMS_HOST, e.g.
+ * forms.yourcentre.uz). A port in FORMS_HOST must match; without one any port does.
+ */
+function onFormsHost(request: NextRequest): boolean {
+  const formsHost = process.env.FORMS_HOST?.trim().toLowerCase();
+  const host = request.headers.get("host")?.toLowerCase();
+  if (!formsHost || !host) return false;
+  return host === formsHost || (!formsHost.includes(":") && host.split(":")[0] === formsHost);
+}
+
 export default async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // The forms host serves a form at /<slug> and the intake endpoints, and
+  // nothing else: every staff route is a 404 there.
+  if (onFormsHost(request)) {
+    if (/^\/api\/(v1|meta)(\/|$)/.test(pathname)) return NextResponse.next();
+    const slug = /^\/([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(pathname)?.[1];
+    if (!slug) return notFound();
+    const url = request.nextUrl.clone();
+    url.pathname = `/form/${slug}`;
+    return NextResponse.rewrite(url);
+  }
+  // And a form page is a 404 on the staff host.
+  if (pathname === "/form" || pathname.startsWith("/form/")) return notFound();
+  // API routes and the auth callback look after themselves.
+  if (pathname.startsWith("/api") || pathname.startsWith("/auth")) return NextResponse.next();
+
   const response = handleI18n(request);
 
-  const { pathname } = request.nextUrl;
   const locale = routing.locales.find(
     (candidate) => pathname === `/${candidate}` || pathname.startsWith(`/${candidate}/`),
   );
@@ -59,6 +88,7 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Everything except API routes, the auth callback, Next internals and files.
-  matcher: "/((?!api|auth|_next|_vercel|.*\\..*).*)",
+  // Everything except Next internals and files. API routes and the auth
+  // callback are let through above, once the host has been checked.
+  matcher: "/((?!_next|_vercel|.*\\..*).*)",
 };

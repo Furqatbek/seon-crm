@@ -1284,6 +1284,378 @@ correctness. Fix them and run every test.
 >   - A teacher sees how many lessons they taught this month on My groups.
 > - Still not built: ranks on the student's Points tab.
 
+## Lead forms add-on
+
+Staff build branded sign-up forms, one per funnel, on a separate public address. Website forms and Facebook/Instagram lead ads feed the same intake. Every lead lands in a shared inbox that updates live and pings staff on Telegram. Build it as Phases 19–23, after the points add-on or straight after Phase 12.
+
+### Decisions locked in
+
+| Decision | Answer |
+| --- | --- |
+| Outside lead sources | Your website or landing pages, and Facebook/Instagram lead ads connected directly |
+| Who builds forms | Owner and managers |
+| Who owns a new lead | Nobody at first: it waits in a shared queue until a manager takes it |
+| Staff alerts | Live in the CRM, plus a Telegram message to staff |
+| Spam protection | Hidden trap field and rate limits only; no CAPTCHA |
+| Languages | One form per funnel, every text in uz, ru and en, with a switch for the visitor |
+| Ad tracking | None for now: no pixels or analytics scripts |
+| Address | A forms subdomain, e.g. `forms.yourcentre.uz/ielts-autumn` |
+
+### Defaults to confirm
+
+| Area | Default | Change it if |
+| --- | --- | --- |
+| Required fields | Every form has Name and Phone. Editors can relabel them but not delete them. |  |
+| Phone input | Uzbek format `+998 __ ___ __ __`; a field option allows other countries |  |
+| Consent | A required consent checkbox with editable text sits on every form; only the owner can remove it |  |
+| Trap | Hidden field plus a signed timestamp: anything filled in under 3 seconds or holding the hidden field is dropped silently and logged as spam |  |
+| Rate limits | 5 submissions per visitor per form per 10 minutes; 3 per phone number per day | Real families submit more often |
+| Duplicates | Same phone as an open lead: no new lead; an activity "Submitted \<form> again" is added and it goes back to the inbox. Same phone as a student: a new lead tagged Existing student. |  |
+| Drafts | Edits save automatically as a draft. Visitors see the published version until someone presses Publish. The last 20 versions can be restored. | Edits should go live at once |
+| Funnel numbers | Page views counted on the server, no cookies, so each form shows views → leads → students won | You want no counting at all |
+| Untaken leads | If nobody takes a lead within 30 minutes (09:00–21:00), staff get one reminder |  |
+| Who gets Telegram alerts | Every owner and manager who linked Telegram and left alerts on in Profile |  |
+| API keys and the Meta connection | Owner only | Managers should manage them too |
+| Fonts | 8 fonts that cover Latin and Cyrillic: Inter, Manrope, Montserrat, Roboto, Open Sans, PT Sans, Nunito, Rubik | You have a brand font file |
+| Uploads | PNG, JPG or WebP up to 5 MB, converted to WebP; no SVG uploads, since SVG can carry scripts |  |
+| Editor screens | The editor needs a screen at least 1024 px wide; on phones it shows "Open on a computer" |  |
+
+Public forms collect personal data from strangers. Uzbekistan's 2026 change to its personal data law lets most personal data be stored abroad, in countries on an approved list that includes Germany and the USA. So pick a Supabase region in a listed country, such as Frankfurt. This is not legal advice; confirm it with a lawyer before launch.
+
+### How a lead arrives
+
+&#91;embedded content: lead intake · 3 sources, 1 shared inbox\]
+
+All three sources go through the same intake function, so spam, duplicate and validation rules can never differ between them.
+
+### Form builder
+
+Each form is one funnel: its own address, fields, look and texts, stored as one JSON document with a draft copy and a published copy. The public page and the editor preview render that document with the same `FormRenderer` component, so what staff see is exactly what visitors get.
+
+**Field types**
+
+| Type | Notes | Can map to |
+| --- | --- | --- |
+| Short text | One line, optional min and max length | Name, subject, preferred time, notes, custom |
+| Long text | Several lines | Notes, custom |
+| Phone | Uzbek mask by default, international option | Phone |
+| Email | Format checked | Custom |
+| Number | Min and max | Custom |
+| Date | Date picker, Monday-first week | Custom |
+| Single choice | Radio buttons or dropdown | Subject, preferred time, custom |
+| Multiple choice | Checkboxes | Custom |
+| Consent | Required checkbox with a link-capable text | Saved with the lead |
+| Hidden value | Fixed value, never shown, e.g. a campaign name | Custom |
+| Heading, paragraph, image | Content only, no answer | — |
+
+Every field has, per language: label, placeholder and help text; plus required on/off, full or half width, and "maps to". Answers mapped to a lead column fill that column; all other answers are saved in `leads.answers` together with the label as it read at submission time.
+
+**Design settings**
+
+- Logo: upload, position at the top or on the left.
+- Background: a colour, or an image with a darkening overlay from 0 to 80%.
+- Colours: page text, card, card text, button, button text. Hex input plus swatches that include the brand purple. A warning appears under any text and background pair below 4.5:1 contrast.
+- Font: one of the eight fonts, with a live sample.
+- Corners: square, rounded or pill. Layout: centred card, or split with an image on one side.
+
+**Form settings**
+
+- Name, address (lowercase Latin letters, digits and hyphens; words like api and admin are reserved). Changing the address of a live form warns that old links will break.
+- Subject the lead gets automatically, and a source tag (e.g. "Autumn IELTS ads").
+- Languages switched on and the default language.
+- After submit: a thank-you title and text, or a redirect to a URL.
+- Closed-form message, page title, description and share image for link previews in Telegram.
+- Embed code: an iframe snippet that resizes itself, for putting the form on another website.
+- Status: Draft, Live or Closed.
+
+**Funnels list — Leads → Forms tab**
+
+- One row per form: name, status, address with Copy, views, leads and students won in the last 30 days, conversion %, last edited by.
+- New form from blank or from a template: Course sign-up, Free trial lesson, Consultation call. Duplicate and Archive on every row.
+
+### Editor with live preview — `/leads/forms/[id]/edit`
+
+The editor fills the whole window: settings on the left, the real form on the right, updating as you type.
+
+- **Top bar:** back arrow, form name (click to rename), status pill, "Saved" or "Saving…", Undo and Redo (last 50 changes, also Ctrl/Cmd+Z), preview language uz / ru / en, screen size Phone 390 · Tablet 768 · Desktop 1280 as a segmented control, Open live, and Publish (primary; reads "Publish changes" when the draft differs). A menu holds Version history, Close form and Duplicate.
+- **Left panel, 400 px, three tabs:**
+  - Fields: cards you drag to reorder. A card opens to edit its texts, with uz / ru / en tabs; a dot marks a missing translation. Add field opens a grid of field types. Name and Phone show a lock instead of Delete.
+  - Design: everything in "Design settings", each change visible immediately.
+  - Settings: everything in "Form settings".
+- **Right side:** a light grey canvas with the form in a frame at the chosen width. When the frame is wider than the space, it scales down and shows the scale, e.g. 75%.
+- The preview renders the in-memory draft and updates within 100 ms of a keystroke. You can type into it and see validation; Submit shows the thank-you screen and never creates a lead. A "Show thank-you screen" switch previews it directly.
+- The draft auto-saves 1 second after the last change. If a second person opens the same form, both see a banner like "Malika is also editing" (Supabase Realtime presence), and the later save wins.
+- Version history lists each publish with who and when, and a Restore button that loads that version into the draft.
+
+### Public intake URL and Meta lead ads
+
+Outside senders use one endpoint with a secret key per source; Facebook and Instagram use their own webhook. Both run the same checks as the CRM's own forms and write every request to an intake log.
+
+**Website and landing pages — `POST https://forms.yourcentre.uz/api/v1/leads`**
+
+- The owner creates a key per source in Settings → Lead sources. The full key is shown once; only a hash and a short prefix are stored.
+- The key goes in `Authorization: Bearer <key>`, or as `?key=` for page builders that cannot set headers.
+- Accepts JSON or ordinary form posts. Each source has a field map from incoming names to lead fields; common names (name, ism, имя, phone, tel, telefon, телефон) are recognised without setup. Unmapped fields go to `answers`.
+- A source can be tied to a funnel, so its leads count in that form's numbers.
+- Responses: `201` with the lead id and `created` or `merged`; `400` with field errors; `401` for a bad key; `429` when rate-limited (60 requests a minute per key). A request without a phone that only carries a `test` field gets `200`, so builders' connection checks pass.
+- Settings → Lead sources shows the last 100 requests per source with their outcome, to debug a website form quickly.
+- A website that cannot post server-side should embed the CRM form with the iframe snippet instead, so no key ends up in public page code.
+
+**Facebook and Instagram lead ads — direct connection**
+
+- Settings → Integrations (owner): Connect with Facebook, choose the Page(s). The app stores a long-lived Page token encrypted and subscribes the Page to the `leadgen` field through `/{page-id}/subscribed_apps`.
+- `/api/meta/webhook`: answers Meta's GET verification with the challenge when the verify token matches; rejects any POST whose `X-Hub-Signature-256` does not match the app secret; replies 200 at once and processes afterwards.
+- Each notification carries a `leadgen_id`, `form_id`, `page_id` and `ad_id`. The app fetches the lead by `leadgen_id`, maps full name, phone and email, and saves custom questions to `answers`. The `leadgen_id` is stored as `external_id`, so a lead is never created twice.
+- An hourly job reads recent leads from each linked Meta form to catch anything a webhook missed.
+- Each Meta form can be linked to a CRM funnel so its leads count in that funnel's numbers.
+- If the token stops working, the integration shows Needs reconnect and the owner gets a Telegram alert.
+
+Meta setup is the slow part. You need a Meta app that passes App Review for `leads_retrieval` and `pages_manage_ads`, then Business Verification; an app still in Development mode cannot read real leads. Start the review early. Until it passes, Make or Zapier can forward Meta leads to the website endpoint above with a source key.
+
+### Shared inbox and staff alerts
+
+A new lead is unassigned until someone presses Take. Everyone sees the queue live, and nobody can miss it for long.
+
+**In the CRM (owner and managers)**
+
+- Leads page: an Inbox strip above the board, "New from forms — 3 waiting". Each card shows name, phone, form, a one-line answer summary, how long it has waited, and Take.
+- Take sets `assigned_to` to you and records `taken_at`; the owner can also assign a lead to someone else. Two people pressing Take together: the first wins, the second sees who took it.
+- New leads appear without refreshing, through Supabase Realtime on `leads` inserts with RLS applied. A toast names the form and lead. A short sound plays unless turned off in Profile. The sidebar shows a count of untaken leads, and the browser tab title reads "(3) Leads".
+- The lead sheet shows the form, the visitor's language, submission time, and every answer with its label as it read then.
+- Teachers never see the inbox or get alerts.
+
+**On Telegram**
+
+- Staff link their own Telegram from Profile with `?start=u_<code>`, and can switch alerts off there.
+- Each new lead sends: name, phone, form, the top answers, an Open in CRM button, and a Take button. Take works from Telegram too; if someone was faster, the bot replies with who took it.
+- A lead untaken after 30 minutes, between 09:00 and 21:00, gets one reminder to everyone. Leads arriving at night alert at 09:00.
+- Staff alerts go only to owners and managers, never to student or parent chats.
+
+**Reports**
+
+- The lead funnel in Reports gains a split by form: views, leads, taken, won, conversion %, and the median time to Take.
+
+### Data model additions
+
+Eight new tables. A form's fields, texts and design live in one JSON document, so adding a field never needs a migration.
+
+```text
+CHANGED
+lead_source        + facebook | web_form | website
+leads              + form_id → lead_forms, answers jsonb, submitted_language,
+                   taken_at, external_id text unique (Meta leadgen id),
+                   tags text[] (e.g. existing_student)
+                   unassigned + status new = in the shared inbox
+profiles           + telegram_chat_id bigint, staff_link_code, alerts_on bool (true),
+                   alert_sound bool (true)
+message_type       + staff_new_lead | staff_lead_reminder
+
+NEW ENUMS
+form_status        draft | live | closed
+intake_channel     form | api | meta
+intake_outcome     created | merged | spam | rate_limited | invalid | test | error
+
+NEW TABLES
+lead_forms         name, slug unique, status, subject, source_tag, draft jsonb,
+                   published jsonb, published_version, published_at,
+                   created_by, updated_by, archived_at
+lead_form_versions form_id, version, content jsonb, published_by, published_at
+form_assets        form_id, kind (logo | background | image | share), path, width, height
+form_daily_stats   form_id, day, views, submissions      unique (form_id, day)
+intake_sources     name, key_prefix, key_hash, field_map jsonb, form_id,
+                   is_active, last_used_at, created_by
+meta_connections   page_id, page_name, token_secret_id (Vault), status,
+                   connected_by, connected_at, last_lead_at
+meta_form_links    meta_form_id, meta_form_name, page_id, form_id → lead_forms
+intake_log         received_at, channel, source_id, form_id, outcome, lead_id,
+                   detail, ip_hash                         -- kept 90 days
+
+FORM DOCUMENT (draft and published)
+{ languages, default_language,
+  texts:  { title, subtitle, button, thank_you_title, thank_you_text,
+            closed_text, consent_text }               each as { uz, ru, en },
+  fields: [ { id, type, maps_to, label, placeholder, help, required,
+              width (full | half), options [ { id, label } ], value } ],
+  design: { font, logo { asset, position }, background { color | asset, overlay },
+            colors { text, card, card_text, button, button_text },
+            corners (square | rounded | pill), layout (card | split) },
+  after_submit { mode (message | redirect), url },
+  share { page_title, description, image_asset } }
+```
+
+Form editors are owners and managers; `intake_sources` and `meta_connections` are owner-only; the public pages read only `published` through a server route, never the tables directly. New env variables: `FORMS_HOST`, `META_APP_ID`, `META_APP_SECRET`, `META_VERIFY_TOKEN`, `FORM_SIGNING_SECRET`.
+
+### Built so far — lead forms
+
+**Phase 19 (public forms).** What was built, and where it differs from the text above:
+
+- **The public page is plain HTML.** Any page of the app ships more than 100 KB of framework JavaScript, so a form is served by a route (`src/app/form/[slug]/route.ts`) that renders `FormRenderer` to HTML with one small inline script and no script files. It works with JavaScript off: the form posts to its own address and the answer is a redirect to the thank-you screen (or the page again with the errors). The published document is cached per slug (`getPublicForm`), refreshed by `refreshPublicForm(slug)` and at most a minute old.
+- **Hosts.** On `FORMS_HOST` only `/<slug>`, `/api/v1/*` and `/api/meta/*` are served; everything else is 404. On the staff host `/form/*` is 404. Until `FORMS_HOST` and `FORM_SIGNING_SECRET` are set, forms are not reachable anywhere.
+- **Field types** in the document are `short_text, long_text, phone, email, number, date, radio, dropdown, multiple_choice, consent, hidden, heading, paragraph, image` (single choice is two types, `radio` and `dropdown`). An image field's `value` is its asset id.
+- **Answers.** Fields mapped to name, phone, subject, preferred time or notes fill the lead's columns. Every other answer goes to `leads.answers` as `[{ id, type, label, value }]` in the visitor's language, consent included (the label is the consent text they agreed to).
+- **Phones.** A lead's phone may be any full international number (`+` and 8–15 digits). Students and teachers still need an Uzbek number, so a lead with a foreign number cannot be converted until its phone is changed.
+- **Duplicates.** A repeat from an open lead's phone adds the timeline entry `form_resubmitted`, clears `assigned_to` and `taken_at` and sets the stage back to New — except a lead on a trial, which keeps its stage. The tag for a known student is `existing_student`; a parent's phone counts too. The form's source tag is the lead's first tag.
+- **Rate limits** are counted in `intake_log`: created, merged and spam rows count towards a visitor's five; a visitor is a keyed hash of the address. A limited visitor is told to try later; only spam gets the fake success. A page open for more than 24 hours asks the visitor to send again.
+- **Fonts** load from Google Fonts. Form pictures are in the public `form-assets` storage bucket.
+- **The three templates** are seeded live at `/course-signup`, `/free-trial` and `/consultation` (`src/lib/forms/templates.ts`; the migration is generated by `scripts/gen-form-templates-sql.mjs`).
+- Not built yet: the editor and publishing (Phase 20), the inbox and alerts (Phase 21), the intake API (Phase 22), Meta lead ads (Phase 23). The `profiles` and `message_type` additions come with Phase 21.
+
+## Build prompts — lead forms
+
+Export this doc again and overwrite `docs/SPEC.md` first. By hand, add the forms subdomain to your Vercel project, point its DNS record where Vercel tells you, and add the new environment variables. Then run five phases the usual way: `/clear`, plan mode, paste, review, check, commit.
+
+| Deliverable | Phases |
+| --- | --- |
+| 1. Public URL that accepts lead data | 22, 23 |
+| 2. Public form page for leads | 19 |
+| 3. Editable fields, new fields | 19, 20 |
+| 4. Editable design: font, background, logo, colours | 19, 20 |
+| 5. Different forms for different funnels | 19, 20 |
+| 6. New leads reach owner and managers | 21 |
+| 7. Live editor with screen-size buttons | 20 |
+
+### Phase 19 — Forms subdomain and public form page
+
+```text
+Phase 19: Public lead forms. Read docs/SPEC.md, in the lead forms add-on: "Decisions
+locked in", "Defaults to confirm", "Form builder" and "Data model additions".
+
+Build:
+- Migrations for lead_forms, lead_form_versions, form_assets, form_daily_stats,
+  intake_log, the new enums and the new leads columns. RLS: owner and managers edit
+  forms; no anonymous access to any table.
+- Host routing in middleware: on FORMS_HOST serve only /[slug], /api/v1/* and
+  /api/meta/*; every staff route returns 404 there, and form pages return 404 on the
+  staff host.
+- src/components/forms/FormRenderer: renders a form document (fields, design, texts in
+  the visitor's language with a uz/ru/en switch). The editor preview will reuse it.
+  Server-rendered, cached per slug and refreshed on publish, under 100 KB of JavaScript,
+  accessible labels and error messages.
+- One intake function in src/lib/intake/ used by every channel: zod validation built
+  from the document, honeypot plus signed timestamp (3 s minimum, 24 h maximum,
+  FORM_SIGNING_SECRET), rate limits (5 per visitor per form per 10 minutes, 3 per phone
+  per day, stored in Postgres), duplicate rules, consent saved, lead created with
+  form_id, answers with labels, submitted_language, source web_form, subject and tags.
+  Spam gets a fake success and an intake_log row.
+- Server-side view counting into form_daily_stats, no cookies.
+- Thank-you screen or redirect, closed-form message, Open Graph tags from the share
+  settings.
+- Seed the three templates (Course sign-up, Free trial lesson, Consultation call) and
+  publish them so they can be tested before the editor exists.
+
+Check: unit tests for the validator builder, duplicate rules, trap timing and rate
+limits. e2e on the forms host at 390 px: a submit in Russian creates a lead with Russian
+answers; a honeypot submit shows success but creates nothing; a staff route on the forms
+host returns 404. Screenshots of each template at 390 and 1280 px.
+```
+
+### Phase 20 — Form editor with live preview
+
+```text
+Phase 20: Form editor. Read docs/SPEC.md, in the lead forms add-on: "Form builder" and
+"Editor with live preview".
+
+Build:
+- Leads → Forms tab: the funnels list with 30-day views, leads, students won and
+  conversion; New (blank or template), Duplicate, Archive.
+- /leads/forms/[id]/edit, full window, exactly as specified: top bar, left panel with
+  Fields, Design and Settings tabs, right preview canvas with Phone 390 / Tablet 768 /
+  Desktop 1280 and automatic scaling with the scale shown.
+- One editor store (zustand) holding the form document; the preview renders
+  FormRenderer from it, so every change shows within 100 ms. Undo and redo of the last
+  50 changes, also with Ctrl/Cmd+Z and Shift+Ctrl/Cmd+Z.
+- Fields: @dnd-kit reordering, type picker, uz/ru/en tabs with missing-translation dots,
+  locked Name and Phone, options editor for choice fields.
+- Design: uploads to Supabase Storage through a server action (PNG, JPG, WebP, 5 MB,
+  converted to WebP), colour pickers with a contrast warning below 4.5:1, the eight
+  fonts through next/font, corners, layout.
+- Settings: slug with reserved words and a warning for live forms, subject, source tag,
+  languages, after-submit, closed text, share settings, embed snippet that resizes
+  itself through postMessage.
+- Draft auto-save 1 s after the last change. Publish copies the draft to published,
+  writes lead_form_versions and refreshes the cached page. Version history with Restore.
+  Realtime presence banner when two people edit.
+- Under 1024 px show "Open on a computer".
+
+Check: unit tests for undo/redo and the contrast function. e2e: create a form from a
+template, add a dropdown in all three languages, change the button colour and font,
+switch to Phone and see the preview change, publish, then open the live page and confirm
+the same field, colour and font. Screenshots of the editor at 1440 px for each screen size.
+```
+
+### Phase 21 — Shared inbox and staff alerts
+
+```text
+Phase 21: Shared inbox. Read docs/SPEC.md, in the lead forms add-on: "Shared inbox and
+staff alerts".
+
+Build:
+- Inbox strip on /leads with Take (atomic: the first Take wins), owner Assign, and
+  waiting timers.
+- Supabase Realtime subscription to new leads with RLS applied; toast with sound (Profile
+  switch); untaken count in the sidebar; "(n)" in the tab title.
+- Lead sheet: form name, language, submission time, answers with their saved labels.
+- Staff Telegram: Profile → Link Telegram (?start=u_<code>), alerts on/off, sound
+  on/off. The bot handles u_ codes and a Take button that uses the same atomic Take and
+  replies with who took it when someone was faster.
+- An alert for every new lead; one reminder after 30 untaken minutes; leads arriving at
+  night alert at 09:00. Use the existing message log and dedupe keys.
+- Reports: lead funnel split by form with views, leads, taken, won, conversion and the
+  median time to Take.
+
+Check: a unit test that two simultaneous Takes give one winner. e2e with two browser
+contexts: a form submit appears in the second manager's inbox without refreshing within
+3 seconds, and Take in one removes it from the other. FakeProvider tests for alerts,
+reminder timing and the night delay.
+```
+
+### Phase 22 — Public intake URL for websites
+
+```text
+Phase 22: Website intake. Read docs/SPEC.md, in the lead forms add-on: "Public intake URL
+and Meta lead ads" (website part) and "Data model additions".
+
+Build:
+- intake_sources and owner-only Settings → Lead sources: create a key (shown once, hash
+  and prefix stored), field-map editor with the built-in name recognition, optional
+  funnel, on/off, last used, and the last 100 intake_log rows.
+- POST /api/v1/leads on the forms host: Bearer header or ?key=, JSON and form-encoded
+  bodies, field mapping, then the shared intake function (same validation, duplicate and
+  rate rules, plus 60 per minute per key), the test-request rule, and responses
+  201/400/401/429 as specified. No CORS for browsers.
+- docs/INTAKE.md: how to connect a website or page builder, with curl examples.
+
+Check: unit tests for field mapping (ism, имя, phone, telefon), key verification and
+each response code. An integration test posting a JSON lead and a form-encoded lead.
+```
+
+### Phase 23 — Facebook and Instagram lead ads
+
+```text
+Phase 23: Meta lead ads. Read docs/SPEC.md, in the lead forms add-on: "Public intake URL
+and Meta lead ads" (Meta part).
+
+Build:
+- meta_connections and meta_form_links. Settings → Integrations (owner): Connect with
+  Facebook, Page picker, long-lived Page token stored in Supabase Vault, Page subscribed
+  to leadgen, the Page's lead forms listed with a funnel picker, status and Reconnect.
+- /api/meta/webhook on the forms host: GET verification with META_VERIFY_TOKEN; POST
+  refused unless X-Hub-Signature-256 matches META_APP_SECRET; reply 200 at once and
+  process after the response.
+- Fetch each lead by leadgen_id, map name, phone and email, put custom questions in
+  answers, store external_id, then call the shared intake function.
+- Hourly Supabase Cron job that reads recent leads per linked Meta form to catch missed
+  webhooks.
+- A failing token sets Needs reconnect and sends the owner a Telegram alert.
+- docs/META_SETUP.md: creating the Meta app, permissions, App Review and Business
+  Verification steps, and the Make/Zapier fallback through a website source key.
+
+Check: unit tests with recorded sample payloads: signature check, verification
+handshake, mapping, a duplicate webhook delivery creates one lead, the backfill skips
+known external_ids. Never call Meta in tests. Then wait for me to connect a real Page and
+send a test lead with Meta's Lead Ads Testing Tool.
+```
+
 ## Interface languages
 
 The interface comes in uz, ru, en and ko (Korean, added for the centre's staff and teachers). A person's choice is kept on their profile (`profiles.language`, type `ui_language`). Messages to students and parents, templates, Telegram chats and the TV stay in uz, ru or en (`app_language`). Korean formats: money "1,250,000숨", dates "2026년 11월 10일", months "2026년 11월".

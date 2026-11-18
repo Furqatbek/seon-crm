@@ -47,6 +47,9 @@ export default defineConfig({
     // or Eskiz credentials are ever set here: nothing real can be sent.
     env: {
       CRON_SECRET: process.env.CRON_SECRET ?? "e2e-cron-secret",
+      // Public forms are served on their own host; *.localhost is this machine.
+      FORMS_HOST: process.env.FORMS_HOST ?? "forms.localhost:3000",
+      FORM_SIGNING_SECRET: process.env.FORM_SIGNING_SECRET ?? "e2e-form-signing-secret",
       TELEGRAM_WEBHOOK_SECRET: process.env.TELEGRAM_WEBHOOK_SECRET ?? "e2e-webhook-secret",
       TELEGRAM_BOT_TOKEN: "",
       ESKIZ_EMAIL: "",

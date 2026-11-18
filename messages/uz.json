@@ -152,7 +152,9 @@
       "walk_in": "Oʻzi keldi",
       "referral": "Tavsiya",
       "website": "Veb-sayt",
-      "other": "Boshqa"
+      "other": "Boshqa",
+      "facebook": "Facebook",
+      "web_form": "Veb-forma"
     },
     "lostReason": {
       "price": "Narx",
@@ -206,7 +208,8 @@
       "call": "Qoʻngʻiroq",
       "note": "Izoh",
       "statusChange": "{from} → {to}",
-      "reason": "Sabab: {reason}"
+      "reason": "Sabab: {reason}",
+      "formResubmitted": "“{form}” formasi qayta yuborildi"
     },
     "lost": {
       "title": "{name} rad etdi deb belgilansinmi?",
@@ -1722,5 +1725,24 @@
     "groupSubtitle": "Eng yaxshi 5 talik · {month}",
     "updated": "Yangilandi: {time}",
     "empty": "Shu oyda hali ball yoʻq"
+  },
+  "publicForm": {
+    "errors": {
+      "required": "Bu maydonni toʻldiring.",
+      "phone": "Telefon raqamini kiriting, masalan +998 90 123 45 67.",
+      "email": "Email manzilini kiriting, masalan name@example.com.",
+      "number": "Son kiriting.",
+      "date": "Sanani tanlang.",
+      "choice": "Variantlardan birini tanlang.",
+      "too_long": "Javob juda uzun."
+    },
+    "summary": "Belgilangan maydonlarni tekshiring.",
+    "expired": "Sahifa juda uzoq ochiq turdi. Formani qayta yuboring.",
+    "rateLimited": "Soʻrovlar juda koʻp. Keyinroq urinib koʻring.",
+    "failed": "Xatolik yuz berdi. Qayta urinib koʻring.",
+    "choose": "Tanlang…",
+    "required": "majburiy",
+    "language": "Til",
+    "leaveEmpty": "Bu maydonni boʻsh qoldiring"
   }
 }

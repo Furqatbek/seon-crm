@@ -257,6 +257,46 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"form_assets": {
+                  Row: {
+                    "created_at": string,"form_id": string,"height": number | null,"id": string,"kind": string,"path": string,"width": number | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"form_id": string,"height"?: number | null,"id"?: string,"kind": string,"path": string,"width"?: number | null
+                  }
+                  Update: {
+                    "created_at"?: string,"form_id"?: string,"height"?: number | null,"id"?: string,"kind"?: string,"path"?: string,"width"?: number | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "form_assets_form_id_fkey"
+      columns: ["form_id"]
+isOneToOne: false
+      referencedRelation: "lead_forms"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"form_daily_stats": {
+                  Row: {
+                    "day": string,"form_id": string,"submissions": number,"views": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "day": string,"form_id": string,"submissions"?: number,"views"?: number
+                  }
+                  Update: {
+                    "day"?: string,"form_id"?: string,"submissions"?: number,"views"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "form_daily_stats_form_id_fkey"
+      columns: ["form_id"]
+isOneToOne: false
+      referencedRelation: "lead_forms"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"group_fee_history": {
                   Row: {
                     "created_at": string,"created_by": string | null,"effective_month": string,"group_id": string,"id": string,"monthly_fee": number
@@ -309,6 +349,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"intake_log": {
+                  Row: {
+                    "channel": Database["public"]['Enums']["intake_channel"],"detail": string | null,"form_id": string | null,"id": string,"ip_hash": string | null,"lead_id": string | null,"outcome": Database["public"]['Enums']["intake_outcome"],"received_at": string,"source_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "channel": Database["public"]['Enums']["intake_channel"],"detail"?: string | null,"form_id"?: string | null,"id"?: string,"ip_hash"?: string | null,"lead_id"?: string | null,"outcome": Database["public"]['Enums']["intake_outcome"],"received_at"?: string,"source_id"?: string | null
+                  }
+                  Update: {
+                    "channel"?: Database["public"]['Enums']["intake_channel"],"detail"?: string | null,"form_id"?: string | null,"id"?: string,"ip_hash"?: string | null,"lead_id"?: string | null,"outcome"?: Database["public"]['Enums']["intake_outcome"],"received_at"?: string,"source_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "intake_log_form_id_fkey"
+      columns: ["form_id"]
+isOneToOne: false
+      referencedRelation: "lead_forms"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "intake_log_lead_id_fkey"
+      columns: ["lead_id"]
+isOneToOne: false
+      referencedRelation: "leads"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"lead_activities": {
                   Row: {
                     "body": string | null,"created_at": string,"created_by": string | null,"from_status": Database["public"]['Enums']["lead_status"] | null,"id": string,"kind": string,"lead_id": string,"to_status": Database["public"]['Enums']["lead_status"] | null
@@ -335,16 +401,68 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
-                },"leads": {
+                },"lead_form_versions": {
                   Row: {
-                    "archived_at": string | null,"assigned_to": string | null,"converted_student_id": string | null,"created_at": string,"created_by": string | null,"full_name": string,"id": string,"lost_reason": string | null,"next_contact_at": string | null,"notes": string | null,"phone": string,"preferred_time": string | null,"referred_by_student_id": string | null,"source": Database["public"]['Enums']["lead_source"],"status": Database["public"]['Enums']["lead_status"],"subject_interest": string | null,"trial_date": string | null,"trial_group_id": string | null,"updated_at": string
+                    "content": NonNullable<Json>,"form_id": string,"id": string,"published_at": string,"published_by": string | null,"version": number
                   }
                   ComputedFields: never
                   Insert: {
-                    "archived_at"?: string | null,"assigned_to"?: string | null,"converted_student_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"full_name": string,"id"?: string,"lost_reason"?: string | null,"next_contact_at"?: string | null,"notes"?: string | null,"phone": string,"preferred_time"?: string | null,"referred_by_student_id"?: string | null,"source": Database["public"]['Enums']["lead_source"],"status"?: Database["public"]['Enums']["lead_status"],"subject_interest"?: string | null,"trial_date"?: string | null,"trial_group_id"?: string | null,"updated_at"?: string
+                    "content": NonNullable<Json>,"form_id": string,"id"?: string,"published_at"?: string,"published_by"?: string | null,"version": number
                   }
                   Update: {
-                    "archived_at"?: string | null,"assigned_to"?: string | null,"converted_student_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"full_name"?: string,"id"?: string,"lost_reason"?: string | null,"next_contact_at"?: string | null,"notes"?: string | null,"phone"?: string,"preferred_time"?: string | null,"referred_by_student_id"?: string | null,"source"?: Database["public"]['Enums']["lead_source"],"status"?: Database["public"]['Enums']["lead_status"],"subject_interest"?: string | null,"trial_date"?: string | null,"trial_group_id"?: string | null,"updated_at"?: string
+                    "content"?: NonNullable<Json>,"form_id"?: string,"id"?: string,"published_at"?: string,"published_by"?: string | null,"version"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "lead_form_versions_form_id_fkey"
+      columns: ["form_id"]
+isOneToOne: false
+      referencedRelation: "lead_forms"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "lead_form_versions_published_by_fkey"
+      columns: ["published_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"lead_forms": {
+                  Row: {
+                    "archived_at": string | null,"created_at": string,"created_by": string | null,"draft": NonNullable<Json>,"id": string,"name": string,"published": Json | null,"published_at": string | null,"published_version": number,"slug": string,"source_tag": string | null,"status": Database["public"]['Enums']["form_status"],"subject": string | null,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "archived_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"draft": NonNullable<Json>,"id"?: string,"name": string,"published"?: Json | null,"published_at"?: string | null,"published_version"?: number,"slug": string,"source_tag"?: string | null,"status"?: Database["public"]['Enums']["form_status"],"subject"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "archived_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"draft"?: NonNullable<Json>,"id"?: string,"name"?: string,"published"?: Json | null,"published_at"?: string | null,"published_version"?: number,"slug"?: string,"source_tag"?: string | null,"status"?: Database["public"]['Enums']["form_status"],"subject"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "lead_forms_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "lead_forms_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"leads": {
+                  Row: {
+                    "answers": Json | null,"archived_at": string | null,"assigned_to": string | null,"converted_student_id": string | null,"created_at": string,"created_by": string | null,"external_id": string | null,"form_id": string | null,"full_name": string,"id": string,"lost_reason": string | null,"next_contact_at": string | null,"notes": string | null,"phone": string,"preferred_time": string | null,"referred_by_student_id": string | null,"source": Database["public"]['Enums']["lead_source"],"status": Database["public"]['Enums']["lead_status"],"subject_interest": string | null,"submitted_language": Database["public"]['Enums']["app_language"] | null,"tags": (string)[],"taken_at": string | null,"trial_date": string | null,"trial_group_id": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "answers"?: Json | null,"archived_at"?: string | null,"assigned_to"?: string | null,"converted_student_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"external_id"?: string | null,"form_id"?: string | null,"full_name": string,"id"?: string,"lost_reason"?: string | null,"next_contact_at"?: string | null,"notes"?: string | null,"phone": string,"preferred_time"?: string | null,"referred_by_student_id"?: string | null,"source": Database["public"]['Enums']["lead_source"],"status"?: Database["public"]['Enums']["lead_status"],"subject_interest"?: string | null,"submitted_language"?: Database["public"]['Enums']["app_language"] | null,"tags"?: (string)[],"taken_at"?: string | null,"trial_date"?: string | null,"trial_group_id"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "answers"?: Json | null,"archived_at"?: string | null,"assigned_to"?: string | null,"converted_student_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"external_id"?: string | null,"form_id"?: string | null,"full_name"?: string,"id"?: string,"lost_reason"?: string | null,"next_contact_at"?: string | null,"notes"?: string | null,"phone"?: string,"preferred_time"?: string | null,"referred_by_student_id"?: string | null,"source"?: Database["public"]['Enums']["lead_source"],"status"?: Database["public"]['Enums']["lead_status"],"subject_interest"?: string | null,"submitted_language"?: Database["public"]['Enums']["app_language"] | null,"tags"?: (string)[],"taken_at"?: string | null,"trial_date"?: string | null,"trial_group_id"?: string | null,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -382,6 +500,12 @@ isOneToOne: false
       columns: ["created_by"]
 isOneToOne: false
       referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "leads_form_id_fkey"
+      columns: ["form_id"]
+isOneToOne: false
+      referencedRelation: "lead_forms"
       referencedColumns: ["id"]
     },{
       foreignKeyName: "leads_referred_by_student_id_fkey"
@@ -949,6 +1073,9 @@ isOneToOne: false
               "billed": number,"collected": number,"debt": number,"expenses": number,"paid": number,"unpaid": number
             }[]
                            },
+"form_count_view":
+{ Args: { "p_form_id": string }; Returns: undefined
+                           },
 "generate_all_lessons":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
@@ -979,6 +1106,14 @@ isOneToOne: false
                            },
 "handle_redemption":
 { Args: { "p_action": string,"p_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["redemption_status"]
+                           },
+"intake_reject":
+{ Args: { "p_channel": Database["public"]['Enums']["intake_channel"],"p_detail": string,"p_form_id": string,"p_ip_hash": string,"p_outcome": Database["public"]['Enums']["intake_outcome"] }; Returns: undefined
+                           },
+"intake_submit":
+{ Args: { "p_answers"?: Json,"p_channel": Database["public"]['Enums']["intake_channel"],"p_form_id": string,"p_full_name": string,"p_ip_hash": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_notes"?: string,"p_phone": string,"p_preferred_time"?: string,"p_subject"?: string }; Returns: {
+              "lead_id": string,"outcome": Database["public"]['Enums']["intake_outcome"]
+            }[]
                            },
 "is_api_user":
 { Args: Record<PropertyKey, never>; Returns: boolean
@@ -1072,6 +1207,9 @@ isOneToOne: false
 { Args: { "p_discount_kind"?: string,"p_discount_value"?: number,"p_group_id": string,"p_joined_on": string }; Returns: {
               "amount": number,"base_amount": number,"billing_month": string,"discount_amount": number,"full_amount": number,"is_prorated": boolean,"lessons_counted": number,"lessons_in_month": number
             }[]
+                           },
+"public_form":
+{ Args: { "p_slug": string }; Returns: Json
                            },
 "rebuild_future_lessons":
 { Args: { "p_group_id": string }; Returns: number
@@ -1240,7 +1378,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "app_language": "uz"|"ru"|"en","attendance_status": "present"|"late"|"absent"|"excused","charge_type": "monthly_fee"|"adjustment","enrollment_status": "active"|"left","expense_category": "rent"|"utilities"|"marketing"|"supplies"|"other","group_status": "forming"|"active"|"finished","lead_source": "instagram"|"telegram"|"phone_call"|"walk_in"|"referral"|"website"|"other","lead_status": "new"|"contacted"|"trial"|"won"|"lost","lesson_status": "scheduled"|"held"|"cancelled","link_role": "student"|"parent","message_channel": "telegram"|"sms","message_status": "queued"|"sent"|"failed"|"skipped","message_type": "payment_due"|"payment_overdue"|"lesson_reminder"|"custom"|"points_weekly"|"points_deduction"|"points_month_result"|"reward_update","pay_type": "fixed_monthly"|"percent_of_revenue"|"per_lesson","payment_method": "cash"|"card"|"transfer","payout_status": "draft"|"paid","points_source": "attendance"|"perfect_month"|"on_time_payment"|"referral"|"teacher_award"|"teacher_deduction"|"owner_adjustment"|"reward_hold"|"reward_return","preset_kind": "award"|"deduction","redemption_status": "requested"|"given"|"rejected"|"cancelled","student_status": "active"|"paused"|"left"|"graduated","ui_language": "uz"|"ru"|"en"|"ko","user_role": "owner"|"manager"|"teacher"
+            "app_language": "uz"|"ru"|"en","attendance_status": "present"|"late"|"absent"|"excused","charge_type": "monthly_fee"|"adjustment","enrollment_status": "active"|"left","expense_category": "rent"|"utilities"|"marketing"|"supplies"|"other","form_status": "draft"|"live"|"closed","group_status": "forming"|"active"|"finished","intake_channel": "form"|"api"|"meta","intake_outcome": "created"|"merged"|"spam"|"rate_limited"|"invalid"|"test"|"error","lead_source": "instagram"|"telegram"|"phone_call"|"walk_in"|"referral"|"website"|"other"|"facebook"|"web_form","lead_status": "new"|"contacted"|"trial"|"won"|"lost","lesson_status": "scheduled"|"held"|"cancelled","link_role": "student"|"parent","message_channel": "telegram"|"sms","message_status": "queued"|"sent"|"failed"|"skipped","message_type": "payment_due"|"payment_overdue"|"lesson_reminder"|"custom"|"points_weekly"|"points_deduction"|"points_month_result"|"reward_update","pay_type": "fixed_monthly"|"percent_of_revenue"|"per_lesson","payment_method": "cash"|"card"|"transfer","payout_status": "draft"|"paid","points_source": "attendance"|"perfect_month"|"on_time_payment"|"referral"|"teacher_award"|"teacher_deduction"|"owner_adjustment"|"reward_hold"|"reward_return","preset_kind": "award"|"deduction","redemption_status": "requested"|"given"|"rejected"|"cancelled","student_status": "active"|"paused"|"left"|"graduated","ui_language": "uz"|"ru"|"en"|"ko","user_role": "owner"|"manager"|"teacher"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -1360,7 +1498,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "app_language": ["uz", "ru", "en"],"attendance_status": ["present", "late", "absent", "excused"],"charge_type": ["monthly_fee", "adjustment"],"enrollment_status": ["active", "left"],"expense_category": ["rent", "utilities", "marketing", "supplies", "other"],"group_status": ["forming", "active", "finished"],"lead_source": ["instagram", "telegram", "phone_call", "walk_in", "referral", "website", "other"],"lead_status": ["new", "contacted", "trial", "won", "lost"],"lesson_status": ["scheduled", "held", "cancelled"],"link_role": ["student", "parent"],"message_channel": ["telegram", "sms"],"message_status": ["queued", "sent", "failed", "skipped"],"message_type": ["payment_due", "payment_overdue", "lesson_reminder", "custom", "points_weekly", "points_deduction", "points_month_result", "reward_update"],"pay_type": ["fixed_monthly", "percent_of_revenue", "per_lesson"],"payment_method": ["cash", "card", "transfer"],"payout_status": ["draft", "paid"],"points_source": ["attendance", "perfect_month", "on_time_payment", "referral", "teacher_award", "teacher_deduction", "owner_adjustment", "reward_hold", "reward_return"],"preset_kind": ["award", "deduction"],"redemption_status": ["requested", "given", "rejected", "cancelled"],"student_status": ["active", "paused", "left", "graduated"],"ui_language": ["uz", "ru", "en", "ko"],"user_role": ["owner", "manager", "teacher"]
+            "app_language": ["uz", "ru", "en"],"attendance_status": ["present", "late", "absent", "excused"],"charge_type": ["monthly_fee", "adjustment"],"enrollment_status": ["active", "left"],"expense_category": ["rent", "utilities", "marketing", "supplies", "other"],"form_status": ["draft", "live", "closed"],"group_status": ["forming", "active", "finished"],"intake_channel": ["form", "api", "meta"],"intake_outcome": ["created", "merged", "spam", "rate_limited", "invalid", "test", "error"],"lead_source": ["instagram", "telegram", "phone_call", "walk_in", "referral", "website", "other", "facebook", "web_form"],"lead_status": ["new", "contacted", "trial", "won", "lost"],"lesson_status": ["scheduled", "held", "cancelled"],"link_role": ["student", "parent"],"message_channel": ["telegram", "sms"],"message_status": ["queued", "sent", "failed", "skipped"],"message_type": ["payment_due", "payment_overdue", "lesson_reminder", "custom", "points_weekly", "points_deduction", "points_month_result", "reward_update"],"pay_type": ["fixed_monthly", "percent_of_revenue", "per_lesson"],"payment_method": ["cash", "card", "transfer"],"payout_status": ["draft", "paid"],"points_source": ["attendance", "perfect_month", "on_time_payment", "referral", "teacher_award", "teacher_deduction", "owner_adjustment", "reward_hold", "reward_return"],"preset_kind": ["award", "deduction"],"redemption_status": ["requested", "given", "rejected", "cancelled"],"student_status": ["active", "paused", "left", "graduated"],"ui_language": ["uz", "ru", "en", "ko"],"user_role": ["owner", "manager", "teacher"]
           }
         }
 } as const
