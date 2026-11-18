@@ -19,7 +19,7 @@ import { KpiCard } from "@/components/ui/kpi-card";
 import { MoneyText } from "@/components/ui/money-text";
 import { PageHeader } from "@/components/ui/page-header";
 import { SegmentedControl } from "@/components/ui/segmented-control";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -155,7 +155,8 @@ export function ReportsScreen({
   const { setParams } = useUrlState();
   const [shownTab, showTab] = useOptimistic(tab);
   const [, startTabChange] = useTransition();
-  const tabs = (
+  // The open tab's content sits in its panel, so each tab names the panel it controls.
+  const withTabs = (content: React.ReactNode) => (
     <Tabs
       value={shownTab}
       onValueChange={(value) =>
@@ -164,7 +165,7 @@ export function ReportsScreen({
           setParams({ tab: value === "overview" ? null : value });
         })
       }
-      className="mb-6"
+      className="gap-6"
     >
       <TabsList>
         {REPORT_TABS.map((name) => (
@@ -173,6 +174,7 @@ export function ReportsScreen({
           </TabsTrigger>
         ))}
       </TabsList>
+      <TabsContent value={shownTab}>{content}</TabsContent>
     </Tabs>
   );
 
@@ -182,8 +184,7 @@ export function ReportsScreen({
         <PageHeader title={tNav("reports")}>
           <PeriodPicker range={range} monthOptions={monthOptions} />
         </PageHeader>
-        {tabs}
-        {points ? <PointsReport report={points} range={range} locale={locale} /> : null}
+        {withTabs(points ? <PointsReport report={points} range={range} locale={locale} /> : null)}
       </>
     );
   }
@@ -210,8 +211,8 @@ export function ReportsScreen({
       <PageHeader title={tNav("reports")}>
         <PeriodPicker range={range} monthOptions={monthOptions} />
       </PageHeader>
-      {tabs}
-
+      {withTabs(
+        <>
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4" data-slot="kpi-row">
         {money ? (
           <>
@@ -520,6 +521,8 @@ export function ReportsScreen({
         ) : null}
 
       </div>
+        </>,
+      )}
     </>
   );
 }
