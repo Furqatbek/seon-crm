@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 import {
   Bar,
   BarChart,
@@ -19,6 +19,7 @@ import { KpiCard } from "@/components/ui/kpi-card";
 import { MoneyText } from "@/components/ui/money-text";
 import { PageHeader } from "@/components/ui/page-header";
 import { SegmentedControl } from "@/components/ui/segmented-control";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -30,7 +31,8 @@ import type { Locale } from "@/i18n/routing";
 import { REPORT_PERIODS, type ReportPeriod } from "@/lib/domain/report-period";
 import { formatMoney, formatMoneyAxis, formatMonth, formatMonthShort, formatPercent } from "@/lib/format";
 import { useUrlState } from "@/lib/hooks/use-url-state";
-import type { Report } from "@/lib/reports/queries";
+import type { PointsReport as PointsReportData, Report } from "@/lib/reports/queries";
+import { REPORT_TABS, type ReportTab } from "@/lib/validation/reports";
 
 import {
   BAR_END_RIGHT,
@@ -45,6 +47,7 @@ import {
   VALUE_LABEL,
   shorten,
 } from "./chart-parts";
+import { PointsReport } from "./points-report";
 
 const ROW = 34;
 const rowsHeight = (count: number) => count * ROW + 12;
@@ -56,7 +59,7 @@ const MONEY_KPI = "col-span-2 sm:col-span-1";
 
 type Range = { period: ReportPeriod; from: string; to: string };
 
-function PeriodPicker({ range, monthOptions }: { range: Range; monthOptions: string[] }) {
+export function PeriodPicker({ range, monthOptions }: { range: Range; monthOptions: string[] }) {
   const t = useTranslations("reports.period");
   const locale = useLocale() as Locale;
   const { setParams } = useUrlState();
@@ -129,11 +132,17 @@ function PeriodPicker({ range, monthOptions }: { range: Range; monthOptions: str
  * lead, attendance and student-count parts (`report.money` is null).
  */
 export function ReportsScreen({
+  tab,
   report,
+  points,
   range,
   monthOptions,
 }: {
-  report: Report;
+  tab: ReportTab;
+  /** The overview's figures; only asked for when that tab is open. */
+  report: Report | null;
+  /** The Points tab's figures; only asked for when that tab is open. */
+  points: PointsReportData | null;
   range: Range;
   /** The months a custom range can start or end on, newest first. */
   monthOptions: string[];
@@ -143,6 +152,41 @@ export function ReportsScreen({
   const tLeads = useTranslations("leads");
   const locale = useLocale() as Locale;
   const [revenueBy, setRevenueBy] = useState<"group" | "subject">("group");
+  const { setParams } = useUrlState();
+  const [shownTab, showTab] = useOptimistic(tab);
+  const [, startTabChange] = useTransition();
+  const tabs = (
+    <Tabs
+      value={shownTab}
+      onValueChange={(value) =>
+        startTabChange(() => {
+          showTab(value as ReportTab);
+          setParams({ tab: value === "overview" ? null : value });
+        })
+      }
+      className="mb-6"
+    >
+      <TabsList>
+        {REPORT_TABS.map((name) => (
+          <TabsTrigger key={name} value={name}>
+            {t(`tabs.${name}`)}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
+  );
+
+  if (!report) {
+    return (
+      <>
+        <PageHeader title={tNav("reports")}>
+          <PeriodPicker range={range} monthOptions={monthOptions} />
+        </PageHeader>
+        {tabs}
+        {points ? <PointsReport report={points} range={range} locale={locale} /> : null}
+      </>
+    );
+  }
 
   const { kpis, money } = report;
   const file = (name: string) => `${name}_${range.from}_${range.to}.csv`;
@@ -166,6 +210,7 @@ export function ReportsScreen({
       <PageHeader title={tNav("reports")}>
         <PeriodPicker range={range} monthOptions={monthOptions} />
       </PageHeader>
+      {tabs}
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4" data-slot="kpi-row">
         {money ? (

@@ -1113,9 +1113,49 @@ isOneToOne: false
               "dimension": string,"key": string,"leads": number,"won": number
             }[]
                            },
+"report_points_by_group":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "average": number,"group_id": string,"group_name": string,"points": number,"students": number
+            }[]
+                           },
+"report_points_by_source":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "month": string,"points": number,"source": Database["public"]['Enums']["points_source"]
+            }[]
+                           },
+"report_points_by_teacher":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "awards": number,"deductions": number,"teacher_name": string,"user_id": string
+            }[]
+                           },
+"report_points_kpis":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "deducted": number,"earned": number,"rewards_given": number,"spent": number,"students_without_points": number,"unspent": number
+            }[]
+                           },
+"report_points_rows":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "created_at": string,"created_by": string,"delta": number,"group_id": string,"id": string,"kind": string,"source": Database["public"]['Enums']["points_source"],"student_id": string
+            }[]
+                           },
+"report_points_students":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "full_name": string,"student_id": string
+            }[]
+                           },
+"report_points_top_students":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "points": number,"student_id": string,"student_name": string
+            }[]
+                           },
 "report_revenue":
 { Args: { "p_from": string,"p_to": string }; Returns: {
               "collected": number,"dimension": string,"name": string
+            }[]
+                           },
+"report_rewards_given":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "given": number,"points": number,"reward_name": string
             }[]
                            },
 "report_starts":

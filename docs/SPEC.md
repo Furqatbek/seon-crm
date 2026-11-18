@@ -1272,7 +1272,8 @@ correctness. Fix them and run every test.
 >   - Templates: the weekly one ends in `{goal}` and the month one in `{bonus}`, whole sentences the app writes in the chat's language, so nothing odd is left when there is no next reward or no bonus. `{reward}` and `{points_needed}` remain available. The reward update has one template with `{update}` (request received, handed over, or rejected with the reason). The weekly summary does not name a "top reason".
 >   - A one-off message from staff by Telegram goes to the parent's chat, or to the student's own when no parent is linked.
 >   - After deploying, press Settings → Notifications → Connect webhook once more: it now also asks Telegram for button presses and registers the command menu in uz, ru and en.
-> - Not built yet (later phases): points reports, ranks on the student's Points tab.
+> - Phase 18, points reports: Reports has two tabs, Overview and Points. A teacher's report is at `/my-groups/reports`; the database narrows it to their groups (points that count for those groups, the students in them, their own awards and deductions). Definitions: earned is every non-reward row except teacher deductions and negative owner adjustments, corrections included; deducted is those two as a positive number; earned minus deducted is what the leaderboards count. "Unspent points" is today's total, whatever the period; "Students with no points" counts active students with nothing earned in the period.
+> - Still not built: ranks on the student's Points tab.
 
 ## Sources
 

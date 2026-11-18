@@ -53,7 +53,8 @@
     "myGroups": "Guruhlarim",
     "pointsHistory": "Tarix",
     "points": "Ballar",
-    "openRequests": "Kutayotgan sovgʻa soʻrovlari:"
+    "openRequests": "Kutayotgan sovgʻa soʻrovlari:",
+    "pointsReport": "Hisobotlar"
   },
   "language": {
     "label": "Til",
@@ -1110,7 +1111,50 @@
       "0_30": "0–30 kun",
       "31_60": "31–60 kun",
       "over_60": "60 kundan ortiq"
-    }
+    },
+    "tabs": {
+      "overview": "Umumiy",
+      "points": "Ballar"
+    },
+    "points": {
+      "points": "Ball",
+      "kpi": {
+        "earned": "Toʻplangan ball",
+        "deducted": "Olingan ball",
+        "spent": "Sovgʻalarga sarflangan",
+        "unspent": "Sarflanmagan ball",
+        "rewardsGiven": "Berilgan sovgʻalar",
+        "studentsWithoutPoints": "Ball olmagan oʻquvchilar"
+      },
+      "bySource": {
+        "title": "Toʻplangan ballar manbalar boʻyicha"
+      },
+      "byTeacher": {
+        "title": "Oʻqituvchilar boʻyicha ragʻbat va jarimalar",
+        "hint": "Bekor qilinganlari hisobga olinmaydi.",
+        "teacher": "Oʻqituvchi",
+        "awards": "Ragʻbatlar",
+        "deductions": "Jarimalar"
+      },
+      "topStudents": {
+        "title": "Eng yaxshi 10 oʻquvchi",
+        "student": "Oʻquvchi"
+      },
+      "rewards": {
+        "title": "Berilgan sovgʻalar",
+        "reward": "Sovgʻa",
+        "given": "Berildi",
+        "points": "Sarflangan ball"
+      },
+      "byGroup": {
+        "title": "Guruhlar boʻyicha bir oʻquvchiga oʻrtacha ball",
+        "hint": "Guruhning davrdagi ballari hozirgi oʻquvchilar soniga boʻlinadi.",
+        "group": "Guruh",
+        "students": "Oʻquvchilar",
+        "average": "Oʻrtacha"
+      }
+    },
+    "teacherTitle": "Guruhlarimdagi ballar"
   },
   "bot": {
     "linked": "{student}: chat ota-ona sifatida ulandi. {centre} toʻlov eslatmalari va ballar haqidagi xabarlarni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",

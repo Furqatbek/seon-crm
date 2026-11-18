@@ -53,7 +53,8 @@
     "myGroups": "My groups",
     "pointsHistory": "History",
     "points": "Points",
-    "openRequests": "Reward requests waiting:"
+    "openRequests": "Reward requests waiting:",
+    "pointsReport": "Reports"
   },
   "language": {
     "label": "Language",
@@ -1110,7 +1111,50 @@
       "0_30": "0–30 days",
       "31_60": "31–60 days",
       "over_60": "Over 60 days"
-    }
+    },
+    "tabs": {
+      "overview": "Overview",
+      "points": "Points"
+    },
+    "points": {
+      "points": "Points",
+      "kpi": {
+        "earned": "Points earned",
+        "deducted": "Points deducted",
+        "spent": "Spent on rewards",
+        "unspent": "Unspent points",
+        "rewardsGiven": "Rewards given",
+        "studentsWithoutPoints": "Students with no points"
+      },
+      "bySource": {
+        "title": "Points earned by source"
+      },
+      "byTeacher": {
+        "title": "Awards and deductions per teacher",
+        "hint": "Undone ones are left out.",
+        "teacher": "Teacher",
+        "awards": "Awards",
+        "deductions": "Deductions"
+      },
+      "topStudents": {
+        "title": "Top 10 students",
+        "student": "Student"
+      },
+      "rewards": {
+        "title": "Rewards given",
+        "reward": "Reward",
+        "given": "Given",
+        "points": "Points spent"
+      },
+      "byGroup": {
+        "title": "Average points per student by group",
+        "hint": "The group's points in the period over the students in it now.",
+        "group": "Group",
+        "students": "Students",
+        "average": "Average"
+      }
+    },
+    "teacherTitle": "Points in my groups"
   },
   "bot": {
     "linked": "{student} is now linked as a parent. Payment reminders and points news from {centre} will come here. Commands: /points /top /rewards /language /stop",

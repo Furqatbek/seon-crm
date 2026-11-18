@@ -22,7 +22,8 @@ export type BlockKey =
   | "reports"
   | "settings"
   | "myGroups"
-  | "pointsHistory";
+  | "pointsHistory"
+  | "pointsReport";
 
 export type Block = { key: BlockKey; href: `/${string}`; icon: LucideIcon };
 
@@ -46,4 +47,5 @@ export const ALL_BLOCKS: Block[] = [...BLOCKS, SETTINGS_BLOCK];
 export const TEACHER_BLOCKS: Block[] = [
   { key: "myGroups", href: "/my-groups", icon: Star },
   { key: "pointsHistory", href: "/my-groups/history", icon: History },
+  { key: "pointsReport", href: "/my-groups/reports", icon: ChartColumn },
 ];
