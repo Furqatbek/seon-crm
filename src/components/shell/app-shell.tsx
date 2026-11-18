@@ -4,6 +4,7 @@ import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+import { useInbox } from "@/components/leads/inbox-provider";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
@@ -17,12 +18,15 @@ function NavLink({
   block,
   active,
   count,
+  countLabel,
   onNavigate,
 }: {
   block: Block;
   active: boolean;
-  /** A count beside the name: reward requests waiting for staff. */
+  /** A count beside the name: reward requests waiting for staff, or leads waiting in the inbox. */
   count?: number;
+  /** What the count is, for screen readers. Reward requests when left out. */
+  countLabel?: string;
   onNavigate?: () => void;
 }) {
   const t = useTranslations("nav");
@@ -43,7 +47,7 @@ function NavLink({
       <span className="truncate">{t(block.key)}</span>
       {count ? (
         <span className="ml-auto rounded-full bg-brand px-1.5 text-caption font-medium text-on-brand numeric" data-nav-count={count}>
-          <span className="sr-only">{t("openRequests")} </span>
+          <span className="sr-only">{countLabel ?? t("openRequests")} </span>
           {count}
         </span>
       ) : null}
@@ -64,6 +68,8 @@ function SidebarContent({
 }) {
   const t = useTranslations();
   const pathname = usePathname();
+  // Leads waiting in the shared inbox, kept live by the inbox provider.
+  const waiting = useInbox().items.length;
   const blocks = user.role === "teacher" ? TEACHER_BLOCKS : BLOCKS;
   const matches = (block: Block) => pathname === block.href || pathname.startsWith(`${block.href}/`);
   // /my-groups/history is under /my-groups: only the longest match is lit.
@@ -90,7 +96,8 @@ function SidebarContent({
             key={block.key}
             block={block}
             active={isActive(block)}
-            count={block.key === "points" ? openRequests : undefined}
+            count={block.key === "points" ? openRequests : block.key === "leads" ? waiting : undefined}
+            countLabel={block.key === "leads" ? t("nav.waitingLeads") : undefined}
             onNavigate={onNavigate}
           />
         ))}

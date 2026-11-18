@@ -11,7 +11,10 @@ export type MessageType =
   | "points_weekly"
   | "points_deduction"
   | "points_month_result"
-  | "reward_update";
+  | "reward_update"
+  /** To the owner and managers, about a lead in the shared inbox. */
+  | "staff_new_lead"
+  | "staff_lead_reminder";
 /** The four points messages: Telegram only, to the student and the parent. */
 export const POINTS_MESSAGE_TYPES = ["points_weekly", "points_deduction", "points_month_result", "reward_update"] as const;
 /** Whose chat a Telegram link is. */

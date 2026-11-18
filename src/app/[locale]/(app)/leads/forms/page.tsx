@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { FormsScreen } from "@/components/forms/forms-screen";
@@ -20,6 +22,12 @@ async function Forms() {
 function FormsFallback() {
   const t = useTranslations("nav");
   return <ListSkeleton title={t("leads")} />;
+}
+
+// The tab reads "Leads", so with leads waiting it reads "(3) Leads".
+export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
+  const locale = await initLocale(params);
+  return { title: (await getTranslations({ locale, namespace: "nav" }))("leads") };
 }
 
 export default async function FormsPage({ params }: LocaleParams) {

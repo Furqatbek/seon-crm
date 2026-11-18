@@ -17,11 +17,11 @@ export class TelegramProvider implements MessageProvider {
     return this.sendWithButtons(recipient, body);
   }
 
-  /** The bot's replies may carry inline buttons, one row each; `data` comes back when one is pressed. */
+  /** A message may carry inline buttons, one row each: `data` comes back when one is pressed, `url` opens a link. */
   async sendWithButtons(
     recipient: string,
     body: string,
-    buttons?: Array<Array<{ text: string; data: string }>>,
+    buttons?: Array<Array<{ text: string; data?: string; url?: string }>>,
   ): Promise<SendResult> {
     if (!this.token) return { ok: false, error: "Telegram is not configured" };
     try {
@@ -32,7 +32,7 @@ export class TelegramProvider implements MessageProvider {
           chat_id: recipient,
           text: body,
           ...(buttons?.length
-            ? { reply_markup: { inline_keyboard: buttons.map((row) => row.map((button) => ({ text: button.text, callback_data: button.data }))) } }
+            ? { reply_markup: { inline_keyboard: buttons.map((row) => row.map((button) => (button.url ? { text: button.text, url: button.url } : { text: button.text, callback_data: button.data }))) } }
             : {}),
         }),
       });

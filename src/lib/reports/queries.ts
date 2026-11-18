@@ -21,6 +21,19 @@ export type ReportKpis = {
 
 export type MonthMoney = { month: string; collected: number; expenses: number; salaries: number; costs: number };
 export type RevenueRow = { dimension: "group" | "subject"; name: string; collected: number };
+export type FormFunnelRow = {
+  formId: string;
+  name: string;
+  views: number;
+  leads: number;
+  taken: number;
+  won: number;
+  /** Leads ÷ views, in per cent; null with no views. */
+  conversion: number | null;
+  /** Minutes from entering the inbox to Take; null when nothing was taken. */
+  medianTakeMinutes: number | null;
+};
+
 export type FunnelRow = { dimension: "stage" | "source"; key: string; leads: number; won: number };
 export type StudentsRow = { month: string; active: number; joined: number; left: number };
 export type AttendanceRow = {
@@ -37,6 +50,8 @@ export type DebtAgeRow = { bucket: "0_30" | "31_60" | "over_60"; amount: number;
 export type Report = {
   kpis: ReportKpis;
   funnel: FunnelRow[];
+  /** The lead funnel split by form. Empty when the centre has no forms. */
+  forms: FormFunnelRow[];
   students: StudentsRow[];
   attendance: AttendanceRow[];
   /** Owner only: null for a manager, who never asks the database for them. */
@@ -55,9 +70,10 @@ export async function getReport(period: { from: string; to: string }, role: User
   const args = { p_from: `${period.from}-01`, p_to: `${period.to}-01` };
   const owner = role === "owner";
 
-  const [kpis, funnel, students, attendance, months, revenue, debtAge] = await Promise.all([
+  const [kpis, funnel, forms, students, attendance, months, revenue, debtAge] = await Promise.all([
     supabase.rpc("report_kpis", args).single(),
     supabase.rpc("report_lead_funnel", args),
+    supabase.rpc("report_lead_forms", args),
     supabase.rpc("report_students", args),
     supabase.rpc("report_attendance", args),
     owner ? supabase.rpc("report_collected_vs_expenses", args) : null,
@@ -82,6 +98,17 @@ export async function getReport(period: { from: string; to: string }, role: User
       key: row.key,
       leads: row.leads,
       won: row.won,
+    })),
+    // Missing while a deploy is ahead of the forms migrations: no split, not an error.
+    forms: (forms.error ? [] : (forms.data ?? [])).map((row) => ({
+      formId: row.form_id,
+      name: row.form_name,
+      views: Number(row.views),
+      leads: Number(row.leads),
+      taken: Number(row.taken),
+      won: Number(row.won),
+      conversion: row.conversion === null ? null : Number(row.conversion),
+      medianTakeMinutes: row.median_take_minutes === null ? null : Number(row.median_take_minutes),
     })),
     students: rows(students).map((row) => ({
       month: row.month.slice(0, 7),

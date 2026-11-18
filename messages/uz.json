@@ -54,7 +54,8 @@
     "pointsHistory": "Tarix",
     "points": "Ballar",
     "openRequests": "Kutayotgan sovgʻa soʻrovlari:",
-    "pointsReport": "Hisobotlar"
+    "pointsReport": "Hisobotlar",
+    "waitingLeads": "Kutayotgan lidlar:"
   },
   "language": {
     "label": "Til",
@@ -183,7 +184,12 @@
     "form": {
       "created": "Lid qoʻshildi",
       "saved": "Lid saqlandi",
-      "chooseSource": "Manbani tanlang"
+      "chooseSource": "Manbani tanlang",
+      "title": "Formadan",
+      "language": "Til: {language}",
+      "submitted": "Yuborilgan: {time}",
+      "yes": "Ha",
+      "no": "Yoʻq"
     },
     "actions": {
       "logCall": "Qoʻngʻiroqni yozish",
@@ -251,6 +257,21 @@
       "notFound": "Bu lid endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    },
+    "inbox": {
+      "title": "Formalardan yangilar — {count} ta kutmoqda",
+      "newToast": "“{form}” formasidan yangi lid: {name}",
+      "newToastPlain": "Yangi lid: {name}",
+      "take": "Olish",
+      "assign": "Biriktirish",
+      "assignTo": "Kimga biriktirish",
+      "taken": "Siz oldingiz: {lead}",
+      "assigned": "{lead} {name}ga biriktirildi",
+      "takenBy": "Bu lidni {name} allaqachon olgan",
+      "notWaiting": "Bu lid endi kutmayapti",
+      "justNow": "hozirgina",
+      "minutes": "{minutes} daq",
+      "hours": "{hours} soat {minutes} daq"
     }
   },
   "students": {
@@ -419,7 +440,9 @@
         "points_weekly": "Haftalik ballar xulosasi",
         "points_deduction": "Ball olindi",
         "points_month_result": "Oy yakunlari",
-        "reward_update": "Sovgʻa holati"
+        "reward_update": "Sovgʻa holati",
+        "staff_new_lead": "Yangi lid (xodimlarga)",
+        "staff_lead_reminder": "Lid eslatmasi (xodimlarga)"
       },
       "channels": {
         "telegram": "Telegram",
@@ -1161,7 +1184,19 @@
         "average": "Oʻrtacha"
       }
     },
-    "teacherTitle": "Guruhlarimdagi ballar"
+    "teacherTitle": "Guruhlarimdagi ballar",
+    "forms": {
+      "title": "Formalar boʻyicha lidlar",
+      "hint": "Davr ichidagi koʻrishlar va lidlar, nechtasi olingan va oʻquvchi boʻlgan, lid qanchalik tez olingan.",
+      "form": "Forma",
+      "views": "Koʻrishlar",
+      "leads": "Lidlar",
+      "taken": "Olingan",
+      "won": "Oʻquvchi boʻldi",
+      "conversion": "Koʻrishlar → lidlar",
+      "medianTake": "Olishgacha median vaqt",
+      "minutes": "{minutes} daq"
+    }
   },
   "bot": {
     "linked": "{student}: chat ota-ona sifatida ulandi. {centre} toʻlov eslatmalari va ballar haqidagi xabarlarni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",
@@ -1452,6 +1487,21 @@
       "created": "{room} xonasi qoʻshildi",
       "saved": "{room} xonasi saqlandi",
       "empty": "Hali xonalar yoʻq. Birinchisini qoʻshing."
+    },
+    "alerts": {
+      "title": "Lidlar haqida xabarlar",
+      "about": "Formadan lid kelganda bu yerda va Telegramda xabar olasiz va uni istalgan joydan olishingiz mumkin.",
+      "linked": "Telegramingiz ulangan.",
+      "notLinked": "Telegramingiz hali ulanmagan.",
+      "link": "Telegramni ulash",
+      "linkAgain": "Boshqa Telegramni ulash",
+      "noBot": "Markazning Telegram boti hali ulanmagan (Sozlamalar → Bildirishnomalar).",
+      "unlink": "Uzish",
+      "unlinked": "Telegram uzildi",
+      "telegram": "Telegramdagi xabarlar",
+      "telegramHint": "Har bir yangi lid va 30 daqiqada hech kim olmasa bitta eslatma.",
+      "sound": "Yangi lidlar uchun ovoz",
+      "soundHint": "Lid kelganda shu brauzerda qisqa ovoz."
     }
   },
   "myGroups": {
@@ -2001,5 +2051,19 @@
       "restore": "Tiklash",
       "restored": "{n}-versiya qoralamaga yuklandi"
     }
+  },
+  "staffBot": {
+    "newLead": "🆕 Yangi lid",
+    "reminder": "⏰ Hali ham kutmoqda: {minutes} daq",
+    "form": "Forma: {form}",
+    "open": "CRMda ochish",
+    "take": "Olish",
+    "taken": "✅ Lid sizniki: {name}, {phone}",
+    "takenBy": "Bu lidni {name} allaqachon olgan.",
+    "notWaiting": "Bu lid endi kutmayapti.",
+    "gone": "Bu lid endi mavjud emas.",
+    "linked": "{name}, {centre} lidlari haqida xabarlar shu yerga keladi. Profilda yoki /stop buyrugʻi bilan oʻchirish mumkin.",
+    "unknownCode": "Bu havola ishlamaydi. {centre} CRMida Profilni ochib, “Telegramni ulash” tugmasini qayta bosing.",
+    "notLinked": "Lidni faqat {centre} xodimlari olishi mumkin. Avval Profilda Telegramni ulang."
   }
 }

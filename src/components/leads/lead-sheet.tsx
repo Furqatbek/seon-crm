@@ -238,6 +238,7 @@ export function LeadSheet({
               </SheetHeader>
 
               <SheetBody className="gap-6 pb-6">
+                <FormAnswers lead={lead} />
                 {readOnly ? (
                   <p className="flex items-start gap-2 rounded-control bg-success-tint px-3 py-2 text-footnote text-success">
                     <UserCheck className="size-4" aria-hidden />
@@ -420,5 +421,42 @@ export function LeadSheet({
         </DialogContent>
       </Dialog>
     </>
+  );
+}
+
+/** For a lead that came through a form: which form, in what language, when, and every answer with its label as it read then. */
+function FormAnswers({ lead }: { lead: LeadDetail }) {
+  const t = useTranslations("leads");
+  const tLanguage = useTranslations("language");
+  const locale = useLocale();
+  const answers = Array.isArray(lead.answers) ? (lead.answers as Array<{ id?: string; label?: string; value?: string | boolean }>) : [];
+  if (!lead.form && answers.length === 0) return null;
+
+  return (
+    <section aria-labelledby="lead-form-title" className="flex flex-col gap-2 rounded-card border border-border p-3" data-lead-form>
+      <h3 id="lead-form-title" className="text-headline text-text">
+        {lead.form?.name ?? t("form.title")}
+      </h3>
+      <p className="text-footnote text-text-secondary">
+        {[
+          lead.submitted_language ? t("form.language", { language: tLanguage(lead.submitted_language) }) : null,
+          t("form.submitted", { time: formatDateTime(lead.inbox_since ?? lead.created_at, locale) }),
+        ]
+          .filter(Boolean)
+          .join(" · ")}
+      </p>
+      {answers.length > 0 ? (
+        <dl className="flex flex-col gap-2">
+          {answers.map((answer, index) => (
+            <div key={answer.id ?? index} data-answer={answer.id}>
+              <dt className="text-footnote break-words text-text-secondary">{answer.label}</dt>
+              <dd className="text-body break-words whitespace-pre-wrap text-text">
+                {typeof answer.value === "boolean" ? t(answer.value ? "form.yes" : "form.no") : answer.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
+    </section>
   );
 }

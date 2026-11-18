@@ -17,6 +17,7 @@ import type { GroupOption, LeadDetail, LeadSummary, StaffOption } from "@/lib/le
 import type { LeadsSearch } from "@/lib/validation/leads";
 
 import { FollowUpStrip } from "./follow-up-strip";
+import { InboxStrip } from "./inbox-strip";
 import { LeadBoard } from "./lead-board";
 import { LeadFormSheet } from "./lead-form-sheet";
 import { LeadList } from "./lead-list";
@@ -110,6 +111,7 @@ export function LeadsScreen({
         <LeadsToolbar search={search} staff={activeStaff} />
       </PageHeader>
 
+      <InboxStrip staff={activeStaff} isOwner={user.role === "owner"} nowIso={nowIso} onOpen={openLead} />
       <FollowUpStrip leads={followUps} now={now} onOpen={openLead} />
 
       {count === 0 ? (

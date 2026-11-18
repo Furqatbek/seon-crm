@@ -144,3 +144,39 @@ export async function admin<T>(fn: (session: Session) => Promise<T>): Promise<T>
     await db.query("rollback");
   }
 }
+
+/**
+ * Attendance is marked on the day of the lesson only, and the seed's groups do
+ * not meet every day. This gives the group a lesson today: if it has none, its
+ * next one is brought forward (committed, so every rolled-back test sees it).
+ * Call `restore` when the file is done.
+ */
+export async function lessonToday(group: string): Promise<{ id: string; restore: () => Promise<void> }> {
+  const db = new pg.Client({ connectionString: DB_URL });
+  await db.connect();
+  try {
+    const today = await db.query(
+      `select id from lessons where group_id = $1 and status <> 'cancelled' and lesson_date = public.tashkent_today() limit 1`,
+      [group],
+    );
+    if (today.rows.length > 0) return { id: today.rows[0].id, restore: async () => {} };
+    const moved = await db.query(
+      `with next as (select id, lesson_date::text as original from lessons
+                     where group_id = $1 and status <> 'cancelled' and lesson_date > public.tashkent_today() order by lesson_date limit 1)
+       update lessons l set lesson_date = public.tashkent_today() from next where l.id = next.id
+       returning l.id, next.original`,
+      [group],
+    );
+    const { id, original } = moved.rows[0] as { id: string; original: string };
+    return {
+      id,
+      restore: async () => {
+        const again = new pg.Client({ connectionString: DB_URL });
+        await again.connect();
+        await again.query(`update lessons set lesson_date = $2 where id = $1`, [id, original]).finally(() => again.end());
+      },
+    };
+  } finally {
+    await db.end();
+  }
+}

@@ -1,11 +1,13 @@
 import type { BotTop, Link, PointsSummary, RewardOffer, Texts } from "./points-data.ts";
+import type { StaffBotStore, StaffTexts } from "./staff-alerts.ts";
 import type { Language, LinkRole } from "./types.ts";
 
 // The Telegram bot — docs/SPEC.md → "Telegram for students and parents".
 // /start s_<code> links a student's own chat, /start p_<code> a parent's;
 // /stop unlinks this chat; /language changes its language; /points, /top and
 // /rewards answer for the linked student. A parent of several children is
-// asked which child first.
+// asked which child first. Staff link with /start u_<code> and take a lead
+// with the button under its alert (staff-alerts.ts).
 
 export type TelegramUpdate = {
   message?: {
@@ -112,7 +114,13 @@ function topText(t: ReturnType<Texts>, top: BotTop, name: string): string {
  * Handles one update and says what to reply, or null for anything the bot
  * does not answer (no text, a group chat, an edited message).
  */
-export async function handleUpdate(update: TelegramUpdate, store: BotStore, texts: Texts): Promise<BotReply | null> {
+export async function handleUpdate(
+  update: TelegramUpdate,
+  store: BotStore,
+  texts: Texts,
+  /** The staff side of the bot: /start u_<code> and the Take button under a lead alert. */
+  staff?: { store: StaffBotStore; texts: StaffTexts },
+): Promise<BotReply | null> {
   const callback = update.callback_query;
   const chat = update.message?.chat ?? callback?.message?.chat;
   const chatId = chat?.id;
@@ -159,6 +167,17 @@ export async function handleUpdate(update: TelegramUpdate, store: BotStore, text
   // ── A button was pressed ──
   if (callback) {
     const [kind, first, second] = input.split(":");
+    if (kind === "tk" && staff) {
+      // Take, under a lead alert. Only a linked owner or manager can.
+      const me = await staff.store.staffByChat(chatId);
+      const leadId = first ? unpackId(first) : null;
+      if (!me || !leadId) return reply(staff.texts(fallback)("notLinked", { centre }));
+      const s = staff.texts(me.language);
+      const result = await staff.store.takeLead(leadId, me.id);
+      if (result === null) return reply(s("gone"));
+      if (result.taken) return reply(s("taken", { name: result.lead.fullName, phone: result.lead.phone }));
+      return reply(result.by ? s("takenBy", { name: result.by }) : s("notWaiting"));
+    }
     if (kind === "lang" && (first === "uz" || first === "ru" || first === "en")) {
       await store.setLanguage(chatId, first);
       return reply(texts(first)("languageSet"));
@@ -198,6 +217,13 @@ export async function handleUpdate(update: TelegramUpdate, store: BotStore, text
 
   if (name === "/start") {
     if (!argument) return reply(t("help", { centre }));
+    // u_<code> is a member of staff linking their own Telegram for lead alerts.
+    if (argument.startsWith("u_") && staff) {
+      const code = argument.slice(2);
+      const person = LINK_CODE.test(code) ? await staff.store.linkStaff(code, chatId) : null;
+      if (!person) return reply(staff.texts(fallback)("unknownCode", { centre }));
+      return reply(staff.texts(person.language)("linked", { name: person.fullName, centre }));
+    }
     // s_<code> is the student's own link, p_<code> the parent's. A bare code is
     // a link from before students had two: it was, and stays, the parent's.
     const role: LinkRole = argument.startsWith("s_") ? "student" : "parent";
@@ -209,7 +235,8 @@ export async function handleUpdate(update: TelegramUpdate, store: BotStore, text
   }
 
   if (name === "/stop") {
-    return reply((await store.unlink(chatId)) > 0 ? t("stopped", { centre }) : t("nothingLinked"));
+    const removed = (await store.unlink(chatId)) + (staff ? await staff.store.unlinkStaff(chatId) : 0);
+    return reply(removed > 0 ? t("stopped", { centre }) : t("nothingLinked"));
   }
 
   if (name === "/language") {

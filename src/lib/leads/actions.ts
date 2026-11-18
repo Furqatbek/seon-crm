@@ -5,6 +5,8 @@ import { refresh } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
 import { canMoveLead, nextContactTimestamp, normalizePhone } from "@/lib/domain/leads";
 import { createClient } from "@/lib/supabase/server";
+
+import { getInbox, type InboxItem } from "./inbox";
 import {
   leadActivitySchema,
   leadFormSchema,
@@ -198,4 +200,36 @@ export async function findPhoneMatches(
     ...(leadMatches.data ?? []).map((row) => ({ kind: "lead" as const, ...row })),
     ...(studentMatches.data ?? []).map((row) => ({ kind: "student" as const, ...row })),
   ];
+}
+
+// ── The shared inbox — docs/SPEC.md → "Lead forms add-on → Shared inbox and staff alerts" ──
+
+/** The inbox as it is now: asked again whenever Realtime says a lead changed. */
+export async function fetchInbox(): Promise<InboxItem[]> {
+  return (await session()) ? getInbox() : [];
+}
+
+export type TakeOutcome =
+  | { ok: true; taken: true }
+  /** Somebody was faster: `by` is who has it now. */
+  | { ok: true; taken: false; by: string | null }
+  | { ok: false; error: LeadErrorKey };
+
+/**
+ * Take a lead from the inbox for yourself, or (the owner) give it to
+ * `assignTo`. take_lead() decides in one statement, so the first Take wins.
+ */
+export async function takeLead(id: unknown, assignTo?: unknown): Promise<TakeOutcome> {
+  const leadId = z.uuid().safeParse(id);
+  const target = assignTo === undefined ? null : z.uuid().safeParse(assignTo);
+  if (!leadId.success || (target && !target.success)) return { ok: false, error: "notFound" };
+  const ctx = await session();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase.rpc("take_lead", { p_lead_id: leadId.data, p_for: target?.data });
+  if (error) return error.code === "P0002" ? { ok: false, error: "notFound" } : failure(error);
+  const row = data?.[0];
+  if (!row) return { ok: false, error: "generic" };
+  refresh();
+  return row.taken ? { ok: true, taken: true } : { ok: true, taken: false, by: row.assigned_name };
 }

@@ -54,7 +54,8 @@
     "pointsHistory": "History",
     "points": "Points",
     "openRequests": "Reward requests waiting:",
-    "pointsReport": "Reports"
+    "pointsReport": "Reports",
+    "waitingLeads": "Leads waiting:"
   },
   "language": {
     "label": "Language",
@@ -183,7 +184,12 @@
     "form": {
       "created": "Lead added",
       "saved": "Lead saved",
-      "chooseSource": "Choose a source"
+      "chooseSource": "Choose a source",
+      "title": "From a form",
+      "language": "Language: {language}",
+      "submitted": "Sent {time}",
+      "yes": "Yes",
+      "no": "No"
     },
     "actions": {
       "logCall": "Log call",
@@ -251,6 +257,21 @@
       "notFound": "This lead no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."
+    },
+    "inbox": {
+      "title": "New from forms — {count} waiting",
+      "newToast": "New lead from “{form}”: {name}",
+      "newToastPlain": "New lead: {name}",
+      "take": "Take",
+      "assign": "Assign",
+      "assignTo": "Assign to",
+      "taken": "You took {lead}",
+      "assigned": "{lead} is assigned to {name}",
+      "takenBy": "{name} already took this lead",
+      "notWaiting": "This lead is no longer waiting",
+      "justNow": "just now",
+      "minutes": "{minutes} min",
+      "hours": "{hours} h {minutes} min"
     }
   },
   "students": {
@@ -419,7 +440,9 @@
         "points_weekly": "Weekly points summary",
         "points_deduction": "Points taken away",
         "points_month_result": "Month results",
-        "reward_update": "Reward update"
+        "reward_update": "Reward update",
+        "staff_new_lead": "New lead (staff)",
+        "staff_lead_reminder": "Lead reminder (staff)"
       },
       "channels": {
         "telegram": "Telegram",
@@ -1161,7 +1184,19 @@
         "average": "Average"
       }
     },
-    "teacherTitle": "Points in my groups"
+    "teacherTitle": "Points in my groups",
+    "forms": {
+      "title": "Leads by form",
+      "hint": "Views and leads in the period, how many were taken and became students, and how fast a lead was taken.",
+      "form": "Form",
+      "views": "Views",
+      "leads": "Leads",
+      "taken": "Taken",
+      "won": "Won",
+      "conversion": "Views → leads",
+      "medianTake": "Median time to Take",
+      "minutes": "{minutes} min"
+    }
   },
   "bot": {
     "linked": "{student} is now linked as a parent. Payment reminders and points news from {centre} will come here. Commands: /points /top /rewards /language /stop",
@@ -1452,6 +1487,21 @@
       "created": "Room {room} added",
       "saved": "Room {room} saved",
       "empty": "No rooms yet. Add the first one."
+    },
+    "alerts": {
+      "title": "Lead alerts",
+      "about": "When a lead comes in from a form, you hear about it here and on Telegram, and can take it from either.",
+      "linked": "Your Telegram is linked.",
+      "notLinked": "Your Telegram is not linked yet.",
+      "link": "Link Telegram",
+      "linkAgain": "Link another Telegram",
+      "noBot": "The centre's Telegram bot is not connected yet (Settings → Notifications).",
+      "unlink": "Unlink",
+      "unlinked": "Telegram is unlinked",
+      "telegram": "Alerts on Telegram",
+      "telegramHint": "Every new lead, and one reminder if nobody takes it in 30 minutes.",
+      "sound": "Sound for new leads",
+      "soundHint": "A short sound in this browser when a lead arrives."
     }
   },
   "myGroups": {
@@ -2001,5 +2051,19 @@
       "restore": "Restore",
       "restored": "Version {n} is loaded into the draft"
     }
+  },
+  "staffBot": {
+    "newLead": "🆕 New lead",
+    "reminder": "⏰ Still waiting: {minutes} min",
+    "form": "Form: {form}",
+    "open": "Open in CRM",
+    "take": "Take",
+    "taken": "✅ It is yours: {name}, {phone}",
+    "takenBy": "{name} already took this lead.",
+    "notWaiting": "This lead is no longer waiting.",
+    "gone": "This lead no longer exists.",
+    "linked": "{name}, you will get lead alerts from {centre} here. Turn them off in Profile, or send /stop.",
+    "unknownCode": "This link does not work. Open Profile in {centre}'s CRM and press Link Telegram again.",
+    "notLinked": "Only {centre}'s staff can take a lead. Link your Telegram in Profile first."
   }
 }

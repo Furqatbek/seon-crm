@@ -1,7 +1,7 @@
 import { handleUpdate, type TelegramUpdate } from "@/lib/notify/bot";
-import { botTexts } from "@/lib/notify/bot-texts";
+import { botTexts, staffBotTexts } from "@/lib/notify/bot-texts";
 import { secretMatches } from "@/lib/notify/secret";
-import { botStore, getProviders } from "@/lib/notify/store";
+import { botStore, getProviders, staffBotStore } from "@/lib/notify/store";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
@@ -9,7 +9,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * in it. The request must carry the secret token the webhook was registered
  * with; anything else is refused. docs/SPEC.md → "Telegram for students and
  * parents": /start s_<code> and p_<code>, /stop, /language, /points, /top,
- * /rewards.
+ * /rewards; and for staff, /start u_<code> and Take under a lead alert.
  */
 export async function POST(request: Request) {
   if (!secretMatches(request.headers.get("x-telegram-bot-api-secret-token"), process.env.TELEGRAM_WEBHOOK_SECRET)) {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
   const telegram = getProviders().telegram;
   try {
-    const reply = await handleUpdate(update, botStore(admin), botTexts);
+    const reply = await handleUpdate(update, botStore(admin), botTexts, { store: staffBotStore(admin), texts: staffBotTexts });
     if (reply) {
       if (reply.callbackId) await telegram.answerCallback(reply.callbackId);
       await telegram.sendWithButtons(String(reply.chatId), reply.text, reply.buttons);

@@ -6,10 +6,7 @@
  */
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import {
-  DB_URL, DENIED, MANAGER_ID, OWNER_ID, TEACHER_USER_ID, as, connect, disconnect, teacherId,
-  type Attempt, type Session,
-} from "./helpers";
+import { DB_URL, DENIED, MANAGER_ID, OWNER_ID, TEACHER_USER_ID, as, connect, disconnect, teacherId, type Attempt, type Session, lessonToday } from "./helpers";
 
 const code = (result: Attempt) => (result.ok ? `allowed (${result.rowCount})` : result.code);
 const TEACHER = teacherId(2);
@@ -19,6 +16,7 @@ let other: string; // a group of another teacher
 let ownStudent: string; // in IELTS 6.5
 let otherStudent: string; // only in another teacher's group
 
+let restoreLesson: () => Promise<void> = async () => {};
 const lessonOn = async (s: Session, group: string, where: string) =>
   (await s.rows<{ id: string }>(`select id from lessons where group_id = $1 and ${where} order by lesson_date desc limit 1`, [group]))[0]?.id;
 
@@ -41,7 +39,10 @@ describe.skipIf(!DB_URL)("Teacher login and coins", () => {
       )[0].student_id;
     });
   });
-  afterAll(disconnect);
+  afterAll(async () => {
+    await restoreLesson();
+    await disconnect();
+  });
 
   describe("what a teacher cannot reach", () => {
     it("no table shows a teacher anything but their own profile", async () => {
@@ -171,9 +172,10 @@ describe.skipIf(!DB_URL)("Teacher login and coins", () => {
 
   describe("attendance", () => {
     it("a teacher marks a lesson of their own group, in their own name", async () => {
-      const lesson = await as("owner", (s) =>
-        lessonOn(s, own.ielts, `lesson_date between public.tashkent_today() - 7 and public.tashkent_today() and status <> 'cancelled'`),
-      );
+      // Attendance is marked on the day: the group gets a lesson today for this test.
+      const todays = await lessonToday(own.ielts);
+      restoreLesson = todays.restore;
+      const lesson = todays.id;
       expect(lesson).toBeTruthy();
       await as("teacher", async (s) => {
         const sheet = await s.rows<{ student_id: string; full_name: string }>(`select * from public.teacher_lesson_sheet($1)`, [lesson]);

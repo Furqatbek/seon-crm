@@ -3,7 +3,11 @@ import { forChannel } from "./templates.ts";
 import type { Channel, MessageType, Providers } from "./types.ts";
 
 export type Outgoing = {
-  studentId: string;
+  /** The student the message is about; null for an alert to staff. */
+  studentId: string | null;
+  /** The member of staff an alert goes to, and the lead it is about. */
+  staffId?: string;
+  leadId?: string;
   type: MessageType;
   channel: Channel;
   recipient: string;

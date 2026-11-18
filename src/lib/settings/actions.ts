@@ -314,6 +314,29 @@ export async function saveProfile(input: unknown): Promise<SettingsResult> {
   return { ok: true };
 }
 
+/** Lead alerts on Telegram on or off, and the sound in the browser. */
+export async function saveAlertSettings(input: unknown): Promise<SettingsResult> {
+  const parsed = z.object({ alerts_on: z.boolean().optional(), alert_sound: z.boolean().optional() }).safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { data, error } = await ctx.supabase.from("profiles").update(parsed.data).eq("id", ctx.user.id).select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notAllowed" };
+  refresh();
+  return { ok: true };
+}
+
+/** Takes the person's Telegram off their profile: no more lead alerts there. */
+export async function unlinkTelegram(): Promise<SettingsResult> {
+  const ctx = await ownSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { error } = await ctx.supabase.rpc("unlink_my_telegram");
+  if (error) return failure(error);
+  refresh();
+  return { ok: true };
+}
+
 /** The language switch in the account menu: remembered on the profile for next sign-in. */
 export async function saveLanguage(languageInput: unknown): Promise<void> {
   const language = profileSchema.shape.language.safeParse(languageInput);

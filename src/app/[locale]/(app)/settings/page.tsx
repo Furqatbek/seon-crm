@@ -17,6 +17,7 @@ import { getSignedInUser } from "@/lib/auth";
 import { getPointPresets, getPointsSettings, getTvSettings } from "@/lib/points/queries";
 import { tashkentDate } from "@/lib/domain/time";
 import {
+  getAlertSettings,
   getAllTemplates,
   getCentreSettings,
   getIntegrations,
@@ -58,7 +59,9 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
       {tab === "points" && owner ? (
         <Points />
       ) : null}
-      {tab === "profile" ? <ProfileTab profile={await getProfile(user)} /> : null}
+      {tab === "profile" ? (
+        <ProfileTab profile={await getProfile(user)} alerts={user.role === "teacher" ? null : await getAlertSettings(user)} />
+      ) : null}
     </SettingsScreen>
   );
 }

@@ -413,6 +413,50 @@ export function ReportsScreen({
           </ResponsiveContainer>
         </ChartCard>
 
+        {/* 3b. The lead funnel split by form */}
+        {report.forms.length > 0 ? (
+          <ChartCard
+            id="forms"
+            title={t("forms.title")}
+            hint={t("forms.hint")}
+            empty={false}
+            csv={{
+              filename: file("lead-forms"),
+              headers: [t("forms.form"), t("forms.views"), t("forms.leads"), t("forms.taken"), t("forms.won"), t("forms.conversion"), t("forms.medianTake")],
+              rows: report.forms.map((row) => [row.name, row.views, row.leads, row.taken, row.won, row.conversion ?? "", row.medianTakeMinutes ?? ""]),
+            }}
+          >
+            {/* Wider than a phone: the table scrolls sideways, also from the keyboard. */}
+            <div className="overflow-x-auto rounded-inner outline-none focus-visible:ring-3 focus-visible:ring-focus-ring" role="region" aria-label={t("forms.title")} tabIndex={0}>
+              <table className="w-full min-w-[34rem] text-left text-body" data-forms-report>
+                <thead>
+                  <tr className="border-b border-border text-footnote text-text-secondary">
+                    <th scope="col" className="py-2 pr-3 font-medium">{t("forms.form")}</th>
+                    {(["views", "leads", "taken", "won", "conversion", "medianTake"] as const).map((key) => (
+                      <th key={key} scope="col" className="px-2 py-2 text-right font-medium">{t(`forms.${key}`)}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.forms.map((row) => (
+                    <tr key={row.formId} className="border-b border-border last:border-b-0" data-form-report-row={row.name}>
+                      <th scope="row" className="py-2 pr-3 font-medium break-words text-text">{row.name}</th>
+                      <td className="px-2 py-2 text-right numeric">{row.views}</td>
+                      <td className="px-2 py-2 text-right numeric">{row.leads}</td>
+                      <td className="px-2 py-2 text-right numeric">{row.taken}</td>
+                      <td className="px-2 py-2 text-right numeric">{row.won}</td>
+                      <td className="px-2 py-2 text-right numeric">{row.conversion === null ? "—" : formatPercent(row.conversion, locale)}</td>
+                      <td className="px-2 py-2 text-right numeric">
+                        {row.medianTakeMinutes === null ? "—" : t("forms.minutes", { minutes: Math.round(row.medianTakeMinutes) })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </ChartCard>
+        ) : null}
+
         {/* 4. Active students over time, with joins and leaves */}
         <ChartCard
           id="students"

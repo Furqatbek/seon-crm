@@ -5,7 +5,7 @@
  */
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { DB_URL, DENIED, OWNER_ID, admin, as, connect, disconnect, teacherId, type Attempt, type Session } from "./helpers";
+import { DB_URL, DENIED, OWNER_ID, admin, as, connect, disconnect, teacherId, type Attempt, lessonToday, type Session } from "./helpers";
 
 const code = (result: Attempt) => (result.ok ? "allowed" : result.code);
 const TEACHER = teacherId(2);
@@ -26,6 +26,7 @@ const ledger = (s: Session, where: string, params: unknown[] = []) =>
   );
 const sum = async (s: Session, where: string, params: unknown[] = []) =>
   (await s.rows<{ n: number }>(`select coalesce(sum(delta), 0)::int as n from points_ledger where ${where}`, params))[0].n;
+let todays: Awaited<ReturnType<typeof lessonToday>> = { id: "", restore: async () => {} };
 const mark = (s: Session, status: string, student = lessonStudent) =>
   s.rows(`select public.save_attendance($1, $2::jsonb)`, [lesson, JSON.stringify([{ student_id: student, status }])]);
 /** The lesson starts with no mark and no points for the student. */
@@ -62,6 +63,8 @@ describe.skipIf(!DB_URL)("Points engine", () => {
     await admin(async (s) => {
       const groups = await s.rows<{ id: string; name: string; teacher_id: string }>(`select id, name, teacher_id from groups where status = 'active' and archived_at is null`);
       ownGroup = groups.find((g) => g.name === "IELTS 6.5")!.id;
+      // Attendance is marked on the day: the group gets a lesson today for this file.
+      todays = await lessonToday(ownGroup);
       otherGroup = groups.find((g) => g.teacher_id !== TEACHER)!.id;
       otherStudent = (
         await s.rows<{ student_id: string }>(
@@ -74,9 +77,9 @@ describe.skipIf(!DB_URL)("Points engine", () => {
       const [row] = await s.rows<{ id: string; student_id: string }>(
         `select l.id, e.student_id from lessons l
          join enrollments e on e.group_id = l.group_id and e.status = 'active' and e.joined_on <= l.lesson_date
-         where l.group_id = $1 and l.status <> 'cancelled' and l.lesson_date between ${today} - 6 and ${today}
-         order by l.lesson_date desc, e.student_id limit 1`,
-        [ownGroup],
+         where l.id = $1
+         order by e.student_id limit 1`,
+        [todays.id],
       );
       lesson = row.id;
       lessonStudent = row.student_id;
@@ -414,7 +417,10 @@ describe.skipIf(!DB_URL)("Points engine", () => {
 // ── Fixes from the review of Phases 13–18 ──
 describe.skipIf(!DB_URL)("Points engine: corrections and edge cases", () => {
   beforeAll(connect);
-  afterAll(disconnect);
+  afterAll(async () => {
+    await todays.restore();
+    await disconnect();
+  });
 
   it("while the programme is off nothing new is given, but a cancelled lesson and a changed mark still take points back", async () => {
     await as("owner", async (s) => {

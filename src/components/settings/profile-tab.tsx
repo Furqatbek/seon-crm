@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -10,6 +11,7 @@ import { useSwitchLocale } from "@/components/shell/use-switch-locale";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -17,8 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { changePassword, saveProfile } from "@/lib/settings/actions";
-import type { Profile } from "@/lib/settings/queries";
+import { Switch } from "@/components/ui/switch";
+import { changePassword, saveAlertSettings, saveProfile, unlinkTelegram } from "@/lib/settings/actions";
+import type { AlertSettings, Profile } from "@/lib/settings/queries";
 import type { ResetPasswordValues } from "@/lib/validation/auth";
 import {
   UI_LANGUAGES,
@@ -73,8 +76,86 @@ function PasswordForm() {
   );
 }
 
-/** Everyone, for themselves: name, interface language, password. */
-export function ProfileTab({ profile }: { profile: Profile }) {
+/** Lead alerts, for the owner and managers: their own Telegram link and two switches. */
+function LeadAlerts({ alerts }: { alerts: AlertSettings }) {
+  const t = useTranslations("settings");
+  const [pending, startTransition] = useTransition();
+  const [alertsOn, setAlertsOn] = useState(alerts.alertsOn);
+  const [sound, setSound] = useState(alerts.alertSound);
+
+  const save = (patch: { alerts_on?: boolean; alert_sound?: boolean }, undo: () => void) =>
+    startTransition(async () => {
+      const result = await saveAlertSettings(patch);
+      if (!result.ok) {
+        undo();
+        toast(t(`errors.${result.error}`));
+      }
+    });
+  const unlink = () =>
+    startTransition(async () => {
+      const result = await unlinkTelegram();
+      toast(result.ok ? t("alerts.unlinked") : t(`errors.${result.error}`));
+    });
+
+  return (
+    <Section title={t("alerts.title")}>
+      <p className="text-footnote text-text-secondary">{t("alerts.about")}</p>
+      <div className="flex flex-col gap-2" data-telegram-linked={alerts.linked}>
+        <p className="text-body text-text">{t(alerts.linked ? "alerts.linked" : "alerts.notLinked")}</p>
+        <div className="flex flex-wrap gap-2">
+          {alerts.linkUrl ? (
+            <Button asChild variant={alerts.linked ? "secondary" : "primary"}>
+              <a href={alerts.linkUrl} target="_blank" rel="noreferrer" data-telegram-link>
+                <Send aria-hidden />
+                {t(alerts.linked ? "alerts.linkAgain" : "alerts.link")}
+              </a>
+            </Button>
+          ) : (
+            <p className="text-footnote text-text-secondary">{t("alerts.noBot")}</p>
+          )}
+          {alerts.linked ? (
+            <Button variant="ghost" disabled={pending} onClick={unlink}>
+              {t("alerts.unlink")}
+            </Button>
+          ) : null}
+        </div>
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <Label htmlFor="alerts-on">{t("alerts.telegram")}</Label>
+          <p className="text-footnote text-text-secondary">{t("alerts.telegramHint")}</p>
+        </div>
+        <Switch
+          id="alerts-on"
+          checked={alertsOn}
+          disabled={pending}
+          onCheckedChange={(on) => {
+            setAlertsOn(on);
+            save({ alerts_on: on }, () => setAlertsOn(!on));
+          }}
+        />
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <Label htmlFor="alert-sound">{t("alerts.sound")}</Label>
+          <p className="text-footnote text-text-secondary">{t("alerts.soundHint")}</p>
+        </div>
+        <Switch
+          id="alert-sound"
+          checked={sound}
+          disabled={pending}
+          onCheckedChange={(on) => {
+            setSound(on);
+            save({ alert_sound: on }, () => setSound(!on));
+          }}
+        />
+      </div>
+    </Section>
+  );
+}
+
+/** Everyone, for themselves: name, interface language, password; and for the owner and managers, lead alerts. */
+export function ProfileTab({ profile, alerts }: { profile: Profile; alerts: AlertSettings | null }) {
   const t = useTranslations("settings");
   const tLanguage = useTranslations("language");
   const tCommon = useTranslations("common");
@@ -138,6 +219,7 @@ export function ProfileTab({ profile }: { profile: Profile }) {
         </Button>
       </form>
       <PasswordForm />
+      {alerts ? <LeadAlerts alerts={alerts} /> : null}
     </div>
   );
 }

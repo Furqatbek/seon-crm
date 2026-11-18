@@ -40,6 +40,8 @@ test("the reminders job needs the cron secret", async ({ request }) => {
     idle: "reminders_off",
     // The points messages ride on the same run and stop with the same switch.
     points: { sent: 0, failed: 0, duplicate: 0, idle: "reminders_off" },
+    // Alerts to staff about leads in the shared inbox do not depend on that switch.
+    staff: { alerts: expect.any(Number), reminders: expect.any(Number), failed: expect.any(Number) },
   });
 });
 

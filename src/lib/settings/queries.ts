@@ -161,3 +161,23 @@ export async function getRooms(): Promise<RoomRow[]> {
     }))
     .sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
 }
+
+/** A person's own lead alerts: their Telegram link and the two switches. Null for a teacher, or before the inbox migration. */
+export type AlertSettings = { linkUrl: string | null; linked: boolean; alertsOn: boolean; alertSound: boolean };
+
+export async function getAlertSettings(user: { id: string }): Promise<AlertSettings | null> {
+  const supabase = await db();
+  const [link, switches, centre] = await Promise.all([
+    supabase.rpc("my_telegram_link").maybeSingle(),
+    supabase.from("profiles").select("alerts_on, alert_sound").eq("id", user.id).maybeSingle(),
+    supabase.from("centre_settings").select("telegram_bot_username").maybeSingle(),
+  ]);
+  if (link.error || switches.error || !link.data || !switches.data) return null;
+  const bot = centre.data?.telegram_bot_username;
+  return {
+    linkUrl: bot ? `https://t.me/${bot}?start=u_${link.data.code}` : null,
+    linked: link.data.linked,
+    alertsOn: switches.data.alerts_on,
+    alertSound: switches.data.alert_sound,
+  };
+}

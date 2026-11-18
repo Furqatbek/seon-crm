@@ -11,6 +11,7 @@ import type { BotTop, PointsSummary } from "./points-data";
 import type { Chats, DeductionEvent, PointsMessageData, RewardEvent } from "./points-messages";
 import type { LessonCandidate, NotifySettings, ReminderData, Template } from "./reminders";
 import type { ChatLink } from "./rules";
+import type { InboxLead, StaffAlertData, StaffBotStore, StaffLanguage } from "./staff-alerts";
 import { TelegramProvider } from "./telegram";
 import type { Language, LinkRole, Providers } from "./types";
 
@@ -44,6 +45,8 @@ export function messageLog(writer: Db, admin: Db): MessageLog {
         .from("messages")
         .insert({
           student_id: message.studentId,
+          staff_id: message.staffId ?? null,
+          lead_id: message.leadId ?? null,
           type: message.type,
           channel: message.channel,
           recipient: message.recipient,
@@ -347,6 +350,101 @@ export function pointsMessageData(admin: Db): PointsMessageData {
         }
       }
       return events;
+    },
+  };
+}
+
+// ── Staff alerts about leads in the shared inbox (staff-alerts.ts) ──
+
+const staffLanguage = (value: string | null | undefined): StaffLanguage =>
+  value === "ru" || value === "en" || value === "ko" ? value : "uz";
+
+/** What the staff-alert run reads, with the service role. */
+export function staffAlertData(admin: Db): StaffAlertData {
+  return {
+    async quietHours() {
+      const { data, error } = await admin.from("centre_settings").select("quiet_from, quiet_to").single();
+      if (error) throw new Error(error.message);
+      return { from: data.quiet_from.slice(0, 5), to: data.quiet_to.slice(0, 5) };
+    },
+    async inboxLeads(since) {
+      const { data, error } = await admin.rpc("lead_inbox");
+      if (error) throw new Error(error.message);
+      return (data ?? [])
+        .filter((row) => row.inbox_since >= since.toISOString())
+        .map(
+          (row): InboxLead => ({
+            id: row.id,
+            fullName: row.full_name,
+            phone: row.phone,
+            formName: row.form_name,
+            answers: Array.isArray(row.answers) ? (row.answers as Array<{ label: string; value: string | boolean }>) : [],
+            inboxSince: row.inbox_since,
+          }),
+        );
+    },
+    async recipients() {
+      const { data, error } = await admin
+        .from("profiles")
+        .select("id, language, telegram_chat_id")
+        .eq("is_active", true)
+        .eq("alerts_on", true)
+        .in("role", ["owner", "manager"])
+        .not("telegram_chat_id", "is", null);
+      if (error) throw new Error(error.message);
+      return data.map((row) => ({ id: row.id, chatId: row.telegram_chat_id as number, language: staffLanguage(row.language) }));
+    },
+  };
+}
+
+/** The staff side of the bot: linking with u_<code>, and the Take button. */
+export function staffBotStore(admin: Db): StaffBotStore {
+  return {
+    async linkStaff(code, chatId) {
+      const person = await admin
+        .from("profiles")
+        .select("id, full_name, language")
+        .eq("staff_link_code", code)
+        .eq("is_active", true)
+        .in("role", ["owner", "manager"])
+        .maybeSingle();
+      if (person.error) throw new Error(person.error.message);
+      if (!person.data) return null;
+      // One chat alerts one person: it leaves whoever had it before.
+      const freed = await admin.from("profiles").update({ telegram_chat_id: null }).eq("telegram_chat_id", chatId).neq("id", person.data.id);
+      if (freed.error) throw new Error(freed.error.message);
+      const linked = await admin.from("profiles").update({ telegram_chat_id: chatId }).eq("id", person.data.id);
+      if (linked.error) throw new Error(linked.error.message);
+      return { fullName: person.data.full_name, language: staffLanguage(person.data.language) };
+    },
+    async unlinkStaff(chatId) {
+      const { data, error } = await admin.from("profiles").update({ telegram_chat_id: null }).eq("telegram_chat_id", chatId).select("id");
+      if (error) throw new Error(error.message);
+      return data.length;
+    },
+    async staffByChat(chatId) {
+      const { data, error } = await admin
+        .from("profiles")
+        .select("id, full_name, language")
+        .eq("telegram_chat_id", chatId)
+        .eq("is_active", true)
+        .in("role", ["owner", "manager"])
+        .maybeSingle();
+      if (error) throw new Error(error.message);
+      return data ? { id: data.id, fullName: data.full_name, language: staffLanguage(data.language) } : null;
+    },
+    async takeLead(leadId, staffId) {
+      const { data, error } = await admin.rpc("take_lead", { p_lead_id: leadId, p_for: staffId });
+      if (error) {
+        if (error.code === "P0002") return null;
+        throw new Error(error.message);
+      }
+      const row = data?.[0];
+      if (!row) return null;
+      if (!row.taken) return { taken: false, by: row.assigned_name };
+      const lead = await admin.from("leads").select("full_name, phone").eq("id", leadId).single();
+      if (lead.error) throw new Error(lead.error.message);
+      return { taken: true, lead: { fullName: lead.data.full_name, phone: lead.data.phone } };
     },
   };
 }

@@ -21,6 +21,9 @@ import { countFormView, getPublicForm, type PublicForm } from "@/lib/forms/publi
 import { submitIntake } from "@/lib/intake/intake";
 import { supabaseIntakeStore } from "@/lib/intake/store";
 import { HONEYPOT_FIELD, TOKEN_FIELD, issueToken } from "@/lib/intake/trap";
+import { staffBotTexts } from "@/lib/notify/bot-texts";
+import { runStaffAlerts } from "@/lib/notify/staff-alerts";
+import { getProviders, messageLog, staffAlertData } from "@/lib/notify/store";
 import { isAnswered } from "@/lib/intake/validator";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -159,6 +162,19 @@ export async function POST(request: NextRequest, { params }: Context) {
   );
 
   if (result.status === "accepted") {
+    // A lead entered the shared inbox: staff hear about it on Telegram at once
+    // (unless it is night; then the job announces it in the morning).
+    if (result.outcome !== "spam") {
+      after(() =>
+        runStaffAlerts(new Date(), {
+          data: staffAlertData(db),
+          log: messageLog(db, db),
+          telegram: getProviders().telegram,
+          texts: staffBotTexts,
+          appUrl: process.env.APP_URL?.replace(/\/$/, "") ?? null,
+        }).catch((error) => console.error("staff alerts", error)),
+      );
+    }
     const { after_submit: afterSubmit } = form.document;
     const location =
       afterSubmit.mode === "redirect" && isHttpUrl(afterSubmit.url) ? afterSubmit.url : `/${slug}?lang=${language}&done=1${embed ? "&embed=1" : ""}`;
