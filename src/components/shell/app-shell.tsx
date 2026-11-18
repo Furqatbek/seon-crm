@@ -35,14 +35,14 @@ function NavLink({
       className={cn(
         "flex h-control items-center gap-3 rounded-control px-3 text-body outline-none motion-fast pointer-coarse:h-control-touch focus-visible:ring-3 focus-visible:ring-focus-ring",
         active
-          ? "bg-purple-tint font-medium text-purple"
+          ? "bg-brand-tint font-medium text-brand-ink"
           : "text-text hover:bg-border [&>svg]:text-text-secondary",
       )}
     >
       <Icon aria-hidden />
       <span className="truncate">{t(block.key)}</span>
       {count ? (
-        <span className="ml-auto rounded-full bg-purple px-1.5 text-caption font-medium text-bg numeric" data-nav-count={count}>
+        <span className="ml-auto rounded-full bg-brand px-1.5 text-caption font-medium text-on-brand numeric" data-nav-count={count}>
           <span className="sr-only">{t("openRequests")} </span>
           {count}
         </span>
@@ -71,7 +71,11 @@ function SidebarContent({
     matches(block) && !blocks.some((other) => other.href.length > block.href.length && matches(other));
 
   return (
-    <div className="flex h-full flex-col">
+    // The centre's mark sits in the middle of the panel, behind the menu.
+    <div
+      data-slot="sidebar"
+      className="flex h-full flex-col bg-[url(/brand/seon-topik.png)] bg-[length:11rem_auto] bg-center bg-no-repeat"
+    >
       <div className="flex h-14 shrink-0 items-center px-5">
         <span className="truncate text-headline text-text" data-slot="centre-name">
           {centreName}

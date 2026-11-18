@@ -125,7 +125,7 @@ export async function getAllTemplates(): Promise<Template[]> {
   return getTemplates(await db());
 }
 
-export type Profile = { fullName: string; language: "uz" | "ru" | "en"; email: string };
+export type Profile = { fullName: string; language: "uz" | "ru" | "en" | "ko"; email: string };
 
 export async function getProfile(user: { id: string; email: string }): Promise<Profile> {
   const supabase = await db();

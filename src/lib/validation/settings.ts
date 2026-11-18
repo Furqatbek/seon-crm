@@ -38,6 +38,8 @@ export const MESSAGE_TYPES = [
 export const TELEGRAM_ONLY_TYPES: readonly string[] = ["points_weekly", "points_deduction", "points_month_result", "reward_update"];
 export const MESSAGE_CHANNELS = ["telegram", "sms"] as const;
 export const TEMPLATE_LANGUAGES = LANGUAGES;
+/** The languages the interface comes in. Messages to families stay in LANGUAGES. */
+export const UI_LANGUAGES = [...LANGUAGES, "ko"] as const;
 
 const name = z.string().trim().min(1, "nameRequired").max(100, "tooLong");
 /** A day of the month every month has: 1–28. */
@@ -71,7 +73,7 @@ export const inviteSchema = z
     email: z.email("emailInvalid").max(200, "tooLong"),
     full_name: name,
     ...roleFields,
-    language: z.enum(LANGUAGES),
+    language: z.enum(UI_LANGUAGES),
   })
   .superRefine(teacherLink)
   .transform(withTeacher);
@@ -109,7 +111,7 @@ export const templateSchema = z
   });
 
 /** Profile: name and interface language. */
-export const profileSchema = z.object({ full_name: name, language: z.enum(LANGUAGES) });
+export const profileSchema = z.object({ full_name: name, language: z.enum(UI_LANGUAGES) });
 export type ProfileInput = z.input<typeof profileSchema>;
 
 export const passwordSchema = resetPasswordSchema;

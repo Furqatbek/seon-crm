@@ -176,7 +176,7 @@ export function ChargesTab({
                     {row.student ? (
                       <Link
                         href={`/students/${row.student.id}?tab=ledger`}
-                        className="rounded-inner font-medium whitespace-nowrap outline-none hover:text-purple focus-visible:ring-3 focus-visible:ring-focus-ring"
+                        className="rounded-inner font-medium whitespace-nowrap outline-none hover:text-brand-ink focus-visible:ring-3 focus-visible:ring-focus-ring"
                       >
                         {row.student.full_name}
                       </Link>

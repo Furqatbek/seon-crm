@@ -26,7 +26,7 @@ export function GroupTrialsTab({ visitors }: { visitors: TrialVisitor[] }) {
             <span className="flex min-w-0 flex-col">
               <Link
                 href={`/leads?lead=${lead.id}`}
-                className="truncate rounded-inner text-body font-medium text-purple outline-none hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
+                className="truncate rounded-inner text-body font-medium text-brand-ink outline-none hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
               >
                 {lead.full_name}
               </Link>

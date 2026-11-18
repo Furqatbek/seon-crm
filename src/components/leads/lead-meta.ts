@@ -15,7 +15,7 @@ import type { LeadSource, LeadStatus } from "@/lib/domain/leads";
 export const STATUS_TONE: Record<LeadStatus, BadgeTone> = {
   new: "neutral",
   contacted: "neutral",
-  trial: "purple",
+  trial: "brand",
   won: "success",
   lost: "danger",
 };

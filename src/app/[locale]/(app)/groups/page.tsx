@@ -43,7 +43,7 @@ async function Groups({ searchParams }: { searchParams: SearchParams }) {
       lesson={lesson}
       lessonLock={
         lesson
-          ? attendanceLock({ lessonDate: lesson.lesson_date, status: lesson.status, today, role: user.role })
+          ? attendanceLock({ lessonDate: lesson.lesson_date, status: lesson.status, today })
           : null
       }
     />

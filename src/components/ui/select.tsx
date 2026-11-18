@@ -74,7 +74,7 @@ function SelectItem({
     >
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator>
-        <Check className="text-purple" aria-hidden />
+        <Check className="text-brand-ink" aria-hidden />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );

@@ -15,7 +15,7 @@ const ROW = 34;
 const rowsHeight = (count: number) => count * ROW + 12;
 const NAME_AXIS = 132;
 
-// Purple for the main series, dark grey for the comparison, greys after that.
+// The brand orange for the main series, dark grey for the comparison, greys after that.
 const SOURCE_COLOR: Record<PointsSource, string> = {
   attendance: SERIES.main,
   teacher_award: SERIES.comparison,

@@ -9,14 +9,14 @@ export function initials(name: string): string {
     .toUpperCase();
 }
 
-/** Initials on the purple tint. Decorative: the name is always shown next to it. */
+/** Initials on the brand tint. Decorative: the name is always shown next to it. */
 function Avatar({ name, className }: { name: string; className?: string }) {
   return (
     <span
       data-slot="avatar"
       aria-hidden
       className={cn(
-        "inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-purple-tint text-caption text-purple select-none",
+        "inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-tint text-caption text-brand-ink select-none",
         className,
       )}
     >

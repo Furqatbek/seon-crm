@@ -293,9 +293,9 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
     });
 
     const oldMark = `select a.lesson_id, a.student_id from attendance a join lessons l on l.id = a.lesson_id
-                     where l.lesson_date < ${today} - 7 order by l.lesson_date limit 1`;
+                     where l.lesson_date < ${today} order by l.lesson_date desc limit 1`;
 
-    it("manager cannot change or add attendance older than 7 days; owner can", async () => {
+    it("nobody changes or adds attendance for a past day, not even yesterday and not the owner", async () => {
       await as("manager", async (s) => {
         // The row is visible to read but not to update.
         expect((await s.rows(oldMark)).length).toBe(1);
@@ -310,21 +310,22 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         s.attempt(
           `insert into attendance (lesson_id, student_id, status, marked_by)
            select l.id, $1, 'present', auth.uid() from lessons l
-           where l.lesson_date < ${today} - 7 and l.status = 'held' order by l.lesson_date limit 1`,
+           where l.lesson_date < ${today} and l.status = 'held' order by l.lesson_date desc limit 1`,
           [studentId(80)],
         );
       // Student 80 is not in that group, so no mark exists yet.
       const cleared = (a: Session) => a.rows(`delete from attendance where student_id = $1`, [studentId(80)]).then(() => {});
       denied(await as("manager", addOld, cleared));
-      allowed(await as("owner", addOld, cleared));
-      allowed(
-        await as("owner", (s) =>
-          s.attempt(
+      denied(await as("owner", addOld, cleared));
+      await as("owner", async (s) => {
+        expect((await s.rows(oldMark)).length).toBe(1);
+        noEffect(
+          await s.attempt(
             `update attendance set status = 'absent', marked_by = auth.uid()
              where (lesson_id, student_id) in (${oldMark})`,
           ),
-        ),
-      );
+        );
+      });
     });
 
     it("attendance cannot be marked in someone else's name", async () => {

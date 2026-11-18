@@ -10,6 +10,6 @@ export const LESSON_TONE: Record<Enums<"lesson_status">, BadgeTone> = {
 
 export const RATE_TONE: Record<RateStatus, BadgeTone> = {
   current: "success",
-  upcoming: "purple",
+  upcoming: "brand",
   past: "neutral",
 };

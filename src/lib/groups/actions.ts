@@ -33,6 +33,7 @@ const ERRORS: Record<string, GroupErrorKey> = {
   EC004: "lessonFuture",
   EC005: "notInGroup",
   EC006: "sameGroup",
+  EC007: "attendanceLocked",
   // EM… are raised by supabase/migrations/20261116100000_rooms.sql.
   EM001: "roomClash",
   EM002: "capacityOverRoom",

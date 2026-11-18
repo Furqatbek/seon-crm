@@ -79,6 +79,8 @@ test("generate a month, take a payment, and the balance and debtors follow", asy
   // The seed has this month's rent, so Expenses is never empty.
   expect(await kpi(page, "expenses")).toBeGreaterThan(0);
   const collectedBefore = await kpi(page, "collected");
+  // The month's fees split exactly into paid and still unpaid.
+  expect((await kpi(page, "paid")) + (await kpi(page, "unpaid"))).toBe(await kpi(page, "billed"));
   await page.waitForLoadState("networkidle");
   await page.screenshot({ path: testInfo.outputPath("charges.png") });
 

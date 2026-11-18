@@ -160,7 +160,7 @@ async function Group({ params, searchParams }: Props) {
       lesson={lesson?.group.id === group.id ? lesson : null}
       lessonLock={
         lesson
-          ? attendanceLock({ lessonDate: lesson.lesson_date, status: lesson.status, today, role: user.role })
+          ? attendanceLock({ lessonDate: lesson.lesson_date, status: lesson.status, today })
           : null
       }
     >

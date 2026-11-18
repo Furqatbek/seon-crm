@@ -47,7 +47,7 @@ import { inviteUser, setUserActive, setUserRole } from "@/lib/settings/actions";
 import type { TeacherOption, UserRow } from "@/lib/settings/queries";
 import {
   LOGIN_ROLES,
-  TEMPLATE_LANGUAGES,
+  UI_LANGUAGES,
   inviteSchema,
   type InviteInput,
   type LoginRole,
@@ -192,7 +192,7 @@ function InviteForm({
                   <SelectValue>{tLanguage(field.value)}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  {TEMPLATE_LANGUAGES.map((code) => (
+                  {UI_LANGUAGES.map((code) => (
                     <SelectItem key={code} value={code}>
                       {tLanguage(code)}
                     </SelectItem>

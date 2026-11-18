@@ -31,14 +31,14 @@ function Rows({ rows, large }: { rows: TvRow[]; large: boolean }) {
             className={cn(
               "flex items-center gap-8 rounded-card px-10",
               large ? "h-[120px]" : "h-[68px]",
-              first ? "bg-purple-tint" : "bg-bg-subtle",
+              first ? "bg-brand-tint" : "bg-bg-subtle",
             )}
           >
             <span
               className={cn(
                 "w-20 shrink-0 text-center font-semibold numeric",
                 large ? "text-[56px]" : "text-[40px]",
-                first ? "text-purple" : "text-text-secondary",
+                first ? "text-brand-ink" : "text-text-secondary",
               )}
             >
               {row.rank}
@@ -46,7 +46,7 @@ function Rows({ rows, large }: { rows: TvRow[]; large: boolean }) {
             <span className={cn("min-w-0 flex-1 truncate font-medium text-text", large ? "text-[56px]" : "text-[40px]")}>
               {row.name}
             </span>
-            <span className={cn("shrink-0 font-semibold numeric", large ? "text-[56px]" : "text-[40px]", first ? "text-purple" : "text-text")}>
+            <span className={cn("shrink-0 font-semibold numeric", large ? "text-[56px]" : "text-[40px]", first ? "text-brand-ink" : "text-text")}>
               {row.points}
             </span>
           </li>
@@ -58,7 +58,7 @@ function Rows({ rows, large }: { rows: TvRow[]; large: boolean }) {
 
 /**
  * Full screen at 1920 × 1080, always light: the centre's top 10 this month,
- * then each group's top 5, one board at a time. Purple marks only first place.
+ * then each group's top 5, one board at a time. The brand orange marks only first place.
  */
 export function TvScreen({ board, updatedAt }: { board: TvBoard; updatedAt: string }) {
   const t = useTranslations("tv");

@@ -14,7 +14,19 @@ async function db() {
   return supabase;
 }
 
-export type MonthSummary = { collected: number; billed: number; debt: number; expenses: number };
+export type MonthSummary = {
+  /** The month's fees, credits taken off. Always paid + unpaid. */
+  billed: number;
+  /** How much of the month's fees has been paid, up to today. */
+  paid: number;
+  /** How much of the month's fees is still owed. */
+  unpaid: number;
+  /** Money received during the month, whatever it paid for. */
+  collected: number;
+  /** Everything owed today, over all months. */
+  debt: number;
+  expenses: number;
+};
 
 /** Owner only: the database refuses anyone else. */
 export async function getMonthSummary(month: string): Promise<MonthSummary> {

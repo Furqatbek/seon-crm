@@ -102,7 +102,7 @@ export function DebtorsTab({ rows, total, page }: { rows: DebtorRow[]; total: nu
               <TableCell>
                 <Link
                   href={`/students/${row.id}`}
-                  className="rounded-inner font-medium whitespace-nowrap outline-none hover:text-purple focus-visible:ring-3 focus-visible:ring-focus-ring"
+                  className="rounded-inner font-medium whitespace-nowrap outline-none hover:text-brand-ink focus-visible:ring-3 focus-visible:ring-focus-ring"
                 >
                   {row.full_name}
                 </Link>

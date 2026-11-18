@@ -47,7 +47,7 @@ export function BoardPeriodControl({
 }
 
 /**
- * A ranked list: place, name, points. Ties share a place. Purple marks only
+ * A ranked list: place, name, points. Ties share a place. The brand orange marks only
  * first place. Staff get links to the students and see who is hidden from the
  * TV; a teacher gets names only.
  */
@@ -71,7 +71,7 @@ export function Leaderboard({ rows, staff }: { rows: BoardRow[]; staff: boolean 
             <span
               className={cn(
                 "w-8 shrink-0 text-center numeric",
-                placed && row.rank === 1 ? "font-semibold text-purple" : "text-text-secondary",
+                placed && row.rank === 1 ? "font-semibold text-brand-ink" : "text-text-secondary",
               )}
             >
               <span className="sr-only">{t("place")} </span>

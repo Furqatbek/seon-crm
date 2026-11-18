@@ -30,7 +30,7 @@ function Detail({ label, children }: { label: string; children: React.ReactNode 
 }
 
 const phoneLink =
-  "rounded-inner text-purple outline-none numeric hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring";
+  "rounded-inner text-brand-ink outline-none numeric hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring";
 
 /** One Telegram link, the student's own or the parent's, with Copy and a QR code. */
 function TelegramLinkCard({
@@ -68,7 +68,7 @@ function TelegramLinkCard({
         target="_blank"
         rel="noreferrer"
         data-telegram-link={role}
-        className="rounded-inner text-body break-all text-purple outline-none hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
+        className="rounded-inner text-body break-all text-brand-ink outline-none hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
       >
         {url}
       </a>
@@ -158,7 +158,7 @@ export function OverviewTab({
             <Detail label={t("fields.lead")}>
               <Link
                 href={`/leads?lead=${student.lead_id}`}
-                className="rounded-inner text-purple outline-none hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
+                className="rounded-inner text-brand-ink outline-none hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
               >
                 {t("openLead")}
               </Link>

@@ -46,7 +46,7 @@ function TableRow({
       data-slot="table-row"
       data-selected={selected ? "true" : undefined}
       className={cn(
-        "motion-fast data-selected:[&>td]:bg-purple-tint [tbody>&:hover>td]:bg-bg-subtle [tbody>&[data-selected=true]:hover>td]:bg-purple-tint",
+        "motion-fast data-selected:[&>td]:bg-brand-tint [tbody>&:hover>td]:bg-bg-subtle [tbody>&[data-selected=true]:hover>td]:bg-brand-tint",
         props.onClick && "cursor-pointer",
         className,
       )}

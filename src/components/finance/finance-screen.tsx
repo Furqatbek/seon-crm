@@ -82,27 +82,42 @@ export function FinanceScreen({
       </PageHeader>
 
       {role === "owner" && summary ? (
-        <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-slot="month-strip">
-          <KpiCard label={t("strip.collected")}>
-            <span data-kpi="collected" data-value={summary.collected}>
-              <MoneyText amount={summary.collected} />
-            </span>
-          </KpiCard>
-          <KpiCard label={t("strip.billed")}>
-            <span data-kpi="billed" data-value={summary.billed}>
-              <MoneyText amount={summary.billed} />
-            </span>
-          </KpiCard>
-          <KpiCard label={t("strip.debt")}>
-            <span data-kpi="debt" data-value={summary.debt}>
-              <MoneyText amount={summary.debt} className={summary.debt > 0 ? "text-danger" : undefined} />
-            </span>
-          </KpiCard>
-          <KpiCard label={t("strip.expenses")}>
-            <span data-kpi="expenses" data-value={summary.expenses}>
-              <MoneyText amount={summary.expenses} />
-            </span>
-          </KpiCard>
+        <div className="mb-6 flex flex-col gap-2" data-slot="month-strip">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <KpiCard label={t("strip.billed")}>
+              <span data-kpi="billed" data-value={summary.billed}>
+                <MoneyText amount={summary.billed} />
+              </span>
+            </KpiCard>
+            <KpiCard label={t("strip.paid")}>
+              <span data-kpi="paid" data-value={summary.paid}>
+                <MoneyText amount={summary.paid} className={summary.paid > 0 ? "text-success" : undefined} />
+              </span>
+            </KpiCard>
+            <KpiCard label={t("strip.unpaid")}>
+              <span data-kpi="unpaid" data-value={summary.unpaid}>
+                <MoneyText amount={summary.unpaid} className={summary.unpaid > 0 ? "text-danger" : undefined} />
+              </span>
+            </KpiCard>
+          </div>
+          <p className="mb-2 text-footnote text-text-secondary">{t("strip.rule")}</p>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <KpiCard label={t("strip.collected")}>
+              <span data-kpi="collected" data-value={summary.collected}>
+                <MoneyText amount={summary.collected} />
+              </span>
+            </KpiCard>
+            <KpiCard label={t("strip.debt")}>
+              <span data-kpi="debt" data-value={summary.debt}>
+                <MoneyText amount={summary.debt} className={summary.debt > 0 ? "text-danger" : undefined} />
+              </span>
+            </KpiCard>
+            <KpiCard label={t("strip.expenses")}>
+              <span data-kpi="expenses" data-value={summary.expenses}>
+                <MoneyText amount={summary.expenses} />
+              </span>
+            </KpiCard>
+          </div>
         </div>
       ) : null}
 

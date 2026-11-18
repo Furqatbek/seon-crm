@@ -60,7 +60,8 @@
     "label": "Til",
     "uz": "Oʻzbekcha",
     "ru": "Русский",
-    "en": "English"
+    "en": "English",
+    "ko": "한국어"
   },
   "theme": {
     "label": "Mavzu",
@@ -529,7 +530,7 @@
       "locked": {
         "cancelled": "Bu dars bekor qilingan. Davomatni belgilash uchun uni tiklang.",
         "future": "Bu dars hali oʻtmagan.",
-        "tooOld": "Bu darsga 7 kundan koʻp boʻldi. Davomatni faqat rahbar oʻzgartira oladi."
+        "tooOld": "Bu dars boshqa kuni boʻlgan. Davomat dars kuni belgilanadi."
       },
       "mark": {
         "present": "Keldi",
@@ -656,7 +657,7 @@
       "lessonFuture": "Bu dars hali oʻtmagan.",
       "notInGroup": "Oʻquvchi bu kuni guruhda emas.",
       "sameGroup": "Oʻquvchi allaqachon bu guruhda.",
-      "attendanceLocked": "Bu darsga 7 kundan koʻp boʻldi. Davomatni faqat rahbar oʻzgartira oladi.",
+      "attendanceLocked": "Davomat dars kuni belgilanadi, bu kun esa oʻtib ketgan.",
       "notFound": "Bu endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
@@ -676,9 +677,12 @@
       "adjustments": "Tuzatishlar"
     },
     "strip": {
-      "collected": "Yigʻilgan",
-      "billed": "Hisoblangan",
-      "debt": "Bugungi qarz",
+      "billed": "Oy uchun hisoblangan",
+      "paid": "Shundan toʻlangan",
+      "unpaid": "Shundan toʻlanmagan",
+      "rule": "Hisoblangan = toʻlangan + toʻlanmagan. Quyidagi raqamlar alohida: tushum — oy davomida qabul qilingan barcha pul, boshqa oylar uchun ham; qarz — bugungi kundagi jami qarz.",
+      "collected": "Oy davomida tushgan pul",
+      "debt": "Bugungi qarz, barcha oylar",
       "expenses": "Xarajatlar"
     },
     "method": {

@@ -2,7 +2,7 @@
  * Design tokens — docs/SPEC.md → "Design system".
  * The only place colours, radii, shadows and motion values are defined.
  * Everything below is exposed to Tailwind through @theme, e.g.
- * bg-bg-subtle, text-text-secondary, bg-purple, rounded-card, shadow-float.
+ * bg-bg-subtle, text-text-secondary, bg-brand, rounded-card, shadow-float.
  */
 
 :root {
@@ -14,19 +14,25 @@
   --text-tertiary: #86868b;
   --border: #e5e5ea;
   --border-strong: #d2d2d7;
-  --purple: #6236c9;
-  --purple-hover: #5b2bc4;
-  --purple-pressed: #4e22a8;
-  --purple-tint: #f3eefc;
-  --success: #0e7a3e;
-  --warning: #a35200;
-  --danger: #c62828;
+  /* Brand: the orange of the SEON TOPIK mark. "brand" fills (buttons, the
+     active tick, chart bars) and carries dark text, "on-brand"; "brand-ink"
+     is the darker orange for text and icons on a light surface. */
+  --brand: #f7941d;
+  --brand-hover: #ee8a10;
+  --brand-pressed: #dc7c08;
+  --brand-tint: #fff0dc;
+  --brand-ink: #a34a05;
+  --brand-ink-hover: #863c03;
+  --on-brand: #1d1d1f;
+  --success: #0a7d3c;
+  --warning: #8a5a00;
+  --danger: #c81e1e;
 
   /* Derived colour: status tints at 10 %, focus ring at 30 %, scrim behind sheets */
-  --success-tint: color-mix(in srgb, var(--success) 10%, transparent);
-  --warning-tint: color-mix(in srgb, var(--warning) 10%, transparent);
-  --danger-tint: color-mix(in srgb, var(--danger) 10%, transparent);
-  --focus-ring: color-mix(in srgb, var(--purple) 30%, transparent);
+  --success-tint: color-mix(in srgb, var(--success) 14%, transparent);
+  --warning-tint: color-mix(in srgb, #f5b301 26%, transparent);
+  --danger-tint: color-mix(in srgb, var(--danger) 12%, transparent);
+  --focus-ring: color-mix(in srgb, var(--brand) 45%, transparent);
   --danger-ring: color-mix(in srgb, var(--danger) 30%, transparent);
   --scrim: color-mix(in srgb, var(--text) 25%, transparent);
 
@@ -70,8 +76,8 @@
  * by the script in the root layout). A browser without light-dark() keeps
  * the light values above.
  *
- * In the dark a filled button is a light purple with dark text (text-bg on
- * bg-purple), so the same classes hold their contrast in both themes.
+ * A filled button is the brand orange with dark text (text-on-brand on
+ * bg-brand) in both themes, so it keeps its contrast in each.
  */
 @supports (color: light-dark(#000, #fff)) {
   :root {
@@ -83,13 +89,15 @@
     --text-tertiary: light-dark(#86868b, #7c7c82);
     --border: light-dark(#e5e5ea, #2b2b30);
     --border-strong: light-dark(#d2d2d7, #3e3e45);
-    --purple: light-dark(#6236c9, #a78bfa);
-    --purple-hover: light-dark(#5b2bc4, #b8a1fb);
-    --purple-pressed: light-dark(#4e22a8, #9373f5);
-    --purple-tint: light-dark(#f3eefc, #2a2244);
-    --success: light-dark(#0e7a3e, #4cc38a);
-    --warning: light-dark(#a35200, #f0a04b);
-    --danger: light-dark(#c62828, #ff6b6b);
+    --brand: light-dark(#f7941d, #f9a33b);
+    --brand-hover: light-dark(#ee8a10, #fbb158);
+    --brand-pressed: light-dark(#dc7c08, #f0921f);
+    --brand-tint: light-dark(#fff0dc, #3a2710);
+    --brand-ink: light-dark(#a34a05, #ffb866);
+    --brand-ink-hover: light-dark(#863c03, #ffc98a);
+    --success: light-dark(#0a7d3c, #4cc38a);
+    --warning: light-dark(#8a5a00, #f5c451);
+    --danger: light-dark(#c81e1e, #ff6b6b);
     --scrim: light-dark(rgba(29, 29, 31, 0.25), rgba(0, 0, 0, 0.6));
     --shadow-float: 0 8px 30px light-dark(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.5));
   }
@@ -120,10 +128,13 @@
   --color-text-tertiary: var(--text-tertiary);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
-  --color-purple: var(--purple);
-  --color-purple-hover: var(--purple-hover);
-  --color-purple-pressed: var(--purple-pressed);
-  --color-purple-tint: var(--purple-tint);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-pressed: var(--brand-pressed);
+  --color-brand-tint: var(--brand-tint);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-ink-hover: var(--brand-ink-hover);
+  --color-on-brand: var(--on-brand);
   --color-success: var(--success);
   --color-success-tint: var(--success-tint);
   --color-warning: var(--warning);

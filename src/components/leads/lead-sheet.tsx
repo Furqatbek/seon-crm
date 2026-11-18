@@ -227,7 +227,7 @@ export function LeadSheet({
                     </StatusPill>
                     <a
                       href={`tel:${lead.phone}`}
-                      className="rounded-inner text-body text-purple outline-none numeric hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
+                      className="rounded-inner text-body text-brand-ink outline-none numeric hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
                     >
                       {formatPhone(lead.phone)}
                     </a>

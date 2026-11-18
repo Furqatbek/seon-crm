@@ -31,6 +31,7 @@ import { giveCoins } from "@/lib/coins/actions";
 import type { CoinRow } from "@/lib/coins/queries";
 import { ATTENDANCE_STATUSES, type AttendanceStatus } from "@/lib/domain/attendance";
 import { roomLabel } from "@/lib/domain/rooms";
+import { useInstantClose } from "@/lib/hooks/use-instant-close";
 import { formatDay } from "@/lib/format";
 import type { BoardRow, PointPreset } from "@/lib/points/queries";
 import { saveMyAttendance } from "@/lib/teacher/actions";
@@ -90,7 +91,7 @@ function AttendanceForm({
       <SheetBody className="gap-0 pb-6">
         {locked ? (
           <p className="mb-3 rounded-control bg-bg-subtle px-3 py-2 text-footnote text-text-secondary">
-            {lesson.status === "cancelled" ? tMine("lessonCancelled") : t("lesson.locked.future")}
+            {lesson.status === "cancelled" ? tMine("lessonCancelled") : t("lesson.locked.tooOld")}
           </p>
         ) : null}
         {lesson.students.length === 0 ? (
@@ -255,7 +256,8 @@ export function MyGroupScreen({
   const router = useRouter();
   const pathname = usePathname();
   const [giving, setGiving] = useState<CoinRow | null>(null);
-  const closeLesson = () => router.replace(pathname, { scroll: false });
+  const lessonSheet = useInstantClose(lesson?.id ?? null, () => router.replace(pathname, { scroll: false }));
+  const closeLesson = lessonSheet.close;
 
   return (
     <>
@@ -293,7 +295,7 @@ export function MyGroupScreen({
                   <span className="text-body font-medium whitespace-nowrap text-text numeric">
                     {formatDay(row.lesson_date, locale, { month: "long" })} · {hhmm(row.start_time)}
                   </span>
-                  {row.lesson_date === today ? <StatusPill tone="purple">{t("today")}</StatusPill> : null}
+                  {row.lesson_date === today ? <StatusPill tone="brand">{t("today")}</StatusPill> : null}
                   <StatusPill tone={LESSON_TONE[row.status]}>{tGroups(`lesson.statuses.${row.status}`)}</StatusPill>
                 </span>
                 {row.can_mark ? (
@@ -366,7 +368,7 @@ export function MyGroupScreen({
         )}
       </section>
 
-      <Sheet open={lesson !== null} onOpenChange={(open) => !open && closeLesson()}>
+      <Sheet open={lessonSheet.open} onOpenChange={(open) => !open && closeLesson()}>
         <SheetContent>
           {lesson ? (
             <>

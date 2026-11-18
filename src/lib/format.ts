@@ -10,7 +10,7 @@ function groupDigits(digits: string, separator: string): string {
  * Formats whole soʻm for display. Money is never a float: a number that is
  * not a safe integer throws instead of being rounded silently.
  *
- *   uz "1 250 000 soʻm" · ru "1 250 000 сум" · en "UZS 1,250,000"
+ *   uz "1 250 000 soʻm" · ru "1 250 000 сум" · en "UZS 1,250,000" · ko "1,250,000숨"
  */
 export function formatMoney(amount: bigint | number, locale: Locale): string {
   if (typeof amount === "number" && !Number.isSafeInteger(amount)) {
@@ -28,6 +28,8 @@ export function formatMoney(amount: bigint | number, locale: Locale): string {
       return `${sign}${groupDigits(digits, " ")} сум`;
     case "uz":
       return `${sign}${groupDigits(digits, " ")} soʻm`;
+    case "ko":
+      return `${sign}${groupDigits(digits, ",")}숨`;
   }
 }
 
@@ -35,6 +37,7 @@ const AXIS_UNITS: Record<Locale, { million: string; thousand: string }> = {
   en: { million: "M", thousand: "K" },
   ru: { million: " млн", thousand: " тыс." },
   uz: { million: " mln", thousand: " ming" },
+  ko: { million: "백만", thousand: "천" },
 };
 
 /**
@@ -47,7 +50,7 @@ export function formatMoneyAxis(amount: number, locale: Locale): string {
   const sign = amount < 0 ? MINUS : "";
   const value = Math.abs(amount);
   const units = AXIS_UNITS[locale];
-  const decimal = locale === "en" ? "." : ",";
+  const decimal = locale === "en" || locale === "ko" ? "." : ",";
   const short = (divisor: number) => {
     // One decimal at most, cut and not rounded up, written without floats.
     const tenths = Math.floor((value * 10) / divisor);
@@ -111,6 +114,8 @@ export function formatNationalPhone(digits: string): string {
 // Dates are written out by hand, in Tashkent time (UTC+5, no daylight saving).
 // Intl month names for Uzbek are missing in some browsers, where a date would
 // read "M11 10".
+const KO_MONTHS = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+
 const MONTHS: Record<Locale, { short: string[]; long: string[] }> = {
   en: {
     short: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -133,6 +138,7 @@ const MONTHS: Record<Locale, { short: string[]; long: string[] }> = {
       "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr",
     ],
   },
+  ko: { short: KO_MONTHS, long: KO_MONTHS },
 };
 
 // Months standing alone, short: Russian needs the nominative ("май", not "мая").
@@ -140,6 +146,7 @@ const MONTHS_SHORT_ALONE: Record<Locale, string[]> = {
   en: MONTHS.en.short,
   ru: ["янв.", "февр.", "март", "апр.", "май", "июнь", "июль", "авг.", "сент.", "окт.", "нояб.", "дек."],
   uz: MONTHS.uz.short,
+  ko: KO_MONTHS,
 };
 
 const TASHKENT_OFFSET_MS = 5 * 60 * 60 * 1000;
@@ -174,6 +181,8 @@ export function formatDate(
       return options.year ? `${day} ${name} ${year}` : `${day} ${name}`;
     case "uz":
       return options.year ? `${day}-${name} ${year}` : `${day}-${name}`;
+    case "ko":
+      return options.year ? `${year}년 ${name} ${day}일` : `${name} ${day}일`;
   }
 }
 
@@ -199,10 +208,12 @@ const MONTHS_ALONE: Record<Locale, string[]> = {
     "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь",
   ],
   uz: MONTHS.uz.long,
+  ko: KO_MONTHS,
 };
 
 /** A month from "YYYY-MM" or "YYYY-MM-01": en "November 2026", ru "ноябрь 2026", uz "noyabr 2026". */
 export function formatMonth(month: string, locale: Locale): string {
   const [year, index] = month.split("-").map(Number);
+  if (locale === "ko") return `${year}년 ${KO_MONTHS[index - 1]}`;
   return `${MONTHS_ALONE[locale][index - 1]} ${year}`;
 }

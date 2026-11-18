@@ -116,6 +116,8 @@ Typecheck, lint and tests pass. The feature works in uz, ru and en. Screenshots 
 
 White does almost all the work; dark grey carries text and structure; royal purple appears only where the user should act or look. Think Apple Settings and Apple Notes: calm, roomy, hairline borders, no decoration.
 
+> **Brand colour (changed on the owner's instruction).** The accent is the orange of the SEON TOPIK mark, not purple. Wherever this document says "purple", read "brand orange". The tokens are `--brand` #F7941D (fills: primary buttons, the active tick, the main chart series; hover #EE8A10, pressed #DC7C08), `--on-brand` #1D1D1F (the text on a brand fill: dark, in both themes, because white on this orange does not reach 4.5:1), `--brand-ink` #A34A05 (orange text, icons and links on a light surface; hover #863C03), and `--brand-tint` #FFF0DC (selected row, active nav background, avatar fill). In the dark theme: brand #F9A33B, ink #FFB866, tint #3A2710. Status tints are stronger than before (success 14%, danger 12%, warning an amber tint). The mark itself sits in the middle of the left panel, behind the menu (`public/brand/seon-topik.png`).
+
 ### Colour tokens
 
 Contrast is measured against white. Anything below 4.5:1 is never used for text a person must read.
@@ -396,7 +398,7 @@ Cancelled lessons are not counted. Example: fee 600,000 soʻm, 12 lessons in Nov
 
 - Lessons are generated from the group's days and start time: when the group is created, and by a daily job that keeps 30 days ahead. Changing the schedule rebuilds future lessons that have no attendance yet.
 - Saving attendance marks the lesson `held`. The manager opens the lesson, everyone starts as Present, and taps to switch to Late, Absent or Excused.
-- Managers can edit attendance for 7 days; the owner any time. Attendance never changes charges. Attendance rate = (present + late) ÷ (present + late + absent); excused is left out.
+- Attendance is marked on the day of the lesson, by a teacher, a manager or the owner; nobody marks or changes it for a past or a future day. A student with two enrolments that cover the day (taken out and put back) is listed once. Attendance never changes charges. Attendance rate = (present + late) ÷ (present + late + absent); excused is left out.
 - A substitute teacher can be set on a single lesson; per-lesson pay goes to whoever taught it.
 - A teacher with a login marks attendance for their own groups, for 7 days like a manager.
 
@@ -476,7 +478,7 @@ Six blocks plus Settings, each a list page and a record page. After sign-in the 
 
 ### Finance — `/finance`
 
-- Owner sees a month strip on top: Collected, Billed, Debt, Expenses.
+- Owner sees a month strip on top, in two rows. First row, always adding up: Billed for the month = Paid of it + Still unpaid of it. A student's payments settle their charges oldest month first, so "unpaid" is the part of that month's fees their payments, up to today, have not reached; credits lower what was billed; archived charges and voided payments count nowhere; students who left are included. Second row, separate figures: Money received in the month (everything taken during it, whatever it paid for), Debt today (all months, without students who left) and Expenses.
 - Payments tab: date, receipt no., student, group, method, amount, received by; filters for month and method; Take payment opens a sheet with student search.
 - Debtors tab: student, groups, debt, oldest unpaid month, last payment date, a Remind button per row and Remind all.
 - Charges tab: month picker, billed vs collected, Generate charges with a preview list before confirming (owner).
@@ -1281,6 +1283,10 @@ correctness. Fix them and run every test.
 >   - A teacher's report has no spending or balances (they belong to no group): three KPIs and four charts. For staff, Unspent points is every point in the ledger.
 >   - A teacher sees how many lessons they taught this month on My groups.
 > - Still not built: ranks on the student's Points tab.
+
+## Interface languages
+
+The interface comes in uz, ru, en and ko (Korean, added for the centre's staff and teachers). A person's choice is kept on their profile (`profiles.language`, type `ui_language`). Messages to students and parents, templates, Telegram chats and the TV stay in uz, ru or en (`app_language`). Korean formats: money "1,250,000숨", dates "2026년 11월 10일", months "2026년 11월".
 
 ## Sources
 

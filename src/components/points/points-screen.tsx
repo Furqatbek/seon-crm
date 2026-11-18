@@ -50,7 +50,7 @@ export function PointsScreen({
             <TabsTrigger key={name} value={name}>
               {t(`tabs.${name}`)}
               {name === "requests" && openRequests > 0 ? (
-                <span className="ml-1.5 rounded-full bg-purple px-1.5 text-caption font-medium text-bg numeric" data-open-requests={openRequests}>
+                <span className="ml-1.5 rounded-full bg-brand px-1.5 text-caption font-medium text-on-brand numeric" data-open-requests={openRequests}>
                   {openRequests}
                 </span>
               ) : null}

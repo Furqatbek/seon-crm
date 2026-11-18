@@ -27,25 +27,23 @@ describe("attendanceRate", () => {
 
 describe("attendanceLock", () => {
   const today = "2026-11-13";
-  const lock = (lessonDate: string, role: "owner" | "manager", status: "scheduled" | "held" | "cancelled" = "scheduled") =>
-    attendanceLock({ lessonDate, status, today, role });
+  const lock = (lessonDate: string, status: "scheduled" | "held" | "cancelled" = "scheduled") =>
+    attendanceLock({ lessonDate, status, today });
 
-  it("today's and recent lessons can be marked by both", () => {
-    expect(lock("2026-11-13", "manager")).toBeNull();
-    expect(lock("2026-11-10", "manager", "held")).toBeNull();
-    expect(lock("2026-11-13", "owner")).toBeNull();
+  it("today's lesson can be marked, also once it is held", () => {
+    expect(lock("2026-11-13")).toBeNull();
+    expect(lock("2026-11-13", "held")).toBeNull();
   });
 
-  it("a manager has 7 days; the owner has no limit", () => {
-    expect(lock("2026-11-06", "manager")).toBeNull(); // exactly 7 days ago
-    expect(lock("2026-11-05", "manager")).toBe("tooOld");
-    expect(lock("2026-09-01", "manager", "held")).toBe("tooOld");
-    expect(lock("2026-09-01", "owner", "held")).toBeNull();
+  it("a past day is closed to everyone, even yesterday", () => {
+    expect(lock("2026-11-12")).toBe("tooOld");
+    expect(lock("2026-11-12", "held")).toBe("tooOld");
+    expect(lock("2026-09-01", "held")).toBe("tooOld");
   });
 
-  it("a lesson that has not happened or was cancelled cannot be marked by anyone", () => {
-    expect(lock("2026-11-14", "owner")).toBe("future");
-    expect(lock("2026-11-14", "manager")).toBe("future");
-    expect(lock("2026-11-10", "owner", "cancelled")).toBe("cancelled");
+  it("a lesson that has not happened or was cancelled cannot be marked", () => {
+    expect(lock("2026-11-14")).toBe("future");
+    expect(lock("2026-11-13", "cancelled")).toBe("cancelled");
+    expect(lock("2026-11-10", "cancelled")).toBe("cancelled");
   });
 });

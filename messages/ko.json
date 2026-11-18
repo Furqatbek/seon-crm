@@ -1,0 +1,1726 @@
+{
+  "app": {
+    "name": "Edu CRM"
+  },
+  "common": {
+    "close": "닫기",
+    "cancel": "취소",
+    "save": "저장",
+    "search": "검색",
+    "pagination": {
+      "range": "총 {total}건 중 {first}–{last}",
+      "previous": "이전 페이지",
+      "next": "다음 페이지"
+    },
+    "weekdays": {
+      "1": "월",
+      "2": "화",
+      "3": "수",
+      "4": "목",
+      "5": "금",
+      "6": "토",
+      "7": "일"
+    },
+    "phoneMatch": {
+      "lead": "이 번호로 등록된 리드가 이미 있습니다:",
+      "student": "이 번호로 등록된 학생이 이미 있습니다:"
+    },
+    "month": {
+      "previous": "이전 달",
+      "next": "다음 달"
+    },
+    "loading": "불러오는 중…",
+    "problem": {
+      "errorTitle": "페이지를 불러올 수 없습니다",
+      "errorBody": "데이터를 가져오는 중 문제가 발생했습니다. 변경된 내용은 없습니다. 다시 시도해 주세요. 문제가 계속되면 원장에게 알려 주세요.",
+      "retry": "다시 시도",
+      "reference": "참조 코드: {code}",
+      "notFoundTitle": "내용이 없습니다",
+      "notFoundBody": "이 기록이 존재하지 않거나 링크가 잘못되었습니다.",
+      "home": "시작 페이지로 이동"
+    }
+  },
+  "nav": {
+    "label": "주 메뉴",
+    "openMenu": "메뉴 열기",
+    "leads": "리드",
+    "students": "학생",
+    "groups": "그룹",
+    "teachers": "선생님",
+    "finance": "재무",
+    "reports": "보고서",
+    "settings": "설정",
+    "myGroups": "내 그룹",
+    "pointsHistory": "내역",
+    "points": "포인트",
+    "openRequests": "대기 중인 리워드 요청:",
+    "pointsReport": "보고서"
+  },
+  "language": {
+    "label": "언어",
+    "uz": "Oʻzbekcha",
+    "ru": "Русский",
+    "en": "English",
+    "ko": "한국어"
+  },
+  "theme": {
+    "label": "테마",
+    "system": "기기 설정과 동일",
+    "light": "라이트",
+    "dark": "다크"
+  },
+  "userMenu": {
+    "label": "계정 메뉴",
+    "signOut": "로그아웃",
+    "roles": {
+      "owner": "원장",
+      "manager": "매니저",
+      "teacher": "선생님"
+    },
+    "profile": "프로필"
+  },
+  "auth": {
+    "email": "이메일",
+    "password": "비밀번호",
+    "signIn": "로그인",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "forgotTitle": "비밀번호 재설정",
+    "forgotHint": "이메일을 입력하시면 새 비밀번호를 설정할 수 있는 링크를 보내 드립니다.",
+    "sendLink": "링크 보내기",
+    "linkSent": "이 이메일로 등록된 계정이 있으면 재설정 링크가 발송됩니다.",
+    "backToSignIn": "로그인으로 돌아가기",
+    "resetTitle": "새 비밀번호",
+    "newPassword": "새 비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "savePassword": "비밀번호 저장",
+    "passwordSaved": "비밀번호가 저장되었습니다",
+    "errors": {
+      "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+      "passwordRequired": "비밀번호를 입력하세요.",
+      "passwordTooShort": "비밀번호는 8자 이상이어야 합니다.",
+      "passwordMismatch": "비밀번호가 일치하지 않습니다.",
+      "invalidCredentials": "이메일 또는 비밀번호가 올바르지 않습니다.",
+      "linkInvalid": "링크가 유효하지 않거나 만료되었습니다. 새 링크를 요청하세요.",
+      "notConfigured": "로그인이 아직 설정되지 않았습니다. Supabase 키가 없습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요."
+    },
+    "inviteTitle": "환영합니다",
+    "inviteOpening": "초대를 여는 중…",
+    "inviteInvalid": "초대가 유효하지 않거나 만료되었습니다. 원장에게 다시 초대를 요청하세요."
+  },
+  "empty": {
+    "leads": "아직 리드가 없습니다.",
+    "students": "아직 학생이 없습니다.",
+    "groups": "아직 그룹이 없습니다.",
+    "teachers": "아직 선생님이 없습니다.",
+    "finance": "아직 결제가 없습니다.",
+    "reports": "아직 보고할 데이터가 없습니다.",
+    "settings": "아직 설정이 없습니다."
+  },
+  "leads": {
+    "newLead": "새 리드",
+    "editLead": "리드 수정",
+    "searchPlaceholder": "이름 또는 전화번호",
+    "followUpToday": "오늘 연락 예정",
+    "followUpDue": "연락할 시기가 되었습니다",
+    "noSubject": "과목 미정",
+    "last30Days": "최근 30일",
+    "noMatches": "조건에 맞는 리드가 없습니다.",
+    "clearFilters": "필터 초기화",
+    "readOnly": "이 리드는 학생으로 전환되어 더 이상 수정할 수 없습니다.",
+    "openStudent": "학생 열기",
+    "view": {
+      "label": "보기",
+      "board": "보드",
+      "list": "목록"
+    },
+    "filters": {
+      "allSources": "모든 유입 경로",
+      "allStaff": "전체 담당자"
+    },
+    "status": {
+      "new": "신규",
+      "contacted": "연락 완료",
+      "trial": "체험 수업",
+      "won": "등록 완료",
+      "lost": "미등록"
+    },
+    "source": {
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "phone_call": "전화 문의",
+      "walk_in": "방문 문의",
+      "referral": "지인 추천",
+      "website": "웹사이트",
+      "other": "기타"
+    },
+    "lostReason": {
+      "price": "가격",
+      "schedule": "시간표",
+      "another_centre": "다른 센터 선택",
+      "no_answer": "연락 안 됨",
+      "other": "기타"
+    },
+    "fields": {
+      "name": "이름",
+      "phone": "전화번호",
+      "source": "유입 경로",
+      "subject": "과목",
+      "preferredTime": "희망 시간",
+      "assignedTo": "담당자",
+      "nextContact": "다음 연락일",
+      "notes": "메모",
+      "status": "상태",
+      "created": "등록일",
+      "trial": "체험 수업",
+      "lostReason": "미등록 사유",
+      "unassigned": "담당자 없음",
+      "referredBy": "추천인",
+      "referredByHint": "이 리드를 소개한 학생입니다. 리드가 등록하고 첫 결제를 하면 추천인이 포인트를 받습니다."
+    },
+    "form": {
+      "created": "리드가 추가되었습니다",
+      "saved": "리드가 저장되었습니다",
+      "chooseSource": "유입 경로 선택"
+    },
+    "actions": {
+      "logCall": "통화 기록",
+      "addNote": "메모 추가",
+      "bookTrial": "체험 수업 예약",
+      "convert": "학생으로 전환",
+      "markLost": "미등록 처리",
+      "edit": "수정",
+      "archive": "보관",
+      "more": "추가 작업",
+      "moveTo": "단계"
+    },
+    "composer": {
+      "callLabel": "통화 내용은 무엇이었나요?",
+      "noteLabel": "메모",
+      "saveCall": "통화 저장",
+      "saveNote": "메모 저장"
+    },
+    "timeline": {
+      "title": "타임라인",
+      "empty": "아직 기록이 없습니다.",
+      "call": "통화",
+      "note": "메모",
+      "statusChange": "{from} → {to}",
+      "reason": "사유: {reason}"
+    },
+    "lost": {
+      "title": "{name} 님을 미등록 처리할까요?",
+      "body": "사유를 선택하세요. 사유는 타임라인에 남습니다.",
+      "reason": "사유",
+      "choose": "사유 선택",
+      "otherLabel": "어떤 일이 있었나요?"
+    },
+    "trial": {
+      "title": "{name} 님의 체험 수업 예약",
+      "body": "체험 수업을 받을 그룹과 날짜를 선택하세요.",
+      "group": "그룹",
+      "choose": "그룹 선택",
+      "date": "날짜"
+    },
+    "archive": {
+      "title": "{name} 님을 보관할까요?",
+      "body": "리드가 보드와 목록에서 숨겨집니다. 타임라인은 유지됩니다.",
+      "done": "리드가 보관되었습니다"
+    },
+    "dnd": {
+      "instructions": "스페이스 키를 눌러 리드를 집으세요. 왼쪽·오른쪽 화살표 키로 열을 선택한 다음 스페이스 키를 눌러 놓으세요. 취소하려면 Esc 키를 누르세요.",
+      "pickedUp": "{name} 님을 집었습니다.",
+      "over": "{name} 님이 {column} 열 위에 있습니다.",
+      "dropped": "{name} 님을 {column} 열에 놓았습니다.",
+      "cancelled": "{name} 님 이동이 취소되었습니다."
+    },
+    "errors": {
+      "nameRequired": "이름을 입력하세요.",
+      "phoneInvalid": "+998 90 123 45 67 형식으로 전화번호를 입력하세요.",
+      "sourceRequired": "유입 경로를 선택하세요.",
+      "dateInvalid": "올바른 날짜를 선택하세요.",
+      "tooLong": "텍스트가 너무 깁니다.",
+      "lostReasonRequired": "사유를 선택하세요.",
+      "trialGroupRequired": "그룹을 선택하세요.",
+      "trialDateRequired": "날짜를 선택하세요.",
+      "noteRequired": "메모를 입력하세요.",
+      "moveNotAllowed": "이 리드는 해당 단계로 옮길 수 없습니다.",
+      "notFound": "이 리드는 더 이상 존재하지 않습니다.",
+      "notAllowed": "이 작업을 수행할 권한이 없습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요."
+    }
+  },
+  "students": {
+    "newStudent": "새 학생",
+    "searchPlaceholder": "이름 또는 전화번호",
+    "noMatches": "조건에 맞는 학생이 없습니다.",
+    "contacts": "연락처",
+    "noGroups": "아직 소속 그룹이 없습니다.",
+    "openLead": "리드 열기",
+    "filters": {
+      "allStatuses": "모든 상태",
+      "allGroups": "모든 그룹",
+      "debtOnly": "미납만",
+      "clear": "필터 초기화"
+    },
+    "status": {
+      "active": "수강 중",
+      "paused": "휴원",
+      "left": "퇴원",
+      "graduated": "수료"
+    },
+    "balance": {
+      "debt": "미납",
+      "due": "납부 예정",
+      "settled": "완납",
+      "credit": "선납"
+    },
+    "tabs": {
+      "overview": "개요",
+      "ledger": "정산 내역",
+      "attendance": "출석",
+      "messages": "메시지",
+      "points": "포인트"
+    },
+    "fields": {
+      "name": "이름",
+      "phone": "전화번호",
+      "parentName": "학부모 이름",
+      "parentPhone": "학부모 전화번호",
+      "birthDate": "생년월일",
+      "language": "메시지 언어",
+      "notes": "메모",
+      "groups": "그룹",
+      "group": "그룹",
+      "balance": "잔액",
+      "status": "상태",
+      "telegram": "Telegram",
+      "lead": "유입 리드"
+    },
+    "form": {
+      "title": {
+        "new": "새 학생",
+        "edit": "학생 수정",
+        "convert": "학생으로 전환"
+      },
+      "convertHint": "리드가 학생으로 전환되고 등록 완료로 표시됩니다. 저장하기 전에 정보를 확인하세요.",
+      "languageHint": "이 학생에게 보내는 알림은 이 언어로 발송됩니다.",
+      "enrolStep": "다음 단계",
+      "created": "학생이 추가되었습니다",
+      "saved": "학생이 저장되었습니다",
+      "converted": "리드가 학생으로 전환되었습니다",
+      "saveAndEnrol": "저장 후 그룹에 등록",
+      "convertAndEnrol": "저장 후 등록"
+    },
+    "actions": {
+      "takePayment": "결제 받기",
+      "enrol": "그룹에 등록",
+      "sendMessage": "메시지 보내기",
+      "edit": "수정",
+      "pause": "휴원 처리",
+      "resume": "수강 중으로 변경",
+      "markLeft": "퇴원 처리",
+      "archive": "보관",
+      "more": "추가 작업",
+      "addCredit": "감면 추가",
+      "markGraduated": "수료 처리"
+    },
+    "done": {
+      "paused": "학생이 휴원 처리되었습니다",
+      "resumed": "학생이 다시 수강 중입니다",
+      "left": "학생이 퇴원 처리되었습니다",
+      "archived": "학생이 보관되었습니다",
+      "graduated": "학생이 수료 처리되었습니다"
+    },
+    "left": {
+      "title": "{name} 님을 퇴원 처리할까요?",
+      "body": "학생은 오늘부로 모든 그룹에서 나가며 더 이상 수강료가 청구되지 않습니다. 자동으로 환불되는 금액은 없습니다."
+    },
+    "archive": {
+      "title": "{name} 님을 보관할까요?",
+      "body": "학생이 목록에서 숨겨집니다. 결제와 출석 기록은 유지됩니다."
+    },
+    "enrolment": {
+      "left": "그룹 탈퇴",
+      "since": "{date}부터",
+      "period": "{from} – {to}",
+      "discount": "할인"
+    },
+    "telegram": {
+      "title": "Telegram",
+      "linked": "연결됨",
+      "linkedShort": "연결됨",
+      "notLinked": "연결 안 됨",
+      "hint": {
+        "student": "학생 본인의 Telegram용: 수업 알림과 본인의 포인트를 받습니다. 결제 알림은 받지 않습니다.",
+        "parent": "학부모의 Telegram용: 결제 알림과 자녀의 포인트를 받습니다."
+      },
+      "copy": "링크 복사",
+      "copied": "복사되었습니다",
+      "showQr": "QR 코드 보기",
+      "hideQr": "QR 코드 숨기기",
+      "qrLabel": "Telegram 링크 QR 코드: {role}",
+      "noBot": "Telegram 봇이 아직 연결되지 않았습니다. 원장이 설정에서 연결합니다.",
+      "role": {
+        "student": "학생 본인용 링크",
+        "parent": "학부모용 링크"
+      }
+    },
+    "ledger": {
+      "empty": "아직 청구나 결제가 없습니다.",
+      "date": "날짜",
+      "description": "내용",
+      "charge": "청구",
+      "payment": "결제",
+      "balance": "잔액",
+      "monthlyFee": "{month} 수강료",
+      "credit": "감면",
+      "adjustment": "조정",
+      "prorated": "수업 {total}회 중 {counted}회",
+      "paymentLine": "결제 · {method} · 영수증 {receipt}",
+      "voided": "취소됨",
+      "method": {
+        "cash": "현금",
+        "card": "카드",
+        "transfer": "계좌 이체"
+      }
+    },
+    "attendance": {
+      "empty": "이번 달에는 수업이 없습니다.",
+      "previousMonth": "이전 달",
+      "nextMonth": "다음 달",
+      "rate": "출석률 {rate}%",
+      "noRate": "아직 기록된 출석이 없습니다",
+      "legend": "표시 설명",
+      "notMarked": "미기록",
+      "cancelled": "취소됨",
+      "mark": {
+        "present": "출석",
+        "late": "지각",
+        "absent": "결석",
+        "excused": "사유 결석"
+      }
+    },
+    "messages": {
+      "empty": "아직 발송된 메시지가 없습니다.",
+      "date": "날짜",
+      "type": "메시지",
+      "channel": "채널",
+      "status": "상태",
+      "text": "내용",
+      "types": {
+        "payment_due": "결제 예정 안내",
+        "payment_overdue": "결제 기한 초과",
+        "lesson_reminder": "수업 알림",
+        "custom": "개별 메시지",
+        "points_weekly": "주간 포인트 요약",
+        "points_deduction": "포인트 차감",
+        "points_month_result": "월간 결과",
+        "reward_update": "리워드 소식"
+      },
+      "channels": {
+        "telegram": "Telegram",
+        "sms": "SMS"
+      },
+      "statuses": {
+        "queued": "대기 중",
+        "sent": "발송됨",
+        "failed": "실패",
+        "skipped": "건너뜀"
+      }
+    },
+    "errors": {
+      "nameRequired": "이름을 입력하세요.",
+      "phoneInvalid": "+998 90 123 45 67 형식으로 전화번호를 입력하세요.",
+      "parentPhoneInvalid": "학부모 전화번호를 +998 90 123 45 67 형식으로 입력하거나 비워 두세요.",
+      "dateInvalid": "올바른 날짜를 선택하세요.",
+      "languageRequired": "언어를 선택하세요.",
+      "tooLong": "텍스트가 너무 깁니다.",
+      "leadNotOpen": "이 리드는 이미 종료되어 전환할 수 없습니다.",
+      "notFound": "이 학생은 더 이상 존재하지 않습니다.",
+      "notAllowed": "이 작업을 수행할 권한이 없습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요."
+    },
+    "graduated": {
+      "title": "{name} 님을 수료 처리할까요?",
+      "body": "학생은 오늘부로 모든 그룹을 마치며 더 이상 수강료가 청구되지 않습니다. 아직 납부하지 않은 금액은 잔액에 그대로 남습니다."
+    },
+    "counts": "수강 중: {studying} · 퇴원: {left} · 수료: {graduated}"
+  },
+  "groups": {
+    "newGroup": "새 그룹",
+    "editGroup": "그룹 수정",
+    "searchPlaceholder": "이름 또는 과목",
+    "noMatches": "조건에 맞는 그룹이 없습니다.",
+    "studentCount": "{count, plural, other {학생 #명}}",
+    "tabs": {
+      "today": "오늘",
+      "all": "모든 그룹"
+    },
+    "groupTabs": {
+      "students": "학생",
+      "attendance": "출석",
+      "lessons": "수업",
+      "trials": "체험 수업",
+      "leaderboard": "랭킹"
+    },
+    "status": {
+      "forming": "모집 중",
+      "active": "진행 중",
+      "finished": "종료"
+    },
+    "filters": {
+      "allStatuses": "모든 상태",
+      "clear": "필터 초기화"
+    },
+    "fields": {
+      "name": "이름",
+      "subject": "과목",
+      "level": "레벨",
+      "teacher": "선생님",
+      "monthlyFee": "월 수강료",
+      "days": "요일",
+      "startTime": "시작 시간",
+      "duration": "수업 시간(분)",
+      "room": "강의실",
+      "capacity": "정원",
+      "startDate": "시작일",
+      "status": "상태",
+      "students": "학생",
+      "daysAndTime": "요일 및 시간",
+      "joined": "등록일",
+      "balance": "잔액",
+      "attendance": "출석",
+      "phone": "전화번호"
+    },
+    "form": {
+      "created": "그룹이 추가되었습니다",
+      "saved": "그룹이 저장되었습니다",
+      "chooseTeacher": "선생님 선택",
+      "feeHint": "변경된 수강료는 다음 청구 월부터 적용되며, 이미 청구된 수강료에는 적용되지 않습니다.",
+      "scheduleHint": "요일, 시간, 선생님 또는 날짜를 변경하면 아직 출석 기록이 없는 이후 수업이 다시 생성됩니다.",
+      "noRoom": "강의실 없음",
+      "roomOption": "{room} ({capacity, plural, other {#석}})"
+    },
+    "today": {
+      "empty": "오늘은 수업이 없습니다.",
+      "markAttendance": "출석 체크",
+      "marked": "체크 완료"
+    },
+    "lesson": {
+      "date": "날짜",
+      "time": "시간",
+      "open": "수업 열기",
+      "actions": "{date} 수업 작업",
+      "saved": "출석이 저장되었습니다",
+      "noStudents": "이날 그룹에 학생이 없었습니다.",
+      "substitute": "대체 선생님",
+      "setSubstitute": "대체 선생님 지정",
+      "saveSubstitute": "저장",
+      "substituteTitle": "{date} 수업은 누가 진행하나요?",
+      "substituteBody": "이 수업만 변경됩니다. 수업당 급여는 실제로 수업을 진행한 선생님에게 지급됩니다.",
+      "substituteSaved": "수업 담당 선생님이 저장되었습니다",
+      "cancel": "수업 취소",
+      "cancelTitle": "{date} 수업을 취소할까요?",
+      "cancelBody": "취소된 수업은 수업당 급여와 일할 계산에 포함되지 않습니다.",
+      "reason": "사유",
+      "cancelled": "수업이 취소되었습니다",
+      "restore": "수업 복원",
+      "restored": "수업이 복원되었습니다",
+      "locked": {
+        "cancelled": "취소된 수업입니다. 출석을 체크하려면 수업을 복원하세요.",
+        "future": "아직 진행되지 않은 수업입니다.",
+        "tooOld": "이 수업은 다른 날에 있었습니다. 출석은 수업 당일에만 기록합니다."
+      },
+      "mark": {
+        "present": "출석",
+        "late": "지각",
+        "absent": "결석",
+        "excused": "사유 결석"
+      },
+      "statuses": {
+        "scheduled": "예정",
+        "held": "진행 완료",
+        "cancelled": "취소됨"
+      }
+    },
+    "attendanceGrid": {
+      "student": "학생",
+      "openLesson": "{date} 수업 열기",
+      "notMarked": "미기록",
+      "notEnrolled": "그룹 소속 아님",
+      "noLessons": "이번 달에는 수업이 없습니다.",
+      "noStudents": "이번 달에는 학생이 없습니다."
+    },
+    "trials": {
+      "empty": "이번 주에는 체험 수업 참가자가 없습니다.",
+      "thisWeek": "리드에서 예약한 이번 주 체험 수업입니다."
+    },
+    "studentsTab": {
+      "empty": "아직 이 그룹에 학생이 없습니다.",
+      "rowActions": "{name} 님 작업",
+      "transfer": "다른 그룹으로 이동",
+      "leave": "그룹에서 제외",
+      "coins": "코인"
+    },
+    "actions": {
+      "addStudent": "학생 추가",
+      "edit": "수정",
+      "archive": "보관",
+      "more": "추가 작업"
+    },
+    "archive": {
+      "title": "{name} 그룹을 보관할까요?",
+      "body": "그룹이 목록에서 숨겨지고 더 이상 수업이 생성되지 않습니다. 기록은 유지됩니다.",
+      "done": "그룹이 보관되었습니다"
+    },
+    "enrol": {
+      "titleGroup": "{group} 그룹에 학생 추가",
+      "titleStudent": "{student} 님 등록",
+      "transferTitle": "{student} 님 그룹 이동",
+      "hint": "저장하면 첫 수강료가 생성됩니다.",
+      "transferHint": "학생은 같은 날짜에 {group} 그룹에서 나가 새 그룹에 들어갑니다.",
+      "student": "학생",
+      "findStudent": "이름 또는 전화번호",
+      "noStudentsFound": "학생을 찾을 수 없습니다.",
+      "change": "변경",
+      "group": "그룹",
+      "toGroup": "새 그룹",
+      "chooseGroup": "그룹 선택",
+      "chooseGroupFirst": "첫 수강료를 확인하려면 그룹을 선택하세요.",
+      "groupFull": "이 그룹은 정원이 찼습니다: {capacity}명 중 {students}명.",
+      "joinDate": "등록일",
+      "transferDate": "이동일",
+      "discount": "할인",
+      "discountNone": "할인 없음",
+      "discountPercent": "비율",
+      "discountAmount": "고정 금액",
+      "discountPercentValue": "할인(%)",
+      "discountAmountValue": "할인(숨)",
+      "note": "메모",
+      "firstCharge": "첫 수강료",
+      "calculating": "계산 중…",
+      "mode": {
+        "prorated": "남은 수업 기준",
+        "full": "한 달 전액",
+        "custom": "직접 입력"
+      },
+      "proratedDetail": "수업 {total}회 중 {counted}회",
+      "fullDetail": "등록일과 관계없이 한 달 전액",
+      "beforeFirst": "이번 달 첫 수업 전에 등록",
+      "nothing": "이번 달 청구 없음",
+      "nothingDetail": "이번 달에 남은 수업이 없습니다. 첫 수강료는 다음 달에 청구됩니다.",
+      "customDetail": "금액과 사유를 입력하세요",
+      "customAmount": "금액(숨)",
+      "customNote": "이 금액인 이유",
+      "creditFor": "{group} 그룹 감면",
+      "creditHint": "선택 사항입니다. 자동으로 환불되는 금액은 없으며, 감면은 학생이 납부할 금액을 줄여 줍니다.",
+      "creditAmount": "감면(숨)",
+      "creditNote": "감면 사유",
+      "save": "등록",
+      "saveTransfer": "이동",
+      "done": "학생이 등록되었습니다",
+      "transferDone": "학생이 이동되었습니다"
+    },
+    "leave": {
+      "title": "{student} 님을 {group} 그룹에서 제외",
+      "body": "학생은 센터에 남아 있지만 이 그룹에는 더 이상 속하지 않습니다.",
+      "date": "제외일",
+      "credit": "감면",
+      "save": "그룹에서 제외",
+      "done": "학생이 그룹에서 제외되었습니다"
+    },
+    "errors": {
+      "nameRequired": "이름을 입력하세요.",
+      "subjectRequired": "과목을 입력하세요.",
+      "teacherRequired": "선생님을 선택하세요.",
+      "feeInvalid": "월 수강료를 숨 단위 정수로 입력하세요.",
+      "daysRequired": "요일을 하나 이상 선택하세요.",
+      "timeInvalid": "시작 시간을 입력하세요.",
+      "durationInvalid": "수업 시간을 15~480분 사이로 입력하세요.",
+      "capacityInvalid": "정원을 0보다 큰 수로 입력하거나 비워 두세요.",
+      "dateInvalid": "올바른 날짜를 선택하세요.",
+      "tooLong": "텍스트가 너무 깁니다.",
+      "studentRequired": "학생을 선택하세요.",
+      "groupRequired": "그룹을 선택하세요.",
+      "discountInvalid": "할인을 입력하세요: 비율은 1–100, 금액은 0보다 큰 수.",
+      "customAmountInvalid": "금액을 숨 단위 정수로 입력하세요.",
+      "chargeNoteRequired": "이 금액을 청구하는 사유를 입력하세요.",
+      "creditInvalid": "감면 금액을 숨 단위 정수로 입력하세요.",
+      "creditNoteRequired": "감면 사유를 입력하세요.",
+      "reasonRequired": "사유를 입력하세요.",
+      "noStudents": "출석을 체크할 학생이 없습니다.",
+      "alreadyEnrolled": "학생이 이미 이 그룹에 있습니다.",
+      "groupClosed": "이 그룹은 종료되었거나 보관되었습니다.",
+      "dateOutOfRange": "이번 달 1일부터 다음 달 말일 사이의 날짜를 선택하세요. 제외일은 미래 날짜로 지정할 수 없습니다.",
+      "lessonCancelled": "취소된 수업입니다.",
+      "lessonFuture": "아직 진행되지 않은 수업입니다.",
+      "notInGroup": "해당 날짜에 이 그룹에 속하지 않은 학생이 있습니다.",
+      "sameGroup": "학생이 이미 이 그룹에 있습니다.",
+      "attendanceLocked": "출석은 수업 당일에만 기록하며, 그 날이 이미 지났습니다.",
+      "notFound": "더 이상 존재하지 않습니다.",
+      "notAllowed": "이 작업을 수행할 권한이 없습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
+      "capacityOverRoom": "강의실 수용 인원은 {detail}입니다. 그룹 정원은 이보다 클 수 없습니다.",
+      "roomInvalid": "목록에서 강의실을 선택하세요.",
+      "roomClash": "해당 시간에 강의실을 {detail}에서 사용 중입니다.",
+      "roomUnavailable": "이 강의실은 더 이상 사용할 수 없습니다. 다른 강의실을 선택하세요."
+    }
+  },
+  "finance": {
+    "tabs": {
+      "payments": "결제",
+      "debtors": "미납자",
+      "charges": "청구",
+      "expenses": "지출",
+      "salaries": "급여",
+      "adjustments": "조정"
+    },
+    "strip": {
+      "billed": "이번 달 청구액",
+      "paid": "그중 납부액",
+      "unpaid": "그중 미납액",
+      "rule": "청구액 = 납부액 + 미납액입니다. 아래 수치는 별도입니다. 수납액은 다른 달 수강료를 포함해 해당 월에 받은 모든 금액이고, 미납은 오늘 기준 전체 미납액입니다.",
+      "collected": "이번 달 수납액",
+      "debt": "오늘 기준 전체 미납",
+      "expenses": "지출"
+    },
+    "method": {
+      "cash": "현금",
+      "card": "카드",
+      "transfer": "계좌 이체"
+    },
+    "filters": {
+      "allMethods": "모든 결제 수단",
+      "allCategories": "모든 분류"
+    },
+    "fields": {
+      "student": "학생",
+      "group": "그룹",
+      "groups": "그룹",
+      "method": "결제 수단",
+      "date": "날짜",
+      "note": "메모",
+      "amount": "금액",
+      "receipt": "영수증 번호",
+      "receivedBy": "수납자",
+      "debt": "미납",
+      "oldestUnpaid": "가장 오래된 미납 월",
+      "lastPayment": "최근 결제",
+      "description": "내용",
+      "category": "분류",
+      "teacher": "선생님",
+      "type": "유형",
+      "by": "처리자",
+      "reason": "사유"
+    },
+    "payment": {
+      "title": "결제 받기",
+      "balance": "잔액",
+      "chooseGroup": "그룹 선택",
+      "amount": "금액(숨)",
+      "save": "결제 저장",
+      "saved": "결제가 저장되었습니다",
+      "receipt": "영수증 번호 {number}",
+      "print": "영수증 인쇄",
+      "done": "완료",
+      "loading": "불러오는 중…",
+      "noGroups": "이 학생은 그룹에 속한 적이 없어 아직 결제할 항목이 없습니다."
+    },
+    "payments": {
+      "empty": "이번 달에는 결제가 없습니다.",
+      "rowActions": "영수증 {receipt} 작업"
+    },
+    "void": {
+      "action": "결제 취소",
+      "title": "영수증 {receipt}을(를) 취소할까요?",
+      "body": "이 결제는 모든 합계에서 제외되고 학생은 해당 금액을 다시 납부해야 합니다. 이 작업은 되돌릴 수 없습니다.",
+      "reason": "사유",
+      "voided": "취소됨",
+      "done": "결제가 취소되었습니다"
+    },
+    "debtors": {
+      "empty": "미납자가 없습니다.",
+      "count": "{count, plural, other {미납 학생 #명}}",
+      "remind": "알림 보내기",
+      "remindAll": "전체 알림 보내기",
+      "never": "없음"
+    },
+    "charges": {
+      "billed": "{month} 청구액",
+      "collected": "{month} 수납액",
+      "generate": "청구 생성",
+      "empty": "이번 달에는 아직 청구가 없습니다.",
+      "monthlyFee": "월 수강료",
+      "credit": "감면",
+      "adjustment": "조정",
+      "prorated": "수업 {total}회 중 {counted}회",
+      "discount": "할인",
+      "previewTitle": "{month} 청구",
+      "previewHint": "진행 중인 그룹의 수강 중인 학생 가운데 이번 달 수강료가 아직 없는 학생마다 월 수강료가 하나씩 생성됩니다.",
+      "previewCount": "{count, plural, other {생성할 수강료 #건}}",
+      "nothingToGenerate": "이번 달 수강료가 이미 모두 생성되어 있습니다. 새로 생성할 항목이 없습니다.",
+      "confirm": "{count, plural, other {청구 #건 생성}}",
+      "created": "{count, plural, =0 {새로 생성된 청구 없음} other {청구 #건이 생성되었습니다}}",
+      "previewMore": "외 {count}건"
+    },
+    "credit": {
+      "title": "{student} 님 감면",
+      "hint": "감면은 학생이 납부할 금액을 줄여 줍니다. 누가 왜 추가했는지와 함께 원장에게 표시됩니다.",
+      "amount": "감면(숨)",
+      "note": "감면 사유",
+      "noGroup": "그룹 없음",
+      "save": "감면 추가",
+      "done": "감면이 추가되었습니다"
+    },
+    "receipt": {
+      "paper": "용지",
+      "roll": "80 mm",
+      "a4": "A4",
+      "print": "인쇄",
+      "paid": "결제 완료"
+    },
+    "errors": {
+      "studentRequired": "학생을 선택하세요.",
+      "groupRequired": "학생의 그룹 중 하나를 선택하세요.",
+      "amountInvalid": "0보다 큰 정수 금액을 입력하세요.",
+      "methodRequired": "결제 수단을 선택하세요.",
+      "dateInvalid": "올바른 날짜를 선택하세요.",
+      "dateInFuture": "미래 날짜는 선택할 수 없습니다.",
+      "noteRequired": "감면 사유를 입력하세요.",
+      "reasonRequired": "사유를 입력하세요.",
+      "tooLong": "텍스트가 너무 깁니다.",
+      "monthNotCurrent": "이번 달만 청구할 수 있습니다.",
+      "alreadyVoided": "이미 취소된 결제입니다.",
+      "notFound": "더 이상 존재하지 않습니다.",
+      "notAllowed": "이 작업을 수행할 권한이 없습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
+      "monthInFuture": "이 달은 아직 시작되지 않았습니다.",
+      "categoryRequired": "분류를 선택하세요.",
+      "adjustmentNoteRequired": "보너스 또는 공제 사유를 입력하세요.",
+      "deductionTooLarge": "공제액이 급여보다 큽니다.",
+      "alreadyPaid": "이미 지급된 급여입니다.",
+      "payoutChanged": "이 급여가 변경되었거나 이미 지급되었습니다. 금액을 확인한 후 다시 시도해 주세요."
+    },
+    "expenses": {
+      "add": "지출 추가",
+      "title": "새 지출",
+      "empty": "이번 달에는 지출이 없습니다.",
+      "amount": "금액(숨)",
+      "save": "지출 추가",
+      "done": "지출이 추가되었습니다",
+      "category": {
+        "rent": "임대료",
+        "utilities": "공과금",
+        "marketing": "마케팅",
+        "supplies": "비품",
+        "other": "기타"
+      },
+      "edit": "지출 수정: {what}",
+      "editTitle": "지출 수정",
+      "updated": "지출이 변경되었습니다"
+    },
+    "salaries": {
+      "calculate": "계산",
+      "hint": "각 달의 급여는 그달 1일에 적용 중인 급여 기준으로 계산됩니다. 지급 완료된 급여는 변경되지 않습니다.",
+      "empty": "{month} 급여가 아직 없습니다. 계산을 눌러 생성하세요.",
+      "calculated": "{count, plural, =0 {계산할 급여가 없습니다} other {급여 #건이 계산되었습니다}}",
+      "calculatedColumn": "계산액",
+      "bonus": "보너스",
+      "deduction": "공제",
+      "toPay": "지급액",
+      "status": "상태",
+      "draft": "임시",
+      "paid": "지급 완료",
+      "showBreakdown": "{teacher} 선생님 상세 내역 보기",
+      "hideBreakdown": "{teacher} 선생님 상세 내역 숨기기",
+      "rowActions": "{teacher} 선생님 작업",
+      "lessons": "{count, plural, other {수업 #회}}",
+      "collected": "수납액",
+      "noLines": "이번 달에 집계된 수업이나 결제가 없습니다.",
+      "rate": "급여 기준",
+      "paidOn": "{date} 지급",
+      "note": "메모",
+      "adjust": "보너스 및 공제",
+      "adjustTitle": "{teacher} 선생님 보너스 및 공제",
+      "adjustHint": "두 항목 모두 계산액에 반영됩니다. 다시 계산해도 유지됩니다.",
+      "bonusField": "보너스(숨)",
+      "deductionField": "공제(숨)",
+      "noteField": "사유",
+      "adjustSaved": "급여가 수정되었습니다",
+      "markPaid": "지급 완료 처리",
+      "markPaidTitle": "{teacher} 선생님의 급여를 지급 완료로 처리할까요?",
+      "markPaidBody": "지급 완료된 급여는 잠기며, 수정하거나 다시 계산할 수 없습니다.",
+      "markedPaid": "급여가 지급 완료 처리되었습니다",
+      "monthOpenWarning": "{month}은(는) 아직 끝나지 않았습니다. 이후에 진행된 수업과 받은 결제는 지급 완료된 급여에 추가되지 않습니다."
+    },
+    "adjustments": {
+      "empty": "이번 달에는 감면이나 취소된 결제가 없습니다.",
+      "credit": "감면",
+      "void": "취소된 결제",
+      "receipt": "영수증 {receipt}"
+    },
+    "archive": {
+      "action": "보관",
+      "payment": "영수증 {what} 보관",
+      "charge": "{what} 청구 보관",
+      "expense": "{what} 지출 보관",
+      "payout": "{what} 급여 보관",
+      "title": "이 기록을 보관할까요?",
+      "body": "삭제되지는 않지만 모든 목록, 잔액, 합계, 보고서에서 제외됩니다. 앱에서는 다시 복원할 수 없습니다.",
+      "bodyPayment": "결제가 취소되고 숨겨집니다. 학생은 해당 금액을 다시 납부해야 합니다.",
+      "bodyCharge": "학생은 이 청구 금액을 더 이상 납부하지 않아도 됩니다. 이후 월 수강료를 다시 생성할 수 있습니다.",
+      "bodyPayout": "이 급여는 급여 합계에서 제외됩니다. 계산을 누르면 이번 달의 임시 급여가 새로 생성됩니다.",
+      "done": "보관되었습니다",
+      "allCharges": "모든 청구 보관",
+      "allChargesTitle": "{month}의 모든 청구를 보관할까요?",
+      "allChargesBody": "이번 달의 {count, plural, other {청구 #건}}이 모두 학생들의 잔액에서 제외됩니다. 결제는 그대로 유지됩니다. 이후 이 달의 청구를 다시 생성할 수 있습니다.",
+      "allChargesDone": "{count, plural, other {청구 #건이 보관되었습니다}}"
+    }
+  },
+  "teachers": {
+    "newTeacher": "새 선생님",
+    "editTeacher": "선생님 수정",
+    "searchPlaceholder": "이름 또는 전화번호",
+    "noMatches": "검색 결과에 맞는 선생님이 없습니다.",
+    "clearSearch": "검색 초기화",
+    "inactive": "근무 안 함",
+    "contacts": "연락처",
+    "noGroups": "아직 그룹이 없습니다.",
+    "lessonsThisMonth": "이번 달 수업",
+    "noLessons": "이번 달에는 수업이 없습니다.",
+    "tabs": {
+      "overview": "개요",
+      "pay": "급여"
+    },
+    "fields": {
+      "name": "이름",
+      "phone": "전화번호",
+      "subjects": "과목",
+      "groups": "그룹",
+      "lessonsThisMonth": "이번 달 수업",
+      "payType": "급여 유형",
+      "hiredOn": "입사일",
+      "notes": "메모",
+      "isActive": "센터에서 근무 중"
+    },
+    "form": {
+      "created": "선생님이 추가되었습니다",
+      "saved": "선생님이 저장되었습니다",
+      "subjectsHint": "과목은 쉼표로 구분하세요."
+    },
+    "actions": {
+      "edit": "수정",
+      "archive": "보관",
+      "more": "추가 작업"
+    },
+    "payType": {
+      "fixed_monthly": "고정 월급",
+      "percent_of_revenue": "그룹 수납액의 %",
+      "per_lesson": "수업당"
+    },
+    "payTypeHint": {
+      "fixed_monthly": "매달 같은 금액을 지급합니다.",
+      "percent_of_revenue": "이 선생님의 그룹에서 한 달 동안 수납된 수강료의 일정 비율을 지급합니다.",
+      "per_lesson": "선생님이 한 달 동안 진행한 수업마다 정해진 금액을 지급합니다."
+    },
+    "lesson": {
+      "date": "날짜",
+      "time": "시간",
+      "group": "그룹",
+      "status": "상태",
+      "substitute": "대체 선생님",
+      "statuses": {
+        "scheduled": "예정",
+        "held": "진행 완료",
+        "cancelled": "취소됨"
+      }
+    },
+    "pay": {
+      "rateHistory": "급여 기준 이력",
+      "setNewRate": "새 급여 기준 설정",
+      "setNewRateHint": "새 급여 기준이 이력에 추가됩니다. 이전 기준은 그대로 유지됩니다.",
+      "currentRate": "현재 급여 기준",
+      "noRate": "급여 기준 없음",
+      "amount": "금액(숨)",
+      "percent": "비율",
+      "effectiveFrom": "적용 시작일",
+      "effectiveHint": "각 달의 급여는 그달 1일에 적용 중인 급여 기준으로 계산됩니다.",
+      "rate": "급여 기준",
+      "status": "상태",
+      "perMonth": "월",
+      "perLesson": "수업당",
+      "percentValue": "수납된 수강료의 {percent}%",
+      "rateSaved": "급여 기준이 저장되었습니다",
+      "rateStatus": {
+        "current": "현재",
+        "upcoming": "예정",
+        "past": "이전"
+      },
+      "payouts": "급여 내역",
+      "noPayouts": "아직 급여 내역이 없습니다.",
+      "month": "월",
+      "paid": "지급액",
+      "payoutStatus": {
+        "draft": "임시",
+        "paid": "지급 완료"
+      },
+      "calculated": "계산액",
+      "bonus": "보너스",
+      "deduction": "공제"
+    },
+    "archive": {
+      "title": "{name} 선생님을 보관할까요?",
+      "body": "선생님이 목록에서 숨겨집니다. 수업과 급여 기록은 유지됩니다.",
+      "done": "선생님이 보관되었습니다"
+    },
+    "errors": {
+      "nameRequired": "이름을 입력하세요.",
+      "phoneInvalid": "+998 90 123 45 67 형식으로 전화번호를 입력하세요.",
+      "dateInvalid": "올바른 날짜를 선택하세요.",
+      "tooLong": "텍스트가 너무 깁니다.",
+      "payTypeRequired": "급여 유형을 선택하세요.",
+      "amountInvalid": "0보다 큰 정수 금액을 입력하세요.",
+      "percentInvalid": "1에서 100 사이의 비율을 입력하세요.",
+      "rateDateTaken": "이 날짜에 시작하는 급여 기준이 이미 있습니다. 다른 날짜를 선택하세요.",
+      "notFound": "이 선생님은 더 이상 존재하지 않습니다.",
+      "notAllowed": "이 작업을 수행할 권한이 없습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요."
+    }
+  },
+  "dev": {
+    "title": "컴포넌트",
+    "newStudent": "새 학생",
+    "export": "내보내기",
+    "archive": "보관",
+    "edit": "수정",
+    "disabled": "비활성",
+    "fullName": "성명",
+    "fullNameError": "성명을 입력하세요.",
+    "notes": "메모",
+    "source": "유입 경로",
+    "sourcePlaceholder": "유입 경로 선택",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "referral": "지인 추천",
+    "reminders": "알림 보내기",
+    "board": "보드",
+    "list": "목록",
+    "view": "보기",
+    "overview": "개요",
+    "ledger": "정산 내역",
+    "attendance": "출석",
+    "messages": "메시지",
+    "active": "수강 중",
+    "paid": "결제 완료",
+    "due": "납부 예정",
+    "debt": "미납",
+    "present": "출석",
+    "late": "지각",
+    "absent": "결석",
+    "excused": "사유 결석",
+    "student": "학생",
+    "group": "그룹",
+    "status": "상태",
+    "balance": "잔액",
+    "collected": "수납액",
+    "activeStudents": "수강 중인 학생",
+    "totalDebt": "총 미납",
+    "attendanceRate": "출석률",
+    "telegramLinked": "Telegram 연결됨",
+    "paymentSaved": "결제가 저장되었습니다",
+    "showToast": "토스트 표시",
+    "openSheet": "시트 열기",
+    "openDialog": "대화 상자 열기",
+    "openMenu": "메뉴 열기",
+    "archiveTitle": "이 학생을 보관할까요?",
+    "archiveBody": "학생이 목록에서 숨겨집니다. 결제와 출석 기록은 유지됩니다.",
+    "noMatches": "조건에 맞는 학생이 없습니다.",
+    "clearFilters": "필터 초기화"
+  },
+  "reports": {
+    "period": {
+      "label": "기간",
+      "this": "이번 달",
+      "last": "지난달",
+      "3": "최근 3개월",
+      "6": "최근 6개월",
+      "12": "최근 12개월",
+      "custom": "기간 직접 지정",
+      "from": "시작",
+      "to": "종료"
+    },
+    "kpi": {
+      "collected": "수납액",
+      "costs": "지출 + 급여",
+      "profit": "이익",
+      "activeStudents": "수강 중인 학생",
+      "newLeads": "신규 리드",
+      "leadConversion": "리드 전환율",
+      "totalDebt": "오늘 기준 미납",
+      "attendanceRate": "출석률"
+    },
+    "exportCsv": "CSV 내보내기",
+    "exportCsvFor": "CSV 내보내기: {chart}",
+    "empty": "이 기간에 표시할 내용이 없습니다.",
+    "month": "월",
+    "money": {
+      "title": "월별 수납액과 지출",
+      "collected": "수납액",
+      "costs": "지출 + 급여",
+      "expenses": "지출",
+      "salaries": "급여"
+    },
+    "revenue": {
+      "title": "매출",
+      "by": "매출 기준",
+      "group": "그룹별",
+      "subject": "과목별",
+      "groupColumn": "그룹",
+      "subjectColumn": "과목",
+      "collected": "수납액"
+    },
+    "funnel": {
+      "title": "리드 퍼널",
+      "stage": "단계",
+      "source": "유입 경로",
+      "leads": "리드",
+      "won": "등록 완료",
+      "bySource": "유입 경로별",
+      "dimension": "구분"
+    },
+    "students": {
+      "title": "수강 중인 학생",
+      "active": "수강 중인 학생",
+      "joined": "신규 등록",
+      "left": "퇴원",
+      "flow": "등록 및 퇴원"
+    },
+    "attendance": {
+      "title": "그룹별 출석률",
+      "group": "그룹",
+      "rate": "출석률",
+      "present": "출석",
+      "late": "지각",
+      "absent": "결석",
+      "excused": "사유 결석"
+    },
+    "debtAge": {
+      "title": "기간별 미납",
+      "hint": "오늘 기준 학생들의 미납액을 청구 후 경과 기간별로 보여 줍니다.",
+      "bucket": "경과 기간",
+      "amount": "미납",
+      "students": "학생",
+      "studentsCount": "{count, plural, other {학생 #명}}",
+      "0_30": "0–30일",
+      "31_60": "31–60일",
+      "over_60": "60일 초과"
+    },
+    "tabs": {
+      "overview": "개요",
+      "points": "포인트"
+    },
+    "points": {
+      "points": "포인트",
+      "kpi": {
+        "earned": "적립된 포인트",
+        "deducted": "차감된 포인트",
+        "spent": "리워드에 사용",
+        "unspent": "미사용 포인트",
+        "rewardsGiven": "지급된 리워드",
+        "studentsWithoutPoints": "포인트가 없는 학생"
+      },
+      "bySource": {
+        "title": "출처별 적립 포인트"
+      },
+      "byTeacher": {
+        "title": "선생님별 지급 및 차감",
+        "hint": "실행 취소된 항목은 제외됩니다.",
+        "teacher": "선생님",
+        "awards": "지급",
+        "deductions": "차감"
+      },
+      "topStudents": {
+        "title": "상위 10명 학생",
+        "student": "학생"
+      },
+      "rewards": {
+        "title": "지급된 리워드",
+        "reward": "리워드",
+        "given": "지급 수",
+        "points": "사용 포인트"
+      },
+      "byGroup": {
+        "title": "그룹별 학생 1인당 평균 포인트",
+        "hint": "해당 기간 그룹의 포인트를 현재 그룹 학생 수로 나눈 값입니다.",
+        "group": "그룹",
+        "students": "학생",
+        "average": "평균"
+      }
+    },
+    "teacherTitle": "내 그룹의 포인트"
+  },
+  "bot": {
+    "linked": "{student} 님의 학부모로 연결되었습니다. {centre}의 결제 알림과 포인트 소식이 이 채팅으로 전송됩니다. 명령어: /points /top /rewards /language /stop",
+    "linkedStudent": "{student} 님, 연결되었습니다. {centre}의 수업 알림과 내 포인트 소식이 이 채팅으로 전송됩니다. 명령어: /points /top /rewards /language /stop",
+    "unknownCode": "유효하지 않은 링크입니다. {centre}에 새 링크를 요청하세요.",
+    "stopped": "연결이 해제되었습니다. 이 채팅에서는 더 이상 {centre}의 메시지를 받지 않습니다.",
+    "nothingLinked": "이 채팅에 연결된 정보가 없습니다.",
+    "notLinked": "이 채팅은 아직 연결되지 않았습니다. {centre}에서 받은 개인 링크를 열어 주세요.",
+    "help": "이 봇은 {centre}의 알림과 포인트 소식을 보내 드립니다. 연결하려면 센터에서 받은 개인 링크를 열어 주세요. 명령어: /points /top /rewards /language /stop",
+    "chooseLanguage": "이 채팅의 언어를 선택하세요:",
+    "languageSet": "완료되었습니다. 이제 이 채팅은 한국어로 표시됩니다.",
+    "whichChild": "어느 자녀인가요?",
+    "failed": "문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+    "pointsCount": "{points, plural, other {#포인트}}",
+    "goal": "“{reward}”까지 {points, plural, other {#포인트}} 남았습니다.",
+    "bonus": "개근 보너스: +{points}.",
+    "points": {
+      "title": "{student}",
+      "balance": "사용 가능: {points}",
+      "month": "이번 달 적립: {points}",
+      "centreRank": "센터: {rank}위",
+      "groupRank": "{group}: {rank}위 ({points})",
+      "last": "최근 내역:"
+    },
+    "top": {
+      "centre": "센터 이번 달 상위 10명",
+      "group": "{group} 상위 5명",
+      "own": "{student}: {rank}위 ({points})",
+      "empty": "이번 달에는 아직 포인트가 없습니다."
+    },
+    "rewards": {
+      "title": "리워드. {student} 님이 사용할 수 있는 포인트: {points}.",
+      "empty": "지금은 리워드가 없습니다.",
+      "outOfStock": "품절",
+      "left": "{count}개 남음",
+      "request": "요청: {reward}"
+    },
+    "request": {
+      "confirm": "{student} 님의 {points}포인트로 “{reward}”을(를) 요청할까요? 포인트는 즉시 보류됩니다.",
+      "yes": "네, 요청합니다",
+      "no": "아니요",
+      "done": "요청이 접수되었습니다: “{reward}”. {centre} 안내 데스크에서 받아 가세요.",
+      "cancelled": "요청하지 않았습니다.",
+      "notEnough": "이 리워드를 받기에 포인트가 부족합니다.",
+      "outOfStock": "이 리워드는 품절되었습니다.",
+      "notOnOffer": "이 리워드는 더 이상 제공되지 않습니다.",
+      "failed": "요청이 처리되지 않았습니다. 잠시 후 다시 시도해 주세요."
+    },
+    "reward": {
+      "requested": "요청이 접수되어 {points}포인트가 보류되었습니다. 안내 데스크에서 받아 가세요.",
+      "given": "전달되었습니다. 축하합니다!",
+      "rejected": "요청이 거절되었습니다({reason}). {points}포인트가 반환되었습니다."
+    },
+    "source": {
+      "attendance": "출석",
+      "perfect_month": "한 달 개근",
+      "on_time_payment": "수강료 기한 내 납부",
+      "referral": "친구 등록",
+      "teacher_award": "선생님 지급",
+      "teacher_deduction": "선생님 차감",
+      "owner_adjustment": "조정",
+      "reward_hold": "리워드 요청",
+      "reward_return": "리워드 반환"
+    },
+    "commands": {
+      "points": "내 포인트와 순위",
+      "top": "이번 달 상위 학생",
+      "rewards": "리워드 및 요청",
+      "language": "언어 변경",
+      "stop": "이 채팅 연결 해제"
+    }
+  },
+  "notify": {
+    "send": {
+      "title": "{student} 님에게 보내는 메시지",
+      "channel": "채널",
+      "telegram": "Telegram",
+      "sms": "SMS",
+      "notLinked": "이 학생은 Telegram이 연결되어 있지 않습니다.",
+      "text": "내용",
+      "smsHint": "{phone} 번호로 발송됩니다. 기본 라틴 문자만 쓰면 SMS 한 건에 160자까지 들어가며, 키릴 문자나 ʻ가 있으면 절반으로 줄어듭니다.",
+      "action": "보내기",
+      "sent": "메시지가 발송되었습니다",
+      "failed": "메시지를 전달하지 못했습니다. 메시지 탭에서 원인을 확인할 수 있습니다."
+    },
+    "remind": {
+      "sent": "알림이 발송되었습니다",
+      "failed": "알림을 전달하지 못했습니다. 학생의 메시지 탭에서 원인을 확인할 수 있습니다.",
+      "already": "오늘 이미 알림을 보냈습니다",
+      "allDone": "{sent, plural, =0 {발송된 알림 없음} other {알림 #건 발송}}{already, plural, =0 {} other { · #명은 오늘 이미 알림 받음}}{failed, plural, =0 {} other { · #건 실패}}",
+      "allTitle": "모든 미납자에게 알림을 보낼까요?",
+      "allBody": "{count, plural, other {미납 학생 #명에게 각각 알림이 발송됩니다}}. Telegram으로 보내며, Telegram이 연결되지 않은 경우 SMS로 보냅니다. 오늘 이미 알림을 받은 학생은 제외됩니다.",
+      "allAction": "전체 알림 보내기"
+    },
+    "errors": {
+      "notAllowed": "이 작업을 수행할 권한이 없습니다.",
+      "notConfigured": "이 서버에는 아직 메시지 발송이 설정되지 않았습니다.",
+      "quietHours": "{from}부터 {to}까지는 메시지를 발송하지 않습니다. {to} 이후에 다시 시도해 주세요.",
+      "noChannel": "이 채널로는 해당 학생에게 연락할 수 없습니다.",
+      "textRequired": "메시지를 입력하세요.",
+      "tooLong": "텍스트가 너무 깁니다.",
+      "notFound": "더 이상 존재하지 않습니다.",
+      "noDebt": "이 학생은 더 이상 미납 금액이 없습니다.",
+      "noTemplate": "이 메시지에 대한 템플릿이 없습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요."
+    }
+  },
+  "settings": {
+    "tabs": {
+      "centre": "센터",
+      "rooms": "강의실",
+      "users": "사용자",
+      "notifications": "알림",
+      "templates": "템플릿",
+      "profile": "프로필",
+      "points": "포인트"
+    },
+    "saved": "저장되었습니다",
+    "centre": {
+      "name": "센터 이름",
+      "billingDay": "청구일",
+      "billingDayHint": "매월 이 날짜에 월 수강료가 생성됩니다.",
+      "dueDay": "납부 기한일",
+      "dueDayHint": "수강료는 이 날짜까지 납부해야 합니다. 이후에도 납부되지 않은 수강료는 미납이 됩니다."
+    },
+    "users": {
+      "invite": "사용자 초대",
+      "inviteTitle": "사용자 초대",
+      "inviteHint": "비밀번호를 설정할 수 있는 링크가 이메일로 발송됩니다.",
+      "email": "이메일",
+      "name": "성명",
+      "role": "역할",
+      "language": "언어",
+      "sendInvite": "초대 보내기",
+      "invited": "{email} 주소로 초대를 보냈습니다",
+      "you": "나",
+      "status": {
+        "active": "활성",
+        "invited": "초대됨",
+        "deactivated": "비활성화됨"
+      },
+      "statusColumn": "상태",
+      "deactivate": "비활성화",
+      "reactivate": "다시 활성화",
+      "deactivateTitle": "{name} 님을 비활성화할까요?",
+      "deactivateBody": "해당 사용자는 로그아웃되며 더 이상 로그인하거나 내용을 볼 수 없습니다. 이전 작업 기록은 그대로 유지됩니다. 나중에 다시 활성화할 수 있습니다.",
+      "deactivated": "{name} 님이 비활성화되었습니다",
+      "reactivated": "{name} 님이 다시 로그인할 수 있습니다",
+      "roleChanged": "{name} 님의 역할이 {role}(으)로 변경되었습니다",
+      "roleFor": "{name} 님의 역할",
+      "teacher": "선생님",
+      "teacherHint": "이 선생님의 그룹만 볼 수 있습니다: 학생 이름, 출석, 코인.",
+      "chooseTeacher": "선생님 선택",
+      "noFreeTeachers": "모든 선생님에게 이미 로그인 계정이 있습니다",
+      "linkTitle": "{name} 님은 어느 선생님인가요?",
+      "linkBody": "선생님 역할로는 해당 선생님의 그룹만 볼 수 있습니다: 학생 이름, 출석, 코인. 앱의 다른 내용은 볼 수 없습니다.",
+      "makeTeacher": "선생님으로 지정"
+    },
+    "notifications": {
+      "enabled": "자동 알림 보내기",
+      "enabledHint": "결제 예정, 결제 기한 초과, 수업 알림입니다. 직원이 직접 보내는 메시지에는 영향을 주지 않습니다.",
+      "lessonHours": "수업 알림(수업 몇 시간 전)",
+      "quietFrom": "방해 금지 시작 시간",
+      "quietTo": "방해 금지 종료 시간",
+      "quietHint": "방해 금지 시간에는 아무것도 발송되지 않습니다. 결제 메시지는 종료될 때까지 대기하고, 수업 알림은 건너뜁니다.",
+      "telegram": "Telegram 봇",
+      "telegramNotConfigured": "설정되지 않음",
+      "telegramNotConfiguredHint": "서버에 TELEGRAM_BOT_TOKEN과 TELEGRAM_WEBHOOK_SECRET을 설정하세요.",
+      "telegramUnreachable": "Telegram이 응답하지 않습니다",
+      "telegramConnected": "연결됨",
+      "telegramNotConnected": "웹훅이 연결되지 않음",
+      "webhook": "웹훅 주소",
+      "webhookElsewhere": "Telegram이 현재 {url} 주소로 전달하고 있습니다.",
+      "webhookNeedsHttps": "Telegram은 https 주소만 호출하며, 서버에 TELEGRAM_WEBHOOK_SECRET이 필요합니다. 배포된 앱에서 연결하세요.",
+      "lastError": "최근 전달 오류: {error}",
+      "connect": "웹훅 연결",
+      "connectedToast": "웹훅이 @{username}에 연결되었습니다",
+      "eskiz": "Eskiz SMS",
+      "eskizConfigured": "설정됨",
+      "eskizNotConfigured": "설정되지 않음",
+      "eskizNotConfiguredHint": "서버에 ESKIZ_EMAIL과 ESKIZ_PASSWORD를 설정하세요.",
+      "sender": "발신자: {sender}",
+      "testPhone": "테스트 SMS를 받을 전화번호",
+      "sendTest": "테스트 SMS 보내기",
+      "testHint": "Eskiz의 고정 테스트 문구로 실제 SMS 한 건을 발송합니다.",
+      "testSent": "{phone} 번호로 테스트 SMS를 보냈습니다",
+      "serverNotReady": "서버에 SUPABASE_SECRET_KEY가 설정되지 않았습니다. 알림, 메시지, 초대 기능이 아직 작동하지 않습니다."
+    },
+    "templates": {
+      "type": "메시지",
+      "channel": "채널",
+      "language": "언어",
+      "text": "내용",
+      "placeholders": "치환 변수",
+      "insert": "{placeholder} 삽입",
+      "preview": "미리보기",
+      "characters": "{count, plural, other {#자}}",
+      "smsParts": "{count, plural, other {SMS #건}}",
+      "smsGsm": "기본 라틴 문자: SMS 한 건에 160자가 들어갑니다.",
+      "smsUnicode": "{characters} 때문에 유니코드로 발송됩니다. SMS 한 건에 70자만 들어갑니다.",
+      "smsConverted": "SMS를 발송할 때 ʻ와 둥근 따옴표는 곧은 따옴표로 바뀝니다.",
+      "unknown": "치환 변수가 아니므로 입력한 그대로 발송됩니다: {names}",
+      "unsaved": "저장되지 않은 변경 사항",
+      "placeholder": {
+        "student": "학생 이름",
+        "group": "그룹",
+        "month": "월",
+        "amount": "금액",
+        "due_date": "납부 기한",
+        "time": "수업 시간",
+        "centre": "센터 이름",
+        "week_points": "이번 주 포인트",
+        "month_points": "이번 달 포인트",
+        "points": "포인트",
+        "balance": "사용 가능 포인트",
+        "group_rank": "그룹 내 순위",
+        "centre_rank": "센터 내 순위",
+        "reason": "사유",
+        "reward": "리워드",
+        "points_needed": "부족한 포인트",
+        "goal": "다음 목표 리워드(문장)",
+        "bonus": "개근 보너스(문장)",
+        "update": "요청 처리 결과(문장)"
+      }
+    },
+    "profile": {
+      "name": "성명",
+      "language": "화면 언어",
+      "email": "이메일",
+      "password": "비밀번호",
+      "newPassword": "새 비밀번호",
+      "confirmPassword": "비밀번호 확인",
+      "savePassword": "비밀번호 변경",
+      "passwordSaved": "비밀번호가 변경되었습니다"
+    },
+    "errors": {
+      "nameRequired": "이름을 입력하세요.",
+      "tooLong": "텍스트가 너무 깁니다.",
+      "dayInvalid": "1일부터 28일 사이의 날짜를 선택하세요.",
+      "dueBeforeBilling": "납부 기한일은 청구일보다 빠를 수 없습니다.",
+      "timeInvalid": "21:00 형식으로 시간을 입력하세요.",
+      "hoursInvalid": "1~48시간 사이로 입력하세요.",
+      "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+      "emailTaken": "이 이메일로 등록된 계정이 이미 있습니다.",
+      "phoneInvalid": "+998901234567 형식으로 전화번호를 입력하세요.",
+      "textRequired": "내용을 입력하세요.",
+      "passwordTooShort": "비밀번호는 8자 이상이어야 합니다.",
+      "passwordMismatch": "비밀번호가 일치하지 않습니다.",
+      "notSelf": "본인의 역할을 변경하거나 본인을 비활성화할 수 없습니다.",
+      "lastOwner": "센터에는 활성 상태의 원장이 한 명 이상 있어야 합니다.",
+      "notAllowed": "이 작업을 수행할 권한이 없습니다.",
+      "notConfigured": "서버에 아직 설정되지 않았습니다.",
+      "notFound": "더 이상 존재하지 않습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
+      "numberRequired": "강의실 번호를 입력하세요.",
+      "numberTaken": "이 번호를 사용하는 다른 강의실이 이미 있습니다.",
+      "capacityInvalid": "수용 인원을 1에서 500 사이로 입력하세요.",
+      "roomInUse": "이 강의실을 사용하는 그룹이 아직 있습니다.",
+      "capacityBelowGroup": "이 강의실을 사용하는 그룹의 정원이 그보다 큽니다. 먼저 그룹 정원을 줄이세요.",
+      "teacherRequired": "선생님을 선택하세요.",
+      "teacherTaken": "이 선생님에게는 이미 로그인 계정이 있습니다."
+    },
+    "rooms": {
+      "add": "강의실 추가",
+      "addTitle": "새 강의실",
+      "editTitle": "강의실 {room} 수정",
+      "number": "번호",
+      "numberHint": "문에 적힌 번호: 3, 2A.",
+      "name": "이름",
+      "nameHint": "선택 사항입니다. 번호 뒤에 표시됩니다: 3 · 대강당.",
+      "capacity": "수용 인원",
+      "capacityHint": "수용할 수 있는 학생 수입니다. 이 강의실을 쓰는 그룹의 정원은 이보다 클 수 없습니다.",
+      "active": "새 그룹에 사용 가능",
+      "activeHint": "끄면 강의실은 유지되지만 새 그룹을 만들 때 선택지에 나타나지 않습니다.",
+      "groups": "그룹",
+      "noGroups": "그룹 없음",
+      "status": "상태",
+      "statusActive": "사용 중",
+      "statusInactive": "선택 불가",
+      "edit": "수정",
+      "editRoom": "강의실 {room} 수정",
+      "archive": "보관",
+      "archiveRoom": "강의실 {room} 보관",
+      "archiveTitle": "강의실 {room}을(를) 보관할까요?",
+      "archiveBody": "강의실이 이 목록에서 사라지며 더 이상 선택할 수 없습니다. 과거에 이 강의실을 사용한 그룹의 기록에는 그대로 남습니다.",
+      "archiveBlocked": "그룹이 사용 중입니다. 먼저 그룹을 옮기거나 종료하세요.",
+      "archived": "강의실 {room}이(가) 보관되었습니다",
+      "created": "강의실 {room}이(가) 추가되었습니다",
+      "saved": "강의실 {room}이(가) 저장되었습니다",
+      "empty": "아직 강의실이 없습니다. 첫 강의실을 추가하세요."
+    }
+  },
+  "myGroups": {
+    "title": "내 그룹",
+    "empty": "아직 담당 그룹이 없습니다. 센터 원장이 그룹을 연결해 줍니다.",
+    "students": "{count, plural, other {학생 #명}}",
+    "lessons": "수업",
+    "noLessons": "지난 한 주와 앞으로 2주 동안 수업이 없습니다.",
+    "today": "오늘",
+    "mark": "출석 체크",
+    "editMarks": "출석 변경",
+    "ranking": "학생 및 코인",
+    "attendance": "출석",
+    "lessonCancelled": "취소된 수업입니다.",
+    "taught": "{count, plural, other {이번 달 진행한 수업 #회}}"
+  },
+  "coins": {
+    "column": "코인",
+    "place": "순위",
+    "placeShort": "{place}위",
+    "earned": "이 그룹에서 적립",
+    "balance": "사용 가능",
+    "count": "{count, plural, other {코인 #개}}",
+    "give": "코인 지급",
+    "spend": "코인 사용",
+    "kind": "지급 또는 사용",
+    "howMany": "수량",
+    "reasonOptional": "사유(선택 사항)",
+    "spentOn": "사용 내용",
+    "giveTitle": "{name} 님에게 코인 지급",
+    "giveHint": "한 번에 최대 10개까지 지급할 수 있습니다. 코인으로 그룹 내 순위가 정해지며 안내 데스크에서 사용할 수 있습니다.",
+    "title": "{name} 님의 코인",
+    "staffHint": "코인을 지급하거나 학생이 가진 코인을 사용 처리합니다: 상품 지급 또는 정정.",
+    "has": "{count, plural, other {사용 가능한 코인 #개}}",
+    "given": "{name}: {count, plural, other {코인 #개 지급}}",
+    "spent": "{name}: {count, plural, other {코인 #개 사용}}",
+    "errors": {
+      "amountInvalid": "한도 내에서 코인 수를 정수로 입력하세요.",
+      "reasonRequired": "코인을 어디에 사용했는지 입력하세요.",
+      "notEnough": "학생이 가진 코인이 그만큼 없습니다.",
+      "notInGroup": "학생이 이 그룹에 속해 있지 않습니다.",
+      "tooLong": "텍스트가 너무 깁니다.",
+      "notFound": "이 학생은 더 이상 존재하지 않습니다.",
+      "notAllowed": "이 작업을 수행할 권한이 없습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요."
+    }
+  },
+  "points": {
+    "count": "{count, plural, other {#포인트}}",
+    "giveTitle": "{name} 님에게 포인트 지급",
+    "takeTitle": "{name} 님의 포인트 차감",
+    "giveHint": "사유를 선택하거나 1~{max}포인트를 직접 지급하세요.",
+    "takeHint": "사유를 선택하거나 사유를 직접 입력해 1~{max}포인트를 차감하세요. 학생과 학부모에게 안내됩니다.",
+    "custom": "직접 입력",
+    "howMany": "수량",
+    "reason": "사유",
+    "give": "포인트 지급",
+    "take": "포인트 차감",
+    "giveTo": "{name} 님에게 포인트 지급",
+    "takeFrom": "{name} 님의 포인트 차감",
+    "given": "{name}: +{count, plural, other {#포인트}}",
+    "taken": "{name}: −{count, plural, other {#포인트}}",
+    "takenReduced": "{name} 님의 포인트가 {count, plural, other {#포인트}}뿐이어서 전부 차감되었습니다",
+    "nothingToTake": "{name} 님은 차감할 포인트가 없습니다",
+    "undo": "실행 취소",
+    "undone": "실행 취소됨",
+    "friend": "친구: {name}",
+    "programmeOff": "포인트 프로그램이 설정에서 꺼져 있습니다. 이미 적립된 포인트는 유지됩니다.",
+    "errors": {
+      "programmeOff": "포인트 프로그램이 꺼져 있습니다.",
+      "amountInvalid": "한도 내에서 포인트 수를 정수로 입력하세요.",
+      "reasonRequired": "사유를 입력하세요.",
+      "dailyLimit": "이 학생의 일일 한도에 도달했습니다.",
+      "dailyLimitLeft": "이 학생의 일일 한도에 도달했습니다. 오늘 남은 한도: {count, plural, =0 {없음} other {#포인트}}.",
+      "notInGroup": "학생이 이 그룹에 속해 있지 않습니다.",
+      "undoTooLate": "실행 취소할 수 있는 시간이 지났습니다.",
+      "notEnough": "학생이 가진 포인트가 그만큼 없습니다.",
+      "valueInvalid": "정수를 입력하세요.",
+      "valueRange": "{min}에서 {max} 사이의 정수를 입력하세요.",
+      "labelRequired": "세 가지 언어로 모두 이름을 입력하세요.",
+      "tooLong": "너무 깁니다.",
+      "notAllowed": "이 작업을 수행할 권한이 없습니다.",
+      "notFound": "찾을 수 없습니다. 삭제되었을 수 있습니다.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
+      "nameRequired": "이름을 입력하세요.",
+      "costInvalid": "필요 포인트를 1에서 100,000 사이로 입력하세요.",
+      "stockInvalid": "정수를 입력하거나, 무제한이면 비워 두세요.",
+      "outOfStock": "이 리워드는 품절되었습니다.",
+      "alreadyHandled": "이미 처리된 요청입니다.",
+      "notOnOffer": "이 리워드는 더 이상 제공되지 않습니다.",
+      "photoInvalid": "2 MB 이하의 JPG, PNG 또는 WebP 사진을 선택하세요."
+    },
+    "history": {
+      "title": "내역",
+      "subtitle": "이번 달에 내가 지급하거나 차감한 모든 포인트입니다.",
+      "empty": "이번 달에 지급하거나 차감한 포인트가 없습니다.",
+      "undone": "실행 취소됨"
+    },
+    "totals": {
+      "balance": "사용 가능",
+      "earnedThisMonth": "이번 달 적립",
+      "earnedAllTime": "누적 적립"
+    },
+    "adjust": {
+      "action": "포인트 조정",
+      "title": "{name} 님의 포인트 조정",
+      "hint": "현재 사용 가능: {count, plural, other {#포인트}}. 사유는 포인트 내역에 남습니다.",
+      "kind": "추가 또는 차감",
+      "add": "추가",
+      "take": "차감",
+      "done": "포인트가 조정되었습니다"
+    },
+    "ledger": {
+      "empty": "아직 포인트가 없습니다.",
+      "date": "날짜",
+      "what": "내용",
+      "by": "처리자",
+      "points": "포인트",
+      "automatic": "자동"
+    },
+    "source": {
+      "attendance": "출석",
+      "perfect_month": "한 달 개근",
+      "on_time_payment": "수강료 기한 내 납부",
+      "referral": "친구 등록",
+      "teacher_award": "선생님 지급",
+      "teacher_deduction": "선생님 차감",
+      "owner_adjustment": "원장 조정",
+      "reward_hold": "리워드 요청",
+      "reward_return": "리워드 반환"
+    },
+    "settings": {
+      "enabled": "포인트 프로그램",
+      "enabledHint": "끄면 새 포인트가 적립되지 않습니다. 이미 적립된 포인트는 유지됩니다.",
+      "values": "포인트 값",
+      "valuesHint": "새 값은 지금부터 적용되며, 이미 지급된 포인트에는 적용되지 않습니다.",
+      "limits": "선생님 한도",
+      "limitsHint": "선생님이 지급하거나 차감할 수 있는 양입니다.",
+      "present": "수업 출석",
+      "late": "수업 지각",
+      "perfect_month": "한 달 개근",
+      "perfect_month_min_lessons": "개근으로 인정되는 최소 수업 수",
+      "on_time": "수강료 기한 내 납부",
+      "referral": "친구 등록",
+      "max_per_action": "지급·차감 1회당 최대 포인트",
+      "teacher_daily_cap": "학생 1명당 하루 최대 포인트"
+    },
+    "presets": {
+      "title": "선생님용 사유",
+      "hint": "선생님이 포인트를 지급하거나 차감할 때 이 중에서 선택합니다. 1회당 한도를 넘는 사유는 표시되지 않습니다.",
+      "kind": "종류",
+      "kinds": {
+        "award": "지급",
+        "deduction": "차감"
+      },
+      "points": "포인트",
+      "label": {
+        "uz": "우즈베크어 이름",
+        "ru": "러시아어 이름",
+        "en": "영어 이름"
+      },
+      "active": "선생님에게 표시",
+      "off": "꺼짐",
+      "edit": "{name} 수정",
+      "add": {
+        "award": "지급 사유 추가",
+        "deduction": "차감 사유 추가"
+      },
+      "editTitle": "사유 수정",
+      "newTitle": "새 사유",
+      "saved": "사유가 저장되었습니다",
+      "removed": "사유가 삭제되었습니다",
+      "remove": "삭제"
+    },
+    "board": {
+      "title": "랭킹",
+      "subtitle": "적립한 포인트 기준입니다. 리워드에 포인트를 사용해도 순위는 내려가지 않습니다.",
+      "scope": "센터 또는 그룹",
+      "centre": "센터 전체",
+      "period": "기간",
+      "periods": {
+        "month": "이번 달",
+        "all": "전체 기간"
+      },
+      "place": "순위",
+      "hidden": "TV에서 숨김",
+      "empty": "아직 학생이 없습니다."
+    },
+    "hide": {
+      "label": "공개 랭킹에서 숨기기",
+      "hint": "학생이 TV 화면과 봇의 상위 목록에서 제외됩니다. 직원은 계속 순위를 볼 수 있습니다.",
+      "hidden": "TV에서 숨겼습니다",
+      "shown": "TV에 다시 표시됩니다"
+    },
+    "tv": {
+      "title": "TV 화면",
+      "hint": "센터의 TV에서 이 링크를 여세요. 로그인이 필요 없으며 이름과 성의 첫 글자만 표시됩니다. 링크가 있는 사람은 누구나 볼 수 있습니다.",
+      "language": "TV 언어",
+      "languageSaved": "TV 언어가 저장되었습니다",
+      "link": "TV 링크",
+      "copy": "링크 복사",
+      "copied": "링크가 복사되었습니다",
+      "regenerate": "새 링크",
+      "regenerateTitle": "새 TV 링크를 만들까요?",
+      "regenerateBody": "기존 링크는 즉시 작동하지 않게 됩니다. 모든 TV에서 새 링크를 여세요.",
+      "regenerated": "새 링크가 만들어졌습니다"
+    },
+    "tabs": {
+      "leaderboard": "랭킹",
+      "rewards": "리워드",
+      "requests": "요청"
+    },
+    "rewards": {
+      "add": "리워드 추가",
+      "edit": "수정",
+      "empty": "아직 리워드가 없습니다.",
+      "off": "꺼짐",
+      "unlimited": "무제한",
+      "outOfStock": "품절",
+      "left": "{count, plural, other {#개 남음}}",
+      "newTitle": "새 리워드",
+      "editTitle": "리워드 수정",
+      "name": "이름",
+      "description": "설명",
+      "cost": "필요 포인트",
+      "stock": "재고",
+      "stockHint": "무제한이면 비워 두세요.",
+      "photo": "사진",
+      "photoHint": "JPG, PNG 또는 WebP, 최대 2 MB. 새 사진을 올리면 기존 사진이 교체됩니다.",
+      "active": "제공 중",
+      "saved": "리워드가 저장되었습니다",
+      "archived": "리워드가 보관되었습니다",
+      "archive": "보관"
+    },
+    "requests": {
+      "empty": "아직 리워드 요청이 없습니다.",
+      "date": "날짜",
+      "student": "학생",
+      "reward": "리워드",
+      "cost": "포인트",
+      "from": "요청 경로",
+      "status": "상태",
+      "via": {
+        "bot": "봇",
+        "desk": "데스크"
+      },
+      "statuses": {
+        "requested": "대기 중",
+        "given": "지급됨",
+        "rejected": "거절됨",
+        "cancelled": "취소됨"
+      },
+      "give": "지급",
+      "reject": "거절",
+      "given": "{name}: 리워드가 지급되었습니다",
+      "rejected": "{name}: 요청이 거절되어 포인트가 반환되었습니다",
+      "rejectTitle": "{name} 님의 요청을 거절할까요?",
+      "rejectBody": "{count, plural, other {#포인트}}가 학생에게 반환되고 리워드는 재고로 돌아갑니다."
+    },
+    "redeem": {
+      "open": "리워드 교환",
+      "title": "{name} 님의 리워드",
+      "hint": "사용 가능: {count, plural, other {#포인트}}. 포인트는 즉시 보류되며, 리워드는 포인트 → 요청에서 지급하세요.",
+      "action": "교환",
+      "short": "{count, plural, other {#포인트 부족}}",
+      "done": "{reward}: 요청이 생성되고 포인트가 보류되었습니다"
+    }
+  },
+  "tv": {
+    "centreTitle": "이번 달 상위 10명",
+    "groupSubtitle": "상위 5명 · {month}",
+    "updated": "{time} 업데이트",
+    "empty": "이번 달에는 아직 포인트가 없습니다"
+  }
+}

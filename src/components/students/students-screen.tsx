@@ -146,7 +146,7 @@ export function StudentsScreen({
           cell: ({ row }) =>
             row.original.telegramLinked ? (
               <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-text-secondary">
-                <Send className="size-4 text-purple" aria-hidden />
+                <Send className="size-4 text-brand-ink" aria-hidden />
                 <span className="text-footnote">{t("telegram.linkedShort")}</span>
               </span>
             ) : (

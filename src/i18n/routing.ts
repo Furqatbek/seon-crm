@@ -1,7 +1,7 @@
 import { defineRouting } from "next-intl/routing";
 
 export const routing = defineRouting({
-  locales: ["uz", "ru", "en"],
+  locales: ["uz", "ru", "en", "ko"],
   defaultLocale: "uz",
   localePrefix: "always",
   // The language switch is remembered in this cookie until profiles.language exists.

@@ -341,10 +341,10 @@ function EnrolForm({
                         key={mode}
                         value={mode}
                         data-charge-mode={mode}
-                        className="group flex items-center gap-3 rounded-control border border-border px-3 py-2 text-left outline-none motion-fast focus-visible:ring-3 focus-visible:ring-focus-ring data-[state=checked]:border-purple data-[state=checked]:bg-purple-tint"
+                        className="group flex items-center gap-3 rounded-control border border-border px-3 py-2 text-left outline-none motion-fast focus-visible:ring-3 focus-visible:ring-focus-ring data-[state=checked]:border-brand data-[state=checked]:bg-brand-tint"
                       >
-                        <span className="flex size-4 shrink-0 items-center justify-center rounded-full border border-border-strong bg-bg group-data-[state=checked]:border-purple">
-                          <RadioGroup.Indicator className="size-2 rounded-full bg-purple" />
+                        <span className="flex size-4 shrink-0 items-center justify-center rounded-full border border-border-strong bg-bg group-data-[state=checked]:border-brand">
+                          <RadioGroup.Indicator className="size-2 rounded-full bg-brand" />
                         </span>
                         <span className="flex min-w-0 flex-1 flex-col">
                           <span className="text-body text-text">

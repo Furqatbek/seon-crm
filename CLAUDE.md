@@ -9,7 +9,7 @@ section each task names before writing code.
 - Next.js, App Router, TypeScript strict, Server Components + Server Actions
 - Supabase: Postgres, Auth (email + password), Row Level Security, Supabase Cron
 - Tailwind CSS v4 + shadcn/ui restyled to our tokens, lucide-react icons
-- next-intl for uz / ru / en; zod + react-hook-form for every form
+- next-intl for uz / ru / en / ko; zod + react-hook-form for every form
 - TanStack Table for lists, Recharts for report charts
 - Vitest for logic tests, Playwright for end-to-end tests; hosted on Vercel
 
@@ -24,7 +24,8 @@ section each task names before writing code.
 - Money = UZS as bigint whole soʻm. Never floats. Display only via formatMoney().
 - Time zone Asia/Tashkent. Store timestamptz; a billing month is a date (1st of month).
 - Every visible string goes through next-intl. Add each key to messages/uz.json,
-  ru.json and en.json in the same change. Uzbek is Latin script with ʻ (U+02BB).
+  ru.json, en.json and ko.json in the same change. Uzbek is Latin script with ʻ (U+02BB).
+  Korean is for the interface only: messages to families stay in uz, ru or en.
 - RLS on every table. Permissions are enforced in the database, not only the UI.
 - Balances, proration and salaries are computed in Postgres functions or
   src/lib/domain/ with unit tests. Components never calculate money.
@@ -40,5 +41,5 @@ section each task names before writing code.
 - supabase/migrations, supabase/seed.sql
 
 ## Done means
-Typecheck, lint and tests pass. The feature works in uz, ru and en. Screenshots at
+Typecheck, lint and tests pass. The feature works in uz, ru, en and ko. Screenshots at
 1440 px and 390 px wide follow the design rules in docs/SPEC.md.

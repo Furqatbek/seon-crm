@@ -21,7 +21,7 @@ import { changePassword, saveProfile } from "@/lib/settings/actions";
 import type { Profile } from "@/lib/settings/queries";
 import type { ResetPasswordValues } from "@/lib/validation/auth";
 import {
-  TEMPLATE_LANGUAGES,
+  UI_LANGUAGES,
   passwordSchema,
   profileSchema,
   type ProfileInput,
@@ -122,7 +122,7 @@ export function ProfileTab({ profile }: { profile: Profile }) {
                   <SelectValue>{tLanguage(field.value)}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  {TEMPLATE_LANGUAGES.map((code) => (
+                  {UI_LANGUAGES.map((code) => (
                     <SelectItem key={code} value={code} lang={code}>
                       {tLanguage(code)}
                     </SelectItem>

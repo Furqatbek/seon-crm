@@ -60,7 +60,8 @@
     "label": "Language",
     "uz": "Oʻzbekcha",
     "ru": "Русский",
-    "en": "English"
+    "en": "English",
+    "ko": "한국어"
   },
   "theme": {
     "label": "Theme",
@@ -529,7 +530,7 @@
       "locked": {
         "cancelled": "This lesson is cancelled. Restore it to mark attendance.",
         "future": "This lesson has not happened yet.",
-        "tooOld": "This lesson is more than 7 days old. Only the owner can change its attendance."
+        "tooOld": "This lesson was on another day. Attendance is marked on the day of the lesson."
       },
       "mark": {
         "present": "Present",
@@ -656,7 +657,7 @@
       "lessonFuture": "This lesson has not happened yet.",
       "notInGroup": "A student is not in this group on that day.",
       "sameGroup": "The student is already in this group.",
-      "attendanceLocked": "This lesson is more than 7 days old. Only the owner can change its attendance.",
+      "attendanceLocked": "Attendance is marked on the day of the lesson, and that day has passed.",
       "notFound": "This no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again.",
@@ -676,9 +677,12 @@
       "adjustments": "Adjustments"
     },
     "strip": {
-      "collected": "Collected",
-      "billed": "Billed",
-      "debt": "Debt today",
+      "billed": "Billed for the month",
+      "paid": "Paid of it",
+      "unpaid": "Still unpaid of it",
+      "rule": "Billed = paid + still unpaid. The figures below are separate: money received counts everything taken during the month, also for other months, and debt is everything owed today.",
+      "collected": "Money received in the month",
+      "debt": "Debt today, all months",
       "expenses": "Expenses"
     },
     "method": {

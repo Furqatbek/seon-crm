@@ -119,12 +119,15 @@ describe.skipIf(!DB_URL)("Hardening", () => {
         const before = await rate();
         const kpiBefore = await kpi();
         // A lesson is marked with everyone absent, then cancelled as a mistake.
-        const [lesson] = await s.rows<{ id: string; n: number }>(
-          `with l as (select id from lessons where group_id = $1 and status = 'held' and lesson_date >= ${month} order by lesson_date limit 1),
-                u as (update attendance set status = 'absent', marked_by = auth.uid() where lesson_id = (select id from l) returning 1)
-           select (select id from l) as id, (select count(*)::int from u) as n`,
+        // Attendance is only written on the day of the lesson, so a held lesson of this month becomes today's first.
+        const [{ id }] = await s.rows<{ id: string }>(
+          `update lessons set lesson_date = public.tashkent_today(), start_time = '23:56'
+           where id = (select id from lessons where group_id = $1 and status = 'held' and lesson_date >= ${month} order by lesson_date limit 1)
+           returning id`,
           [groupId(1)],
         );
+        const marked = await s.rows(`update attendance set status = 'absent', marked_by = auth.uid() where lesson_id = $1 returning 1`, [id]);
+        const lesson = { id, n: marked.length };
         expect(lesson.n).toBeGreaterThan(0);
         const wrong = await rate();
         const kpiWrong = await kpi();

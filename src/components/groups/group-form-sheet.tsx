@@ -241,7 +241,7 @@ function GroupForm({
                       className={cn(
                         "h-control min-w-12 rounded-control border px-3 text-body font-medium outline-none motion-fast pointer-coarse:h-control-touch focus-visible:ring-3 focus-visible:ring-focus-ring",
                         on
-                          ? "border-purple bg-purple-tint text-purple"
+                          ? "border-brand bg-brand-tint text-brand-ink"
                           : "border-border-strong bg-bg text-text hover:bg-bg-subtle",
                       )}
                     >

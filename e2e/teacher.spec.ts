@@ -17,14 +17,23 @@ async function fixture(groupName: string) {
     const { rows: groups } = await db.query("select id from groups where name = $1 and teacher_id = $2", [groupName, TEACHER]);
     const group = groups[0].id as string;
     const { rows: others } = await db.query("select id from groups where teacher_id <> $1 and status = 'active' order by name limit 1", [TEACHER]);
-    const { rows: lessons } = await db.query(
-      `select id, lesson_date::text as day, status from lessons
-       where group_id = $1 and status <> 'cancelled'
-         and lesson_date between public.tashkent_today() - 7 and public.tashkent_today()
-       order by lesson_date desc limit 1`,
+    // Attendance is marked on the day of the lesson. If the group has no lesson
+    // today, its next one is brought forward for the test and put back after.
+    let { rows: lessons } = await db.query(
+      `select id, lesson_date::text as day, lesson_date::text as original, status from lessons
+       where group_id = $1 and status <> 'cancelled' and lesson_date = public.tashkent_today() limit 1`,
       [group],
     );
-    const lesson = lessons[0] as { id: string; day: string; status: string };
+    if (lessons.length === 0) {
+      ({ rows: lessons } = await db.query(
+        `with next as (select id, lesson_date::text as original from lessons
+                       where group_id = $1 and status <> 'cancelled' and lesson_date > public.tashkent_today() order by lesson_date limit 1)
+         update lessons l set lesson_date = public.tashkent_today() from next where l.id = next.id
+         returning l.id, l.lesson_date::text as day, next.original, l.status`,
+        [group],
+      ));
+    }
+    const lesson = lessons[0] as { id: string; day: string; original: string; status: string };
     const { rows: marks } = await db.query("select student_id, status, marked_by, marked_at from attendance where lesson_id = $1", [lesson.id]);
     await db.query("delete from attendance where lesson_id = $1", [lesson.id]);
     await db.query("update lessons set status = 'scheduled' where id = $1", [lesson.id]);
@@ -47,7 +56,7 @@ async function restore(data: Awaited<ReturnType<typeof fixture>>) {
         [data.lesson.id, mark.student_id, mark.status, mark.marked_by, mark.marked_at],
       );
     }
-    await db.query("update lessons set status = $2 where id = $1", [data.lesson.id, data.lesson.status]);
+    await db.query("update lessons set status = $2, lesson_date = $3 where id = $1", [data.lesson.id, data.lesson.status, data.lesson.original]);
   });
 }
 

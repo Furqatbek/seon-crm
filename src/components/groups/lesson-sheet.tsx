@@ -26,6 +26,7 @@ import {
 import { formatDay } from "@/lib/format";
 import { saveAttendance } from "@/lib/groups/actions";
 import { roomLabel } from "@/lib/domain/rooms";
+import { useInstantClose } from "@/lib/hooks/use-instant-close";
 import type { LessonSheetData } from "@/lib/groups/queries";
 import type { GroupErrorKey } from "@/lib/validation/groups";
 
@@ -129,9 +130,10 @@ export function LessonSheet({
 }) {
   const t = useTranslations("groups");
   const locale = useLocale();
+  const sheet = useInstantClose(lesson?.id ?? null, onClose);
 
   return (
-    <Sheet open={lesson !== null} onOpenChange={(open) => !open && onClose()}>
+    <Sheet open={sheet.open} onOpenChange={(open) => !open && sheet.close()}>
       <SheetContent>
         {lesson ? (
           <>
@@ -147,13 +149,13 @@ export function LessonSheet({
                   </StatusPill>
                   <span>{lesson.teacher.full_name}</span>
                   {lesson.teacher.id !== lesson.group.teacher_id ? (
-                    <Badge tone="purple">{t("lesson.substitute")}</Badge>
+                    <Badge tone="brand">{t("lesson.substitute")}</Badge>
                   ) : null}
                   {lesson.group.room ? <span data-slot="lesson-room">{roomLabel(lesson.group.room)}</span> : null}
                 </div>
               </SheetDescription>
             </SheetHeader>
-            <Marks key={lesson.id} lesson={lesson} lock={lock} onClose={onClose} />
+            <Marks key={lesson.id} lesson={lesson} lock={lock} onClose={sheet.close} />
           </>
         ) : null}
       </SheetContent>

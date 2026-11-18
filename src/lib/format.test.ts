@@ -186,3 +186,12 @@ describe("formatMonthShort", () => {
     expect(formatMonthShort("2026-05", "ru")).toBe("май 26");
   });
 });
+
+describe("Korean formats", () => {
+  it("writes money, dates and months the Korean way", () => {
+    expect(formatMoney(1_250_000, "ko")).toBe("1,250,000숨");
+    expect(formatDate("2026-11-10T04:00:00Z", "ko")).toBe("11월 10일");
+    expect(formatDate("2026-11-10T04:00:00Z", "ko", { year: true })).toBe("2026년 11월 10일");
+    expect(formatMonth("2026-11", "ko")).toBe("2026년 11월");
+  });
+});

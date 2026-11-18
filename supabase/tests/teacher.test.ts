@@ -204,23 +204,52 @@ describe.skipIf(!DB_URL)("Teacher login and coins", () => {
       });
     });
 
-    it("not a lesson older than 7 days, a future one or a cancelled one", async () => {
+    it("not a past lesson, a future one or a cancelled one", async () => {
       const ids = await as("owner", async (s) => ({
         old: await lessonOn(s, own.ielts, `lesson_date < public.tashkent_today() - 7`),
+        yesterday: await lessonOn(s, own.ielts, `lesson_date < public.tashkent_today()`),
         future: await lessonOn(s, own.ielts, `lesson_date > public.tashkent_today()`),
-        recent: await lessonOn(s, own.ielts, `lesson_date between public.tashkent_today() - 7 and public.tashkent_today()`),
       }));
       const marks = JSON.stringify([{ student_id: ownStudent, status: "present" }]);
+      await as("teacher", async (s) => {
+        expect(code(await s.attempt(`select public.teacher_save_attendance($1, $2::jsonb)`, [ids.old, marks]))).toBe("ET001");
+        expect(await s.rows(`select * from public.teacher_lesson($1)`, [ids.old])).toEqual([]);
+        // The most recent past lesson can be opened to read, not marked.
+        expect(code(await s.attempt(`select public.teacher_save_attendance($1, $2::jsonb)`, [ids.yesterday, marks]))).toBe("ET001");
+        expect(await s.rows(`select can_mark from public.teacher_lesson($1)`, [ids.yesterday])).toEqual([{ can_mark: false }]);
+        expect(code(await s.attempt(`select public.teacher_save_attendance($1, $2::jsonb)`, [ids.future, marks]))).toBe("ET001");
+      });
+      // Today's lesson, once cancelled, cannot be marked either.
       await as(
         "teacher",
         async (s) => {
-          expect(code(await s.attempt(`select public.teacher_save_attendance($1, $2::jsonb)`, [ids.old, marks]))).toBe("ET001");
-          expect(await s.rows(`select * from public.teacher_lesson($1)`, [ids.old])).toEqual([]);
-          expect(code(await s.attempt(`select public.teacher_save_attendance($1, $2::jsonb)`, [ids.future, marks]))).toBe("EC004");
-          expect(code(await s.attempt(`select public.teacher_save_attendance($1, $2::jsonb)`, [ids.recent, marks]))).toBe("EC003");
+          const [{ id }] = await s.rows<{ id: string }>(`select id from public.teacher_lessons($1) where lesson_date = public.tashkent_today()`, [own.ielts]);
+          expect(code(await s.attempt(`select public.teacher_save_attendance($1, $2::jsonb)`, [id, marks]))).toBe("EC003");
         },
         async (a) => {
-          await a.rows(`update lessons set status = 'cancelled', cancel_reason = 'Test' where id = $1`, [ids.recent]);
+          await a.rows(`update lessons set lesson_date = public.tashkent_today(), start_time = '23:58', status = 'cancelled', cancel_reason = 'Test'
+                        where id = (select id from lessons where group_id = $1 and lesson_date > public.tashkent_today() order by lesson_date limit 1)`, [own.ielts]);
+          await a.rows(`delete from lessons where group_id = $1 and lesson_date = public.tashkent_today() and start_time <> '23:58' and not exists (select 1 from attendance x where x.lesson_id = lessons.id)`, [own.ielts]);
+        },
+      );
+    });
+
+    it("a student taken out and put back the same day is listed once on the lesson", async () => {
+      await as(
+        "teacher",
+        async (s) => {
+          const [{ id }] = await s.rows<{ id: string }>(`select id from public.teacher_lessons($1) where lesson_date = public.tashkent_today() and start_time = '23:57'`, [own.ielts]);
+          const sheet = await s.rows<{ student_id: string }>(`select student_id from public.teacher_lesson_sheet($1)`, [id]);
+          expect(sheet.filter((row) => row.student_id === ownStudent)).toHaveLength(1);
+          expect(new Set(sheet.map((row) => row.student_id)).size).toBe(sheet.length);
+          const all = JSON.stringify(sheet.map((row) => ({ student_id: row.student_id, status: "present" })));
+          expect(code(await s.attempt(`select public.teacher_save_attendance($1, $2::jsonb)`, [id, all]))).toMatch(/^allowed/);
+        },
+        async (a) => {
+          await a.rows(`update lessons set lesson_date = public.tashkent_today(), start_time = '23:57', status = 'scheduled', cancel_reason = null
+                        where id = (select id from lessons where group_id = $1 and lesson_date > public.tashkent_today() order by lesson_date desc limit 1)`, [own.ielts]);
+          await a.rows(`update enrollments set status = 'left', left_on = public.tashkent_today() where group_id = $1 and student_id = $2 and status = 'active'`, [own.ielts, ownStudent]);
+          await a.rows(`insert into enrollments (group_id, student_id, joined_on) values ($1, $2, public.tashkent_today())`, [own.ielts, ownStudent]);
         },
       );
     });
