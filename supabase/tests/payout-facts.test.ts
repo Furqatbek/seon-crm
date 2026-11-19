@@ -46,8 +46,14 @@ const setup = async (s: Session) => {
       [student, group, discount],
     );
   await charge(ids[2], month, 300000);
+  // A grant given as a custom amount of 0: the full fee is the base, no discount is recorded, nothing is charged.
+  await s.rows(
+    `insert into charges (student_id, enrollment_id, group_id, billing_month, type, base_amount, discount_amount, amount, note)
+     values ($1, ${enrollment(ids[1])}, $2, ${month}, 'monthly_fee', 600000, 0, 0, 'Grant')`,
+    [ids[1], group],
+  );
   await charge(ids[0], month, 0);
-  await charge(ids[1], month, 200000, true);
+  await charge(ids[3], month, 200000, true);
   await charge(ids[3], `(${month} - interval '1 month')::date`, 100000);
 };
 
@@ -58,11 +64,13 @@ describe.skipIf(!DB_URL)("Payout facts", () => {
   it("counts who was learning in the month, who paid, who has a discount, and the month's discounts", async () => {
     await as("owner", async (s) => {
       expect(await s.rows(`select students, paid_students, discounted, discount_total from public.payout_group_facts(${month}) where group_id = $1`, [group])).toEqual([
-        { students: 4, paid_students: 2, discounted: 1, discount_total: "300000" },
+        // Two learn below the full fee: one with a 50 % discount (300,000 off), one free of charge (600,000 off).
+        { students: 4, paid_students: 2, discounted: 2, discount_total: "900000" },
       ]);
       // Last month: the two who had joined by then, the payment made then, and that month's discount.
       expect(await s.rows(`select students, paid_students, discounted, discount_total from public.payout_group_facts((${month} - interval '1 month')::date) where group_id = $1`, [group])).toEqual([
-        { students: 2, paid_students: 0, discounted: 0, discount_total: "100000" },
+        // One of the two was charged 100,000 below the fee that month.
+        { students: 2, paid_students: 0, discounted: 1, discount_total: "100000" },
       ]);
       expect(code(await s.attempt(`select * from public.payout_group_facts(${month} + 3)`))).toBe("22023");
     }, setup);
