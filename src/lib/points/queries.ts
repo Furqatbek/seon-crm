@@ -289,7 +289,10 @@ export async function getRedemptions(): Promise<RedemptionRow[]> {
 
 /** How many reward requests wait for staff: the number beside Points in the sidebar. 0 for a teacher. */
 export async function getOpenRequestCount(): Promise<number> {
-  const supabase = await db();
+  // Asked on every page, from the layout: while Supabase is not configured
+  // (a build without its settings) there is simply nothing waiting.
+  const supabase = await createClient();
+  if (!supabase) return 0;
   const { count, error } = await supabase
     .from("redemptions")
     .select("id", { count: "exact", head: true })
