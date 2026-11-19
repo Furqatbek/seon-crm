@@ -849,7 +849,7 @@
     },
     "salaries": {
       "calculate": "Calculate",
-      "hint": "Each month is paid at the rate in effect on its 1st day. Paid payouts are not changed.",
+      "hint": "Each month is paid at the rate in effect on its 1st day. Drafts follow payments and lessons by themselves: a voided payment leaves the share at once. Paid payouts are not changed.",
       "empty": "No payouts for {month} yet. Press Calculate to create them.",
       "calculated": "{count, plural, =0 {Nothing to calculate} one {# payout calculated} other {# payouts calculated}}",
       "calculatedColumn": "Calculated",

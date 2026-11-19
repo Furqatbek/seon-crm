@@ -1358,6 +1358,12 @@ isOneToOne: false
 "rebuild_future_lessons":
 { Args: { "p_group_id": string }; Returns: number
                            },
+"refresh_drafts_for":
+{ Args: { "p_day": string }; Returns: undefined
+                           },
+"refresh_teacher_payouts":
+{ Args: { "p_month": string }; Returns: number
+                           },
 "regenerate_tv_token":
 { Args: Record<PropertyKey, never>; Returns: string
                            },

@@ -849,7 +849,7 @@
     },
     "salaries": {
       "calculate": "Hisoblash",
-      "hint": "Har oy uning 1-kunida amalda boʻlgan stavka boʻyicha toʻlanadi. Toʻlangan maoshlar oʻzgarmaydi.",
+      "hint": "Har oy uning 1-kunida amalda boʻlgan stavka boʻyicha toʻlanadi. Qoralamalar toʻlovlar va darslarga oʻzi moslashadi: bekor qilingan toʻlov ulushdan darhol chiqariladi. Toʻlangan maoshlar oʻzgarmaydi.",
       "empty": "{month} uchun maoshlar hali yoʻq. Yaratish uchun «Hisoblash»ni bosing.",
       "calculated": "{count, plural, =0 {Hisoblanadigan narsa yoʻq} other {# ta maosh hisoblandi}}",
       "calculatedColumn": "Hisoblangan",
