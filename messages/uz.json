@@ -879,7 +879,13 @@
       "markPaidTitle": "{teacher} maoshi toʻlangan deb belgilansinmi?",
       "markPaidBody": "Toʻlangan maosh qulflanadi: uni tahrirlab yoki qayta hisoblab boʻlmaydi.",
       "markedPaid": "Maosh toʻlangan deb belgilandi",
-      "monthOpenWarning": "{month} hali tugamagan. Bundan keyingi darslar va toʻlovlar toʻlangan maoshga qoʻshilmaydi."
+      "monthOpenWarning": "{month} hali tugamagan. Bundan keyingi darslar va toʻlovlar toʻlangan maoshga qoʻshilmaydi.",
+      "facts": {
+        "students": "{count, plural, other {# ta oʻquvchi oʻqiyapti}}",
+        "paid": "{count, plural, other {# tasi toʻlagan}}",
+        "discounted": "{count, plural, other {# tasi chegirma bilan}}",
+        "discountTotal": "Oy uchun chegirmalar:"
+      }
     },
     "adjustments": {
       "empty": "Bu oyda balansga qaytarish yoki bekor qilingan toʻlov yoʻq.",

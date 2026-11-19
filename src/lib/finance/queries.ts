@@ -230,8 +230,11 @@ export type PayoutRow = Pick<
   | "note"
 > & {
   teacher: { id: string; full_name: string } | null;
-  breakdown: PayoutLine[];
+  breakdown: Array<PayoutLine & { facts: GroupFacts | null }>;
 };
+
+/** What stands behind a group's line: who was learning, who paid, and the discounts. */
+export type GroupFacts = { students: number; paid: number; discounted: number; discountTotal: number };
 
 /** A month's payouts, one row per teacher, by name. */
 export async function getPayouts(month: string, locale: string): Promise<PayoutRow[]> {
@@ -244,8 +247,16 @@ export async function getPayouts(month: string, locale: string): Promise<PayoutR
     .eq("month", `${month}-01`)
     .is("archived_at", null);
   if (error) throw new Error(error.message);
+  // Worked out now, to explain the lines; missing while a deploy is ahead of its migration.
+  const facts = await supabase.rpc("payout_group_facts", { p_month: `${month}-01` });
+  const byGroup = new Map(
+    (facts.error ? [] : (facts.data ?? [])).map((row) => [
+      row.group_id,
+      { students: row.students, paid: row.paid_students, discounted: row.discounted, discountTotal: Number(row.discount_total) },
+    ]),
+  );
   return data
-    .map((row) => ({ ...row, breakdown: row.breakdown as PayoutLine[] }))
+    .map((row) => ({ ...row, breakdown: (row.breakdown as PayoutLine[]).map((line) => ({ ...line, facts: byGroup.get(line.group_id) ?? null })) }))
     .sort((a, b) => (a.teacher?.full_name ?? "").localeCompare(b.teacher?.full_name ?? "", locale));
 }
 

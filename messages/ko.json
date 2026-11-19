@@ -879,7 +879,13 @@
       "markPaidTitle": "{teacher} 선생님의 급여를 지급 완료로 처리할까요?",
       "markPaidBody": "지급 완료된 급여는 잠기며, 수정하거나 다시 계산할 수 없습니다.",
       "markedPaid": "급여가 지급 완료 처리되었습니다",
-      "monthOpenWarning": "{month}은(는) 아직 끝나지 않았습니다. 이후에 진행된 수업과 받은 결제는 지급 완료된 급여에 추가되지 않습니다."
+      "monthOpenWarning": "{month}은(는) 아직 끝나지 않았습니다. 이후에 진행된 수업과 받은 결제는 지급 완료된 급여에 추가되지 않습니다.",
+      "facts": {
+        "students": "{count, plural, other {수강생 #명}}",
+        "paid": "{count, plural, other {#명 납부}}",
+        "discounted": "{count, plural, other {할인 적용 #명}}",
+        "discountTotal": "이번 달 할인:"
+      }
     },
     "adjustments": {
       "empty": "이번 달에는 감면이나 취소된 결제가 없습니다.",

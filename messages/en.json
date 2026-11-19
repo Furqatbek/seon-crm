@@ -879,7 +879,13 @@
       "markPaidTitle": "Mark the payout for {teacher} as paid?",
       "markPaidBody": "A paid payout is locked: it cannot be edited or recalculated.",
       "markedPaid": "Payout marked paid",
-      "monthOpenWarning": "{month} is not over yet. Lessons held and payments received after this will not be added to a paid payout."
+      "monthOpenWarning": "{month} is not over yet. Lessons held and payments received after this will not be added to a paid payout.",
+      "facts": {
+        "students": "{count, plural, one {# student learning} other {# students learning}}",
+        "paid": "{count, plural, one {# paid} other {# paid}}",
+        "discounted": "{count, plural, one {# with a discount} other {# with a discount}}",
+        "discountTotal": "Discounts this month:"
+      }
     },
     "adjustments": {
       "empty": "No credits or voided payments this month.",

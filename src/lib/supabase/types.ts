@@ -1308,6 +1308,11 @@ isOneToOne: false
               "full_name": string,"group_name": string,"language": Database["public"]['Enums']["app_language"],"lesson_date": string,"lesson_id": string,"parent_chat_id": number,"parent_chat_language": Database["public"]['Enums']["app_language"],"start_time": string,"student_chat_id": number,"student_chat_language": Database["public"]['Enums']["app_language"],"student_id": string
             }[]
                            },
+"payout_group_facts":
+{ Args: { "p_month": string }; Returns: {
+              "discount_total": number,"discounted": number,"group_id": string,"paid_students": number,"students": number
+            }[]
+                           },
 "points_daily":
 { Args: Record<PropertyKey, never>; Returns: undefined
                            },

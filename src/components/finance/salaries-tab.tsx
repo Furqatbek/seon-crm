@@ -82,7 +82,8 @@ function Breakdown({ payout }: { payout: PayoutRow }) {
       ) : (
         <ul className="flex flex-col divide-y divide-border">
           {payout.breakdown.map((line) => (
-            <li key={line.group_id} className="flex items-center justify-between gap-4 py-2" data-breakdown-line>
+            <li key={line.group_id} className="flex flex-col gap-1.5 py-2" data-breakdown-line>
+              <div className="flex items-center justify-between gap-4">
               <span className="flex min-w-0 flex-col">
                 <span className="truncate font-medium">{line.group_name}</span>
                 <span className="text-footnote text-text-secondary">
@@ -96,6 +97,20 @@ function Breakdown({ payout }: { payout: PayoutRow }) {
                 </span>
               </span>
               {line.amount !== null ? <MoneyText amount={line.amount} /> : null}
+              </div>
+              {/* How the line came about: who was learning, who paid, and the discounts. */}
+              {line.facts ? (
+                <p className="flex flex-wrap gap-x-3 gap-y-0.5 rounded-control bg-bg-subtle px-2.5 py-1.5 text-footnote text-text-secondary" data-group-facts>
+                  <span>{t("salaries.facts.students", { count: line.facts.students })}</span>
+                  <span className={line.facts.paid < line.facts.students ? "text-warning" : "text-success"}>
+                    {t("salaries.facts.paid", { count: line.facts.paid })}
+                  </span>
+                  <span>{t("salaries.facts.discounted", { count: line.facts.discounted })}</span>
+                  <span>
+                    {t("salaries.facts.discountTotal")} <MoneyText amount={line.facts.discountTotal} />
+                  </span>
+                </p>
+              ) : null}
             </li>
           ))}
         </ul>
