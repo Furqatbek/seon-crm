@@ -442,7 +442,8 @@
         "points_month_result": "Oy yakunlari",
         "reward_update": "Sovgʻa holati",
         "staff_new_lead": "Yangi lid (xodimlarga)",
-        "staff_lead_reminder": "Lid eslatmasi (xodimlarga)"
+        "staff_lead_reminder": "Lid eslatmasi (xodimlarga)",
+        "staff_integration_alert": "Integratsiya xabari (xodimlarga)"
       },
       "channels": {
         "telegram": "Telegram",
@@ -1313,7 +1314,8 @@
       "templates": "Shablonlar",
       "profile": "Profil",
       "points": "Ballar",
-      "sources": "Lid manbalari"
+      "sources": "Lid manbalari",
+      "integrations": "Integratsiyalar"
     },
     "saved": "Saqlandi",
     "centre": {
@@ -1561,6 +1563,48 @@
         "rate_limited": "Cheklovdan oshdi",
         "invalid": "Rad etildi",
         "error": "Xatolik"
+      }
+    },
+    "meta": {
+      "title": "Facebook va Instagram lid reklamalari",
+      "about": "Markazning Facebook sahifasini ulang — reklama formasidan kelgan har bir lid darhol umumiy roʻyxatga tushadi.",
+      "notReady": "Integratsiyalar hali sozlanmagan: ular uchun maʼlumotlar bazasi migratsiyasi qoʻllanmagan.",
+      "setup": "Sozlash",
+      "notConfigured": "Bu CRM uchun Meta ilovasi hali sozlanmagan. Avval serverga uchta sozlama qoʻshilishi kerak:",
+      "guide": "Qadamlar docs/META_SETUP.md faylida yozilgan.",
+      "connect": "Facebook orqali ulash",
+      "connectAnother": "Yana sahifa ulash",
+      "reconnect": "Qayta ulash",
+      "none": "Hali birorta sahifa ulanmagan.",
+      "pages": "Ulangan sahifalar",
+      "connected": "Ulangan",
+      "needsReconnect": "Qayta ulash kerak",
+      "reconnectHint": "Meta bu sahifaga ruxsatni endi qabul qilmayapti. Yangi lidlar kelmayapti. “Qayta ulash”ni bosing — oxirgi 48 soatdagi lidlar olinadi.",
+      "lastLead": "Oxirgi lid: {time}",
+      "noLeadsYet": "Hali lidlar yoʻq",
+      "refreshForms": "Formalarni yangilash",
+      "formsRefreshed": "Formalar roʻyxati yangilandi",
+      "forms": "Bu sahifaning lid formalari",
+      "noForms": "Bu sahifada hali lid formalari yoʻq. Ads Managerda forma yaratib, “Formalarni yangilash”ni bosing.",
+      "funnelOf": "“{form}” uchun voronka",
+      "choose": "Ulanadigan sahifalarni tanlang",
+      "chooseHint": "Bular Facebook akkauntingiz boshqaradigan sahifalar.",
+      "noPages": "Facebook birorta sahifa qaytarmadi. Qayta ulaning va Facebook oynasida sahifaga ruxsat bering.",
+      "alreadyConnected": "allaqachon ulangan",
+      "connectChosen": "Ulash",
+      "connectedToast": "{count, plural, other {# ta sahifa ulandi}}",
+      "webhookUrl": "Vebhuk manzili (Meta ilovasidagi Callback URL)",
+      "verifyToken": "Tekshiruv tokeni",
+      "verifyTokenSet": "Serverda oʻrnatilgan (META_VERIFY_TOKEN).",
+      "verifyTokenMissing": "Serverda hali oʻrnatilmagan (META_VERIFY_TOKEN): Meta vebhukni tekshira olmaydi.",
+      "redirectUri": "Qaytish manzili (Meta ilovasidagi Valid OAuth Redirect URI)",
+      "recent": "Meta yuborgan oxirgi soʻrovlar",
+      "testLead": "Sinov lidi",
+      "problems": {
+        "cancelled": "Ulash Facebookda bekor qilindi. Hech narsa oʻzgarmadi.",
+        "failed": "Facebook ulanishni yakunlamadi. Qayta urinib koʻring.",
+        "state": "Ulash boshqa oynada boshlangan yoki juda uzoq davom etdi. Qayta urinib koʻring.",
+        "not_configured": "Meta ilovasi serverda hali sozlanmagan."
       }
     }
   },
@@ -2124,6 +2168,7 @@
     "gone": "Bu lid endi mavjud emas.",
     "linked": "{name}, {centre} lidlari haqida xabarlar shu yerga keladi. Profilda yoki /stop buyrugʻi bilan oʻchirish mumkin.",
     "unknownCode": "Bu havola ishlamaydi. {centre} CRMida Profilni ochib, “Telegramni ulash” tugmasini qayta bosing.",
-    "notLinked": "Lidni faqat {centre} xodimlari olishi mumkin. Avval Profilda Telegramni ulang."
+    "notLinked": "Lidni faqat {centre} xodimlari olishi mumkin. Avval Profilda Telegramni ulang.",
+    "metaReconnect": "⚠️ Facebookdan lidlar kelmay qoldi: “{page}” sahifasini qayta ulash kerak. CRMda Sozlamalar → Integratsiyalar boʻlimini ochib, “Qayta ulash”ni bosing."
   }
 }

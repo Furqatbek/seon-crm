@@ -152,12 +152,14 @@ export type SettingsResult<T = undefined> =
       detail?: string;
     };
 
-export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "points", "sources", "profile"] as const;
+export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "points", "sources", "integrations", "profile"] as const;
 export type SettingsTab = (typeof SETTINGS_TABS)[number];
 
 /** URL state of /settings. */
 export const settingsSearchSchema = z.object({
   tab: z.enum(SETTINGS_TABS).optional().catch(undefined),
+  /** How "Connect with Facebook" ended: choose (pick Pages), cancelled, failed, state, not_configured. */
+  meta: z.enum(["choose", "cancelled", "failed", "state", "not_configured"]).optional().catch(undefined),
 });
 
 // ── Lead sources: keys for websites that post leads (docs/SPEC.md → "Public intake URL") ──

@@ -24,6 +24,8 @@ export type IntakeStore = {
     formId: string | null;
     /** The website source (API key) it came through, if any. */
     sourceId: string | null;
+    /** The sender's own id of this lead (Meta's leadgen id): the same id is never taken twice. */
+    externalId?: string | null;
     ipHash: string | null;
     lead: LeadFromForm;
     language: FormLanguage | null;
@@ -35,6 +37,7 @@ export type IntakeStore = {
     outcome: "spam" | "invalid" | "error" | "test" | "rate_limited";
     detail: string;
     ipHash: string | null;
+    externalId?: string | null;
   }): Promise<void>;
 };
 
@@ -65,6 +68,8 @@ export type IntakeInput = Common &
         mapped: LeadCheck;
         formId: string | null;
         sourceId: string | null;
+        /** Meta's leadgen id. */
+        externalId?: string | null;
       }
   );
 
@@ -83,8 +88,9 @@ export async function submitIntake(input: IntakeInput, deps: { store: IntakeStor
   const ipHash = hashVisitor(secret, input.ip);
   const formId = "form" in input ? input.form.id : input.formId;
   const sourceId = "form" in input ? null : input.sourceId;
+  const externalId = "form" in input ? null : (input.externalId ?? null);
   const log = (outcome: "spam" | "invalid" | "error", detail: string) =>
-    store.reject({ channel, formId, sourceId, outcome, detail, ipHash }).catch(() => undefined);
+    store.reject({ channel, formId, sourceId, outcome, detail, ipHash, externalId }).catch(() => undefined);
 
   let checked: LeadCheck;
   if ("form" in input) {
@@ -114,7 +120,7 @@ export async function submitIntake(input: IntakeInput, deps: { store: IntakeStor
   }
 
   try {
-    const { outcome, leadId } = await store.submit({ channel, formId, sourceId, ipHash, lead: checked.lead, language: input.language });
+    const { outcome, leadId } = await store.submit({ channel, formId, sourceId, externalId, ipHash, lead: checked.lead, language: input.language });
     if (outcome === "created" || outcome === "merged") return { status: "accepted", outcome, leadId };
     if (outcome === "rate_limited") return { status: "rate_limited" };
     if (outcome === "invalid") return { status: "closed" };

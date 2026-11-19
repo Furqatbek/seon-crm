@@ -442,7 +442,8 @@
         "points_month_result": "Month results",
         "reward_update": "Reward update",
         "staff_new_lead": "New lead (staff)",
-        "staff_lead_reminder": "Lead reminder (staff)"
+        "staff_lead_reminder": "Lead reminder (staff)",
+        "staff_integration_alert": "Integration alert (staff)"
       },
       "channels": {
         "telegram": "Telegram",
@@ -1313,7 +1314,8 @@
       "templates": "Templates",
       "profile": "Profile",
       "points": "Points",
-      "sources": "Lead sources"
+      "sources": "Lead sources",
+      "integrations": "Integrations"
     },
     "saved": "Saved",
     "centre": {
@@ -1561,6 +1563,48 @@
         "rate_limited": "Rate-limited",
         "invalid": "Refused",
         "error": "Error"
+      }
+    },
+    "meta": {
+      "title": "Facebook and Instagram lead ads",
+      "about": "Connect the centre's Facebook Page, and every lead submitted in an ad form arrives in the shared inbox within moments.",
+      "notReady": "Integrations are not set up yet: the database migration for them has not been applied.",
+      "setup": "Setup",
+      "notConfigured": "The Meta app is not set up for this CRM yet. Three settings must be added on the server first:",
+      "guide": "The steps are in docs/META_SETUP.md.",
+      "connect": "Connect with Facebook",
+      "connectAnother": "Connect another Page",
+      "reconnect": "Reconnect",
+      "none": "No Page is connected yet.",
+      "pages": "Connected Pages",
+      "connected": "Connected",
+      "needsReconnect": "Needs reconnect",
+      "reconnectHint": "Meta no longer accepts this Page's access. New leads are not arriving. Press Reconnect; leads from the last 48 hours are then picked up.",
+      "lastLead": "Last lead: {time}",
+      "noLeadsYet": "No leads yet",
+      "refreshForms": "Refresh forms",
+      "formsRefreshed": "The list of forms is up to date",
+      "forms": "Lead forms of this Page",
+      "noForms": "This Page has no lead forms yet. After you make one in Ads Manager, press Refresh forms.",
+      "funnelOf": "Funnel for {form}",
+      "choose": "Choose the Pages to connect",
+      "chooseHint": "These are the Pages your Facebook account manages.",
+      "noPages": "Facebook returned no Pages. Connect again and allow access to the Page in Facebook's dialog.",
+      "alreadyConnected": "already connected",
+      "connectChosen": "Connect",
+      "connectedToast": "{count, plural, one {# Page is connected} other {# Pages are connected}}",
+      "webhookUrl": "Webhook address (Callback URL in the Meta app)",
+      "verifyToken": "Verify token",
+      "verifyTokenSet": "Set on the server (META_VERIFY_TOKEN).",
+      "verifyTokenMissing": "Not set on the server yet (META_VERIFY_TOKEN): Meta cannot verify the webhook.",
+      "redirectUri": "Return address (Valid OAuth Redirect URI in the Meta app)",
+      "recent": "Recent requests from Meta",
+      "testLead": "Test lead",
+      "problems": {
+        "cancelled": "Connecting was cancelled in Facebook. Nothing was changed.",
+        "failed": "Facebook did not complete the connection. Try again.",
+        "state": "The connection was started in another window or took too long. Try again.",
+        "not_configured": "The Meta app is not set up on the server yet."
       }
     }
   },
@@ -2124,6 +2168,7 @@
     "gone": "This lead no longer exists.",
     "linked": "{name}, you will get lead alerts from {centre} here. Turn them off in Profile, or send /stop.",
     "unknownCode": "This link does not work. Open Profile in {centre}'s CRM and press Link Telegram again.",
-    "notLinked": "Only {centre}'s staff can take a lead. Link your Telegram in Profile first."
+    "notLinked": "Only {centre}'s staff can take a lead. Link your Telegram in Profile first.",
+    "metaReconnect": "⚠️ Facebook leads have stopped: the Page “{page}” must be connected again. Open Settings → Integrations in the CRM and press Reconnect."
   }
 }

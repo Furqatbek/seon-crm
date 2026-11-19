@@ -192,6 +192,7 @@ describe("POST /api/v1/leads", () => {
         channel: "api",
         formId: "form-1",
         sourceId: "source-1",
+        externalId: null,
         // No visitor address: the request comes from a website's server.
         ipHash: null,
         language: "ru",

@@ -34,6 +34,7 @@ export async function appPages(): Promise<Array<{ name: string; path: string }>>
     { name: "settings notifications", path: "/settings?tab=notifications" },
     { name: "settings templates", path: "/settings?tab=templates" },
     { name: "settings lead sources", path: "/settings?tab=sources" },
+    { name: "settings integrations", path: "/settings?tab=integrations" },
     { name: "settings profile", path: "/settings?tab=profile" },
     { name: "receipt", path: `/receipts/${paymentId}` },
   ];

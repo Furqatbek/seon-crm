@@ -50,6 +50,10 @@ export default defineConfig({
       // Public forms are served on their own host; *.localhost is this machine.
       FORMS_HOST: process.env.FORMS_HOST ?? "forms.localhost:3000",
       FORM_SIGNING_SECRET: process.env.FORM_SIGNING_SECRET ?? "e2e-form-signing-secret",
+      // A made-up Meta app, so the webhook's checks and the Integrations screen can be tested. Meta is never called.
+      META_APP_ID: process.env.META_APP_ID ?? "1234567890",
+      META_APP_SECRET: process.env.META_APP_SECRET ?? "e2e-meta-app-secret",
+      META_VERIFY_TOKEN: process.env.META_VERIFY_TOKEN ?? "e2e-meta-verify-token",
       TELEGRAM_WEBHOOK_SECRET: process.env.TELEGRAM_WEBHOOK_SECRET ?? "e2e-webhook-secret",
       TELEGRAM_BOT_TOKEN: "",
       ESKIZ_EMAIL: "",

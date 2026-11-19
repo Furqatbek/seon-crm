@@ -351,14 +351,14 @@ isOneToOne: false
                   ]
                 },"intake_log": {
                   Row: {
-                    "channel": Database["public"]['Enums']["intake_channel"],"detail": string | null,"form_id": string | null,"id": string,"ip_hash": string | null,"lead_id": string | null,"outcome": Database["public"]['Enums']["intake_outcome"],"received_at": string,"source_id": string | null
+                    "channel": Database["public"]['Enums']["intake_channel"],"detail": string | null,"external_id": string | null,"form_id": string | null,"id": string,"ip_hash": string | null,"lead_id": string | null,"outcome": Database["public"]['Enums']["intake_outcome"],"received_at": string,"source_id": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "channel": Database["public"]['Enums']["intake_channel"],"detail"?: string | null,"form_id"?: string | null,"id"?: string,"ip_hash"?: string | null,"lead_id"?: string | null,"outcome": Database["public"]['Enums']["intake_outcome"],"received_at"?: string,"source_id"?: string | null
+                    "channel": Database["public"]['Enums']["intake_channel"],"detail"?: string | null,"external_id"?: string | null,"form_id"?: string | null,"id"?: string,"ip_hash"?: string | null,"lead_id"?: string | null,"outcome": Database["public"]['Enums']["intake_outcome"],"received_at"?: string,"source_id"?: string | null
                   }
                   Update: {
-                    "channel"?: Database["public"]['Enums']["intake_channel"],"detail"?: string | null,"form_id"?: string | null,"id"?: string,"ip_hash"?: string | null,"lead_id"?: string | null,"outcome"?: Database["public"]['Enums']["intake_outcome"],"received_at"?: string,"source_id"?: string | null
+                    "channel"?: Database["public"]['Enums']["intake_channel"],"detail"?: string | null,"external_id"?: string | null,"form_id"?: string | null,"id"?: string,"ip_hash"?: string | null,"lead_id"?: string | null,"outcome"?: Database["public"]['Enums']["intake_outcome"],"received_at"?: string,"source_id"?: string | null
                   }
                   Relationships: [
                     {
@@ -659,6 +659,52 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "students"
       referencedColumns: ["id"]
+    }
+                  ]
+                },"meta_connections": {
+                  Row: {
+                    "connected_at": string,"connected_by": string | null,"created_at": string,"id": string,"last_lead_at": string | null,"page_id": string,"page_name": string,"status": string,"status_detail": string | null,"token_secret_id": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "connected_at"?: string,"connected_by"?: string | null,"created_at"?: string,"id"?: string,"last_lead_at"?: string | null,"page_id": string,"page_name": string,"status"?: string,"status_detail"?: string | null,"token_secret_id"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "connected_at"?: string,"connected_by"?: string | null,"created_at"?: string,"id"?: string,"last_lead_at"?: string | null,"page_id"?: string,"page_name"?: string,"status"?: string,"status_detail"?: string | null,"token_secret_id"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "meta_connections_connected_by_fkey"
+      columns: ["connected_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"meta_form_links": {
+                  Row: {
+                    "created_at": string,"form_id": string | null,"id": string,"meta_form_id": string,"meta_form_name": string,"page_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"form_id"?: string | null,"id"?: string,"meta_form_id": string,"meta_form_name": string,"page_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"form_id"?: string | null,"id"?: string,"meta_form_id"?: string,"meta_form_name"?: string,"page_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "meta_form_links_form_id_fkey"
+      columns: ["form_id"]
+isOneToOne: false
+      referencedRelation: "lead_forms"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "meta_form_links_page_id_fkey"
+      columns: ["page_id"]
+isOneToOne: false
+      referencedRelation: "meta_connections"
+      referencedColumns: ["page_id"]
     }
                   ]
                 },"payments": {
@@ -1097,6 +1143,9 @@ isOneToOne: false
 "calculate_teacher_payouts":
 { Args: { "p_month": string }; Returns: number
                            },
+"call_meta_backfill_job":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
 "call_reminders_job":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
@@ -1152,7 +1201,7 @@ isOneToOne: false
 { Args: { "p_action": string,"p_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["redemption_status"]
                            },
 "intake_reject":
-{ Args: { "p_channel": Database["public"]['Enums']["intake_channel"],"p_detail": string,"p_form_id": string,"p_ip_hash": string,"p_outcome": Database["public"]['Enums']["intake_outcome"],"p_source_id"?: string }; Returns: undefined
+{ Args: { "p_channel": Database["public"]['Enums']["intake_channel"],"p_detail": string,"p_external_id"?: string,"p_form_id": string,"p_ip_hash": string,"p_outcome": Database["public"]['Enums']["intake_outcome"],"p_source_id"?: string }; Returns: undefined
                            },
 "intake_source_check":
 { Args: { "p_key_hash": string }; Returns: {
@@ -1165,7 +1214,7 @@ isOneToOne: false
             }[]
                            },
 "intake_submit":
-{ Args: { "p_answers"?: Json,"p_channel": Database["public"]['Enums']["intake_channel"],"p_form_id": string,"p_full_name": string,"p_ip_hash": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_notes"?: string,"p_phone": string,"p_preferred_time"?: string,"p_source_id"?: string,"p_subject"?: string }; Returns: {
+{ Args: { "p_answers"?: Json,"p_channel": Database["public"]['Enums']["intake_channel"],"p_external_id"?: string,"p_form_id": string,"p_full_name": string,"p_ip_hash": string,"p_language"?: Database["public"]['Enums']["app_language"],"p_notes"?: string,"p_phone": string,"p_preferred_time"?: string,"p_source_id"?: string,"p_subject"?: string }; Returns: {
               "lead_id": string,"outcome": Database["public"]['Enums']["intake_outcome"]
             }[]
                            },
@@ -1222,6 +1271,24 @@ isOneToOne: false
                            },
 "mark_student_left":
 { Args: { "p_student_id": string }; Returns: undefined
+                           },
+"meta_known_leads":
+{ Args: { "p_ids": (string)[] }; Returns: string[]
+                           },
+"meta_mark_reconnect":
+{ Args: { "p_detail": string,"p_page_id": string }; Returns: boolean
+                           },
+"meta_page_token":
+{ Args: { "p_page_id": string }; Returns: string
+                           },
+"meta_pending_token":
+{ Args: { "p_user": string }; Returns: string
+                           },
+"meta_save_connection":
+{ Args: { "p_page_id": string,"p_page_name": string,"p_token": string,"p_user": string }; Returns: string
+                           },
+"meta_set_pending":
+{ Args: { "p_token": string,"p_user": string }; Returns: undefined
                            },
 "my_teacher_id":
 { Args: Record<PropertyKey, never>; Returns: string
@@ -1463,7 +1530,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "app_language": "uz"|"ru"|"en","attendance_status": "present"|"late"|"absent"|"excused","charge_type": "monthly_fee"|"adjustment","enrollment_status": "active"|"left","expense_category": "rent"|"utilities"|"marketing"|"supplies"|"other","form_status": "draft"|"live"|"closed","group_status": "forming"|"active"|"finished","intake_channel": "form"|"api"|"meta","intake_outcome": "created"|"merged"|"spam"|"rate_limited"|"invalid"|"test"|"error","lead_source": "instagram"|"telegram"|"phone_call"|"walk_in"|"referral"|"website"|"other"|"facebook"|"web_form","lead_status": "new"|"contacted"|"trial"|"won"|"lost","lesson_status": "scheduled"|"held"|"cancelled","link_role": "student"|"parent","message_channel": "telegram"|"sms","message_status": "queued"|"sent"|"failed"|"skipped","message_type": "payment_due"|"payment_overdue"|"lesson_reminder"|"custom"|"points_weekly"|"points_deduction"|"points_month_result"|"reward_update"|"staff_new_lead"|"staff_lead_reminder","pay_type": "fixed_monthly"|"percent_of_revenue"|"per_lesson","payment_method": "cash"|"card"|"transfer","payout_status": "draft"|"paid","points_source": "attendance"|"perfect_month"|"on_time_payment"|"referral"|"teacher_award"|"teacher_deduction"|"owner_adjustment"|"reward_hold"|"reward_return","preset_kind": "award"|"deduction","redemption_status": "requested"|"given"|"rejected"|"cancelled","student_status": "active"|"paused"|"left"|"graduated","ui_language": "uz"|"ru"|"en"|"ko","user_role": "owner"|"manager"|"teacher"
+            "app_language": "uz"|"ru"|"en","attendance_status": "present"|"late"|"absent"|"excused","charge_type": "monthly_fee"|"adjustment","enrollment_status": "active"|"left","expense_category": "rent"|"utilities"|"marketing"|"supplies"|"other","form_status": "draft"|"live"|"closed","group_status": "forming"|"active"|"finished","intake_channel": "form"|"api"|"meta","intake_outcome": "created"|"merged"|"spam"|"rate_limited"|"invalid"|"test"|"error","lead_source": "instagram"|"telegram"|"phone_call"|"walk_in"|"referral"|"website"|"other"|"facebook"|"web_form","lead_status": "new"|"contacted"|"trial"|"won"|"lost","lesson_status": "scheduled"|"held"|"cancelled","link_role": "student"|"parent","message_channel": "telegram"|"sms","message_status": "queued"|"sent"|"failed"|"skipped","message_type": "payment_due"|"payment_overdue"|"lesson_reminder"|"custom"|"points_weekly"|"points_deduction"|"points_month_result"|"reward_update"|"staff_new_lead"|"staff_lead_reminder"|"staff_integration_alert","pay_type": "fixed_monthly"|"percent_of_revenue"|"per_lesson","payment_method": "cash"|"card"|"transfer","payout_status": "draft"|"paid","points_source": "attendance"|"perfect_month"|"on_time_payment"|"referral"|"teacher_award"|"teacher_deduction"|"owner_adjustment"|"reward_hold"|"reward_return","preset_kind": "award"|"deduction","redemption_status": "requested"|"given"|"rejected"|"cancelled","student_status": "active"|"paused"|"left"|"graduated","ui_language": "uz"|"ru"|"en"|"ko","user_role": "owner"|"manager"|"teacher"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -1583,7 +1650,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "app_language": ["uz", "ru", "en"],"attendance_status": ["present", "late", "absent", "excused"],"charge_type": ["monthly_fee", "adjustment"],"enrollment_status": ["active", "left"],"expense_category": ["rent", "utilities", "marketing", "supplies", "other"],"form_status": ["draft", "live", "closed"],"group_status": ["forming", "active", "finished"],"intake_channel": ["form", "api", "meta"],"intake_outcome": ["created", "merged", "spam", "rate_limited", "invalid", "test", "error"],"lead_source": ["instagram", "telegram", "phone_call", "walk_in", "referral", "website", "other", "facebook", "web_form"],"lead_status": ["new", "contacted", "trial", "won", "lost"],"lesson_status": ["scheduled", "held", "cancelled"],"link_role": ["student", "parent"],"message_channel": ["telegram", "sms"],"message_status": ["queued", "sent", "failed", "skipped"],"message_type": ["payment_due", "payment_overdue", "lesson_reminder", "custom", "points_weekly", "points_deduction", "points_month_result", "reward_update", "staff_new_lead", "staff_lead_reminder"],"pay_type": ["fixed_monthly", "percent_of_revenue", "per_lesson"],"payment_method": ["cash", "card", "transfer"],"payout_status": ["draft", "paid"],"points_source": ["attendance", "perfect_month", "on_time_payment", "referral", "teacher_award", "teacher_deduction", "owner_adjustment", "reward_hold", "reward_return"],"preset_kind": ["award", "deduction"],"redemption_status": ["requested", "given", "rejected", "cancelled"],"student_status": ["active", "paused", "left", "graduated"],"ui_language": ["uz", "ru", "en", "ko"],"user_role": ["owner", "manager", "teacher"]
+            "app_language": ["uz", "ru", "en"],"attendance_status": ["present", "late", "absent", "excused"],"charge_type": ["monthly_fee", "adjustment"],"enrollment_status": ["active", "left"],"expense_category": ["rent", "utilities", "marketing", "supplies", "other"],"form_status": ["draft", "live", "closed"],"group_status": ["forming", "active", "finished"],"intake_channel": ["form", "api", "meta"],"intake_outcome": ["created", "merged", "spam", "rate_limited", "invalid", "test", "error"],"lead_source": ["instagram", "telegram", "phone_call", "walk_in", "referral", "website", "other", "facebook", "web_form"],"lead_status": ["new", "contacted", "trial", "won", "lost"],"lesson_status": ["scheduled", "held", "cancelled"],"link_role": ["student", "parent"],"message_channel": ["telegram", "sms"],"message_status": ["queued", "sent", "failed", "skipped"],"message_type": ["payment_due", "payment_overdue", "lesson_reminder", "custom", "points_weekly", "points_deduction", "points_month_result", "reward_update", "staff_new_lead", "staff_lead_reminder", "staff_integration_alert"],"pay_type": ["fixed_monthly", "percent_of_revenue", "per_lesson"],"payment_method": ["cash", "card", "transfer"],"payout_status": ["draft", "paid"],"points_source": ["attendance", "perfect_month", "on_time_payment", "referral", "teacher_award", "teacher_deduction", "owner_adjustment", "reward_hold", "reward_return"],"preset_kind": ["award", "deduction"],"redemption_status": ["requested", "given", "rejected", "cancelled"],"student_status": ["active", "paused", "left", "graduated"],"ui_language": ["uz", "ru", "en", "ko"],"user_role": ["owner", "manager", "teacher"]
           }
         }
 } as const
