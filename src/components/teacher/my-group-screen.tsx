@@ -29,7 +29,7 @@ import { StatusPill } from "@/components/ui/status-pill";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { giveCoins } from "@/lib/coins/actions";
 import type { CoinRow } from "@/lib/coins/queries";
-import { ATTENDANCE_STATUSES, type AttendanceStatus } from "@/lib/domain/attendance";
+import { ATTENDANCE_STATUSES, MARK_TONE, type AttendanceStatus } from "@/lib/domain/attendance";
 import { roomLabel } from "@/lib/domain/rooms";
 import { useInstantClose } from "@/lib/hooks/use-instant-close";
 import { formatDay } from "@/lib/format";
@@ -134,7 +134,7 @@ function AttendanceForm({
                   disabled={locked}
                   value={marks[student.id]}
                   onValueChange={(status) => setMarks((all) => ({ ...all, [student.id]: status }))}
-                  options={ATTENDANCE_STATUSES.map((status) => ({ value: status, label: t(`lesson.mark.${status}`) }))}
+                  options={ATTENDANCE_STATUSES.map((status) => ({ value: status, label: t(`lesson.mark.${status}`), tone: MARK_TONE[status] }))}
                 />
               </li>
             ))}

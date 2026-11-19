@@ -20,6 +20,7 @@ import {
 import { StatusPill } from "@/components/ui/status-pill";
 import {
   ATTENDANCE_STATUSES,
+  MARK_TONE,
   type AttendanceLock,
   type AttendanceStatus,
 } from "@/lib/domain/attendance";
@@ -91,6 +92,7 @@ function Marks({
                   options={ATTENDANCE_STATUSES.map((status) => ({
                     value: status,
                     label: t(`lesson.mark.${status}`),
+                    tone: MARK_TONE[status],
                   }))}
                 />
               </li>

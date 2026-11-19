@@ -38,3 +38,6 @@ export function attendanceLock(lesson: {
   if (lesson.lessonDate < lesson.today) return "tooOld";
   return null;
 }
+
+/** The colour each mark is shown in when chosen: came green, late amber, absent red, excused plain. */
+export const MARK_TONE = { present: "success", late: "warning", absent: "danger", excused: "neutral" } as const satisfies Record<AttendanceStatus, string>;
