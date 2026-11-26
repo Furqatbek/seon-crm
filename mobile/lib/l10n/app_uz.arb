@@ -1,0 +1,119 @@
+{
+  "@@locale": "uz",
+  "appName": "Seon Topik Student",
+  "welcomeHeadline": "Koreys tilini mashq qiling, TOPIKka tayyorlaning",
+  "createAccount": "Roʻyxatdan oʻtish",
+  "signIn": "Kirish",
+  "chooseLanguage": "Tilni tanlang",
+  "languageUz": "Oʻzbekcha",
+  "languageRu": "Русский",
+  "languageEn": "English",
+  "languageKo": "한국어",
+  "back": "Orqaga",
+  "fullName": "Ism familiya",
+  "phone": "Telefon raqam",
+  "password": "Parol",
+  "showPassword": "Parolni koʻrsatish",
+  "hidePassword": "Parolni yashirish",
+  "koreanLevel": "Koreys tili darajangiz",
+  "levelBeginner": "Boshlangʻich",
+  "levelTopik1": "TOPIK I",
+  "levelTopik2": "TOPIK II",
+  "continueAction": "Davom etish",
+  "consentBefore": "Davom etib, ",
+  "consentLink": "maxfiylik siyosatiga",
+  "consentAfter": " rozilik bildirasiz",
+  "privacyPolicy": "Maxfiylik siyosati",
+  "privacyEmpty": "Maxfiylik siyosati hali qoʻshilmagan.",
+  "errorNameRequired": "Ism va familiyangizni kiriting",
+  "errorPhoneInvalid": "Telefon raqamni toʻliq kiriting",
+  "errorPasswordShort": "Parol kamida 8 ta belgidan iborat boʻlsin",
+  "errorPasswordRequired": "Parolni kiriting",
+  "errorLevelRequired": "Darajangizni tanlang",
+  "errorPasswordsDiffer": "Parollar mos kelmadi",
+  "smsCodeTitle": "SMS kod",
+  "smsCodeSentBefore": "",
+  "smsCodeSentAfter": " raqamiga 6 xonali kod yubordik",
+  "smsCodeField": "6 xonali kod",
+  "resendIn": "Kodni qayta yuborish ({time})",
+  "@resendIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "resend": "Kodni qayta yuborish",
+  "codeResent": "Kod qayta yuborildi",
+  "confirm": "Tasdiqlash",
+  "errorWrongCode": "{count, plural, =0{Kod notoʻgʻri. Yangi kod soʻrang} other{Kod notoʻgʻri. Yana {count} ta urinish qoldi}}",
+  "@errorWrongCode": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorTooManySms": "Juda koʻp SMS soʻraldi. {minutes} daqiqadan keyin urinib koʻring",
+  "@errorTooManySms": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "errorAlreadyRegistered": "Bu raqam allaqachon roʻyxatdan oʻtgan",
+  "errorInvalidCredentials": "Telefon raqam yoki parol notoʻgʻri",
+  "errorNoAccount": "Bu raqam bilan hisob topilmadi",
+  "errorPhoneNotSupported": "Faqat Oʻzbekiston raqamlari qabul qilinadi",
+  "errorNetwork": "Internet aloqasi yoʻq. Qayta urinib koʻring",
+  "errorGeneric": "Xatolik yuz berdi. Qayta urinib koʻring",
+  "linkedTitle": "Akkauntingiz markazga ulandi",
+  "start": "Boshlash",
+  "forgotPassword": "Parolni unutdingizmi?",
+  "resetPassword": "Parolni tiklash",
+  "resetHint": "Telefon raqamingizni kiriting, SMS orqali kod yuboramiz",
+  "sendCode": "Kod yuborish",
+  "newPassword": "Yangi parol",
+  "repeatPassword": "Parolni takrorlang",
+  "save": "Saqlash",
+  "passwordSaved": "Parol saqlandi",
+  "tabHome": "Bosh sahifa",
+  "tabGame": "Oʻyin",
+  "tabQr": "QR kod",
+  "tabShop": "Doʻkon",
+  "tabMore": "Boshqa",
+  "soonTitle": "Tez orada",
+  "homeStudentSoon": "Keyingi dars, oʻrningiz, tangalar va balans shu yerda boʻladi.",
+  "homeAppUserSoon": "Sinov imtihonlari, ochiq darslar va vaucheringiz shu yerda boʻladi.",
+  "gameStudentSoon": "1 ga 1 oʻyin va sinov imtihonlari. Gʻalaba uchun tanga olasiz.",
+  "gameAppUserSoon": "1 ga 1 oʻyin va sinov imtihonlari. Tangalar markazga qoʻshilganingizdan keyin beriladi.",
+  "qrStudentSoon": "Markazga kirishda koʻrsatiladigan QR kodingiz shu yerda boʻladi.",
+  "qrAppUserSoon": "QR orqali kirish faqat markaz oʻquvchilari uchun.",
+  "shopStudentSoon": "Tangalaringizni sovgʻalarga almashtirasiz.",
+  "shopAppUserSoon": "Sovgʻalarni koʻrishingiz mumkin. Tanga sarflash uchun markazga qoʻshiling.",
+  "moreStudentSoon": "Profil, reyting, dars jadvali va toʻlovlar shu yerda boʻladi.",
+  "moreAppUserSoon": "Profil, vaucher va ochiq darslar shu yerda boʻladi.",
+  "notifications": "Bildirishnomalar",
+  "notificationsSoon": "Bildirishnomalaringiz shu yerda boʻladi.",
+  "logOut": "Chiqish",
+  "money": "{amount} soʻm",
+  "@money": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "coinsCount": "{count, plural, other{{formatted} tanga}}",
+  "@coinsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "formatted": {
+        "type": "String"
+      }
+    }
+  }
+}
