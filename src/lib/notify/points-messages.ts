@@ -1,3 +1,4 @@
+import { handledInApp, type StudentPush } from "./app-notify.ts";
 import { deliver, type MessageLog, type Outgoing } from "./deliver.ts";
 import type { PointsSummary, Texts } from "./points-data.ts";
 import { dedupeKey, isQuiet, routesFor, type ChatLink, type Route } from "./rules.ts";
@@ -34,7 +35,7 @@ export const DEDUCTION_DELAY_SECONDS = 30;
 
 export type Chats = { studentChat: ChatLink | null; parentChat: ChatLink | null };
 
-/** A student with at least one linked chat. */
+/** A student with at least one linked chat, or with the app. */
 export type LinkedStudent = Chats & { id: string };
 
 export type DeductionEvent = Chats & {
@@ -62,7 +63,7 @@ export type RewardEvent = Chats & {
 export interface PointsMessageData {
   settings(): Promise<PointsSettings>;
   templates(): Promise<PointsTemplate[]>;
-  /** Active students who have a chat. */
+  /** Active students who have a chat or an app account. */
   linkedStudents(): Promise<LinkedStudent[]>;
   summary(studentId: string, month?: string): Promise<PointsSummary | null>;
   /** Teacher deductions since then that were not undone. */
@@ -124,7 +125,14 @@ export type PointsRunSummary = { sent: number; failed: number; duplicate: number
  */
 export async function runPointsMessages(
   now: Date,
-  deps: { data: PointsMessageData; log: MessageLog; providers: Providers; texts: Texts },
+  deps: {
+    data: PointsMessageData;
+    log: MessageLog;
+    providers: Providers;
+    texts: Texts;
+    /** The student app: a student who has it gets a push instead of the message in their own Telegram chat. */
+    app?: StudentPush;
+  },
 ): Promise<PointsRunSummary> {
   const result: PointsRunSummary = { sent: 0, failed: 0, duplicate: 0 };
   const settings = await deps.data.settings();
@@ -149,8 +157,20 @@ export async function runPointsMessages(
     values: (language: Language) => TemplateValues | null,
   ) {
     const routes: Route[] = routesFor(type, { ...chats, parentPhone: null, phone: null });
+    // The student's own copy: by push when they have the app, otherwise to their Telegram chat.
+    let inApp = false;
+    if (deps.app) {
+      const outcome = await deps.app(studentId, type, key("student"), (language) => {
+        const filled = values(language);
+        return filled ? compose(templates, type, language, filled) : null;
+      });
+      inApp = handledInApp(outcome);
+      if (outcome === "pushed") result.sent += 1;
+      else if (outcome === "duplicate") result.duplicate += 1;
+    }
     for (const route of routes) {
       if (route.channel !== "telegram" || !route.role || !route.language) continue;
+      if (route.role === "student" && inApp) continue;
       const filled = values(route.language);
       const body = filled ? compose(templates, type, route.language, filled) : null;
       if (body === null) continue;

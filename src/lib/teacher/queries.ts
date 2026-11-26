@@ -46,6 +46,8 @@ export type MyLesson = {
   marked: number;
   /** Not cancelled and not in the future. */
   can_mark: boolean;
+  kind: Enums<"lesson_kind">;
+  exam_title: string | null;
 };
 
 /** The last 7 days and the next 14. Null when the group is not the teacher's. */

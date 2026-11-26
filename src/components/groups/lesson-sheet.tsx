@@ -25,12 +25,13 @@ import {
   type AttendanceStatus,
 } from "@/lib/domain/attendance";
 import { formatDay } from "@/lib/format";
-import { saveAttendance } from "@/lib/groups/actions";
+import { saveAttendance, setLessonExam } from "@/lib/groups/actions";
 import { roomLabel } from "@/lib/domain/rooms";
 import { useInstantClose } from "@/lib/hooks/use-instant-close";
 import type { LessonSheetData } from "@/lib/groups/queries";
 import type { GroupErrorKey } from "@/lib/validation/groups";
 
+import { ExamControl } from "./exam-control";
 import { LESSON_TONE, hhmm } from "./group-meta";
 
 function Marks({
@@ -67,6 +68,9 @@ function Marks({
   return (
     <>
       <SheetBody className="gap-0 pb-6">
+        {lesson.status === "cancelled" ? null : (
+          <ExamControl lessonId={lesson.id} isExam={lesson.kind === "exam"} title={lesson.exam_title} save={setLessonExam} />
+        )}
         {lock ? (
           <p className="mb-3 flex items-start gap-2 rounded-control bg-bg-subtle px-3 py-2 text-footnote text-text-secondary">
             <Info className="size-4" aria-hidden />
@@ -150,6 +154,7 @@ export function LessonSheet({
                     <span data-lesson-status={lesson.status}>{t(`lesson.statuses.${lesson.status}`)}</span>
                   </StatusPill>
                   <span>{lesson.teacher.full_name}</span>
+                  {lesson.kind === "exam" ? <Badge tone="warning">{lesson.exam_title}</Badge> : null}
                   {lesson.teacher.id !== lesson.group.teacher_id ? (
                     <Badge tone="brand">{t("lesson.substitute")}</Badge>
                   ) : null}

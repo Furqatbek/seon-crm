@@ -128,6 +128,7 @@ async function Student({ params, searchParams }: Props) {
       {tab === "overview" ? (
         <OverviewTab
           student={student}
+          role={user.role}
           botUsername={billing.botUsername}
           openGroups={openGroups}
           today={today}

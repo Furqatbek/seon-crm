@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserPlus } from "lucide-react";
+import { TabletSmartphone, UserPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -43,13 +43,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { inviteUser, setUserActive, setUserRole } from "@/lib/settings/actions";
+import { createKiosk, inviteUser, setUserActive, setUserRole } from "@/lib/settings/actions";
 import type { TeacherOption, UserRow } from "@/lib/settings/queries";
 import {
   LOGIN_ROLES,
   UI_LANGUAGES,
   inviteSchema,
+  kioskSchema,
   type InviteInput,
+  type KioskInput,
   type LoginRole,
   type SettingsErrorKey,
   type SettingsResult,
@@ -216,7 +218,57 @@ function InviteForm({
   );
 }
 
-/** Owner only: invite by email, change a role, deactivate or reactivate. */
+/** A kiosk account for the reception tablet: a name, an email and a password to sign in with. */
+function KioskForm({ onClose }: { onClose: () => void }) {
+  const t = useTranslations("settings");
+  const tCommon = useTranslations("common");
+  const [pending, startTransition] = useTransition();
+  const [failure, setFailure] = useState<Failure | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<KioskInput>({ resolver: zodResolver(kioskSchema), defaultValues: { full_name: "", email: "", password: "" } });
+  const message = (key: string | undefined) => (key ? t(`errors.${key as SettingsErrorKey}`) : null);
+
+  const onSubmit = handleSubmit((values) => {
+    setFailure(null);
+    startTransition(async () => {
+      const result = await createKiosk(values);
+      if (!result.ok) return setFailure(result);
+      toast(t("users.kioskCreated", { name: values.full_name }));
+      onClose();
+    });
+  });
+
+  return (
+    <form onSubmit={onSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
+      <SheetBody>
+        <Field label={t("users.name")} htmlFor="kiosk-name" error={message(errors.full_name?.message)}>
+          <Input id="kiosk-name" autoComplete="off" autoFocus aria-invalid={errors.full_name ? true : undefined} {...register("full_name")} />
+        </Field>
+        <Field label={t("users.email")} htmlFor="kiosk-email" error={message(errors.email?.message)}>
+          <Input id="kiosk-email" type="email" autoComplete="off" aria-invalid={errors.email ? true : undefined} {...register("email")} />
+        </Field>
+        <Field label={t("users.kioskPassword")} htmlFor="kiosk-password" error={message(errors.password?.message)}>
+          <Input id="kiosk-password" type="password" autoComplete="new-password" aria-invalid={errors.password ? true : undefined} {...register("password")} />
+          <p className="text-footnote text-text-secondary">{t("users.kioskPasswordHint")}</p>
+        </Field>
+        <Problem failure={failure} />
+      </SheetBody>
+      <SheetFooter>
+        <Button variant="secondary" onClick={onClose}>
+          {tCommon("cancel")}
+        </Button>
+        <Button type="submit" variant="primary" disabled={pending}>
+          {t("users.kioskCreate")}
+        </Button>
+      </SheetFooter>
+    </form>
+  );
+}
+
+/** Owner only: invite by email, add a kiosk, change a role, deactivate or reactivate. */
 export function UsersTab({
   users,
   teachers,
@@ -230,6 +282,7 @@ export function UsersTab({
   const tRoles = useTranslations("userMenu.roles");
   const tCommon = useTranslations("common");
   const [inviting, setInviting] = useState(false);
+  const [addingKiosk, setAddingKiosk] = useState(false);
   const [deactivating, setDeactivating] = useState<UserRow | null>(null);
   const [failure, setFailure] = useState<Failure | null>(null);
   const [busy, startTransition] = useTransition();
@@ -261,10 +314,16 @@ export function UsersTab({
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Problem failure={failure} />
-        <Button variant="primary" onClick={() => setInviting(true)} className="ml-auto w-full sm:w-auto">
-          <UserPlus aria-hidden />
-          {t("users.invite")}
-        </Button>
+        <div className="ml-auto flex w-full flex-wrap gap-2 sm:w-auto">
+          <Button onClick={() => setAddingKiosk(true)} className="w-full sm:w-auto">
+            <TabletSmartphone aria-hidden />
+            {t("users.addKiosk")}
+          </Button>
+          <Button variant="primary" onClick={() => setInviting(true)} className="w-full sm:w-auto">
+            <UserPlus aria-hidden />
+            {t("users.invite")}
+          </Button>
+        </div>
       </div>
 
       <Table>
@@ -287,7 +346,8 @@ export function UsersTab({
               <TableCell className="whitespace-nowrap text-text-secondary">{user.email || "—"}</TableCell>
               <TableCell>
                 {/* Your own role is not yours to change. */}
-                {user.isSelf || user.status === "deactivated" ? (
+                {/* A kiosk stays a kiosk. */}
+                {user.role === "kiosk" || user.isSelf || user.status === "deactivated" ? (
                   tRoles(user.role)
                 ) : (
                   <Select value={user.role} onValueChange={(role) => changeRole(user, role as LoginRole)} disabled={busy}>
@@ -335,6 +395,16 @@ export function UsersTab({
             <SheetDescription>{t("users.inviteHint")}</SheetDescription>
           </SheetHeader>
           {inviting ? <InviteForm language={language} teachers={teachers} onClose={() => setInviting(false)} /> : null}
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={addingKiosk} onOpenChange={(next) => !next && setAddingKiosk(false)}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>{t("users.kioskTitle")}</SheetTitle>
+            <SheetDescription>{t("users.kioskHint")}</SheetDescription>
+          </SheetHeader>
+          {addingKiosk ? <KioskForm onClose={() => setAddingKiosk(false)} /> : null}
         </SheetContent>
       </Sheet>
 

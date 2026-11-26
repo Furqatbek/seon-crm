@@ -131,7 +131,7 @@ describe("linking", () => {
     const { store, send } = world();
     expect(await handleUpdate({ message: { text: "/points", chat: { id: -5, type: "group" } } }, store, botTexts)).toBeNull();
     expect(await handleUpdate({ message: { chat: { id: 5, type: "private" } } }, store, botTexts)).toBeNull();
-    expect((await send("hello"))?.text).toContain("This bot sends reminders and points news from Seon.");
+    expect((await send("hello"))?.text).toContain("This bot sends reminders and coin news from Seon.");
     expect((await send("/points"))?.text).toBe("This chat is not linked yet. Open the personal link Seon gave you.");
   });
 });
@@ -153,7 +153,7 @@ describe("/points, /top and /rewards", () => {
       "+2  Davomat",
       "−2  Oʻqituvchi oldi · Darsda telefon",
       "",
-      "“Free lesson” uchun yana 140 ball kerak.",
+      "“Free lesson” uchun yana 140 ta tanga kerak.",
     ]);
   });
 
@@ -188,9 +188,9 @@ describe("/points, /top and /rewards", () => {
     const reply = await send("/rewards", 501);
     expect(reply?.text.split("\n")).toEqual([
       "Награды. У Aziza Karimova 120 для обмена.",
-      "Notebook — 40 баллов · нет в наличии",
-      "T-shirt — 100 баллов · осталось 3",
-      "Free lesson — 150 баллов",
+      "Notebook — 40 монет · нет в наличии",
+      "T-shirt — 100 монет · осталось 3",
+      "Free lesson — 150 монет",
     ]);
     // Notebook is out of stock, the free lesson costs too much.
     expect(reply?.buttons).toEqual([[{ text: "Запросить: T-shirt", data: `rq:${packId(AZIZA.id)}:${packId(TSHIRT.id)}` }]]);
@@ -201,7 +201,7 @@ describe("/points, /top and /rewards", () => {
     await send(`/start p_${AZIZA.parent}`, 900);
     const ids = `${packId(AZIZA.id)}:${packId(TSHIRT.id)}`;
     const confirm = await press(`rq:${ids}`, 900);
-    expect(confirm?.text).toBe("Запросить «T-shirt» за 100 баллов для Aziza Karimova? Баллы удерживаются сразу.");
+    expect(confirm?.text).toBe("Запросить «T-shirt» за 100 монет для Aziza Karimova? Монеты удерживаются сразу.");
     expect(data(confirm)).toEqual([`ry:${ids}`, "rn"]);
     expect(requests).toEqual([]);
     expect((await press("rn", 900))?.text).toBe("Ничего не запрошено.");
@@ -221,7 +221,7 @@ describe("/points, /top and /rewards", () => {
     await send(`/start s_${AZIZA.student}`, 501);
     const ids = `${packId(AZIZA.id)}:${packId(TSHIRT.id)}`;
     for (const [outcome, text] of [
-      ["notEnough", "Не хватает баллов на эту награду."],
+      ["notEnough", "Не хватает монет на эту награду."],
       ["outOfStock", "Этой награды нет в наличии."],
       ["failed", "Запрос не прошёл. Попробуйте через минуту."],
     ] as const) {

@@ -16,7 +16,16 @@ export type MessageType =
   | "staff_new_lead"
   | "staff_lead_reminder"
   /** To the owner: an integration (the Meta connection) needs attention. */
-  | "staff_integration_alert";
+  | "staff_integration_alert"
+  /** Student app — docs/STUDENT_APP_SPEC.md → "Rules → Notifications". */
+  | "visit_arrived"
+  | "visit_left"
+  | "account_linked"
+  | "voucher_expiring"
+  | "open_lesson_reminder"
+  | "receipt_approved"
+  | "receipt_rejected"
+  | "staff_new_receipt";
 /** The four points messages: Telegram only, to the student and the parent. */
 export const POINTS_MESSAGE_TYPES = ["points_weekly", "points_deduction", "points_month_result", "reward_update"] as const;
 /** Whose chat a Telegram link is. */

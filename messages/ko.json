@@ -52,7 +52,7 @@
     "settings": "설정",
     "myGroups": "내 그룹",
     "pointsHistory": "내역",
-    "points": "포인트",
+    "points": "코인",
     "openRequests": "대기 중인 리워드 요청:",
     "pointsReport": "보고서",
     "waitingLeads": "대기 중인 리드:"
@@ -76,7 +76,8 @@
     "roles": {
       "owner": "원장",
       "manager": "매니저",
-      "teacher": "선생님"
+      "teacher": "선생님",
+      "kiosk": "키오스크"
     },
     "profile": "프로필"
   },
@@ -155,7 +156,8 @@
       "website": "웹사이트",
       "other": "기타",
       "facebook": "Facebook",
-      "web_form": "웹 양식"
+      "web_form": "웹 양식",
+      "mobile_app": "모바일 앱"
     },
     "lostReason": {
       "price": "가격",
@@ -179,7 +181,8 @@
       "lostReason": "미등록 사유",
       "unassigned": "담당자 없음",
       "referredBy": "추천인",
-      "referredByHint": "이 리드를 소개한 학생입니다. 리드가 등록하고 첫 결제를 하면 추천인이 포인트를 받습니다."
+      "referredByHint": "이 리드를 소개한 학생입니다. 리드가 등록하고 첫 결제를 하면 추천인이 코인을 받습니다.",
+      "koreanLevel": "한국어 수준"
     },
     "form": {
       "created": "리드가 추가되었습니다",
@@ -215,7 +218,8 @@
       "note": "메모",
       "statusChange": "{from} → {to}",
       "reason": "사유: {reason}",
-      "formResubmitted": "“{form}” 양식을 다시 제출함"
+      "formResubmitted": "“{form}” 양식을 다시 제출함",
+      "appSignup": "모바일 앱에서 가입함"
     },
     "lost": {
       "title": "{name} 님을 미등록 처리할까요?",
@@ -272,6 +276,11 @@
       "justNow": "방금",
       "minutes": "{minutes}분",
       "hours": "{hours}시간 {minutes}분"
+    },
+    "koreanLevel": {
+      "beginner": "입문",
+      "topik1": "TOPIK I",
+      "topik2": "TOPIK II"
     }
   },
   "students": {
@@ -304,7 +313,7 @@
       "ledger": "정산 내역",
       "attendance": "출석",
       "messages": "메시지",
-      "points": "포인트"
+      "points": "코인"
     },
     "fields": {
       "name": "이름",
@@ -376,8 +385,8 @@
       "linkedShort": "연결됨",
       "notLinked": "연결 안 됨",
       "hint": {
-        "student": "학생 본인의 Telegram용: 수업 알림과 본인의 포인트를 받습니다. 결제 알림은 받지 않습니다.",
-        "parent": "학부모의 Telegram용: 결제 알림과 자녀의 포인트를 받습니다."
+        "student": "학생 본인의 Telegram용: 수업 알림과 본인의 코인을 받습니다. 결제 알림은 받지 않습니다.",
+        "parent": "학부모의 Telegram용: 결제 알림과 자녀의 코인을 받습니다."
       },
       "copy": "링크 복사",
       "copied": "복사되었습니다",
@@ -437,13 +446,21 @@
         "payment_overdue": "결제 기한 초과",
         "lesson_reminder": "수업 알림",
         "custom": "개별 메시지",
-        "points_weekly": "주간 포인트 요약",
-        "points_deduction": "포인트 차감",
+        "points_weekly": "주간 코인 요약",
+        "points_deduction": "코인 차감",
         "points_month_result": "월간 결과",
         "reward_update": "리워드 소식",
         "staff_new_lead": "새 리드 (직원용)",
         "staff_lead_reminder": "리드 리마인더 (직원용)",
-        "staff_integration_alert": "연동 알림 (직원용)"
+        "staff_integration_alert": "연동 알림 (직원용)",
+        "visit_arrived": "센터 도착",
+        "visit_left": "센터 퇴실",
+        "account_linked": "앱 계정 연결",
+        "voucher_expiring": "바우처 만료 임박",
+        "open_lesson_reminder": "공개 수업 알림",
+        "receipt_approved": "영수증 승인",
+        "receipt_rejected": "영수증 거절",
+        "staff_new_receipt": "새 영수증 (직원)"
       },
       "channels": {
         "telegram": "Telegram",
@@ -466,13 +483,33 @@
       "leadNotOpen": "이 리드는 이미 종료되어 전환할 수 없습니다.",
       "notFound": "이 학생은 더 이상 존재하지 않습니다.",
       "notAllowed": "이 작업을 수행할 권한이 없습니다.",
-      "generic": "문제가 발생했습니다. 다시 시도해 주세요."
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
+      "noAppAccount": "이 전화번호로 가입한 미연결 앱 계정이 없습니다.",
+      "alreadyLinked": "이 학생은 이미 앱 계정이 연결되어 있습니다."
     },
     "graduated": {
       "title": "{name} 님을 수료 처리할까요?",
       "body": "학생은 오늘부로 모든 그룹을 마치며 더 이상 수강료가 청구되지 않습니다. 아직 납부하지 않은 금액은 잔액에 그대로 남습니다."
     },
-    "counts": "수강 중: {studying} · 퇴원: {left} · 수료: {graduated}"
+    "counts": "수강 중: {studying} · 퇴원: {left} · 수료: {graduated}",
+    "app": {
+      "title": "모바일 앱",
+      "linked": "연결됨",
+      "notSignedUp": "가입 안 함",
+      "linkedSince": "{date}부터",
+      "linkedHint": "학생은 앱에서 시간표, 코인, 결제 내역과 QR 코드를 볼 수 있습니다.",
+      "waitingHint": "이 전화번호로 앱에 가입한 계정이 있지만 아직 연결되지 않았습니다. 원장이 이 학생에게 연결할 수 있습니다.",
+      "notSignedUpHint": "학생이 본인 또는 학부모의 전화번호로 앱에 가입하면 계정이 자동으로 연결됩니다.",
+      "invite": "앱 초대 보내기",
+      "inviteSent": "{name}: 초대 SMS를 보냈습니다",
+      "inviteFailed": "SMS를 보내지 못했습니다. 자세한 내용은 메시지 탭에서 확인하세요.",
+      "unlink": "연결 해제",
+      "relink": "다시 연결",
+      "unlinked": "{name}: 앱 계정 연결을 해제했습니다",
+      "relinked": "{name}: 앱 계정을 연결했습니다",
+      "unlinkTitle": "{name} 님의 앱 계정 연결을 해제할까요?",
+      "unlinkBody": "계정은 삭제되지 않습니다. 계정 주인은 앱에 로그인할 수 있지만 이 학생의 수업, 코인, 결제 내역은 볼 수 없습니다. 나중에 다시 연결할 수 있습니다."
+    }
   },
   "groups": {
     "newGroup": "새 그룹",
@@ -569,7 +606,13 @@
         "scheduled": "예정",
         "held": "진행 완료",
         "cancelled": "취소됨"
-      }
+      },
+      "exam": "시험",
+      "examHint": "학생 앱의 시간표에 시험으로 표시됩니다.",
+      "examTitle": "시험 이름",
+      "examSave": "시험 저장",
+      "examSaved": "수업을 시험으로 표시했습니다",
+      "examCleared": "수업이 더 이상 시험이 아닙니다"
     },
     "attendanceGrid": {
       "student": "학생",
@@ -691,7 +734,8 @@
       "capacityOverRoom": "강의실 수용 인원은 {detail}입니다. 그룹 정원은 이보다 클 수 없습니다.",
       "roomInvalid": "목록에서 강의실을 선택하세요.",
       "roomClash": "해당 시간에 강의실을 {detail}에서 사용 중입니다.",
-      "roomUnavailable": "이 강의실은 더 이상 사용할 수 없습니다. 다른 강의실을 선택하세요."
+      "roomUnavailable": "이 강의실은 더 이상 사용할 수 없습니다. 다른 강의실을 선택하세요.",
+      "examTitleRequired": "시험 이름을 입력하세요."
     }
   },
   "finance": {
@@ -1151,20 +1195,20 @@
     },
     "tabs": {
       "overview": "개요",
-      "points": "포인트"
+      "points": "코인"
     },
     "points": {
-      "points": "포인트",
+      "points": "코인",
       "kpi": {
-        "earned": "적립된 포인트",
-        "deducted": "차감된 포인트",
+        "earned": "적립된 코인",
+        "deducted": "차감된 코인",
         "spent": "리워드에 사용",
-        "unspent": "미사용 포인트",
+        "unspent": "미사용 코인",
         "rewardsGiven": "지급된 리워드",
-        "studentsWithoutPoints": "포인트가 없는 학생"
+        "studentsWithoutPoints": "코인이 없는 학생"
       },
       "bySource": {
-        "title": "출처별 적립 포인트"
+        "title": "출처별 적립 코인"
       },
       "byTeacher": {
         "title": "선생님별 지급 및 차감",
@@ -1181,17 +1225,17 @@
         "title": "지급된 리워드",
         "reward": "리워드",
         "given": "지급 수",
-        "points": "사용 포인트"
+        "points": "사용 코인"
       },
       "byGroup": {
-        "title": "그룹별 학생 1인당 평균 포인트",
-        "hint": "해당 기간 그룹의 포인트를 현재 그룹 학생 수로 나눈 값입니다.",
+        "title": "그룹별 학생 1인당 평균 코인",
+        "hint": "해당 기간 그룹의 코인을 현재 그룹 학생 수로 나눈 값입니다.",
         "group": "그룹",
         "students": "학생",
         "average": "평균"
       }
     },
-    "teacherTitle": "내 그룹의 포인트",
+    "teacherTitle": "내 그룹의 코인",
     "forms": {
       "title": "양식별 리드",
       "hint": "기간 내 조회와 리드, 가져간 수와 수강생 전환 수, 리드를 가져가기까지 걸린 시간.",
@@ -1206,19 +1250,19 @@
     }
   },
   "bot": {
-    "linked": "{student} 님의 학부모로 연결되었습니다. {centre}의 결제 알림과 포인트 소식이 이 채팅으로 전송됩니다. 명령어: /points /top /rewards /language /stop",
-    "linkedStudent": "{student} 님, 연결되었습니다. {centre}의 수업 알림과 내 포인트 소식이 이 채팅으로 전송됩니다. 명령어: /points /top /rewards /language /stop",
+    "linked": "{student} 님의 학부모로 연결되었습니다. {centre}의 결제 알림과 코인 소식이 이 채팅으로 전송됩니다. 명령어: /points /top /rewards /language /stop",
+    "linkedStudent": "{student} 님, 연결되었습니다. {centre}의 수업 알림과 내 코인 소식이 이 채팅으로 전송됩니다. 명령어: /points /top /rewards /language /stop",
     "unknownCode": "유효하지 않은 링크입니다. {centre}에 새 링크를 요청하세요.",
     "stopped": "연결이 해제되었습니다. 이 채팅에서는 더 이상 {centre}의 메시지를 받지 않습니다.",
     "nothingLinked": "이 채팅에 연결된 정보가 없습니다.",
     "notLinked": "이 채팅은 아직 연결되지 않았습니다. {centre}에서 받은 개인 링크를 열어 주세요.",
-    "help": "이 봇은 {centre}의 알림과 포인트 소식을 보내 드립니다. 연결하려면 센터에서 받은 개인 링크를 열어 주세요. 명령어: /points /top /rewards /language /stop",
+    "help": "이 봇은 {centre}의 알림과 코인 소식을 보내 드립니다. 연결하려면 센터에서 받은 개인 링크를 열어 주세요. 명령어: /points /top /rewards /language /stop",
     "chooseLanguage": "이 채팅의 언어를 선택하세요:",
     "languageSet": "완료되었습니다. 이제 이 채팅은 한국어로 표시됩니다.",
     "whichChild": "어느 자녀인가요?",
     "failed": "문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
-    "pointsCount": "{points, plural, other {#포인트}}",
-    "goal": "“{reward}”까지 {points, plural, other {#포인트}} 남았습니다.",
+    "pointsCount": "{points, plural, other {#코인}}",
+    "goal": "“{reward}”까지 {points, plural, other {#코인}} 남았습니다.",
     "bonus": "개근 보너스: +{points}.",
     "points": {
       "title": "{student}",
@@ -1232,30 +1276,30 @@
       "centre": "센터 이번 달 상위 10명",
       "group": "{group} 상위 5명",
       "own": "{student}: {rank}위 ({points})",
-      "empty": "이번 달에는 아직 포인트가 없습니다."
+      "empty": "이번 달에는 아직 코인이 없습니다."
     },
     "rewards": {
-      "title": "리워드. {student} 님이 사용할 수 있는 포인트: {points}.",
+      "title": "리워드. {student} 님이 사용할 수 있는 코인: {points}.",
       "empty": "지금은 리워드가 없습니다.",
       "outOfStock": "품절",
       "left": "{count}개 남음",
       "request": "요청: {reward}"
     },
     "request": {
-      "confirm": "{student} 님의 {points}포인트로 “{reward}”을(를) 요청할까요? 포인트는 즉시 보류됩니다.",
+      "confirm": "{student} 님의 {points}코인으로 “{reward}”을(를) 요청할까요? 코인은 즉시 보류됩니다.",
       "yes": "네, 요청합니다",
       "no": "아니요",
       "done": "요청이 접수되었습니다: “{reward}”. {centre} 안내 데스크에서 받아 가세요.",
       "cancelled": "요청하지 않았습니다.",
-      "notEnough": "이 리워드를 받기에 포인트가 부족합니다.",
+      "notEnough": "이 리워드를 받기에 코인이 부족합니다.",
       "outOfStock": "이 리워드는 품절되었습니다.",
       "notOnOffer": "이 리워드는 더 이상 제공되지 않습니다.",
       "failed": "요청이 처리되지 않았습니다. 잠시 후 다시 시도해 주세요."
     },
     "reward": {
-      "requested": "요청이 접수되어 {points}포인트가 보류되었습니다. 안내 데스크에서 받아 가세요.",
+      "requested": "요청이 접수되어 {points}코인이 보류되었습니다. 안내 데스크에서 받아 가세요.",
       "given": "전달되었습니다. 축하합니다!",
-      "rejected": "요청이 거절되었습니다({reason}). {points}포인트가 반환되었습니다."
+      "rejected": "요청이 거절되었습니다({reason}). {points}코인이 반환되었습니다."
     },
     "source": {
       "attendance": "출석",
@@ -1269,7 +1313,7 @@
       "reward_return": "리워드 반환"
     },
     "commands": {
-      "points": "내 포인트와 순위",
+      "points": "내 코인과 순위",
       "top": "이번 달 상위 학생",
       "rewards": "리워드 및 요청",
       "language": "언어 변경",
@@ -1308,7 +1352,8 @@
       "notFound": "더 이상 존재하지 않습니다.",
       "noDebt": "이 학생은 더 이상 미납 금액이 없습니다.",
       "noTemplate": "이 메시지에 대한 템플릿이 없습니다.",
-      "generic": "문제가 발생했습니다. 다시 시도해 주세요."
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
+      "noStoreLinks": "앱 스토어 링크가 설정되지 않았습니다. 서버에 APP_STORE_URL 또는 GOOGLE_PLAY_URL을 설정해야 합니다."
     }
   },
   "settings": {
@@ -1319,9 +1364,10 @@
       "notifications": "알림",
       "templates": "템플릿",
       "profile": "프로필",
-      "points": "포인트",
+      "points": "코인",
       "sources": "리드 소스",
-      "integrations": "연동"
+      "integrations": "연동",
+      "about": "센터 소개 및 개인정보"
     },
     "saved": "저장되었습니다",
     "centre": {
@@ -1362,7 +1408,14 @@
       "noFreeTeachers": "모든 선생님에게 이미 로그인 계정이 있습니다",
       "linkTitle": "{name} 님은 어느 선생님인가요?",
       "linkBody": "선생님 역할로는 해당 선생님의 그룹만 볼 수 있습니다: 학생 이름, 출석, 코인. 앱의 다른 내용은 볼 수 없습니다.",
-      "makeTeacher": "선생님으로 지정"
+      "makeTeacher": "선생님으로 지정",
+      "addKiosk": "키오스크 추가",
+      "kioskTitle": "키오스크 계정",
+      "kioskHint": "안내 데스크 태블릿용입니다. 키오스크는 출입 체크 스캐너만 열 수 있고 다른 것은 볼 수 없습니다.",
+      "kioskPassword": "비밀번호",
+      "kioskPasswordHint": "8자 이상이어야 합니다. 태블릿에서 이 이메일과 비밀번호로 로그인합니다.",
+      "kioskCreate": "키오스크 만들기",
+      "kioskCreated": "{name}: 키오스크 계정을 만들었습니다"
     },
     "notifications": {
       "enabled": "자동 알림 보내기",
@@ -1417,15 +1470,15 @@
         "due_date": "납부 기한",
         "time": "수업 시간",
         "centre": "센터 이름",
-        "week_points": "이번 주 포인트",
-        "month_points": "이번 달 포인트",
-        "points": "포인트",
-        "balance": "사용 가능 포인트",
+        "week_points": "이번 주 코인",
+        "month_points": "이번 달 코인",
+        "points": "코인",
+        "balance": "사용 가능 코인",
         "group_rank": "그룹 내 순위",
         "centre_rank": "센터 내 순위",
         "reason": "사유",
         "reward": "리워드",
-        "points_needed": "부족한 포인트",
+        "points_needed": "부족한 코인",
         "goal": "다음 목표 리워드(문장)",
         "bonus": "개근 보너스(문장)",
         "update": "요청 처리 결과(문장)"
@@ -1612,6 +1665,12 @@
         "state": "다른 창에서 시작했거나 시간이 너무 오래 걸렸습니다. 다시 시도하세요.",
         "not_configured": "Meta 앱이 서버에 아직 설정되지 않았습니다."
       }
+    },
+    "about": {
+      "hint": "이 내용은 학생 앱의 “센터 소개”와 “개인정보 처리방침” 화면에 표시됩니다. 언어별로 입력하세요.",
+      "language": "내용 언어",
+      "about": "센터 소개",
+      "privacy": "개인정보 처리방침"
     }
   },
   "myGroups": {
@@ -1660,35 +1719,35 @@
     }
   },
   "points": {
-    "count": "{count, plural, other {#포인트}}",
-    "giveTitle": "{name} 님에게 포인트 지급",
-    "takeTitle": "{name} 님의 포인트 차감",
-    "giveHint": "사유를 선택하거나 1~{max}포인트를 직접 지급하세요.",
-    "takeHint": "사유를 선택하거나 사유를 직접 입력해 1~{max}포인트를 차감하세요. 학생과 학부모에게 안내됩니다.",
+    "count": "{count, plural, other {#코인}}",
+    "giveTitle": "{name} 님에게 코인 지급",
+    "takeTitle": "{name} 님의 코인 차감",
+    "giveHint": "사유를 선택하거나 1~{max}코인을 직접 지급하세요.",
+    "takeHint": "사유를 선택하거나 사유를 직접 입력해 1~{max}코인을 차감하세요. 학생과 학부모에게 안내됩니다.",
     "custom": "직접 입력",
     "howMany": "수량",
     "reason": "사유",
-    "give": "포인트 지급",
-    "take": "포인트 차감",
-    "giveTo": "{name} 님에게 포인트 지급",
-    "takeFrom": "{name} 님의 포인트 차감",
-    "given": "{name}: +{count, plural, other {#포인트}}",
-    "taken": "{name}: −{count, plural, other {#포인트}}",
-    "takenReduced": "{name} 님의 포인트가 {count, plural, other {#포인트}}뿐이어서 전부 차감되었습니다",
-    "nothingToTake": "{name} 님은 차감할 포인트가 없습니다",
+    "give": "코인 지급",
+    "take": "코인 차감",
+    "giveTo": "{name} 님에게 코인 지급",
+    "takeFrom": "{name} 님의 코인 차감",
+    "given": "{name}: +{count, plural, other {#코인}}",
+    "taken": "{name}: −{count, plural, other {#코인}}",
+    "takenReduced": "{name} 님의 코인이 {count, plural, other {#코인}}뿐이어서 전부 차감되었습니다",
+    "nothingToTake": "{name} 님은 차감할 코인이 없습니다",
     "undo": "실행 취소",
     "undone": "실행 취소됨",
     "friend": "친구: {name}",
-    "programmeOff": "포인트 프로그램이 설정에서 꺼져 있습니다. 이미 적립된 포인트는 유지됩니다.",
+    "programmeOff": "코인 프로그램이 설정에서 꺼져 있습니다. 이미 적립된 코인은 유지됩니다.",
     "errors": {
-      "programmeOff": "포인트 프로그램이 꺼져 있습니다.",
-      "amountInvalid": "한도 내에서 포인트 수를 정수로 입력하세요.",
+      "programmeOff": "코인 프로그램이 꺼져 있습니다.",
+      "amountInvalid": "한도 내에서 코인 수를 정수로 입력하세요.",
       "reasonRequired": "사유를 입력하세요.",
       "dailyLimit": "이 학생의 일일 한도에 도달했습니다.",
-      "dailyLimitLeft": "이 학생의 일일 한도에 도달했습니다. 오늘 남은 한도: {count, plural, =0 {없음} other {#포인트}}.",
+      "dailyLimitLeft": "이 학생의 일일 한도에 도달했습니다. 오늘 남은 한도: {count, plural, =0 {없음} other {#코인}}.",
       "notInGroup": "학생이 이 그룹에 속해 있지 않습니다.",
       "undoTooLate": "실행 취소할 수 있는 시간이 지났습니다.",
-      "notEnough": "학생이 가진 포인트가 그만큼 없습니다.",
+      "notEnough": "학생이 가진 코인이 그만큼 없습니다.",
       "valueInvalid": "정수를 입력하세요.",
       "valueRange": "{min}에서 {max} 사이의 정수를 입력하세요.",
       "labelRequired": "세 가지 언어로 모두 이름을 입력하세요.",
@@ -1697,7 +1756,7 @@
       "notFound": "찾을 수 없습니다. 삭제되었을 수 있습니다.",
       "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
       "nameRequired": "이름을 입력하세요.",
-      "costInvalid": "필요 포인트를 1에서 100,000 사이로 입력하세요.",
+      "costInvalid": "필요 코인을 1에서 100,000 사이로 입력하세요.",
       "stockInvalid": "정수를 입력하거나, 무제한이면 비워 두세요.",
       "outOfStock": "이 리워드는 품절되었습니다.",
       "alreadyHandled": "이미 처리된 요청입니다.",
@@ -1706,8 +1765,8 @@
     },
     "history": {
       "title": "내역",
-      "subtitle": "이번 달에 내가 지급하거나 차감한 모든 포인트입니다.",
-      "empty": "이번 달에 지급하거나 차감한 포인트가 없습니다.",
+      "subtitle": "이번 달에 내가 지급하거나 차감한 모든 코인입니다.",
+      "empty": "이번 달에 지급하거나 차감한 코인이 없습니다.",
       "undone": "실행 취소됨"
     },
     "totals": {
@@ -1716,20 +1775,20 @@
       "earnedAllTime": "누적 적립"
     },
     "adjust": {
-      "action": "포인트 조정",
-      "title": "{name} 님의 포인트 조정",
-      "hint": "현재 사용 가능: {count, plural, other {#포인트}}. 사유는 포인트 내역에 남습니다.",
+      "action": "코인 조정",
+      "title": "{name} 님의 코인 조정",
+      "hint": "현재 사용 가능: {count, plural, other {#코인}}. 사유는 코인 내역에 남습니다.",
       "kind": "추가 또는 차감",
       "add": "추가",
       "take": "차감",
-      "done": "포인트가 조정되었습니다"
+      "done": "코인이 조정되었습니다"
     },
     "ledger": {
-      "empty": "아직 포인트가 없습니다.",
+      "empty": "아직 코인이 없습니다.",
       "date": "날짜",
       "what": "내용",
       "by": "처리자",
-      "points": "포인트",
+      "points": "코인",
       "automatic": "자동"
     },
     "source": {
@@ -1741,13 +1800,15 @@
       "teacher_deduction": "선생님 차감",
       "owner_adjustment": "원장 조정",
       "reward_hold": "리워드 요청",
-      "reward_return": "리워드 반환"
+      "reward_return": "리워드 반환",
+      "game_win": "게임 승리",
+      "exam": "모의고사"
     },
     "settings": {
-      "enabled": "포인트 프로그램",
-      "enabledHint": "끄면 새 포인트가 적립되지 않습니다. 이미 적립된 포인트는 유지됩니다.",
-      "values": "포인트 값",
-      "valuesHint": "새 값은 지금부터 적용되며, 이미 지급된 포인트에는 적용되지 않습니다.",
+      "enabled": "코인 프로그램",
+      "enabledHint": "끄면 새 코인이 적립되지 않습니다. 이미 적립된 코인은 유지됩니다.",
+      "values": "코인 값",
+      "valuesHint": "새 값은 지금부터 적용되며, 이미 지급된 코인에는 적용되지 않습니다.",
       "limits": "선생님 한도",
       "limitsHint": "선생님이 지급하거나 차감할 수 있는 양입니다.",
       "present": "수업 출석",
@@ -1756,18 +1817,18 @@
       "perfect_month_min_lessons": "개근으로 인정되는 최소 수업 수",
       "on_time": "수강료 기한 내 납부",
       "referral": "친구 등록",
-      "max_per_action": "지급·차감 1회당 최대 포인트",
-      "teacher_daily_cap": "학생 1명당 하루 최대 포인트"
+      "max_per_action": "지급·차감 1회당 최대 코인",
+      "teacher_daily_cap": "학생 1명당 하루 최대 코인"
     },
     "presets": {
       "title": "선생님용 사유",
-      "hint": "선생님이 포인트를 지급하거나 차감할 때 이 중에서 선택합니다. 1회당 한도를 넘는 사유는 표시되지 않습니다.",
+      "hint": "선생님이 코인을 지급하거나 차감할 때 이 중에서 선택합니다. 1회당 한도를 넘는 사유는 표시되지 않습니다.",
       "kind": "종류",
       "kinds": {
         "award": "지급",
         "deduction": "차감"
       },
-      "points": "포인트",
+      "points": "코인",
       "label": {
         "uz": "우즈베크어 이름",
         "ru": "러시아어 이름",
@@ -1788,7 +1849,7 @@
     },
     "board": {
       "title": "랭킹",
-      "subtitle": "적립한 포인트 기준입니다. 리워드에 포인트를 사용해도 순위는 내려가지 않습니다.",
+      "subtitle": "적립한 코인 기준입니다. 리워드에 코인을 사용해도 순위는 내려가지 않습니다.",
       "scope": "센터 또는 그룹",
       "centre": "센터 전체",
       "period": "기간",
@@ -1836,7 +1897,7 @@
       "editTitle": "리워드 수정",
       "name": "이름",
       "description": "설명",
-      "cost": "필요 포인트",
+      "cost": "필요 코인",
       "stock": "재고",
       "stockHint": "무제한이면 비워 두세요.",
       "photo": "사진",
@@ -1851,7 +1912,7 @@
       "date": "날짜",
       "student": "학생",
       "reward": "리워드",
-      "cost": "포인트",
+      "cost": "코인",
       "from": "요청 경로",
       "status": "상태",
       "via": {
@@ -1862,29 +1923,30 @@
         "requested": "대기 중",
         "given": "지급됨",
         "rejected": "거절됨",
-        "cancelled": "취소됨"
+        "cancelled": "취소됨",
+        "ready": "수령 준비 완료"
       },
       "give": "지급",
       "reject": "거절",
       "given": "{name}: 리워드가 지급되었습니다",
-      "rejected": "{name}: 요청이 거절되어 포인트가 반환되었습니다",
+      "rejected": "{name}: 요청이 거절되어 코인이 반환되었습니다",
       "rejectTitle": "{name} 님의 요청을 거절할까요?",
-      "rejectBody": "{count, plural, other {#포인트}}가 학생에게 반환되고 리워드는 재고로 돌아갑니다."
+      "rejectBody": "{count, plural, other {#코인}}이 학생에게 반환되고 리워드는 재고로 돌아갑니다."
     },
     "redeem": {
       "open": "리워드 교환",
       "title": "{name} 님의 리워드",
-      "hint": "사용 가능: {count, plural, other {#포인트}}. 포인트는 즉시 보류되며, 리워드는 포인트 → 요청에서 지급하세요.",
+      "hint": "사용 가능: {count, plural, other {#코인}}. 코인은 즉시 보류되며, 리워드는 코인 → 요청에서 지급하세요.",
       "action": "교환",
-      "short": "{count, plural, other {#포인트 부족}}",
-      "done": "{reward}: 요청이 생성되고 포인트가 보류되었습니다"
+      "short": "{count, plural, other {#코인 부족}}",
+      "done": "{reward}: 요청이 생성되고 코인이 보류되었습니다"
     }
   },
   "tv": {
     "centreTitle": "이번 달 상위 10명",
     "groupSubtitle": "상위 5명 · {month}",
     "updated": "{time} 업데이트",
-    "empty": "이번 달에는 아직 포인트가 없습니다"
+    "empty": "이번 달에는 아직 코인이 없습니다"
   },
   "publicForm": {
     "errors": {
@@ -2176,5 +2238,12 @@
     "unknownCode": "이 링크는 작동하지 않습니다. {centre} CRM의 프로필에서 Telegram 연결을 다시 누르세요.",
     "notLinked": "{centre} 직원만 리드를 가져갈 수 있습니다. 먼저 프로필에서 Telegram을 연결하세요.",
     "metaReconnect": "⚠️ Facebook 리드가 중단되었습니다. “{page}” 페이지를 다시 연결해야 합니다. CRM의 설정 → 연동에서 다시 연결을 누르세요."
+  },
+  "studentApp": {
+    "account_linked": {
+      "title": "계정이 센터에 연결되었습니다",
+      "body": "{centre}: 이제 앱에서 수업, 코인, 결제 내역을 볼 수 있습니다."
+    },
+    "inviteSms": "{centre}: 시간표, 코인, 결제 내역을 앱에서 확인하세요. 다운로드: {links}"
   }
 }

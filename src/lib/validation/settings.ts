@@ -79,6 +79,25 @@ export const inviteSchema = z
   .transform(withTeacher);
 export type InviteInput = z.input<typeof inviteSchema>;
 
+/** A kiosk account for the reception tablet: an email and a password the owner chooses. */
+export const kioskSchema = z.object({
+  full_name: name,
+  email: z.email("emailInvalid").max(200, "tooLong"),
+  password: z.string().min(8, "passwordTooShort").max(72, "tooLong"),
+});
+export type KioskInput = z.input<typeof kioskSchema>;
+
+/** About the centre and the privacy policy, as the student app shows them, in its four languages. */
+const appText = (max: number) =>
+  z.object({
+    uz: z.string().trim().max(max, "tooLong"),
+    ru: z.string().trim().max(max, "tooLong"),
+    en: z.string().trim().max(max, "tooLong"),
+    ko: z.string().trim().max(max, "tooLong"),
+  });
+export const appTextsSchema = z.object({ about: appText(5000), privacy_policy: appText(30000) });
+export type AppTextsInput = z.input<typeof appTextsSchema>;
+
 export const userRoleSchema = z
   .object({ user_id: z.uuid(), ...roleFields })
   .superRefine(teacherLink)
@@ -152,7 +171,7 @@ export type SettingsResult<T = undefined> =
       detail?: string;
     };
 
-export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "points", "sources", "integrations", "profile"] as const;
+export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "points", "about", "sources", "integrations", "profile"] as const;
 export type SettingsTab = (typeof SETTINGS_TABS)[number];
 
 /** URL state of /settings. */

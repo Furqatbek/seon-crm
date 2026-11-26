@@ -52,6 +52,8 @@ export type StudentErrorKey =
   | "languageRequired"
   | "tooLong"
   | "leadNotOpen"
+  | "noAppAccount"
+  | "alreadyLinked"
   | "notFound"
   | "notAllowed"
   | "generic";

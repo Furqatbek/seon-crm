@@ -10,6 +10,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { sendMessageSchema, type NotifyErrorKey, type NotifyFailure } from "@/lib/validation/notify";
 
+import { studentAppTexts } from "./bot-texts";
 import { deliver, type Delivery } from "./deliver";
 import { compose, paymentMessage, tashkentNow, type DebtCandidate } from "./reminders";
 import { chooseChannel, dedupeKey, isQuiet, smsRecipient } from "./rules";
@@ -116,6 +117,46 @@ export async function sendMessage(input: unknown): Promise<{ ok: true; delivered
         channel: target.channel,
         recipient: target.recipient,
         body: parsed.data.body,
+        dedupeKey: dedupeKey.custom(randomUUID()),
+      },
+      { now: () => ctx.now },
+    );
+    refresh();
+    return { ok: true, delivered: result === "sent" };
+  } catch (error) {
+    return failure(error);
+  }
+}
+
+/** Where the student app is downloaded: APP_STORE_URL and GOOGLE_PLAY_URL. */
+function storeLinks(): string[] {
+  return [process.env.APP_STORE_URL, process.env.GOOGLE_PLAY_URL].map((url) => url?.trim() ?? "").filter((url) => url !== "");
+}
+
+/**
+ * Send app invite, from the student page: an SMS to the student's own phone
+ * with the store links, in the student's language. Logged like every message.
+ */
+export async function sendAppInvite(studentIdInput: unknown): Promise<{ ok: true; delivered: boolean } | NotifyFailure> {
+  const studentId = z.uuid().safeParse(studentIdInput);
+  if (!studentId.success) return { ok: false, error: "notFound" };
+  const links = storeLinks();
+  if (links.length === 0) return { ok: false, error: "noStoreLinks" };
+  const { blocked, ctx } = await context();
+  if (blocked) return blocked;
+
+  const student = await ctx.supabase.from("students").select(STUDENT).eq("id", studentId.data).maybeSingle();
+  if (!student.data || student.data.archived_at) return { ok: false, error: "notFound" };
+  try {
+    const result = await deliver(
+      ctx.log,
+      getProviders(),
+      {
+        studentId: student.data.id,
+        type: "custom",
+        channel: "sms",
+        recipient: student.data.phone,
+        body: studentAppTexts(student.data.language)("inviteSms", { centre: ctx.settings.centreName, links: links.join(" ") }),
         dedupeKey: dedupeKey.custom(randomUUID()),
       },
       { now: () => ctx.now },

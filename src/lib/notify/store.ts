@@ -4,9 +4,11 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/lib/supabase/types";
 
+import type { AppAccount, AppEventData, AppLanguage, AppNotifyStore } from "./app-notify";
 import type { BotStore, RequestOutcome } from "./bot";
 import type { MessageLog } from "./deliver";
 import { EskizProvider } from "./eskiz";
+import { FcmSender, readServiceAccount } from "./fcm";
 import type { BotTop, PointsSummary } from "./points-data";
 import type { Chats, DeductionEvent, PointsMessageData, RewardEvent } from "./points-messages";
 import type { LessonCandidate, NotifySettings, ReminderData, Template } from "./reminders";
@@ -278,12 +280,18 @@ export function pointsMessageData(admin: Db): PointsMessageData {
     },
     templates: () => getTemplates(admin),
     async linkedStudents() {
-      const { data, error } = await admin
-        .from("telegram_links")
-        .select("student_id, role, chat_id, language, student:students(status, archived_at)");
-      if (error) throw new Error(error.message);
-      const active = data.filter((row) => row.student.status === "active" && row.student.archived_at === null);
-      return [...new Set(active.map((row) => row.student_id))].map((id) => ({
+      const [links, accounts] = await Promise.all([
+        admin.from("telegram_links").select("student_id, role, chat_id, language, student:students(status, archived_at)"),
+        // Students with the app are told there, with or without a Telegram chat.
+        admin.from("profiles").select("student_id, student:students(status, archived_at)").eq("is_active", true).not("student_id", "is", null),
+      ]);
+      if (links.error) throw new Error(links.error.message);
+      if (accounts.error) throw new Error(accounts.error.message);
+      const active = links.data.filter((row) => row.student.status === "active" && row.student.archived_at === null);
+      const withApp = accounts.data
+        .filter((row) => row.student?.status === "active" && row.student.archived_at === null)
+        .map((row) => row.student_id as string);
+      return [...new Set([...active.map((row) => row.student_id), ...withApp])].map((id) => ({
         id,
         ...chatsOf(active.filter((row) => row.student_id === id)),
       }));
@@ -352,6 +360,106 @@ export function pointsMessageData(admin: Db): PointsMessageData {
       return events;
     },
   };
+}
+
+// ── The student app: notifications and push (app-notify.ts) ──
+
+// One sender per server instance, so its Firebase access token is asked for once.
+let push: FcmSender | undefined;
+
+/** Push through Firebase, from FIREBASE_SERVICE_ACCOUNT. Unconfigured, every push fails and Telegram is used. */
+export function getPushSender(): FcmSender {
+  push ??= new FcmSender({ account: readServiceAccount(process.env.FIREBASE_SERVICE_ACCOUNT) });
+  return push;
+}
+
+const messageLanguage = (value: string | null | undefined): Language => (value === "ru" || value === "en" ? value : "uz");
+const appLanguage = (value: string | null | undefined): AppLanguage => (value === "ko" ? "ko" : messageLanguage(value));
+
+type AccountRow = { id: string; language: string; student: { language: string } | null; device_tokens: Array<{ token: string }> };
+const ACCOUNT_COLUMNS = "id, language, student:students(language), device_tokens(token)";
+
+function toAccount(row: AccountRow): AppAccount {
+  const language = appLanguage(row.language);
+  return {
+    profileId: row.id,
+    language,
+    // The centre's templates have no Korean: such a student is written to in their record's language.
+    messageLanguage: language === "ko" ? messageLanguage(row.student?.language) : language,
+    tokens: row.device_tokens.map((device) => device.token),
+  };
+}
+
+/** The app's notifications and device tokens, with the service role. */
+export function appNotifyStore(admin: Db): AppNotifyStore {
+  return {
+    async accountOfStudent(studentId) {
+      const { data, error } = await admin.from("profiles").select(ACCOUNT_COLUMNS).eq("student_id", studentId).eq("is_active", true).maybeSingle();
+      if (error) throw new Error(error.message);
+      return data ? toAccount(data) : null;
+    },
+    async insert(profileId, notification) {
+      const { error } = await admin.from("notifications").insert({
+        profile_id: profileId,
+        type: notification.type,
+        title: notification.title,
+        body: notification.body,
+        data: { ...notification.data, dedupe: notification.dedupeKey },
+      });
+      // The unique dedupe key: this account was already told.
+      if (error?.code === "23505") return false;
+      if (error) throw new Error(error.message);
+      return true;
+    },
+    async dropToken(token) {
+      const { error } = await admin.from("device_tokens").delete().eq("token", token);
+      if (error) throw new Error(error.message);
+    },
+  };
+}
+
+/** What the app's own notifications read, with the service role. */
+export function appEventData(admin: Db): AppEventData {
+  return {
+    async centreName() {
+      const { data } = await admin.from("centre_settings").select("centre_name").maybeSingle();
+      return data?.centre_name ?? "";
+    },
+    async linkedSince(since) {
+      const { data, error } = await admin
+        .from("profiles")
+        .select(`${ACCOUNT_COLUMNS}, linked_at`)
+        .eq("is_active", true)
+        .not("student_id", "is", null)
+        .gte("linked_at", since.toISOString())
+        .order("linked_at");
+      if (error) throw new Error(error.message);
+      return data.map((row) => ({ account: toAccount(row), linkedAt: row.linked_at as string }));
+    },
+  };
+}
+
+/**
+ * Removes the profile photos of accounts deleted in the app: everything under
+ * avatars/<profile id>/, then the row that asked for it. Returns how many
+ * accounts were cleaned; one that fails stays for the next run.
+ */
+export async function removeDeletedAvatars(admin: Db): Promise<number> {
+  const { data, error } = await admin.from("deleted_app_accounts").select("profile_id").order("deleted_at").limit(50);
+  if (error) throw new Error(error.message);
+  let cleaned = 0;
+  for (const { profile_id: id } of data) {
+    const bucket = admin.storage.from("avatars");
+    const files = await bucket.list(id, { limit: 100 });
+    if (files.error) continue;
+    if (files.data.length > 0) {
+      const removed = await bucket.remove(files.data.map((file) => `${id}/${file.name}`));
+      if (removed.error) continue;
+    }
+    const done = await admin.from("deleted_app_accounts").delete().eq("profile_id", id);
+    if (!done.error) cleaned += 1;
+  }
+  return cleaned;
 }
 
 // ── Staff alerts about leads in the shared inbox (staff-alerts.ts) ──

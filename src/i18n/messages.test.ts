@@ -71,7 +71,7 @@ describe("messages", () => {
       .filter(([key, value]) => !/[\uAC00-\uD7A3]/.test(value) && value === MESSAGES.en[key] && /[A-Za-z]{4,}/.test(value.replace(/\{[^}]*\}/g, "")))
       .map(([key]) => key)
       // Names that are the same everywhere.
-      .filter((key) => !/^(app\.name|language\.|dev\.)|telegram|instagram|facebook|eskiz|\.sms$/i.test(key));
+      .filter((key) => !/^(app\.name|language\.|dev\.)|telegram|instagram|facebook|eskiz|topik|\.sms$/i.test(key));
     expect(untranslated).toEqual([]);
   });
 });

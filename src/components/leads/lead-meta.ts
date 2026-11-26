@@ -7,6 +7,7 @@ import {
   Megaphone,
   Phone,
   Send,
+  Smartphone,
   UsersRound,
   type LucideIcon,
 } from "lucide-react";
@@ -31,5 +32,6 @@ export const SOURCE_ICON: Record<LeadSource, LucideIcon> = {
   website: Globe,
   web_form: ClipboardList,
   facebook: Megaphone,
+  mobile_app: Smartphone,
   other: CircleEllipsis,
 };

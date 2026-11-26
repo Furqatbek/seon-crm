@@ -1,9 +1,16 @@
 # Edu CRM
 
 CRM for one education centre in Uzbekistan. Owner, Manager and Teacher log in.
-Teachers see only their own groups. Students and parents never log in; they use
-the Telegram bot. Full spec: docs/SPEC.md — read the
-section each task names before writing code.
+Teachers see only their own groups. Students and the public sign up in the
+Flutter app in mobile/ (spec: docs/STUDENT_APP_SPEC.md), never in the CRM;
+parents use the Telegram bot. Full spec: docs/SPEC.md — read the section each
+task names before writing code.
+
+The roles Student (an app account linked to a student record), App user (signed
+up in the app, not linked yet) and Kiosk (the reception tablet's check-in
+scanner only) exist beside Owner, Manager and Teacher. None of the three opens
+the CRM's pages; the database gives each only what docs/STUDENT_APP_SPEC.md →
+"Users, roles and access" lists.
 
 ## Stack
 - Next.js, App Router, TypeScript strict, Server Components + Server Actions
@@ -39,6 +46,7 @@ section each task names before writing code.
 - src/components/ui = shared primitives; src/components/<block> = block parts
 - src/lib/domain = pure business logic + tests; src/lib/supabase = clients + types
 - supabase/migrations, supabase/seed.sql
+- mobile/ = the Flutter student app (its own CLAUDE.md); docs/STUDENT_APP_SPEC.md wins on its behaviour
 
 ## Done means
 Typecheck, lint and tests pass. The feature works in uz, ru, en and ko. Screenshots at

@@ -61,8 +61,8 @@ test("staff see the leaderboards; a hidden student is missing from the TV but vi
 
     // ── /points: the centre this month, a group, all-time, a past month ──
     if (phone) await page.getByRole("button", { name: "Open menu" }).click();
-    await page.getByRole("navigation", { name: "Main navigation" }).locator("visible=true").getByRole("link", { name: "Points" }).click();
-    await expect(page.getByRole("heading", { level: 1, name: "Points" })).toBeVisible();
+    await page.getByRole("navigation", { name: "Main navigation" }).locator("visible=true").getByRole("link", { name: "Coins" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Coins" })).toBeVisible();
     // Since Phase 16 the board is the first of three tabs.
     await expect(page.getByRole("tab", { name: "Leaderboard" })).toHaveAttribute("data-state", "active");
     const row = page.locator(`[data-board-row="${id}"]`);

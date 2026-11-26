@@ -30,10 +30,10 @@ test("the owner sets point values and reasons, adjusts a student's points, and a
 
     // ── Settings → Points: values and limits ──
     await page.goto("/en/settings?tab=points");
-    await expect(page.getByRole("tab", { name: "Points" })).toHaveAttribute("data-state", "active");
-    await expect(page.getByRole("switch", { name: /Points programme/ })).toBeChecked();
+    await expect(page.getByRole("tab", { name: "Coins" })).toHaveAttribute("data-state", "active");
+    await expect(page.getByRole("switch", { name: /Coins programme/ })).toBeChecked();
     await expect(page.getByLabel("Present at a lesson")).toHaveValue("2");
-    await expect(page.getByLabel("Most points per student per day")).toHaveValue("10");
+    await expect(page.getByLabel("Most coins per student per day")).toHaveValue("10");
     await page.getByLabel(value.label, { exact: true }).fill("5000");
     await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText("Enter a whole number from 0 to 1000.")).toBeVisible();
@@ -52,7 +52,7 @@ test("the owner sets point values and reasons, adjusts a student's points, and a
     await expect(sheet(page).getByRole("heading", { name: "New reason" })).toBeVisible();
     await sheet(page).getByRole("button", { name: "Save" }).click();
     await expect(sheet(page).getByText("Write the name in all three languages.").first()).toBeVisible();
-    await sheet(page).getByLabel("Points").fill("4");
+    await sheet(page).getByLabel("Coins").fill("4");
     await sheet(page).getByLabel("Name in Uzbek").fill(`${marker} uz`);
     await sheet(page).getByLabel("Name in Russian").fill(`${marker} ru`);
     await sheet(page).getByLabel("Name in English").fill(marker);
@@ -79,27 +79,27 @@ test("the owner sets point values and reasons, adjusts a student's points, and a
 
     // ── The student's Points tab: the owner adjusts with a reason, never below zero ──
     await page.goto(`/en/students/${student.id}?tab=points`);
-    await expect(page.getByRole("tab", { name: "Points" })).toHaveAttribute("data-state", "active");
+    await expect(page.getByRole("tab", { name: "Coins" })).toHaveAttribute("data-state", "active");
     const before = { balance: await total(page, "balance"), month: await total(page, "earnedThisMonth") };
-    await page.getByRole("button", { name: "Adjust points" }).click();
-    await expect(sheet(page).getByRole("heading", { name: `Adjust points of ${student.name}` })).toBeVisible();
+    await page.getByRole("button", { name: "Adjust coins" }).click();
+    await expect(sheet(page).getByRole("heading", { name: `Adjust coins of ${student.name}` })).toBeVisible();
     await sheet(page).getByRole("button", { name: "Save" }).click();
     await expect(sheet(page).getByText("Write the reason.")).toBeVisible();
     await sheet(page).getByRole("radio", { name: "Take away" }).click();
     await sheet(page).getByLabel("How many").fill(String(before.balance + 1));
     await sheet(page).getByLabel("Reason").fill(marker);
     await sheet(page).getByRole("button", { name: "Save" }).click();
-    await expect(sheet(page).getByText("The student does not have that many points.")).toBeVisible();
+    await expect(sheet(page).getByText("The student does not have that many coins.")).toBeVisible();
     await sheet(page).getByRole("radio", { name: "Add", exact: true }).click();
     await sheet(page).getByLabel("How many").fill("7");
     await sheet(page).getByRole("button", { name: "Save" }).click();
-    await expect(page.getByText("Points adjusted")).toBeVisible();
+    await expect(page.getByText("Coins adjusted")).toBeVisible();
     await expect.poll(() => total(page, "balance")).toBe(before.balance + 7);
     expect(await total(page, "earnedThisMonth")).toBe(before.month + 7);
     const row = page.locator('[data-points-row="owner_adjustment"]').filter({ hasText: marker });
     await expect(row).toHaveAttribute("data-delta", "7");
     await expect(row).toContainText("Owner adjustment");
-    await expect(row).toContainText("+7 points");
+    await expect(row).toContainText("+7 coins");
     await page.waitForLoadState("networkidle");
     await page.screenshot({ path: testInfo.outputPath("student-points.png"), fullPage: true });
 
@@ -122,7 +122,7 @@ test("the owner sets point values and reasons, adjusts a student's points, and a
     await signIn(page, "manager");
     await page.goto(`/en/students/${student.id}?tab=points`);
     await expect(page.locator('[data-points-row="owner_adjustment"]').filter({ hasText: marker })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Adjust points" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Adjust coins" })).toHaveCount(0);
     await page.goto("/en/settings?tab=points");
     await expect(page.getByRole("heading", { name: "Profile", level: 1 })).toBeVisible();
     await expect(page.getByLabel("Present at a lesson")).toHaveCount(0);

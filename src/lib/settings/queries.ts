@@ -39,11 +39,28 @@ export async function getCentreSettings(): Promise<CentreSettings> {
   return { ...data, quiet_from: data.quiet_from.slice(0, 5), quiet_to: data.quiet_to.slice(0, 5) };
 }
 
+export type AppTexts = { about: Record<AppTextLanguage, string>; privacy_policy: Record<AppTextLanguage, string> };
+type AppTextLanguage = "uz" | "ru" | "en" | "ko";
+
+/** About the centre and the privacy policy for the student app, in its four languages. */
+export async function getAppTexts(): Promise<AppTexts> {
+  const supabase = await db();
+  const { data, error } = await supabase.from("centre_settings").select("about, privacy_policy").single();
+  if (error) throw new Error(error.message);
+  const texts = (value: unknown) => {
+    const stored = (value && typeof value === "object" ? value : {}) as Record<string, unknown>;
+    const of = (language: AppTextLanguage) => (typeof stored[language] === "string" ? (stored[language] as string) : "");
+    return { uz: of("uz"), ru: of("ru"), en: of("en"), ko: of("ko") };
+  };
+  return { about: texts(data.about), privacy_policy: texts(data.privacy_policy) };
+}
+
 export type UserRow = {
   id: string;
   fullName: string;
   email: string;
-  role: LoginRole;
+  /** A kiosk signs in on the reception tablet only; its role never changes. */
+  role: LoginRole | "kiosk";
   /** The teacher record a teacher login belongs to. */
   teacher: { id: string; name: string } | null;
   /** active: can sign in. invited: has not accepted the invitation yet. deactivated: blocked. */
@@ -59,12 +76,17 @@ export type UserRow = {
 export async function getUsers(currentUserId: string): Promise<UserRow[]> {
   const supabase = await db();
   const admin = createAdminClient();
-  const [profiles, accounts] = await Promise.all([
-    supabase.from("profiles").select("id, full_name, role, is_active, teacher:teachers (id, full_name)").order("full_name"),
-    admin ? admin.auth.admin.listUsers({ perPage: 1000 }) : null,
-  ]);
+  const profiles = await supabase
+      .from("profiles")
+      .select("id, full_name, role, is_active, teacher:teachers (id, full_name)")
+      // Students and app users sign up in the mobile app: they are not users of the CRM.
+      .in("role", ["owner", "manager", "teacher", "kiosk"])
+      .order("full_name");
   if (profiles.error) throw new Error(profiles.error.message);
-  const byId = new Map((accounts?.data.users ?? []).map((account) => [account.id, account]));
+  // One account at a time, by id: the list of all accounts also holds everyone
+  // who signed up in the student app, and comes a page at a time.
+  const accounts = admin ? await Promise.all(profiles.data.map((profile) => admin.auth.admin.getUserById(profile.id))) : [];
+  const byId = new Map(accounts.flatMap((account) => (account.data.user ? [[account.data.user.id, account.data.user] as const] : [])));
 
   return profiles.data.map((profile) => {
     const account = byId.get(profile.id);
@@ -72,7 +94,7 @@ export async function getUsers(currentUserId: string): Promise<UserRow[]> {
       id: profile.id,
       fullName: profile.full_name,
       email: account?.email ?? "",
-      role: profile.role,
+      role: profile.role as UserRow["role"],
       teacher: profile.teacher ? { id: profile.teacher.id, name: profile.teacher.full_name } : null,
       status: !profile.is_active ? "deactivated" : account && !account.last_sign_in_at ? "invited" : "active",
       isSelf: profile.id === currentUserId,

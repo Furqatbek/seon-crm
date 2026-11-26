@@ -16,6 +16,7 @@ export const LEAD_SOURCES = [
   "website",
   "web_form",
   "facebook",
+  "mobile_app",
   "other",
 ] as const;
 export type LeadSource = (typeof LEAD_SOURCES)[number];

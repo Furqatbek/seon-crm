@@ -223,7 +223,7 @@ export async function getGroupStudents(groupId: string): Promise<GroupStudent[]>
     .sort((a, b) => a.student.full_name.localeCompare(b.student.full_name));
 }
 
-export type MonthLesson = Pick<Lesson, "id" | "lesson_date" | "start_time" | "status" | "cancel_reason"> & {
+export type MonthLesson = Pick<Lesson, "id" | "lesson_date" | "start_time" | "status" | "cancel_reason" | "kind" | "exam_title"> & {
   teacher: TeacherOption;
 };
 
@@ -243,7 +243,7 @@ export async function getGroupMonth(groupId: string, month: string): Promise<Gro
   const [lessons, enrolments] = await Promise.all([
     supabase
       .from("lessons")
-      .select("id, lesson_date, start_time, status, cancel_reason, teacher:teachers!inner(id, full_name)")
+      .select("id, lesson_date, start_time, status, cancel_reason, kind, exam_title, teacher:teachers!inner(id, full_name)")
       .eq("group_id", groupId)
       .gte("lesson_date", start)
       .lt("lesson_date", end)
@@ -312,7 +312,7 @@ export async function getGroupTrials(groupId: string, now: Date): Promise<TrialV
 
 // ── Lesson sheet ──
 
-export type LessonSheetData = Pick<Lesson, "id" | "lesson_date" | "start_time" | "status" | "cancel_reason"> & {
+export type LessonSheetData = Pick<Lesson, "id" | "lesson_date" | "start_time" | "status" | "cancel_reason" | "kind" | "exam_title"> & {
   group: Pick<Group, "id" | "name" | "teacher_id"> & { room: RoomRef | null };
   teacher: TeacherOption;
   /** Everyone in the group on the lesson's day, with their mark if there is one. */
@@ -324,7 +324,7 @@ export async function getLessonSheet(lessonId: string): Promise<LessonSheetData 
   const lesson = await supabase
     .from("lessons")
     .select(
-      "id, lesson_date, start_time, status, cancel_reason, group:groups!inner(id, name, teacher_id, room:rooms(id, number, name)), teacher:teachers!inner(id, full_name)",
+      "id, lesson_date, start_time, status, cancel_reason, kind, exam_title, group:groups!inner(id, name, teacher_id, room:rooms(id, number, name)), teacher:teachers!inner(id, full_name)",
     )
     .eq("id", lessonId)
     .maybeSingle();

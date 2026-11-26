@@ -28,6 +28,9 @@ function failure(error: { code?: string } | null): { ok: false; error: StudentEr
   if (error?.code === DENIED) return { ok: false, error: "notAllowed" };
   if (error?.code === NOT_FOUND) return { ok: false, error: "notFound" };
   if (error?.code === RULE) return { ok: false, error: "leadNotOpen" };
+  // The app account: supabase/migrations/20261205100100_student_app_groundwork.sql.
+  if (error?.code === "EA001") return { ok: false, error: "noAppAccount" };
+  if (error?.code === "EA002") return { ok: false, error: "alreadyLinked" };
   return { ok: false, error: "generic" };
 }
 
@@ -163,6 +166,23 @@ export async function archiveStudent(id: unknown): Promise<StudentResult> {
     .eq("id", studentId.data);
   if (error) return failure(error);
 
+  refresh();
+  return { ok: true };
+}
+
+/**
+ * Student page → Unlink / Relink. Owner only; the database refuses anyone
+ * else. Unlink turns the student's app account back into an app user; Relink
+ * links the account that signed up with the student's phone or the parent's.
+ */
+export async function setAppLink(id: unknown, linked: unknown): Promise<StudentResult> {
+  const studentId = z.uuid().safeParse(id);
+  if (!studentId.success || typeof linked !== "boolean") return { ok: false, error: "notFound" };
+  const ctx = await session();
+  if (!ctx || ctx.user.role !== "owner") return { ok: false, error: "notAllowed" };
+
+  const { error } = await ctx.supabase.rpc(linked ? "link_app_account" : "unlink_app_account", { p_student_id: studentId.data });
+  if (error) return failure(error);
   refresh();
   return { ok: true };
 }

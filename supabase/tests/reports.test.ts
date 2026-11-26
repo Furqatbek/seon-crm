@@ -213,7 +213,7 @@ describe.skipIf(!DB_URL)("Reports", () => {
         const stages = rows.filter((row) => row.dimension === "stage");
         const sources = rows.filter((row) => row.dimension === "source");
         expect(stages.map((row) => row.key)).toEqual(["new", "contacted", "trial", "won", "lost"]);
-        expect(sources).toHaveLength(9);
+        expect(sources).toHaveLength(10);
         const [{ leads, won }] = await s.rows<{ leads: number; won: number }>(
           `select count(*)::int as leads, (count(*) filter (where status = 'won'))::int as won
            from leads where archived_at is null and created_at >= (${monthsAgo(11)}::timestamp at time zone 'Asia/Tashkent')`,
@@ -265,7 +265,7 @@ describe.skipIf(!DB_URL)("Reports", () => {
         expect(row.new_leads).toBeGreaterThan(0);
         expect(row.attendance_rate).toBeGreaterThan(50);
 
-        expect((await s.rows(`select * from public.report_lead_funnel(${monthsAgo(2)}, ${month})`)).length).toBe(14);
+        expect((await s.rows(`select * from public.report_lead_funnel(${monthsAgo(2)}, ${month})`)).length).toBe(15);
         expect((await s.rows(`select * from public.report_students(${monthsAgo(2)}, ${month})`)).length).toBe(3);
         expect((await s.rows(`select * from public.report_attendance(${monthsAgo(2)}, ${month})`)).length).toBeGreaterThan(5);
       });

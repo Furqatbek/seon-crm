@@ -13,7 +13,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import {
   centreSchema,
+  appTextsSchema,
   inviteSchema,
+  kioskSchema,
   notificationsSchema,
   passwordSchema,
   profileSchema,
@@ -180,6 +182,34 @@ export async function inviteUser(input: unknown): Promise<SettingsResult> {
   return { ok: true };
 }
 
+/**
+ * A kiosk account: it signs in on the reception tablet and opens the check-in
+ * scanner, nothing else. The role is written to the account's app metadata,
+ * which only the server's key can do, so nobody can sign up as a kiosk.
+ */
+export async function createKiosk(input: unknown): Promise<SettingsResult> {
+  const parsed = kioskSchema.safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const admin = createAdminClient();
+  if (!admin) return { ok: false, error: "notConfigured" };
+
+  const { error } = await admin.auth.admin.createUser({
+    email: parsed.data.email,
+    password: parsed.data.password,
+    email_confirm: true,
+    app_metadata: { role: "kiosk" },
+    user_metadata: { full_name: parsed.data.full_name },
+  });
+  if (error) {
+    // Only a used email is "taken": a refused password comes back with the service's own words.
+    return error.code === "email_exists" ? { ok: false, error: "emailTaken" } : { ok: false, error: "generic", detail: error.message };
+  }
+  refresh();
+  return { ok: true };
+}
+
 export async function setUserRole(input: unknown): Promise<SettingsResult> {
   const parsed = userRoleSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "notFound" };
@@ -192,6 +222,8 @@ export async function setUserRole(input: unknown): Promise<SettingsResult> {
     .from("profiles")
     .update({ role: parsed.data.role, teacher_id: parsed.data.teacher_id })
     .eq("id", parsed.data.user_id)
+    // A kiosk stays a kiosk, and the student app's accounts are not staff.
+    .in("role", ["owner", "manager", "teacher"])
     .select("id");
   if (error) return linkFailure(error);
   if (data.length === 0) return { ok: false, error: "notFound" };
@@ -231,6 +263,22 @@ export async function setUserActive(input: unknown): Promise<SettingsResult> {
   refresh();
   // The profile is already switched; say so if the account itself could not be.
   if (ban.error) return { ok: false, error: "generic", detail: ban.error.message };
+  return { ok: true };
+}
+
+// ── About and Privacy ──
+
+/** The texts the student app shows under About the centre and Privacy policy. */
+export async function saveAppTexts(input: unknown): Promise<SettingsResult> {
+  const parsed = appTextsSchema.safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase.from("centre_settings").update(parsed.data).eq("singleton", true).select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notAllowed" };
+  refresh();
   return { ok: true };
 }
 

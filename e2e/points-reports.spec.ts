@@ -31,12 +31,12 @@ const EARNED = `l.source not in ('reward_hold', 'reward_return', 'teacher_deduct
 test("the owner's points report: six KPIs, five charts, CSV, and the period changes it", async ({ page }, testInfo) => {
   await signIn(page, "owner");
   await page.goto("/en/reports");
-  await page.getByRole("tab", { name: "Points" }).click();
+  await page.getByRole("tab", { name: "Coins" }).click();
   await expect(page).toHaveURL(/tab=points/);
   await expect(page.locator("[data-points-kpi]")).toHaveCount(6);
   for (const id of CHARTS) await expect(chart(page, id)).toBeVisible();
-  await expect(chart(page, "points-by-source").getByRole("heading")).toHaveText("Points earned by source");
-  await expect(chart(page, "points-by-group").getByRole("heading")).toHaveText("Average points per student by group");
+  await expect(chart(page, "points-by-source").getByRole("heading")).toHaveText("Coins earned by source");
+  await expect(chart(page, "points-by-group").getByRole("heading")).toHaveText("Average coins per student by group");
 
   // Other tests give points while this one runs: the screen and the database are read until they agree.
   await expect(async () => {
@@ -57,11 +57,11 @@ test("the owner's points report: six KPIs, five charts, CSV, and the period chan
   }).toPass({ timeout: 30_000 });
 
   const top = await exportCsv(page, "points-top-students");
-  expect(top.rows[0]).toEqual(["Student", "Points"]);
+  expect(top.rows[0]).toEqual(["Student", "Coins"]);
   expect(top.rows.length).toBeGreaterThan(1);
   expect(top.rows.length).toBeLessThanOrEqual(11);
   const groups = await exportCsv(page, "points-by-group");
-  expect(groups.rows[0]).toEqual(["Group", "Students", "Points", "Average"]);
+  expect(groups.rows[0]).toEqual(["Group", "Students", "Coins", "Average"]);
 
   await page.waitForLoadState("networkidle");
   await page.screenshot({ path: testInfo.outputPath("points-report.png"), fullPage: true });
@@ -77,7 +77,7 @@ test("the owner's points report: six KPIs, five charts, CSV, and the period chan
   await page.getByRole("tab", { name: "Overview" }).click();
   await expect(page.locator('[data-slot="kpi-row"]')).toBeVisible();
   await page.goto("/uz/reports?tab=points");
-  await expect(page.getByRole("tab", { name: "Ballar" })).toHaveAttribute("data-state", "active");
+  await expect(page.getByRole("tab", { name: "Tangalar" })).toHaveAttribute("data-state", "active");
   await expect(chart(page, "points-top-students").getByRole("heading")).toHaveText("Eng yaxshi 10 oʻquvchi");
   await page.goto("/ru/reports?tab=points");
   await expect(chart(page, "points-by-teacher").getByRole("heading")).toHaveText("Поощрения и снятия по учителям");
@@ -89,7 +89,7 @@ test("a teacher gets the same report for their own groups only", async ({ page }
   if (phone) await page.getByRole("button", { name: "Open menu" }).click();
   await page.getByRole("navigation", { name: "Main navigation" }).locator("visible=true").getByRole("link", { name: "Reports" }).click();
   await expect(page).toHaveURL(/\/en\/my-groups\/reports$/);
-  await expect(page.getByRole("heading", { level: 1, name: "Points in my groups" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Coins in my groups" })).toBeVisible();
   // Spending and balances belong to no group: a teacher has neither those three figures nor the rewards chart.
   await expect(page.locator("[data-points-kpi]")).toHaveCount(3);
   for (const key of ["spent", "unspent", "rewardsGiven"]) await expect(page.locator(`[data-points-kpi="${key}"]`)).toHaveCount(0);

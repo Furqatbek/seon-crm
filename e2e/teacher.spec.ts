@@ -128,23 +128,23 @@ test("a teacher sees only their groups, marks attendance and gives coins; staff 
     const monthPoints = pupil.locator('[data-slot="points-text"]');
     // Present at this lesson: 2 points already.
     await expect(monthPoints).toHaveAttribute("data-value", "2");
-    await pupil.getByRole("button", { name: `Give points to ${pupilName}` }).click();
-    await expect(choices(page).getByRole("heading", { name: `Give points to ${pupilName}` })).toBeVisible();
+    await pupil.getByRole("button", { name: `Give coins to ${pupilName}` }).click();
+    await expect(choices(page).getByRole("heading", { name: `Give coins to ${pupilName}` })).toBeVisible();
     await expect(choices(page).locator("[data-preset]")).toHaveCount(4);
     await page.screenshot({ path: testInfo.outputPath("give-points.png") });
     await choices(page).getByRole("button", { name: /Homework done/ }).click();
-    await expect(page.locator('[data-slot="points-toast"]')).toContainText(`${pupilName}: +2 points`);
+    await expect(page.locator('[data-slot="points-toast"]')).toContainText(`${pupilName}: +2 coins`);
     await expect(monthPoints).toHaveAttribute("data-value", "4");
 
-    await pupil.getByRole("button", { name: `Take points from ${pupilName}` }).click();
+    await pupil.getByRole("button", { name: `Take coins from ${pupilName}` }).click();
     await expect(choices(page).locator("[data-preset]")).toHaveCount(3);
     // A custom amount needs its reason.
-    await choices(page).getByRole("button", { name: "Take points" }).click();
+    await choices(page).getByRole("button", { name: "Take coins" }).click();
     await expect(choices(page).getByText("Write the reason.")).toBeVisible();
     await choices(page).getByRole("radio", { name: "3", exact: true }).click();
     await choices(page).getByLabel("Reason").fill("Talking in class");
-    await choices(page).getByRole("button", { name: "Take points" }).click();
-    const taken = page.locator('[data-slot="points-toast"]').filter({ hasText: `${pupilName}: −3 points` });
+    await choices(page).getByRole("button", { name: "Take coins" }).click();
+    const taken = page.locator('[data-slot="points-toast"]').filter({ hasText: `${pupilName}: −3 coins` });
     await expect(taken).toBeVisible();
     await expect(monthPoints).toHaveAttribute("data-value", "1");
     await taken.getByRole("button", { name: "Undo" }).click();

@@ -22,6 +22,7 @@ export type NotifyErrorKey =
   | "notFound"
   | "noDebt"
   | "noTemplate"
+  | "noStoreLinks"
   | "generic";
 
 export type NotifyFailure = {

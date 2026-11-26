@@ -1,3 +1,4 @@
+import { handledInApp, type StudentPush } from "./app-notify";
 import { deliver, skip, type MessageLog, type Outgoing } from "./deliver";
 import {
   chooseChannel,
@@ -128,7 +129,13 @@ export type ReminderSummary = {
  */
 export async function runReminders(
   now: Date,
-  deps: { data: ReminderData; log: MessageLog; providers: Providers },
+  deps: {
+    data: ReminderData;
+    log: MessageLog;
+    providers: Providers;
+    /** The student app: a student who has it gets the lesson reminder by push. */
+    app?: StudentPush;
+  },
 ): Promise<ReminderSummary> {
   const summary: ReminderSummary = { sent: 0, failed: 0, skipped: 0, duplicate: 0 };
   const settings = await deps.data.settings();
@@ -186,6 +193,21 @@ export async function runReminders(
     const minutesUntil = (startsAt - now.getTime()) / 60_000;
     if (!lessonReminderDue(minutesUntil, settings.lessonReminderHours)) continue;
     for (const student of lesson.students) {
+      // By push when the student has the app; a reminder in quiet hours is not pushed either.
+      if (deps.app && !lessonsQuiet) {
+        const outcome = await deps.app(student.id, "lesson_reminder", dedupeKey.lesson(lesson.lessonId, student.id), (language) =>
+          compose(templates, "lesson_reminder", "telegram", language, {
+            student: student.fullName,
+            group: lesson.groupName,
+            time: lesson.startTime,
+            centre: settings.centreName,
+          }),
+        );
+        if (handledInApp(outcome)) {
+          count(outcome === "pushed" ? "sent" : "duplicate");
+          continue;
+        }
+      }
       const target = chooseChannel("lesson_reminder", student);
       if (!target) continue;
       const body = compose(templates, "lesson_reminder", target.channel, target.language ?? student.language, {

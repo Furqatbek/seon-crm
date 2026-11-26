@@ -148,7 +148,9 @@ function TimelineItem({ activity, author }: { activity: LeadActivity; author: st
               })
             : activity.kind === "form_resubmitted"
               ? t("timeline.formResubmitted", { form: activity.body ?? "" })
-              : t(`timeline.${activity.kind === "call" ? "call" : "note"}`)}
+              : activity.kind === "app_signup"
+                ? t("timeline.appSignup")
+                : t(`timeline.${activity.kind === "call" ? "call" : "note"}`)}
         </p>
         {reason ? (
           <p className="text-body break-words text-text-secondary">
@@ -345,6 +347,9 @@ export function LeadSheet({
 
                 <dl className="divide-y divide-border border-y border-border">
                   <Detail label={t("fields.source")}>{t(`source.${lead.source}`)}</Detail>
+                  {lead.koreanLevel ? (
+                    <Detail label={t("fields.koreanLevel")}>{t(`koreanLevel.${lead.koreanLevel}`)}</Detail>
+                  ) : null}
                   {lead.subject_interest ? (
                     <Detail label={t("fields.subject")}>{lead.subject_interest}</Detail>
                   ) : null}

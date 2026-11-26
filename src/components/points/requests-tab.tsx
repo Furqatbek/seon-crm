@@ -21,6 +21,7 @@ import type { PointsErrorKey } from "@/lib/validation/points";
 
 const STATUS_TONE: Record<RedemptionRow["status"], BadgeTone> = {
   requested: "warning",
+  ready: "brand",
   given: "success",
   rejected: "danger",
   cancelled: "neutral",

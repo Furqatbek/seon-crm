@@ -5,6 +5,7 @@ import ko from "../../../messages/ko.json";
 import ru from "../../../messages/ru.json";
 import uz from "../../../messages/uz.json";
 
+import type { AppLanguage, AppTexts } from "./app-notify";
 import type { Texts } from "./points-data";
 import type { StaffLanguage, StaffTexts } from "./staff-alerts";
 import type { Language } from "./types";
@@ -45,6 +46,19 @@ export const staffBotTexts: StaffTexts = (language) => {
     const t = createTranslator({ locale: language, messages: { staffBot: STAFF_MESSAGES[language].staffBot }, namespace: "staffBot" });
     translate = (key, values) => (t as (key: string, values?: Record<string, string | number>) => string)(key, values);
     staffTranslators.set(language, translate);
+  }
+  return translate;
+};
+
+const appTranslators = new Map<AppLanguage, ReturnType<AppTexts>>();
+
+/** What the student app is pushed and the invite SMS ("studentApp" in messages/*.json), in the app's four languages. */
+export const studentAppTexts: AppTexts = (language) => {
+  let translate = appTranslators.get(language);
+  if (!translate) {
+    const t = createTranslator({ locale: language, messages: { studentApp: STAFF_MESSAGES[language].studentApp }, namespace: "studentApp" });
+    translate = (key, values) => (t as (key: string, values?: Record<string, string | number>) => string)(key, values);
+    appTranslators.set(language, translate);
   }
   return translate;
 };

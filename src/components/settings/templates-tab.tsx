@@ -59,7 +59,7 @@ function sample(language: Template["language"], centreName: string, today: strin
     reason: { uz: "Darsda telefon", ru: "Телефон на уроке", en: "Phone in class" }[language],
     reward: "Brend futbolka",
     points_needed: "8",
-    goal: { uz: "“Brend futbolka” uchun yana 8 ball kerak.", ru: "До «Brend futbolka» осталось 8 баллов.", en: "8 more points for “Brend futbolka”." }[language],
+    goal: { uz: "“Brend futbolka” uchun yana 8 ta tanga kerak.", ru: "До «Brend futbolka» осталось 8 монет.", en: "8 more coins for “Brend futbolka”." }[language],
     bonus: { uz: "Qoldirilmagan oy uchun bonus: +10.", ru: "Бонус за месяц без пропусков: +10.", en: "Perfect month bonus: +10." }[language],
     update: { uz: "topshirildi. Tabriklaymiz!", ru: "выдано. Поздравляем!", en: "handed over. Enjoy!" }[language],
   };

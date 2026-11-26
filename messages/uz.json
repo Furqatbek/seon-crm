@@ -52,7 +52,7 @@
     "settings": "Sozlamalar",
     "myGroups": "Guruhlarim",
     "pointsHistory": "Tarix",
-    "points": "Ballar",
+    "points": "Tangalar",
     "openRequests": "Kutayotgan sovgʻa soʻrovlari:",
     "pointsReport": "Hisobotlar",
     "waitingLeads": "Kutayotgan lidlar:"
@@ -76,7 +76,8 @@
     "roles": {
       "owner": "Rahbar",
       "manager": "Menejer",
-      "teacher": "Oʻqituvchi"
+      "teacher": "Oʻqituvchi",
+      "kiosk": "Kiosk"
     },
     "profile": "Profil"
   },
@@ -155,7 +156,8 @@
       "website": "Veb-sayt",
       "other": "Boshqa",
       "facebook": "Facebook",
-      "web_form": "Veb-forma"
+      "web_form": "Veb-forma",
+      "mobile_app": "Mobil ilova"
     },
     "lostReason": {
       "price": "Narx",
@@ -179,7 +181,8 @@
       "lostReason": "Rad etish sababi",
       "unassigned": "Hech kim",
       "referredBy": "Kim tavsiya qildi",
-      "referredByHint": "Bu lidni olib kelgan oʻquvchi. Lid yozilib, birinchi toʻlovni qilganda unga ball beriladi."
+      "referredByHint": "Bu lidni olib kelgan oʻquvchi. Lid yozilib, birinchi toʻlovni qilganda unga tanga beriladi.",
+      "koreanLevel": "Koreys tili darajasi"
     },
     "form": {
       "created": "Lid qoʻshildi",
@@ -215,7 +218,8 @@
       "note": "Izoh",
       "statusChange": "{from} → {to}",
       "reason": "Sabab: {reason}",
-      "formResubmitted": "“{form}” formasi qayta yuborildi"
+      "formResubmitted": "“{form}” formasi qayta yuborildi",
+      "appSignup": "Mobil ilovada roʻyxatdan oʻtdi"
     },
     "lost": {
       "title": "{name} rad etdi deb belgilansinmi?",
@@ -272,6 +276,11 @@
       "justNow": "hozirgina",
       "minutes": "{minutes} daq",
       "hours": "{hours} soat {minutes} daq"
+    },
+    "koreanLevel": {
+      "beginner": "Boshlangʻich",
+      "topik1": "TOPIK I",
+      "topik2": "TOPIK II"
     }
   },
   "students": {
@@ -304,7 +313,7 @@
       "ledger": "Hisob-kitob",
       "attendance": "Davomat",
       "messages": "Xabarlar",
-      "points": "Ballar"
+      "points": "Tangalar"
     },
     "fields": {
       "name": "Ism",
@@ -376,8 +385,8 @@
       "linkedShort": "Ulangan",
       "notLinked": "Ulanmagan",
       "hint": {
-        "student": "Oʻquvchining oʻz Telegrami uchun: dars eslatmalari va ballari. Toʻlov eslatmalari kelmaydi.",
-        "parent": "Ota-ona Telegrami uchun: toʻlov eslatmalari va farzandining ballari."
+        "student": "Oʻquvchining oʻz Telegrami uchun: dars eslatmalari va tangalari. Toʻlov eslatmalari kelmaydi.",
+        "parent": "Ota-ona Telegrami uchun: toʻlov eslatmalari va farzandining tangalari."
       },
       "copy": "Havolani nusxalash",
       "copied": "Nusxalandi",
@@ -437,13 +446,21 @@
         "payment_overdue": "Toʻlov kechikdi",
         "lesson_reminder": "Dars eslatmasi",
         "custom": "Bir martalik xabar",
-        "points_weekly": "Haftalik ballar xulosasi",
-        "points_deduction": "Ball olindi",
+        "points_weekly": "Haftalik tangalar xulosasi",
+        "points_deduction": "Tanga olindi",
         "points_month_result": "Oy yakunlari",
         "reward_update": "Sovgʻa holati",
         "staff_new_lead": "Yangi lid (xodimlarga)",
         "staff_lead_reminder": "Lid eslatmasi (xodimlarga)",
-        "staff_integration_alert": "Integratsiya xabari (xodimlarga)"
+        "staff_integration_alert": "Integratsiya xabari (xodimlarga)",
+        "visit_arrived": "Markazga keldi",
+        "visit_left": "Markazdan ketdi",
+        "account_linked": "Ilova hisobi ulandi",
+        "voucher_expiring": "Vaucher muddati tugayapti",
+        "open_lesson_reminder": "Ochiq dars eslatmasi",
+        "receipt_approved": "Chek tasdiqlandi",
+        "receipt_rejected": "Chek rad etildi",
+        "staff_new_receipt": "Yangi chek (xodimlarga)"
       },
       "channels": {
         "telegram": "Telegram",
@@ -466,13 +483,33 @@
       "leadNotOpen": "Bu lid allaqachon yopilgan, uni oʻquvchiga aylantirib boʻlmaydi.",
       "notFound": "Bu oʻquvchi endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
-      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "noAppAccount": "Bu telefon raqami bilan ilovada ulanmagan hisob yoʻq.",
+      "alreadyLinked": "Bu oʻquvchining ilova hisobi allaqachon ulangan."
     },
     "graduated": {
       "title": "{name} bitirgan deb belgilansinmi?",
       "body": "Oʻquvchi bugun barcha guruhlarni tugatadi va unga boshqa toʻlov hisoblanmaydi. Qarzi boʻlsa, balansida qoladi."
     },
-    "counts": "Hozir oʻqiyapti: {studying} · Ketgan: {left} · Bitirgan: {graduated}"
+    "counts": "Hozir oʻqiyapti: {studying} · Ketgan: {left} · Bitirgan: {graduated}",
+    "app": {
+      "title": "Mobil ilova",
+      "linked": "Ulangan",
+      "notSignedUp": "Roʻyxatdan oʻtmagan",
+      "linkedSince": "{date} dan beri",
+      "linkedHint": "Oʻquvchi ilovada dars jadvali, tangalari, toʻlovlari va QR kodini koʻradi.",
+      "waitingHint": "Shu telefon raqami bilan ilovada hisob ochilgan, lekin u hali ulanmagan. Rahbar uni shu oʻquvchiga ulashi mumkin.",
+      "notSignedUpHint": "Oʻquvchi ilovada oʻz telefoni yoki ota-onasining telefoni bilan roʻyxatdan oʻtsa, hisob oʻzi ulanadi.",
+      "invite": "Ilovaga taklif yuborish",
+      "inviteSent": "{name}: taklif SMS orqali yuborildi",
+      "inviteFailed": "SMS yuborilmadi. Tafsilotlar Xabarlar boʻlimida.",
+      "unlink": "Uzish",
+      "relink": "Qayta ulash",
+      "unlinked": "{name}: ilova hisobi uzildi",
+      "relinked": "{name}: ilova hisobi ulandi",
+      "unlinkTitle": "{name}ning ilova hisobi uzilsinmi?",
+      "unlinkBody": "Hisob oʻchirilmaydi: egasi ilovaga kira oladi, lekin bu oʻquvchining darslari, tangalari va toʻlovlarini koʻrmaydi. Keyin qayta ulash mumkin."
+    }
   },
   "groups": {
     "newGroup": "Yangi guruh",
@@ -569,7 +606,13 @@
         "scheduled": "Rejalashtirilgan",
         "held": "Oʻtildi",
         "cancelled": "Bekor qilindi"
-      }
+      },
+      "exam": "Imtihon",
+      "examHint": "Oʻquvchilar ilovasidagi jadvalda imtihon sifatida koʻrinadi.",
+      "examTitle": "Imtihon nomi",
+      "examSave": "Imtihonni saqlash",
+      "examSaved": "Dars imtihon sifatida belgilandi",
+      "examCleared": "Dars endi imtihon emas"
     },
     "attendanceGrid": {
       "student": "Oʻquvchi",
@@ -691,7 +734,8 @@
       "capacityOverRoom": "Xonada {detail} ta oʻrin bor. Guruh bundan katta boʻla olmaydi.",
       "roomInvalid": "Xonani roʻyxatdan tanlang.",
       "roomClash": "Bu vaqtda xona «{detail}» guruhi bilan band.",
-      "roomUnavailable": "Bu xona endi mavjud emas. Boshqasini tanlang."
+      "roomUnavailable": "Bu xona endi mavjud emas. Boshqasini tanlang.",
+      "examTitleRequired": "Imtihon nomini kiriting."
     }
   },
   "finance": {
@@ -1151,20 +1195,20 @@
     },
     "tabs": {
       "overview": "Umumiy",
-      "points": "Ballar"
+      "points": "Tangalar"
     },
     "points": {
-      "points": "Ball",
+      "points": "Tanga",
       "kpi": {
-        "earned": "Toʻplangan ball",
-        "deducted": "Olingan ball",
+        "earned": "Toʻplangan tanga",
+        "deducted": "Olingan tanga",
         "spent": "Sovgʻalarga sarflangan",
-        "unspent": "Sarflanmagan ball",
+        "unspent": "Sarflanmagan tanga",
         "rewardsGiven": "Berilgan sovgʻalar",
-        "studentsWithoutPoints": "Ball olmagan oʻquvchilar"
+        "studentsWithoutPoints": "Tanga olmagan oʻquvchilar"
       },
       "bySource": {
-        "title": "Toʻplangan ballar manbalar boʻyicha"
+        "title": "Toʻplangan tangalar manbalar boʻyicha"
       },
       "byTeacher": {
         "title": "Oʻqituvchilar boʻyicha ragʻbat va jarimalar",
@@ -1181,17 +1225,17 @@
         "title": "Berilgan sovgʻalar",
         "reward": "Sovgʻa",
         "given": "Berildi",
-        "points": "Sarflangan ball"
+        "points": "Sarflangan tanga"
       },
       "byGroup": {
-        "title": "Guruhlar boʻyicha bir oʻquvchiga oʻrtacha ball",
-        "hint": "Guruhning davrdagi ballari hozirgi oʻquvchilar soniga boʻlinadi.",
+        "title": "Guruhlar boʻyicha bir oʻquvchiga oʻrtacha tanga",
+        "hint": "Guruhning davrdagi tangalari hozirgi oʻquvchilar soniga boʻlinadi.",
         "group": "Guruh",
         "students": "Oʻquvchilar",
         "average": "Oʻrtacha"
       }
     },
-    "teacherTitle": "Guruhlarimdagi ballar",
+    "teacherTitle": "Guruhlarimdagi tangalar",
     "forms": {
       "title": "Formalar boʻyicha lidlar",
       "hint": "Davr ichidagi koʻrishlar va lidlar, nechtasi olingan va oʻquvchi boʻlgan, lid qanchalik tez olingan.",
@@ -1206,19 +1250,19 @@
     }
   },
   "bot": {
-    "linked": "{student}: chat ota-ona sifatida ulandi. {centre} toʻlov eslatmalari va ballar haqidagi xabarlarni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",
-    "linkedStudent": "{student}, chat ulandi. {centre} dars eslatmalari va ballaringizni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",
+    "linked": "{student}: chat ota-ona sifatida ulandi. {centre} toʻlov eslatmalari va tangalar haqidagi xabarlarni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",
+    "linkedStudent": "{student}, chat ulandi. {centre} dars eslatmalari va tangalaringizni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",
     "unknownCode": "Bu havola yaroqsiz. {centre}dan yangisini soʻrang.",
     "stopped": "Uzildi. Bu chatga {centre}dan boshqa xabar kelmaydi.",
     "nothingLinked": "Bu chatga hech narsa ulanmagan.",
     "notLinked": "Bu chat hali ulanmagan. {centre} bergan shaxsiy havolani oching.",
-    "help": "Bu bot {centre}dan eslatmalar va ballar haqida xabar yuboradi. Ulanish uchun markaz bergan shaxsiy havolani oching. Buyruqlar: /points /top /rewards /language /stop",
+    "help": "Bu bot {centre}dan eslatmalar va tangalar haqida xabar yuboradi. Ulanish uchun markaz bergan shaxsiy havolani oching. Buyruqlar: /points /top /rewards /language /stop",
     "chooseLanguage": "Shu chat tilini tanlang:",
     "languageSet": "Tayyor. Endi bu chat oʻzbek tilida.",
     "whichChild": "Qaysi farzand?",
     "failed": "Xatolik yuz berdi. Bir daqiqadan soʻng urinib koʻring.",
-    "pointsCount": "{points} ball",
-    "goal": "“{reward}” uchun yana {points} ball kerak.",
+    "pointsCount": "{points} ta tanga",
+    "goal": "“{reward}” uchun yana {points} ta tanga kerak.",
     "bonus": "Qoldirilmagan oy uchun bonus: +{points}.",
     "points": {
       "title": "{student}",
@@ -1232,30 +1276,30 @@
       "centre": "Markaz, shu oyning eng yaxshi 10 taligi",
       "group": "{group}, eng yaxshi 5 talik",
       "own": "{student}: {rank}-oʻrin ({points})",
-      "empty": "Shu oyda hali ball yoʻq."
+      "empty": "Shu oyda hali tanga yoʻq."
     },
     "rewards": {
-      "title": "Sovgʻalar. {student}da sarflash uchun {points} ball bor.",
+      "title": "Sovgʻalar. {student}da sarflash uchun {points} ta tanga bor.",
       "empty": "Hozircha sovgʻalar yoʻq.",
       "outOfStock": "tugagan",
       "left": "{count} ta qoldi",
       "request": "Soʻrash: {reward}"
     },
     "request": {
-      "confirm": "{student} uchun “{reward}” {points} ballga soʻralsinmi? Ballar darhol ushlab qolinadi.",
+      "confirm": "{student} uchun “{reward}” {points} ta tangaga soʻralsinmi? Tangalar darhol ushlab qolinadi.",
       "yes": "Ha, soʻrash",
       "no": "Yoʻq",
       "done": "Soʻrov qabul qilindi: “{reward}”. {centre} qabulxonasidan oling.",
       "cancelled": "Hech narsa soʻralmadi.",
-      "notEnough": "Bu sovgʻa uchun ball yetarli emas.",
+      "notEnough": "Bu sovgʻa uchun tanga yetarli emas.",
       "outOfStock": "Bu sovgʻa tugagan.",
       "notOnOffer": "Bu sovgʻa endi taklif qilinmaydi.",
       "failed": "Soʻrov oʻtmadi. Bir daqiqadan soʻng urinib koʻring."
     },
     "reward": {
-      "requested": "soʻrov qabul qilindi, {points} ball ushlab qolindi. Qabulxonadan oling.",
+      "requested": "soʻrov qabul qilindi, {points} ta tanga ushlab qolindi. Qabulxonadan oling.",
       "given": "topshirildi. Tabriklaymiz!",
-      "rejected": "soʻrov rad etildi ({reason}). {points} ball qaytarildi."
+      "rejected": "soʻrov rad etildi ({reason}). {points} ta tanga qaytarildi."
     },
     "source": {
       "attendance": "Davomat",
@@ -1269,7 +1313,7 @@
       "reward_return": "Sovgʻa qaytarildi"
     },
     "commands": {
-      "points": "Ballarim va oʻrinlarim",
+      "points": "Tangalarim va oʻrinlarim",
       "top": "Oyning eng yaxshi oʻquvchilari",
       "rewards": "Sovgʻalar va soʻrovlar",
       "language": "Tilni oʻzgartirish",
@@ -1308,7 +1352,8 @@
       "notFound": "Bu endi mavjud emas.",
       "noDebt": "Bu oʻquvchining qarzi qolmagan.",
       "noTemplate": "Bu xabar uchun shablon yoʻq.",
-      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "noStoreLinks": "Ilova havolalari sozlanmagan. Serverda APP_STORE_URL yoki GOOGLE_PLAY_URL kiritilishi kerak."
     }
   },
   "settings": {
@@ -1319,9 +1364,10 @@
       "notifications": "Bildirishnomalar",
       "templates": "Shablonlar",
       "profile": "Profil",
-      "points": "Ballar",
+      "points": "Tangalar",
       "sources": "Lid manbalari",
-      "integrations": "Integratsiyalar"
+      "integrations": "Integratsiyalar",
+      "about": "Markaz haqida va maxfiylik"
     },
     "saved": "Saqlandi",
     "centre": {
@@ -1362,7 +1408,14 @@
       "noFreeTeachers": "Barcha oʻqituvchilarda kirish bor",
       "linkTitle": "{name} qaysi oʻqituvchi?",
       "linkBody": "Oʻqituvchi faqat shu oʻqituvchining guruhlarini koʻradi: oʻquvchilar ismi, davomat va tangalar. Ilovada boshqa hech narsa koʻrinmaydi.",
-      "makeTeacher": "Oʻqituvchi qilish"
+      "makeTeacher": "Oʻqituvchi qilish",
+      "addKiosk": "Kiosk qoʻshish",
+      "kioskTitle": "Kiosk hisobi",
+      "kioskHint": "Qabulxonadagi planshet uchun. Kiosk faqat kelish-ketishni qayd etish skanerini ochadi, boshqa hech narsani koʻrmaydi.",
+      "kioskPassword": "Parol",
+      "kioskPasswordHint": "Kamida 8 ta belgi. Planshetda shu email va parol bilan kiriladi.",
+      "kioskCreate": "Kiosk yaratish",
+      "kioskCreated": "{name}: kiosk hisobi yaratildi"
     },
     "notifications": {
       "enabled": "Avtomatik eslatmalarni yuborish",
@@ -1417,15 +1470,15 @@
         "due_date": "Toʻlov muddati",
         "time": "Dars vaqti",
         "centre": "Markaz nomi",
-        "week_points": "Haftalik ball",
-        "month_points": "Oylik ball",
-        "points": "Ball",
-        "balance": "Sarflash mumkin boʻlgan ball",
+        "week_points": "Haftalik tanga",
+        "month_points": "Oylik tanga",
+        "points": "Tanga",
+        "balance": "Sarflash mumkin boʻlgan tanga",
         "group_rank": "Guruhdagi oʻrin",
         "centre_rank": "Markazdagi oʻrin",
         "reason": "Sabab",
         "reward": "Sovgʻa",
-        "points_needed": "Yana kerak ball",
+        "points_needed": "Yana kerak tanga",
         "goal": "Keyingi sovgʻa (gap)",
         "bonus": "Qoldirilmagan oy bonusi (gap)",
         "update": "Soʻrov holati (gap)"
@@ -1612,6 +1665,12 @@
         "state": "Ulash boshqa oynada boshlangan yoki juda uzoq davom etdi. Qayta urinib koʻring.",
         "not_configured": "Meta ilovasi serverda hali sozlanmagan."
       }
+    },
+    "about": {
+      "hint": "Bu matnlar oʻquvchilar ilovasida “Markaz haqida” va “Maxfiylik siyosati” sahifalarida koʻrinadi. Har bir tilni alohida toʻldiring.",
+      "language": "Matn tili",
+      "about": "Markaz haqida",
+      "privacy": "Maxfiylik siyosati"
     }
   },
   "myGroups": {
@@ -1660,35 +1719,35 @@
     }
   },
   "points": {
-    "count": "{count} ball",
-    "giveTitle": "{name}ga ball berish",
-    "takeTitle": "{name}dan ball olish",
-    "giveHint": "Sababni tanlang yoki oʻz sababingiz bilan 1 dan {max} gacha ball bering.",
-    "takeHint": "Sababni tanlang yoki oʻz sababingiz bilan 1 dan {max} gacha ball oling. Oʻquvchi va ota-onaga xabar boradi.",
+    "count": "{count} ta tanga",
+    "giveTitle": "{name}ga tanga berish",
+    "takeTitle": "{name}dan tanga olish",
+    "giveHint": "Sababni tanlang yoki oʻz sababingiz bilan 1 dan {max} tagacha tanga bering.",
+    "takeHint": "Sababni tanlang yoki oʻz sababingiz bilan 1 dan {max} tagacha tanga oling. Oʻquvchi va ota-onaga xabar boradi.",
     "custom": "Boshqa sabab",
     "howMany": "Nechta",
     "reason": "Sabab",
-    "give": "Ball berish",
-    "take": "Ball olish",
-    "giveTo": "{name}ga ball berish",
-    "takeFrom": "{name}dan ball olish",
-    "given": "{name}: +{count} ball",
-    "taken": "{name}: −{count} ball",
-    "takenReduced": "{name}da faqat {count} ball bor edi: hammasi olindi",
-    "nothingToTake": "{name}da olinadigan ball yoʻq",
+    "give": "Tanga berish",
+    "take": "Tanga olish",
+    "giveTo": "{name}ga tanga berish",
+    "takeFrom": "{name}dan tanga olish",
+    "given": "{name}: +{count} ta tanga",
+    "taken": "{name}: −{count} ta tanga",
+    "takenReduced": "{name}da faqat {count} ta tanga bor edi: hammasi olindi",
+    "nothingToTake": "{name}da olinadigan tanga yoʻq",
     "undo": "Bekor qilish",
     "undone": "Bekor qilindi",
     "friend": "Doʻsti: {name}",
-    "programmeOff": "Ballar dasturi sozlamalarda oʻchirilgan. Toʻplangan ballar saqlanadi.",
+    "programmeOff": "Tangalar dasturi sozlamalarda oʻchirilgan. Toʻplangan tangalar saqlanadi.",
     "errors": {
-      "programmeOff": "Ballar dasturi oʻchirilgan.",
+      "programmeOff": "Tangalar dasturi oʻchirilgan.",
       "amountInvalid": "Limit doirasida butun son kiriting.",
       "reasonRequired": "Sababni yozing.",
       "dailyLimit": "Bu oʻquvchi uchun kunlik limit tugadi.",
-      "dailyLimitLeft": "Bu oʻquvchi uchun kunlik limit tugadi: bugun {count} ball qoldi.",
+      "dailyLimitLeft": "Bu oʻquvchi uchun kunlik limit tugadi: bugun {count} ta tanga qoldi.",
       "notInGroup": "Oʻquvchi bu guruhda emas.",
       "undoTooLate": "Endi bekor qilib boʻlmaydi.",
-      "notEnough": "Oʻquvchida buncha ball yoʻq.",
+      "notEnough": "Oʻquvchida buncha tanga yoʻq.",
       "valueInvalid": "Butun son kiriting.",
       "valueRange": "{min} dan {max} gacha butun son kiriting.",
       "labelRequired": "Nomini uchala tilda yozing.",
@@ -1706,8 +1765,8 @@
     },
     "history": {
       "title": "Tarix",
-      "subtitle": "Shu oyda siz bergan yoki olgan barcha ballar.",
-      "empty": "Shu oyda hali ball bermadingiz va olmadingiz.",
+      "subtitle": "Shu oyda siz bergan yoki olgan barcha tangalar.",
+      "empty": "Shu oyda hali tanga bermadingiz va olmadingiz.",
       "undone": "Bekor qilindi"
     },
     "totals": {
@@ -1716,20 +1775,20 @@
       "earnedAllTime": "Jami toʻplandi"
     },
     "adjust": {
-      "action": "Ballarni oʻzgartirish",
-      "title": "{name} ballarini oʻzgartirish",
-      "hint": "Hozir sarflash mumkin: {count} ball. Sabab tarixda saqlanadi.",
+      "action": "Tangalarni oʻzgartirish",
+      "title": "{name} tangalarini oʻzgartirish",
+      "hint": "Hozir sarflash mumkin: {count} ta tanga. Sabab tarixda saqlanadi.",
       "kind": "Qoʻshish yoki olish",
       "add": "Qoʻshish",
       "take": "Olish",
-      "done": "Ballar oʻzgartirildi"
+      "done": "Tangalar oʻzgartirildi"
     },
     "ledger": {
-      "empty": "Hali ball yoʻq.",
+      "empty": "Hali tanga yoʻq.",
       "date": "Sana",
       "what": "Nima uchun",
       "by": "Kim",
-      "points": "Ball",
+      "points": "Tanga",
       "automatic": "Avtomatik"
     },
     "source": {
@@ -1741,33 +1800,35 @@
       "teacher_deduction": "Oʻqituvchi oldi",
       "owner_adjustment": "Rahbar oʻzgartirdi",
       "reward_hold": "Sovgʻa soʻraldi",
-      "reward_return": "Sovgʻa qaytarildi"
+      "reward_return": "Sovgʻa qaytarildi",
+      "game_win": "Oʻyindagi gʻalaba",
+      "exam": "Sinov imtihoni"
     },
     "settings": {
-      "enabled": "Ballar dasturi",
-      "enabledHint": "Oʻchirilsa, yangi ball berilmaydi. Toʻplangan ballar saqlanadi.",
-      "values": "Nima uchun necha ball",
-      "valuesHint": "Yangi qiymat shu paytdan amal qiladi, berilgan ballar oʻzgarmaydi.",
+      "enabled": "Tangalar dasturi",
+      "enabledHint": "Oʻchirilsa, yangi tanga berilmaydi. Toʻplangan tangalar saqlanadi.",
+      "values": "Nima uchun nechta tanga",
+      "valuesHint": "Yangi qiymat shu paytdan amal qiladi, berilgan tangalar oʻzgarmaydi.",
       "limits": "Oʻqituvchilar uchun limitlar",
-      "limitsHint": "Oʻqituvchi qancha ball berishi yoki olishi mumkin.",
+      "limitsHint": "Oʻqituvchi qancha tanga berishi yoki olishi mumkin.",
       "present": "Darsda qatnashdi",
       "late": "Darsga kechikdi",
       "perfect_month": "Qoldirilmagan oy",
       "perfect_month_min_lessons": "Qoldirilmagan oy uchun darslar soni",
       "on_time": "Oʻz vaqtida toʻlov",
       "referral": "Doʻsti yozildi",
-      "max_per_action": "Bir martada eng koʻp ball",
-      "teacher_daily_cap": "Bir oʻquvchiga kuniga eng koʻp ball"
+      "max_per_action": "Bir martada eng koʻp tanga",
+      "teacher_daily_cap": "Bir oʻquvchiga kuniga eng koʻp tanga"
     },
     "presets": {
       "title": "Oʻqituvchilar uchun sabablar",
-      "hint": "Oʻqituvchilar ball berganda yoki olganda shu roʻyxatdan tanlaydi. Bir martalik limitdan qimmat sabablar taklif qilinmaydi.",
+      "hint": "Oʻqituvchilar tanga berganda yoki olganda shu roʻyxatdan tanlaydi. Bir martalik limitdan qimmat sabablar taklif qilinmaydi.",
       "kind": "Turi",
       "kinds": {
         "award": "Ragʻbatlar",
         "deduction": "Jarimalar"
       },
-      "points": "Ball",
+      "points": "Tanga",
       "label": {
         "uz": "Oʻzbekcha nomi",
         "ru": "Ruscha nomi",
@@ -1788,7 +1849,7 @@
     },
     "board": {
       "title": "Reyting",
-      "subtitle": "Toʻplangan ballar. Ballarni sovgʻaga sarflash oʻrinni pasaytirmaydi.",
+      "subtitle": "Toʻplangan tangalar. Tangalarni sovgʻaga sarflash oʻrinni pasaytirmaydi.",
       "scope": "Markaz yoki guruh",
       "centre": "Butun markaz",
       "period": "Davr",
@@ -1836,7 +1897,7 @@
       "editTitle": "Sovgʻani tahrirlash",
       "name": "Nomi",
       "description": "Tavsifi",
-      "cost": "Narxi, ball",
+      "cost": "Narxi, tanga",
       "stock": "Mavjud soni",
       "stockHint": "Cheklanmagan boʻlsa, boʻsh qoldiring.",
       "photo": "Rasm",
@@ -1851,7 +1912,7 @@
       "date": "Sana",
       "student": "Oʻquvchi",
       "reward": "Sovgʻa",
-      "cost": "Ball",
+      "cost": "Tanga",
       "from": "Qayerdan",
       "status": "Holat",
       "via": {
@@ -1862,29 +1923,30 @@
         "requested": "Kutmoqda",
         "given": "Berildi",
         "rejected": "Rad etildi",
-        "cancelled": "Bekor qilindi"
+        "cancelled": "Bekor qilindi",
+        "ready": "Olib ketishga tayyor"
       },
       "give": "Berish",
       "reject": "Rad etish",
       "given": "{name}: sovgʻa berildi",
-      "rejected": "{name}: soʻrov rad etildi, ballar qaytarildi",
+      "rejected": "{name}: soʻrov rad etildi, tangalar qaytarildi",
       "rejectTitle": "{name} soʻrovi rad etilsinmi?",
-      "rejectBody": "Oʻquvchiga {count} ball qaytadi, sovgʻa esa zaxiraga qaytadi."
+      "rejectBody": "Oʻquvchiga {count} ta tanga qaytadi, sovgʻa esa zaxiraga qaytadi."
     },
     "redeem": {
       "open": "Sovgʻa berish",
       "title": "{name} uchun sovgʻa",
-      "hint": "Sarflash mumkin: {count} ball. Ballar darhol ushlab qolinadi; sovgʻani Ballar → Soʻrovlar boʻlimida bering.",
+      "hint": "Sarflash mumkin: {count} ta tanga. Tangalar darhol ushlab qolinadi; sovgʻani Tangalar → Soʻrovlar boʻlimida bering.",
       "action": "Almashtirish",
-      "short": "Yana {count} ball kerak",
-      "done": "{reward}: soʻrov yaratildi, ballar ushlab qolindi"
+      "short": "Yana {count} ta tanga kerak",
+      "done": "{reward}: soʻrov yaratildi, tangalar ushlab qolindi"
     }
   },
   "tv": {
     "centreTitle": "Shu oyning eng yaxshi 10 taligi",
     "groupSubtitle": "Eng yaxshi 5 talik · {month}",
     "updated": "Yangilandi: {time}",
-    "empty": "Shu oyda hali ball yoʻq"
+    "empty": "Shu oyda hali tanga yoʻq"
   },
   "publicForm": {
     "errors": {
@@ -2176,5 +2238,12 @@
     "unknownCode": "Bu havola ishlamaydi. {centre} CRMida Profilni ochib, “Telegramni ulash” tugmasini qayta bosing.",
     "notLinked": "Lidni faqat {centre} xodimlari olishi mumkin. Avval Profilda Telegramni ulang.",
     "metaReconnect": "⚠️ Facebookdan lidlar kelmay qoldi: “{page}” sahifasini qayta ulash kerak. CRMda Sozlamalar → Integratsiyalar boʻlimini ochib, “Qayta ulash”ni bosing."
+  },
+  "studentApp": {
+    "account_linked": {
+      "title": "Hisobingiz markazga ulandi",
+      "body": "{centre}: darslaringiz, tangalaringiz va toʻlovlaringiz endi ilovada."
+    },
+    "inviteSms": "{centre}: dars jadvali, tangalar va toʻlovlar ilovada. Yuklab oling: {links}"
   }
 }

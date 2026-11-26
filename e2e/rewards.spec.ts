@@ -48,7 +48,7 @@ test("a manager redeems a T-shirt at the desk and marks it given; a rejected req
     await expect(sheet(page).locator("[data-reward]")).toHaveCount(3);
     await page.screenshot({ path: testInfo.outputPath("redeem.png") });
     await sheet(page).locator(`[data-reward="${TSHIRT}"]`).getByRole("button", { name: /^Redeem/ }).click();
-    await expect(page.getByText(`${TSHIRT}: request made, points held`)).toBeVisible();
+    await expect(page.getByText(`${TSHIRT}: request made, coins held`)).toBeVisible();
     await expect(sheet(page)).toHaveCount(0);
     // The points are held at once; what was earned (and so the rank) is untouched.
     await expect.poll(() => total(page, "balance")).toBe(before.balance - 100);
@@ -62,7 +62,7 @@ test("a manager redeems a T-shirt at the desk and marks it given; a rejected req
     if (phone) await page.getByRole("button", { name: "Open menu" }).click();
     const nav = page.getByRole("navigation", { name: "Main navigation" }).locator("visible=true");
     await expect(nav.locator("[data-nav-count]")).toBeVisible();
-    await nav.getByRole("link", { name: /^Points/ }).click();
+    await nav.getByRole("link", { name: /^Coins/ }).click();
     await page.getByRole("tab", { name: /^Requests/ }).click();
     await expect(page).toHaveURL(/tab=requests/);
     await expect(requests()).toHaveCount(1);
@@ -94,12 +94,12 @@ test("a manager redeems a T-shirt at the desk and marks it given; a rejected req
     await page.goto("/en/points?tab=requests");
     const open = requests().and(page.locator('[data-request-row="requested"]'));
     await open.getByRole("button", { name: /^Reject/ }).click();
-    await expect(dialog(page)).toContainText("40 points return to the student");
+    await expect(dialog(page)).toContainText("40 coins return to the student");
     await dialog(page).getByRole("button", { name: "Reject" }).click();
     await expect(dialog(page).getByText("Write the reason.")).toBeVisible();
     await dialog(page).getByLabel("Reason").fill("Wrong colour");
     await dialog(page).getByRole("button", { name: "Reject" }).click();
-    await expect(page.getByText(`${name}: request rejected, points returned`)).toBeVisible();
+    await expect(page.getByText(`${name}: request rejected, coins returned`)).toBeVisible();
     await expect(requests().filter({ hasText: "Wrong colour" })).toHaveAttribute("data-request-row", "rejected");
     await page.goto(`/en/students/${id}?tab=points`);
     expect(await total(page, "balance")).toBe(before.balance - 100);
@@ -107,7 +107,7 @@ test("a manager redeems a T-shirt at the desk and marks it given; a rejected req
 
     // ── A manager looks at the catalogue but does not edit it ──
     await page.goto("/en/points?tab=rewards");
-    await expect(page.locator(`[data-reward="${TSHIRT}"]`)).toContainText("100 points");
+    await expect(page.locator(`[data-reward="${TSHIRT}"]`)).toContainText("100 coins");
     await expect(page.locator('[data-reward="Bepul dars"]')).toContainText("Unlimited");
     await expect(page.getByRole("button", { name: "Add reward" })).toHaveCount(0);
     await expect(page.getByRole("button", { name: /^Edit/ })).toHaveCount(0);
@@ -120,13 +120,13 @@ test("a manager redeems a T-shirt at the desk and marks it given; a rejected req
     await sheet(page).getByRole("button", { name: "Save" }).click();
     await expect(sheet(page).getByText("Enter a name.")).toBeVisible();
     await sheet(page).getByLabel("Name").fill(marker);
-    await sheet(page).getByLabel("Cost, points").fill("25");
+    await sheet(page).getByLabel("Cost, coins").fill("25");
     await sheet(page).getByLabel("In stock").fill("2");
     await sheet(page).getByLabel("Photo").setInputFiles({ name: "photo.png", mimeType: "image/png", buffer: PIXEL });
     await sheet(page).getByRole("button", { name: "Save" }).click();
     await expect(page.getByText("Reward saved")).toBeVisible();
     const card = page.locator(`[data-reward="${marker}"]`);
-    await expect(card).toContainText("25 points");
+    await expect(card).toContainText("25 coins");
     await expect(card).toContainText("2 left");
     // The photo comes from the private bucket through a signed link, and loads.
     await expect(card.locator("img")).toHaveAttribute("src", /reward-photos\/.+token=/);

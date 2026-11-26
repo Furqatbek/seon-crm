@@ -149,6 +149,7 @@ export function GroupLessonsTab({
                     <StatusPill tone={LESSON_TONE[lesson.status]}>
                       {t(`lesson.statuses.${lesson.status}`)}
                     </StatusPill>
+                    {lesson.kind === "exam" ? <Badge tone="warning">{lesson.exam_title}</Badge> : null}
                     {lesson.status === "cancelled" && lesson.cancel_reason ? (
                       <span className="text-footnote text-text-secondary">{lesson.cancel_reason}</span>
                     ) : null}

@@ -176,8 +176,8 @@ describe("weekly summary", () => {
     expect(await world.run("2026-11-14T18:00")).toEqual({ sent: 0, failed: 0, duplicate: 0 });
     expect(await world.run(SUNDAY_EVENING)).toEqual({ sent: 2, failed: 0, duplicate: 0 });
     expect(world.providers.telegram.sent).toEqual([
-      { recipient: "501", body: "[uz] Student a week 14, total 92, English B1 #2, centre #7. “T-shirt” uchun yana 8 ball kerak." },
-      { recipient: "900", body: "[en] Student a week 14, total 92, English B1 #2, centre #7. 8 more points for “T-shirt”." },
+      { recipient: "501", body: "[uz] Student a week 14, total 92, English B1 #2, centre #7. “T-shirt” uchun yana 8 ta tanga kerak." },
+      { recipient: "900", body: "[en] Student a week 14, total 92, English B1 #2, centre #7. 8 more coins for “T-shirt”." },
     ]);
     expect(world.rows.map((row) => row.dedupeKey)).toEqual(["weekly:a:student:2026-11-09", "weekly:a:parent:2026-11-09"]);
   });
@@ -346,8 +346,8 @@ describe("reward updates", () => {
     const world = setup({ rewards: [event("requested", "2026-11-16T11:00:00+05:00")] });
     await world.run("2026-11-16T11:15");
     expect(world.providers.telegram.sent).toEqual([
-      { recipient: "501", body: "[en] Student a, T-shirt: request received, 100 points are held. Collect it at the front desk." },
-      { recipient: "900", body: "[ru] Student a, T-shirt: запрос принят, 100 баллов удержано. Заберите на ресепшене." },
+      { recipient: "501", body: "[en] Student a, T-shirt: request received, 100 coins are held. Collect it at the front desk." },
+      { recipient: "900", body: "[ru] Student a, T-shirt: запрос принят, 100 монет удержано. Заберите на ресепшене." },
     ]);
 
     const handled = setup({
@@ -365,7 +365,7 @@ describe("reward updates", () => {
 
     const rejected = setup({ rewards: [event("rejected", "2026-11-16T15:00:00+05:00", "Wrong size")] });
     await rejected.run("2026-11-16T15:15");
-    expect(rejected.providers.telegram.sent[0].body).toBe("[en] Student a, T-shirt: the request was declined (Wrong size). 100 points are back.");
+    expect(rejected.providers.telegram.sent[0].body).toBe("[en] Student a, T-shirt: the request was declined (Wrong size). 100 coins are back.");
   });
 });
 

@@ -52,7 +52,7 @@
     "settings": "Settings",
     "myGroups": "My groups",
     "pointsHistory": "History",
-    "points": "Points",
+    "points": "Coins",
     "openRequests": "Reward requests waiting:",
     "pointsReport": "Reports",
     "waitingLeads": "Leads waiting:"
@@ -76,7 +76,8 @@
     "roles": {
       "owner": "Owner",
       "manager": "Manager",
-      "teacher": "Teacher"
+      "teacher": "Teacher",
+      "kiosk": "Kiosk"
     },
     "profile": "Profile"
   },
@@ -155,7 +156,8 @@
       "website": "Website",
       "other": "Other",
       "facebook": "Facebook",
-      "web_form": "Web form"
+      "web_form": "Web form",
+      "mobile_app": "Mobile app"
     },
     "lostReason": {
       "price": "Price",
@@ -179,7 +181,8 @@
       "lostReason": "Lost because",
       "unassigned": "Nobody",
       "referredBy": "Referred by",
-      "referredByHint": "The student who sent this lead. They get points when the lead enrols and makes a first payment."
+      "referredByHint": "The student who sent this lead. They get coins when the lead enrols and makes a first payment.",
+      "koreanLevel": "Korean level"
     },
     "form": {
       "created": "Lead added",
@@ -215,7 +218,8 @@
       "note": "Note",
       "statusChange": "{from} → {to}",
       "reason": "Reason: {reason}",
-      "formResubmitted": "Submitted “{form}” again"
+      "formResubmitted": "Submitted “{form}” again",
+      "appSignup": "Signed up in the mobile app"
     },
     "lost": {
       "title": "Mark {name} as lost?",
@@ -272,6 +276,11 @@
       "justNow": "just now",
       "minutes": "{minutes} min",
       "hours": "{hours} h {minutes} min"
+    },
+    "koreanLevel": {
+      "beginner": "Beginner",
+      "topik1": "TOPIK I",
+      "topik2": "TOPIK II"
     }
   },
   "students": {
@@ -304,7 +313,7 @@
       "ledger": "Ledger",
       "attendance": "Attendance",
       "messages": "Messages",
-      "points": "Points"
+      "points": "Coins"
     },
     "fields": {
       "name": "Name",
@@ -376,8 +385,8 @@
       "linkedShort": "Linked",
       "notLinked": "Not linked",
       "hint": {
-        "student": "For the student's own Telegram: lesson reminders and their points. Not payment reminders.",
-        "parent": "For a parent's Telegram: payment reminders and the child's points."
+        "student": "For the student's own Telegram: lesson reminders and their coins. Not payment reminders.",
+        "parent": "For a parent's Telegram: payment reminders and the child's coins."
       },
       "copy": "Copy link",
       "copied": "Copied",
@@ -437,13 +446,21 @@
         "payment_overdue": "Payment overdue",
         "lesson_reminder": "Lesson reminder",
         "custom": "One-off message",
-        "points_weekly": "Weekly points summary",
-        "points_deduction": "Points taken away",
+        "points_weekly": "Weekly coins summary",
+        "points_deduction": "Coins taken away",
         "points_month_result": "Month results",
         "reward_update": "Reward update",
         "staff_new_lead": "New lead (staff)",
         "staff_lead_reminder": "Lead reminder (staff)",
-        "staff_integration_alert": "Integration alert (staff)"
+        "staff_integration_alert": "Integration alert (staff)",
+        "visit_arrived": "Arrived at the centre",
+        "visit_left": "Left the centre",
+        "account_linked": "App account linked",
+        "voucher_expiring": "Voucher expiring",
+        "open_lesson_reminder": "Open lesson reminder",
+        "receipt_approved": "Receipt approved",
+        "receipt_rejected": "Receipt rejected",
+        "staff_new_receipt": "New receipt (staff)"
       },
       "channels": {
         "telegram": "Telegram",
@@ -466,13 +483,33 @@
       "leadNotOpen": "This lead is already closed and cannot be converted.",
       "notFound": "This student no longer exists.",
       "notAllowed": "You are not allowed to do this.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "noAppAccount": "No app account is waiting for this phone.",
+      "alreadyLinked": "This student already has an app account."
     },
     "graduated": {
       "title": "Mark {name} as graduated?",
       "body": "The student finishes every group today and is no longer billed. Anything still owed stays on their balance."
     },
-    "counts": "Studying now: {studying} · Left: {left} · Graduated: {graduated}"
+    "counts": "Studying now: {studying} · Left: {left} · Graduated: {graduated}",
+    "app": {
+      "title": "Mobile app",
+      "linked": "Linked",
+      "notSignedUp": "Not signed up",
+      "linkedSince": "since {date}",
+      "linkedHint": "The student sees their schedule, coins, payments and QR code in the app.",
+      "waitingHint": "Someone signed up in the app with this phone and is not linked yet. The owner can link the account to this student.",
+      "notSignedUpHint": "When the student signs up in the app with their own phone or the parent's, the account is linked by itself.",
+      "invite": "Send app invite",
+      "inviteSent": "{name}: invite sent by SMS",
+      "inviteFailed": "The SMS was not sent. See the Messages tab for details.",
+      "unlink": "Unlink",
+      "relink": "Relink",
+      "unlinked": "{name}: app account unlinked",
+      "relinked": "{name}: app account linked",
+      "unlinkTitle": "Unlink the app account of {name}?",
+      "unlinkBody": "The account is not deleted: its owner can still sign in to the app but no longer sees this student's lessons, coins or payments. You can link it again later."
+    }
   },
   "groups": {
     "newGroup": "New group",
@@ -569,7 +606,13 @@
         "scheduled": "Scheduled",
         "held": "Held",
         "cancelled": "Cancelled"
-      }
+      },
+      "exam": "Exam",
+      "examHint": "Students see it as an exam in the app's schedule.",
+      "examTitle": "Exam title",
+      "examSave": "Save exam",
+      "examSaved": "Lesson marked as an exam",
+      "examCleared": "The lesson is no longer an exam"
     },
     "attendanceGrid": {
       "student": "Student",
@@ -691,7 +734,8 @@
       "capacityOverRoom": "The room holds {detail}. The group cannot be larger.",
       "roomInvalid": "Choose a room from the list.",
       "roomClash": "The room is taken at that time by {detail}.",
-      "roomUnavailable": "This room is no longer available. Choose another."
+      "roomUnavailable": "This room is no longer available. Choose another.",
+      "examTitleRequired": "Enter the exam's title."
     }
   },
   "finance": {
@@ -1151,20 +1195,20 @@
     },
     "tabs": {
       "overview": "Overview",
-      "points": "Points"
+      "points": "Coins"
     },
     "points": {
-      "points": "Points",
+      "points": "Coins",
       "kpi": {
-        "earned": "Points earned",
-        "deducted": "Points deducted",
+        "earned": "Coins earned",
+        "deducted": "Coins deducted",
         "spent": "Spent on rewards",
-        "unspent": "Unspent points",
+        "unspent": "Unspent coins",
         "rewardsGiven": "Rewards given",
-        "studentsWithoutPoints": "Students with no points"
+        "studentsWithoutPoints": "Students with no coins"
       },
       "bySource": {
-        "title": "Points earned by source"
+        "title": "Coins earned by source"
       },
       "byTeacher": {
         "title": "Awards and deductions per teacher",
@@ -1181,17 +1225,17 @@
         "title": "Rewards given",
         "reward": "Reward",
         "given": "Given",
-        "points": "Points spent"
+        "points": "Coins spent"
       },
       "byGroup": {
-        "title": "Average points per student by group",
-        "hint": "The group's points in the period over the students in it now.",
+        "title": "Average coins per student by group",
+        "hint": "The group's coins in the period over the students in it now.",
         "group": "Group",
         "students": "Students",
         "average": "Average"
       }
     },
-    "teacherTitle": "Points in my groups",
+    "teacherTitle": "Coins in my groups",
     "forms": {
       "title": "Leads by form",
       "hint": "Views and leads in the period, how many were taken and became students, and how fast a lead was taken.",
@@ -1206,19 +1250,19 @@
     }
   },
   "bot": {
-    "linked": "{student} is now linked as a parent. Payment reminders and points news from {centre} will come here. Commands: /points /top /rewards /language /stop",
-    "linkedStudent": "{student}, you are linked. Lesson reminders and your points from {centre} will come here. Commands: /points /top /rewards /language /stop",
+    "linked": "{student} is now linked as a parent. Payment reminders and coin news from {centre} will come here. Commands: /points /top /rewards /language /stop",
+    "linkedStudent": "{student}, you are linked. Lesson reminders and your coins from {centre} will come here. Commands: /points /top /rewards /language /stop",
     "unknownCode": "This link is not valid. Ask {centre} for a new one.",
     "stopped": "Unlinked. You will get no more messages from {centre} in this chat.",
     "nothingLinked": "Nothing is linked to this chat.",
     "notLinked": "This chat is not linked yet. Open the personal link {centre} gave you.",
-    "help": "This bot sends reminders and points news from {centre}. Open the personal link the centre gave you to connect. Commands: /points /top /rewards /language /stop",
+    "help": "This bot sends reminders and coin news from {centre}. Open the personal link the centre gave you to connect. Commands: /points /top /rewards /language /stop",
     "chooseLanguage": "Choose the language of this chat:",
     "languageSet": "Done. This chat is now in English.",
     "whichChild": "Which child?",
     "failed": "Something went wrong. Try again in a minute.",
-    "pointsCount": "{points, plural, one {# point} other {# points}}",
-    "goal": "{points, plural, one {# more point} other {# more points}} for “{reward}”.",
+    "pointsCount": "{points, plural, one {# coin} other {# coins}}",
+    "goal": "{points, plural, one {# more coin} other {# more coins}} for “{reward}”.",
     "bonus": "Perfect month bonus: +{points}.",
     "points": {
       "title": "{student}",
@@ -1232,7 +1276,7 @@
       "centre": "Centre, top 10 this month",
       "group": "{group}, top 5",
       "own": "{student}: place {rank} ({points})",
-      "empty": "No points yet this month."
+      "empty": "No coins yet this month."
     },
     "rewards": {
       "title": "Rewards. {student} has {points} to spend.",
@@ -1242,20 +1286,20 @@
       "request": "Request: {reward}"
     },
     "request": {
-      "confirm": "Request “{reward}” for {points} points for {student}? The points are held at once.",
+      "confirm": "Request “{reward}” for {points} coins for {student}? The coins are held at once.",
       "yes": "Yes, request",
       "no": "No",
       "done": "Request received: “{reward}”. Collect it at the front desk of {centre}.",
       "cancelled": "Nothing was requested.",
-      "notEnough": "Not enough points for this reward.",
+      "notEnough": "Not enough coins for this reward.",
       "outOfStock": "This reward is out of stock.",
       "notOnOffer": "This reward is no longer on offer.",
       "failed": "The request did not go through. Try again in a minute."
     },
     "reward": {
-      "requested": "request received, {points} points are held. Collect it at the front desk.",
+      "requested": "request received, {points} coins are held. Collect it at the front desk.",
       "given": "handed over. Enjoy!",
-      "rejected": "the request was declined ({reason}). {points} points are back."
+      "rejected": "the request was declined ({reason}). {points} coins are back."
     },
     "source": {
       "attendance": "Attendance",
@@ -1269,7 +1313,7 @@
       "reward_return": "Reward returned"
     },
     "commands": {
-      "points": "My points and places",
+      "points": "My coins and places",
       "top": "Top students this month",
       "rewards": "Rewards and requests",
       "language": "Change the language",
@@ -1308,7 +1352,8 @@
       "notFound": "This no longer exists.",
       "noDebt": "This student no longer owes anything.",
       "noTemplate": "There is no template for this message.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "noStoreLinks": "The app's store links are not set. APP_STORE_URL or GOOGLE_PLAY_URL has to be set on the server."
     }
   },
   "settings": {
@@ -1319,9 +1364,10 @@
       "notifications": "Notifications",
       "templates": "Templates",
       "profile": "Profile",
-      "points": "Points",
+      "points": "Coins",
       "sources": "Lead sources",
-      "integrations": "Integrations"
+      "integrations": "Integrations",
+      "about": "About and Privacy"
     },
     "saved": "Saved",
     "centre": {
@@ -1362,7 +1408,14 @@
       "noFreeTeachers": "Every teacher already has a login",
       "linkTitle": "Which teacher is {name}?",
       "linkBody": "As a teacher they see only that teacher's groups: students' names, attendance and coins. Nothing else in the app.",
-      "makeTeacher": "Make teacher"
+      "makeTeacher": "Make teacher",
+      "addKiosk": "Add kiosk",
+      "kioskTitle": "Kiosk account",
+      "kioskHint": "For the reception tablet. A kiosk opens only the check-in scanner and sees nothing else.",
+      "kioskPassword": "Password",
+      "kioskPasswordHint": "At least 8 characters. The tablet signs in with this email and password.",
+      "kioskCreate": "Create kiosk",
+      "kioskCreated": "{name}: kiosk account created"
     },
     "notifications": {
       "enabled": "Send automatic reminders",
@@ -1417,15 +1470,15 @@
         "due_date": "Due date",
         "time": "Lesson time",
         "centre": "Centre name",
-        "week_points": "Points this week",
-        "month_points": "Points in the month",
-        "points": "Points",
-        "balance": "Points to spend",
+        "week_points": "Coins this week",
+        "month_points": "Coins in the month",
+        "points": "Coins",
+        "balance": "Coins to spend",
         "group_rank": "Place in the group",
         "centre_rank": "Place in the centre",
         "reason": "Reason",
         "reward": "Reward",
-        "points_needed": "Points still needed",
+        "points_needed": "Coins still needed",
         "goal": "Next reward to save for (a sentence)",
         "bonus": "Perfect-month bonus (a sentence)",
         "update": "What happened to the request (a sentence)"
@@ -1612,6 +1665,12 @@
         "state": "The connection was started in another window or took too long. Try again.",
         "not_configured": "The Meta app is not set up on the server yet."
       }
+    },
+    "about": {
+      "hint": "The student app shows these texts under About the centre and Privacy policy. Fill in each language.",
+      "language": "Language of the text",
+      "about": "About the centre",
+      "privacy": "Privacy policy"
     }
   },
   "myGroups": {
@@ -1660,35 +1719,35 @@
     }
   },
   "points": {
-    "count": "{count, plural, one {# point} other {# points}}",
-    "giveTitle": "Give points to {name}",
-    "takeTitle": "Take points from {name}",
-    "giveHint": "Pick a reason, or give 1 to {max} points of your own.",
-    "takeHint": "Pick a reason, or take 1 to {max} points with a reason of your own. The student and parent are told.",
+    "count": "{count, plural, one {# coin} other {# coins}}",
+    "giveTitle": "Give coins to {name}",
+    "takeTitle": "Take coins from {name}",
+    "giveHint": "Pick a reason, or give 1 to {max} coins of your own.",
+    "takeHint": "Pick a reason, or take 1 to {max} coins with a reason of your own. The student and parent are told.",
     "custom": "Custom",
     "howMany": "How many",
     "reason": "Reason",
-    "give": "Give points",
-    "take": "Take points",
-    "giveTo": "Give points to {name}",
-    "takeFrom": "Take points from {name}",
-    "given": "{name}: +{count, plural, one {# point} other {# points}}",
-    "taken": "{name}: −{count, plural, one {# point} other {# points}}",
-    "takenReduced": "{name} had only {count, plural, one {# point} other {# points}}: all taken",
-    "nothingToTake": "{name} has no points to take",
+    "give": "Give coins",
+    "take": "Take coins",
+    "giveTo": "Give coins to {name}",
+    "takeFrom": "Take coins from {name}",
+    "given": "{name}: +{count, plural, one {# coin} other {# coins}}",
+    "taken": "{name}: −{count, plural, one {# coin} other {# coins}}",
+    "takenReduced": "{name} had only {count, plural, one {# coin} other {# coins}}: all taken",
+    "nothingToTake": "{name} has no coins to take",
     "undo": "Undo",
     "undone": "Undone",
     "friend": "Friend: {name}",
-    "programmeOff": "The points programme is switched off in Settings. Points already earned stay.",
+    "programmeOff": "The coins programme is switched off in Settings. Coins already earned stay.",
     "errors": {
-      "programmeOff": "The points programme is switched off.",
-      "amountInvalid": "Enter a whole number of points within the limit.",
+      "programmeOff": "The coins programme is switched off.",
+      "amountInvalid": "Enter a whole number of coins within the limit.",
       "reasonRequired": "Write the reason.",
       "dailyLimit": "The daily limit for this student is reached.",
-      "dailyLimitLeft": "The daily limit for this student is reached: {count, plural, =0 {nothing} one {# point} other {# points}} left today.",
+      "dailyLimitLeft": "The daily limit for this student is reached: {count, plural, =0 {nothing} one {# coin} other {# coins}} left today.",
       "notInGroup": "The student is not in this group.",
       "undoTooLate": "Too late to undo.",
-      "notEnough": "The student does not have that many points.",
+      "notEnough": "The student does not have that many coins.",
       "valueInvalid": "Enter a whole number.",
       "valueRange": "Enter a whole number from {min} to {max}.",
       "labelRequired": "Write the name in all three languages.",
@@ -1697,7 +1756,7 @@
       "notFound": "Not found. It may have been removed.",
       "generic": "Something went wrong. Try again.",
       "nameRequired": "Enter a name.",
-      "costInvalid": "Enter a cost from 1 to 100,000 points.",
+      "costInvalid": "Enter a cost from 1 to 100,000 coins.",
       "stockInvalid": "Enter a whole number, or leave it empty for unlimited.",
       "outOfStock": "This reward is out of stock.",
       "alreadyHandled": "This request was already handled.",
@@ -1706,8 +1765,8 @@
     },
     "history": {
       "title": "History",
-      "subtitle": "Every point you gave or took this month.",
-      "empty": "You have not given or taken any points this month.",
+      "subtitle": "Every coin you gave or took this month.",
+      "empty": "You have not given or taken any coins this month.",
       "undone": "Undone"
     },
     "totals": {
@@ -1716,20 +1775,20 @@
       "earnedAllTime": "Earned in total"
     },
     "adjust": {
-      "action": "Adjust points",
-      "title": "Adjust points of {name}",
-      "hint": "{count, plural, one {# point} other {# points}} to spend now. The reason is kept in the ledger.",
+      "action": "Adjust coins",
+      "title": "Adjust coins of {name}",
+      "hint": "{count, plural, one {# coin} other {# coins}} to spend now. The reason is kept in the ledger.",
       "kind": "Add or take",
       "add": "Add",
       "take": "Take away",
-      "done": "Points adjusted"
+      "done": "Coins adjusted"
     },
     "ledger": {
-      "empty": "No points yet.",
+      "empty": "No coins yet.",
       "date": "Date",
       "what": "What for",
       "by": "By",
-      "points": "Points",
+      "points": "Coins",
       "automatic": "Automatic"
     },
     "source": {
@@ -1741,13 +1800,15 @@
       "teacher_deduction": "Teacher deduction",
       "owner_adjustment": "Owner adjustment",
       "reward_hold": "Reward requested",
-      "reward_return": "Reward returned"
+      "reward_return": "Reward returned",
+      "game_win": "Game win",
+      "exam": "Mock exam"
     },
     "settings": {
-      "enabled": "Points programme",
-      "enabledHint": "Off stops new points. Points already earned stay.",
-      "values": "Point values",
-      "valuesHint": "A new value applies from now on, never to points already given.",
+      "enabled": "Coins programme",
+      "enabledHint": "Off stops new coins. Coins already earned stay.",
+      "values": "Coin values",
+      "valuesHint": "A new value applies from now on, never to coins already given.",
       "limits": "Teacher limits",
       "limitsHint": "How much a teacher can give or take.",
       "present": "Present at a lesson",
@@ -1756,18 +1817,18 @@
       "perfect_month_min_lessons": "Lessons needed for a perfect month",
       "on_time": "Fee paid on time",
       "referral": "Friend enrols",
-      "max_per_action": "Most points per award or deduction",
-      "teacher_daily_cap": "Most points per student per day"
+      "max_per_action": "Most coins per award or deduction",
+      "teacher_daily_cap": "Most coins per student per day"
     },
     "presets": {
       "title": "Reasons for teachers",
-      "hint": "Teachers pick from these when they give or take points. Reasons worth more than the per-action limit are not offered.",
+      "hint": "Teachers pick from these when they give or take coins. Reasons worth more than the per-action limit are not offered.",
       "kind": "Kind",
       "kinds": {
         "award": "Awards",
         "deduction": "Deductions"
       },
-      "points": "Points",
+      "points": "Coins",
       "label": {
         "uz": "Name in Uzbek",
         "ru": "Name in Russian",
@@ -1788,7 +1849,7 @@
     },
     "board": {
       "title": "Leaderboard",
-      "subtitle": "Points earned. Spending points on a reward does not lower the place.",
+      "subtitle": "Coins earned. Spending coins on a reward does not lower the place.",
       "scope": "Centre or group",
       "centre": "Whole centre",
       "period": "Period",
@@ -1836,7 +1897,7 @@
       "editTitle": "Edit reward",
       "name": "Name",
       "description": "Description",
-      "cost": "Cost, points",
+      "cost": "Cost, coins",
       "stock": "In stock",
       "stockHint": "Leave empty for unlimited.",
       "photo": "Photo",
@@ -1851,7 +1912,7 @@
       "date": "Date",
       "student": "Student",
       "reward": "Reward",
-      "cost": "Points",
+      "cost": "Coins",
       "from": "From",
       "status": "Status",
       "via": {
@@ -1862,29 +1923,30 @@
         "requested": "Waiting",
         "given": "Given",
         "rejected": "Rejected",
-        "cancelled": "Cancelled"
+        "cancelled": "Cancelled",
+        "ready": "Ready for pickup"
       },
       "give": "Give",
       "reject": "Reject",
       "given": "{name}: reward given",
-      "rejected": "{name}: request rejected, points returned",
+      "rejected": "{name}: request rejected, coins returned",
       "rejectTitle": "Reject the request of {name}?",
-      "rejectBody": "{count, plural, one {# point returns} other {# points return}} to the student, and the reward goes back in stock."
+      "rejectBody": "{count, plural, one {# coin returns} other {# coins return}} to the student, and the reward goes back in stock."
     },
     "redeem": {
       "open": "Redeem reward",
       "title": "Reward for {name}",
-      "hint": "{count, plural, one {# point} other {# points}} to spend. The points are held at once; hand the reward over from Points → Requests.",
+      "hint": "{count, plural, one {# coin} other {# coins}} to spend. The coins are held at once; hand the reward over from Coins → Requests.",
       "action": "Redeem",
-      "short": "{count, plural, one {# more point needed} other {# more points needed}}",
-      "done": "{reward}: request made, points held"
+      "short": "{count, plural, one {# more coin needed} other {# more coins needed}}",
+      "done": "{reward}: request made, coins held"
     }
   },
   "tv": {
     "centreTitle": "Top 10 this month",
     "groupSubtitle": "Top 5 · {month}",
     "updated": "Updated {time}",
-    "empty": "No points yet this month"
+    "empty": "No coins yet this month"
   },
   "publicForm": {
     "errors": {
@@ -2176,5 +2238,12 @@
     "unknownCode": "This link does not work. Open Profile in {centre}'s CRM and press Link Telegram again.",
     "notLinked": "Only {centre}'s staff can take a lead. Link your Telegram in Profile first.",
     "metaReconnect": "⚠️ Facebook leads have stopped: the Page “{page}” must be connected again. Open Settings → Integrations in the CRM and press Reconnect."
+  },
+  "studentApp": {
+    "account_linked": {
+      "title": "Your account is linked to the centre",
+      "body": "{centre}: your lessons, coins and payments are now in the app."
+    },
+    "inviteSms": "{centre}: your schedule, coins and payments are in the app. Download: {links}"
   }
 }

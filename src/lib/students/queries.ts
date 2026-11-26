@@ -192,11 +192,20 @@ export type StudentDetail = Tables<"students"> & {
   balance: number;
   oldestUnpaidMonth: string | null;
   enrolments: StudentEnrolment[];
+  app: StudentApp;
+};
+
+/** The student's account in the mobile app. */
+export type StudentApp = {
+  /** When the account was linked to this student; null when they have not signed up. */
+  linkedAt: string | null;
+  /** Someone signed up with this student's phone or the parent's and is not linked yet. */
+  waiting: boolean;
 };
 
 export async function getStudent(id: string): Promise<StudentDetail | null> {
   const supabase = await db();
-  const [student, links, balance, enrolments] = await Promise.all([
+  const [student, links, balance, enrolments, account] = await Promise.all([
     supabase.from("students").select("*").eq("id", id).is("archived_at", null).maybeSingle(),
     supabase.from("telegram_links").select("role").eq("student_id", id),
     supabase
@@ -212,6 +221,7 @@ export async function getStudent(id: string): Promise<StudentDetail | null> {
       .eq("student_id", id)
       .order("status")
       .order("joined_on", { ascending: false }),
+    supabase.from("profiles").select("linked_at").eq("student_id", id).maybeSingle(),
   ]);
   if (student.error) throw new Error(student.error.message);
   if (balance.error) throw new Error(balance.error.message);
@@ -233,7 +243,23 @@ export async function getStudent(id: string): Promise<StudentDetail | null> {
     balance: balance.data?.balance ?? 0,
     oldestUnpaidMonth: balance.data?.oldest_unpaid_month ?? null,
     enrolments: enrolments.data,
+    app: {
+      linkedAt: account.data ? (account.data.linked_at ?? student.data.created_at) : null,
+      waiting: account.data ? false : await appAccountWaiting(supabase, [student.data.phone, student.data.parent_phone]),
+    },
   };
+}
+
+/** Whether an app user signed up with one of these phones and is not linked to a student. */
+async function appAccountWaiting(supabase: Awaited<ReturnType<typeof db>>, phones: Array<string | null>): Promise<boolean> {
+  const { data } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("role", "app_user")
+    .eq("is_active", true)
+    .in("phone", phones.filter((phone): phone is string => Boolean(phone)))
+    .limit(1);
+  return (data?.length ?? 0) > 0;
 }
 
 /** Every charge and payment of the student, for the ledger. */

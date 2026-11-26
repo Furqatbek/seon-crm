@@ -56,7 +56,10 @@ export const getSignedInUser = cache(async (): Promise<SignedInUser | null> => {
   if (profile.role === "teacher") {
     return profile.teacher_id ? { ...base, role: "teacher", teacherId: profile.teacher_id } : null;
   }
-  return { ...base, role: profile.role === "owner" ? "owner" : "manager" };
+  // Students and app users sign in to the mobile app, and a kiosk only to the
+  // reception scanner: none of them is staff here.
+  if (profile.role !== "owner" && profile.role !== "manager") return null;
+  return { ...base, role: profile.role };
 });
 
 /**

@@ -13,9 +13,11 @@ import { MoneyText } from "@/components/ui/money-text";
 import { StatusPill } from "@/components/ui/status-pill";
 import { Link } from "@/i18n/navigation";
 import { formatDay, formatPhone } from "@/lib/format";
+import type { UserRole } from "@/lib/auth";
 import type { OpenGroup } from "@/lib/groups/queries";
 import type { StudentDetail, TelegramLink } from "@/lib/students/queries";
 
+import { AppCard } from "./app-card";
 import { QrCode } from "./qr-code";
 
 type Weekday = "1" | "2" | "3" | "4" | "5" | "6" | "7";
@@ -108,14 +110,16 @@ function TelegramCard({ student, botUsername }: { student: StudentDetail; botUse
   );
 }
 
-/** Contacts, groups with fee and discount, and the two Telegram links. */
+/** Contacts, groups with fee and discount, the app account and the two Telegram links. */
 export function OverviewTab({
   student,
   botUsername,
   openGroups,
   today,
+  role,
 }: {
   student: StudentDetail;
+  role: UserRole;
   botUsername: string | null;
   openGroups: OpenGroup[];
   today: string;
@@ -251,6 +255,10 @@ export function OverviewTab({
           </ul>
         )}
       </section>
+
+      <div className="lg:col-span-2">
+        <AppCard student={student} role={role} />
+      </div>
 
       <div className="lg:col-span-2">
         <TelegramCard student={student} botUsername={botUsername} />

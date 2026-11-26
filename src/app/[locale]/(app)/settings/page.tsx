@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
+import { AboutTab } from "@/components/settings/about-tab";
 import { CentreTab } from "@/components/settings/centre-tab";
 import { PointsTab } from "@/components/settings/points-tab";
 import { NotificationsTab } from "@/components/settings/notifications-tab";
@@ -23,6 +24,7 @@ import { tashkentDate } from "@/lib/domain/time";
 import {
   getAlertSettings,
   getAllTemplates,
+  getAppTexts,
   getCentreSettings,
   getIntegrations,
   getLeadSources,
@@ -39,7 +41,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
   const user = await getSignedInUser();
   if (!user) return null;
 
-  // Centre, rooms, users, notifications, templates, points, lead sources and integrations are the owner's. A manager or a teacher has
+  // Centre, rooms, users, notifications, templates, points, About and Privacy, lead sources and integrations are the owner's. A manager or a teacher has
   // Profile only: the other tabs are never rendered, and the database would
   // refuse the changes anyway.
   const tabs: readonly SettingsTab[] = user.role === "owner" ? SETTINGS_TABS : ["profile"];
@@ -64,6 +66,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
       {tab === "points" && owner ? (
         <Points />
       ) : null}
+      {tab === "about" && owner ? <AboutTab texts={await getAppTexts()} language={locale} /> : null}
       {tab === "sources" && owner ? (
         <SourcesTab
           data={await getLeadSources()}

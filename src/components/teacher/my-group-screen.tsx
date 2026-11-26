@@ -9,7 +9,9 @@ import { CoinsText } from "@/components/coins/coins-text";
 import { BoardPeriodControl, Leaderboard } from "@/components/points/leaderboard";
 import { PointsSheet, type PointsTarget } from "@/components/points/points-sheet";
 import { PointsText } from "@/components/points/points-text";
+import { ExamControl } from "@/components/groups/exam-control";
 import { LESSON_TONE, hhmm, type Weekday } from "@/components/groups/group-meta";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Field } from "@/components/ui/field";
@@ -34,7 +36,7 @@ import { roomLabel } from "@/lib/domain/rooms";
 import { useInstantClose } from "@/lib/hooks/use-instant-close";
 import { formatDay } from "@/lib/format";
 import type { BoardRow, PointPreset } from "@/lib/points/queries";
-import { saveMyAttendance } from "@/lib/teacher/actions";
+import { saveMyAttendance, setMyLessonExam } from "@/lib/teacher/actions";
 import type { MyGroup, MyLesson, MyLessonSheet } from "@/lib/teacher/queries";
 import { TEACHER_COIN_CHOICES, type CoinsErrorKey } from "@/lib/validation/coins";
 import type { GroupErrorKey } from "@/lib/validation/groups";
@@ -53,10 +55,13 @@ export type LessonPoints = {
 function AttendanceForm({
   lesson,
   points,
+  exam,
   onClose,
 }: {
   lesson: MyLessonSheet;
   points: LessonPoints | null;
+  /** Whether the lesson is marked as an exam, and its title. */
+  exam: { isExam: boolean; title: string | null };
   onClose: () => void;
 }) {
   // The + / − sheet opens inside this one, so choosing in it does not close the lesson.
@@ -89,6 +94,9 @@ function AttendanceForm({
   return (
     <>
       <SheetBody className="gap-0 pb-6">
+        {lesson.status === "cancelled" ? null : (
+          <ExamControl lessonId={lesson.id} isExam={exam.isExam} title={exam.title} save={setMyLessonExam} />
+        )}
         {locked ? (
           <p className="mb-3 rounded-control bg-bg-subtle px-3 py-2 text-footnote text-text-secondary">
             {lesson.status === "cancelled" ? tMine("lessonCancelled") : t("lesson.locked.tooOld")}
@@ -258,6 +266,8 @@ export function MyGroupScreen({
   const [giving, setGiving] = useState<CoinRow | null>(null);
   const lessonSheet = useInstantClose(lesson?.id ?? null, () => router.replace(pathname, { scroll: false }));
   const closeLesson = lessonSheet.close;
+  // The list knows whether the open lesson is an exam.
+  const openLesson = lesson ? lessons.find((row) => row.id === lesson.id) : undefined;
 
   return (
     <>
@@ -297,6 +307,7 @@ export function MyGroupScreen({
                   </span>
                   {row.lesson_date === today ? <StatusPill tone="brand">{t("today")}</StatusPill> : null}
                   <StatusPill tone={LESSON_TONE[row.status]}>{tGroups(`lesson.statuses.${row.status}`)}</StatusPill>
+                  {row.kind === "exam" ? <Badge tone="warning">{row.exam_title}</Badge> : null}
                 </span>
                 {row.can_mark ? (
                   <Button
@@ -378,7 +389,13 @@ export function MyGroupScreen({
                   {group.name} · {formatDay(lesson.lesson_date, locale, { month: "long" })} · {hhmm(lesson.start_time)}
                 </SheetDescription>
               </SheetHeader>
-              <AttendanceForm key={lesson.id} lesson={lesson} points={points} onClose={closeLesson} />
+              <AttendanceForm
+                key={lesson.id}
+                lesson={lesson}
+                points={points}
+                exam={{ isExam: openLesson?.kind === "exam", title: openLesson?.exam_title ?? null }}
+                onClose={closeLesson}
+              />
             </>
           ) : null}
         </SheetContent>

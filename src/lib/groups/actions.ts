@@ -17,6 +17,7 @@ import {
   proposalSchema,
   substituteSchema,
   transferSchema,
+  lessonExamSchema,
   type GroupErrorKey,
   type GroupResult,
 } from "@/lib/validation/groups";
@@ -160,6 +161,25 @@ export async function restoreLesson(id: unknown): Promise<GroupResult> {
 
   const { error } = await ctx.supabase.rpc("restore_lesson", { p_lesson_id: lessonId.data });
   if (error) return failure(error);
+
+  refresh();
+  return { ok: true };
+}
+
+/** Mark as exam, with a title, or back to an ordinary lesson. The student app shows exams in the schedule. */
+export async function setLessonExam(input: unknown): Promise<GroupResult> {
+  const parsed = lessonExamSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const ctx = await session();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("lessons")
+    .update(parsed.data.is_exam ? { kind: "exam", exam_title: parsed.data.title } : { kind: "lesson", exam_title: null })
+    .eq("id", parsed.data.lesson_id)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
 
   refresh();
   return { ok: true };

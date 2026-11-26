@@ -196,6 +196,11 @@ export const cancelLessonSchema = z.object({
   reason: z.string().trim().min(1, "reasonRequired").max(300, "tooLong"),
 });
 
+/** Mark as exam: an exam has a title; switching it off clears the title. */
+export const lessonExamSchema = z
+  .object({ lesson_id: z.uuid(), is_exam: z.boolean(), title: z.string().trim().max(100, "tooLong").default("") })
+  .refine((value) => !value.is_exam || value.title !== "", { path: ["title"], message: "examTitleRequired" });
+
 export const substituteSchema = z.object({ lesson_id: z.uuid(), teacher_id: z.uuid("teacherRequired") });
 
 export type GroupErrorKey =
@@ -221,6 +226,7 @@ export type GroupErrorKey =
   | "creditInvalid"
   | "creditNoteRequired"
   | "reasonRequired"
+  | "examTitleRequired"
   | "noStudents"
   | "alreadyEnrolled"
   | "groupClosed"
