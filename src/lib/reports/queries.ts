@@ -188,7 +188,7 @@ export async function getPointsReport(period: { from: string; to: string }): Pro
   for (const row of rows(sources)) {
     const month = row.month.slice(0, 7);
     if (!months.has(month)) {
-      months.set(month, { month, attendance: 0, perfect_month: 0, on_time_payment: 0, referral: 0, teacher_award: 0, owner_adjustment: 0 });
+      months.set(month, { month, attendance: 0, perfect_month: 0, on_time_payment: 0, referral: 0, teacher_award: 0, owner_adjustment: 0, game_win: 0 });
     }
     if ((POINTS_SOURCES as readonly string[]).includes(row.source)) months.get(month)![row.source as PointsSource] = row.points;
   }

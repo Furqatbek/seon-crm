@@ -75,7 +75,7 @@ const pass = (s: Session, seconds: number, silent: "none" | "a" | "b" | "both" =
       [seconds, silent],
     );
     await s.rows(`update match_answers set answered_at = answered_at - $1 * interval '1 second' where match_id in (select id from matches where status in ('countdown', 'playing'))`, by);
-    await s.rows(`update match_queue set joined_at = joined_at - $1 * interval '1 second'`, by);
+    await s.rows(`update match_queue set joined_at = joined_at - $1 * interval '1 second', last_seen = last_seen - $1 * interval '1 second'`, by);
     await s.rows(`update match_invites set expires_at = expires_at - $1 * interval '1 second', created_at = created_at - $1 * interval '1 second'`, by);
   });
 
@@ -297,6 +297,39 @@ describe.skipIf(!DB_URL)("The 1v1 game", () => {
         // Coming back does not undo it.
         expect(await call<State>(s, S2, `public.heartbeat($1)`, [match])).toMatchObject({ status: "finished", result: { outcome: "loss", forfeit: true } });
         expect(await asDb(s, () => s.rows(`select winner, forfeited_by from matches where id = $1`, [match]))).toEqual([{ winner: "a", forfeited_by: "b" }]);
+      });
+    });
+
+    it("a match forfeited before its question was shown reviews nothing, and that question is not counted as seen", async () => {
+      await game(async (s) => {
+        expect(await call(s, S1, `public.join_queue($1)`, [group])).toHaveProperty("queued_at");
+        const match = (await call<{ match_id: string }>(s, S2, `public.join_queue($1)`, [group])).match_id;
+        // B goes silent during the countdown. The clock is put back so the first question was never on screen.
+        await pass(s, 21, "b");
+        await asDb(s, () => s.rows(`update matches set question_started_at = now() + interval '1 second' where id = $1`, [match]));
+        const end = await call<State>(s, S1, `public.heartbeat($1)`, [match]);
+        expect(end).toMatchObject({ status: "finished", previous: null, result: { outcome: "win", forfeit: true, review: [] } });
+        // With only ten questions on, a new match must use that very question again: it was never seen.
+        const first = await asDb(s, async () => (await s.rows<{ id: string }>(`select question_ids[1] as id from matches where id = $1`, [match]))[0].id);
+        await asDb(s, () => s.rows(`update questions set is_active = false where subject = $1 and id not in (select id from questions where subject = $1 and id <> $2 order by id limit 10)`, [BANK.subject, first]));
+        await asDb(s, () => s.rows(`update questions set is_active = true where id = $1`, [first]));
+        await asDb(s, () => s.rows(`update points_settings set game_min_questions = 10`));
+        const next = await matchOf(s, S1, S3);
+        const drawn = await asDb(s, async () => (await s.rows<{ ids: string[] }>(`select question_ids::text[] as ids from matches where id = $1`, [next]))[0].ids);
+        expect(drawn).toContain(first);
+      });
+    });
+
+    it("a match forfeited in the middle of a question reviews what was shown, and tells the last settled question", async () => {
+      await game(async (s) => {
+        const match = await matchOf(s, S1, S2);
+        await round(s, match, S1, S2, "right", "wrong");
+        await pass(s, 1);
+        await submit(s, S1, match, 1, "a");
+        await pass(s, 21, "b");
+        const end = await call<State>(s, S1, `public.heartbeat($1)`, [match]);
+        expect(end).toMatchObject({ status: "finished", rope: 1, previous: { index: 0, pull: 1 }, result: { forfeit: true } });
+        expect(end.result?.review.map((row) => row.index)).toEqual([0, 1]);
       });
     });
 
@@ -588,6 +621,32 @@ describe.skipIf(!DB_URL)("The 1v1 game", () => {
       });
     });
 
+    it("a player who keeps asking keeps their place and their waiting time, however long they wait", async () => {
+      await game(async (s) => {
+        const first = await call<{ queued_at: string }>(s, S1, `public.join_queue($1)`, [group]);
+        // Five minutes of waiting, asking again every minute and a half.
+        for (let i = 0; i < 4; i++) {
+          await pass(s, 90);
+          await asDb(s, () => s.rows(`select public.close_abandoned_matches()`));
+          const again = await call<{ queued_at: string }>(s, S1, `public.join_queue($1)`, [group]);
+          expect(Date.parse(first.queued_at) - Date.parse(again.queued_at)).toBe((i + 1) * 90_000);
+        }
+        // Still first in line: the next player meets them.
+        const made = await call<{ match_id: string }>(s, S2, `public.join_queue($1)`, [group]);
+        expect(await asDb(s, () => s.rows(`select player_a, player_b from matches where id = $1`, [made.match_id]))).toEqual([{ player_a: S1, player_b: S2 }]);
+      });
+    });
+
+    it("a player is in one match at a time, however the second one would be made", async () => {
+      await game(async (s) => {
+        await matchOf(s, S1, S2);
+        // What a pairing that raced past the checks would do.
+        await asDb(s, async () => {
+          expect(code(await s.attempt(`select public.game_create_match('friend', $1, $2, $3, $4, null, null)`, [BANK.subject, BANK.level, S3, S1]))).toBe("EG002");
+        });
+      });
+    });
+
     it("leaving the queue, and a place nobody refreshed for two minutes, are not paired", async () => {
       await game(async (s) => {
         await call(s, S1, `public.join_queue($1)`, [group]);
@@ -857,6 +916,12 @@ describe.skipIf(!DB_URL)("The 1v1 game", () => {
         // The level decides before the name does.
         expect(await of("Koreys tili", "TOPIK I", "Future TOPIK II")).toEqual({ subject: "TOPIK", level: "topik1" });
         expect(await of("Matematika", "7-sinf", "M-7")).toEqual({ subject: "Matematika", level: "7-sinf" });
+        // The numeral is a whole word: an ordinary word after TOPIK, or another numeral, is not a level.
+        expect(await of("TOPIK imtihoni", null, "Kechki")).toEqual({ subject: "TOPIK imtihoni", level: "" });
+        expect(await of("Koreys tili", "TOPIK IV", "K-4")).toEqual({ subject: "Koreys tili", level: "TOPIK IV" });
+        expect(await of("Koreys tili", null, "TOPIK intensiv")).toEqual({ subject: "Koreys tili", level: "" });
+        expect(await of("TOPIK imtihoni", "TOPIK II", "Kechki")).toEqual({ subject: "TOPIK", level: "topik2" });
+        expect(await of("Koreys tili", "TOPIK 1-daraja", "K")).toEqual({ subject: "TOPIK", level: "topik1" });
         expect(await of(" Matematika ", null, "M")).toEqual({ subject: "Matematika", level: "" });
       }, setup);
     });

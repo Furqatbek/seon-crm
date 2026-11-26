@@ -2,7 +2,7 @@
 
 import { Archive, Eye, FileUp, HelpCircle, Pencil, Plus, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -58,6 +58,8 @@ export function QuestionsList({
   const [form, setForm] = useState<"new" | QuestionRow | null>(null);
   const [importing, setImporting] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // A search still waiting to be sent does not follow the person to another page.
+  useEffect(() => () => void (timer.current && clearTimeout(timer.current)), []);
   const staff = role !== "teacher";
   const chosen = banks.find((bank) => bankKey(bank.subject, bank.level) === search.bank);
 

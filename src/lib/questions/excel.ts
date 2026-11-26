@@ -25,13 +25,16 @@ export async function xlsxRows(data: ArrayBuffer): Promise<string[][] | null> {
   const sheet = workbook.worksheets[0];
   if (!sheet) return null;
   const rows: string[][] = [];
-  // One more than the limit is enough to say "too many".
-  const last = Math.min(sheet.rowCount, IMPORT_MAX_ROWS + 2);
-  for (let number = 1; number <= last; number++) {
+  let filled = 0;
+  // Every row keeps its line number, blank ones included. Reading stops only
+  // once there is one question too many: enough to say "too many".
+  for (let number = 1; number <= sheet.rowCount && filled <= IMPORT_MAX_ROWS + 1; number++) {
     const row = sheet.getRow(number);
     const cells: string[] = [];
     for (let column = 1; column <= Math.min(sheet.columnCount, 40); column++) cells.push(cellText(row.getCell(column).value));
-    rows.push(cells);
+    const blank = cells.every((cell) => cell.trim() === "");
+    if (!blank) filled++;
+    rows.push(blank ? [] : cells);
   }
   return rows;
 }

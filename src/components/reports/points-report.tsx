@@ -23,6 +23,8 @@ const SOURCE_COLOR: Record<PointsSource, string> = {
   on_time_payment: SERIES.rest,
   referral: "var(--border-strong)",
   owner_adjustment: "var(--border)",
+  // Wins in the student app's game.
+  game_win: "var(--success)",
 };
 
 /**

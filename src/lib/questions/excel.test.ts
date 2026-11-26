@@ -31,4 +31,23 @@ describe("Excel import files", () => {
       errors: [{ row: 4, errors: ["textRequired"] }],
     });
   });
+
+  it("blank rows in a long sheet do not cut off the questions after them", async () => {
+    const sheetOf = async (questions: number) => {
+      const workbook = new ExcelJS.Workbook();
+      const sheet = workbook.addWorksheet("Questions");
+      sheet.addRow(["subject", "level", "question", "option_a", "option_b", "correct"]);
+      for (let n = 1; n <= questions; n++) {
+        sheet.addRow(["TOPIK", "TOPIK I", `Question ${n}`, "a", "b", "a"]);
+        // A blank separator after every hundred.
+        if (n % 100 === 0) sheet.addRow([]);
+      }
+      return xlsxRows((await workbook.xlsx.writeBuffer()) as ArrayBuffer);
+    };
+    const report = readImport((await sheetOf(998)) ?? [], banks);
+    expect(report).toMatchObject({ ok: true, rows: 998, errors: [] });
+    expect(report.ok && report.questions.at(-1)?.text).toBe("Question 998");
+    // One too many is said, not trimmed.
+    expect(readImport((await sheetOf(1001)) ?? [], banks)).toEqual({ ok: false, error: "tooManyRows" });
+  });
 });

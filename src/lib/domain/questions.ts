@@ -172,7 +172,8 @@ export function readImport(table: unknown[][], banks: Bank[], existing: Readonly
       const key = questionKey(bank.subject, bank.level, text);
       if (seen.has(key)) problems.push("duplicateInFile");
       else if (existing.has(key)) problems.push("duplicateInBank");
-      seen.add(key);
+      // Only a row that is kept can make a later one a duplicate.
+      if (problems.length === 0) seen.add(key);
     }
 
     if (problems.length > 0 || !bank || !language || !correct || !difficulty) {

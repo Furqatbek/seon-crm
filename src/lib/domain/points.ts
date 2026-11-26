@@ -39,7 +39,7 @@ export const DEFAULT_POINTS_SETTINGS: PointsSettings = {
 };
 
 /** The sources points are earned from, in the order the report stacks them. */
-export const EARNED_SOURCES = ["attendance", "teacher_award", "perfect_month", "on_time_payment", "referral", "owner_adjustment"] as const;
+export const EARNED_SOURCES = ["attendance", "teacher_award", "perfect_month", "on_time_payment", "referral", "owner_adjustment", "game_win"] as const;
 export type EarnedSource = (typeof EARNED_SOURCES)[number];
 
 /** Sources that are spending, not earning: left out of rankings. */

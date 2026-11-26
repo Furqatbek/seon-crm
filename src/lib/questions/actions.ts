@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { IMAGE_MAX_BYTES, IMAGE_TYPES, questionSchema, type ImportRowError, type QuestionErrorKey, type QuestionResult } from "@/lib/validation/questions";
 
 import { reportOf } from "./file";
+import { allRows } from "./queries";
 
 // Question banks. Everything is written as the signed-in user: Row Level
 // Security and the guard trigger decide who may write which question, switch
@@ -98,8 +99,12 @@ type Ctx = NonNullable<Awaited<ReturnType<typeof session>>>;
 async function read(ctx: Ctx, form: FormData): Promise<{ ok: false; error: QuestionErrorKey } | { ok: true; file: File; rows: number; questions: ImportQuestion[]; errors: ImportRowError[] }> {
   const file = form.get("file");
   if (!(file instanceof File)) return { ok: false, error: "fileInvalid" };
-  const [banks, existing] = await Promise.all([ctx.supabase.rpc("game_banks"), ctx.supabase.from("questions").select("subject, level, text").is("archived_at", null).limit(20000)]);
-  if (banks.error || existing.error) return failure(banks.error ?? existing.error ?? {});
+  const [banks, existing] = await Promise.all([
+    ctx.supabase.rpc("game_banks"),
+    // Every question there is, not only the first page: one that is missed here would be imported twice.
+    allRows((from, to) => ctx.supabase.from("questions").select("subject, level, text").is("archived_at", null).order("id").range(from, to)),
+  ]);
+  if (banks.error || existing.error || !existing.data) return failure(banks.error ?? existing.error ?? {});
   const report = await reportOf(file, banks.data, existing.data);
   if (!report.ok) return { ok: false, error: report.error };
   return { ok: true, file, rows: report.rows, questions: report.questions, errors: report.errors };

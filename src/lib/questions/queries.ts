@@ -42,8 +42,22 @@ export async function getBanks(): Promise<BankOption[]> {
 }
 
 const COLUMNS = "id, subject, level, language, text, image_path, options, correct_option_id, explanation, difficulty, is_active, times_used, times_correct" as const;
-/** More than a centre writes; the flags are worked out here, so the list is read whole. */
-const LIST_LIMIT = 5000;
+/** The API hands out at most this many rows at a time (max_rows in supabase/config.toml). */
+export const API_PAGE = 1000;
+
+/**
+ * Every row of a query, however many: read a page at a time until a short one
+ * comes back. `page` runs the query for the rows from..to.
+ */
+export async function allRows<T>(page: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: { code?: string; message: string } | null }>) {
+  const rows: T[] = [];
+  for (let from = 0; ; from += API_PAGE) {
+    const { data, error } = await page(from, from + API_PAGE - 1);
+    if (error) return { data: null, error };
+    rows.push(...(data ?? []));
+    if ((data ?? []).length < API_PAGE) return { data: rows, error: null };
+  }
+}
 
 const optionsOf = (value: unknown): Array<{ id: string; text: string }> =>
   Array.isArray(value) ? value.flatMap((option) => (option && typeof option === "object" && "id" in option && "text" in option ? [{ id: String(option.id), text: String(option.text) }] : [])) : [];
@@ -54,17 +68,19 @@ const optionsOf = (value: unknown): Array<{ id: string; text: string }> =>
  */
 export async function getQuestions(search: QuestionsSearch): Promise<{ rows: QuestionRow[]; total: number; flagged: number }> {
   const supabase = await db();
-  let query = supabase.from("questions").select(COLUMNS).is("archived_at", null).order("created_at", { ascending: false }).order("id").limit(LIST_LIMIT);
-  if (search.bank.includes("|")) {
-    const [subject, ...rest] = search.bank.split("|");
-    query = query.eq("subject", subject).eq("level", rest.join("|"));
-  }
-  if (search.state !== "all") query = query.eq("is_active", search.state === "on");
   // The words are looked for as written: % and _ are not wildcards, and a comma is not a separator.
   const words = search.q.replace(/[%_\\,()]/g, " ").trim();
-  if (words) query = query.ilike("text", `%${words}%`);
-
-  const { data, error } = await query;
+  // The flags are worked out here, so the list is read whole, a page of the API at a time.
+  const { data, error } = await allRows((from, to) => {
+    let query = supabase.from("questions").select(COLUMNS).is("archived_at", null).order("created_at", { ascending: false }).order("id").range(from, to);
+    if (search.bank.includes("|")) {
+      const [subject, ...rest] = search.bank.split("|");
+      query = query.eq("subject", subject).eq("level", rest.join("|"));
+    }
+    if (search.state !== "all") query = query.eq("is_active", search.state === "on");
+    if (words) query = query.ilike("text", `%${words}%`);
+    return query;
+  });
   if (error) {
     // The game's migration is not applied yet.
     if (error.code === "42P01" || error.code === "PGRST205") return { rows: [], total: 0, flagged: 0 };

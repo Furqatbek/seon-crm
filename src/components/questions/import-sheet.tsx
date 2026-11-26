@@ -2,7 +2,7 @@
 
 import { Download } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -26,8 +26,11 @@ export function ImportSheet({ open, onClose }: { open: boolean; onClose: () => v
   const [file, setFile] = useState<File | null>(null);
   const [report, setReport] = useState<ImportPreview | null>(null);
   const [error, setError] = useState<QuestionErrorKey | null>(null);
+  // The file chosen last: a report that arrives for an earlier one is dropped.
+  const latest = useRef<File | null>(null);
 
   function close() {
+    latest.current = null;
     setFile(null);
     setReport(null);
     setError(null);
@@ -35,6 +38,7 @@ export function ImportSheet({ open, onClose }: { open: boolean; onClose: () => v
   }
 
   function choose(next: File | null) {
+    latest.current = next;
     setFile(next);
     setReport(null);
     setError(null);
@@ -43,6 +47,7 @@ export function ImportSheet({ open, onClose }: { open: boolean; onClose: () => v
       const form = new FormData();
       form.set("file", next);
       const result = await previewImport(form);
+      if (latest.current !== next) return;
       if (result.ok) setReport(result.data);
       else setError(result.error);
     });

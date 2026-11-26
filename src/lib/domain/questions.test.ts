@@ -100,6 +100,12 @@ describe("reading an import", () => {
     expect(report.ok && report.questions.map((question) => question.level)).toEqual(["topik1", "topik2"]);
   });
 
+  it("a row that was left out does not make its corrected copy a duplicate", () => {
+    const report = readImport([header, withRow({ correct: "" }), good, good], banks);
+    expect(report).toMatchObject({ ok: true, errors: [{ row: 2, errors: ["correctInvalid"] }, { row: 4, errors: ["duplicateInFile"] }] });
+    expect(report.ok && report.questions).toHaveLength(1);
+  });
+
   it("refuses a file without its columns, without rows, or with too many", () => {
     expect(readImport([], banks)).toEqual({ ok: false, error: "empty" });
     expect(readImport([header], banks)).toEqual({ ok: false, error: "empty" });
