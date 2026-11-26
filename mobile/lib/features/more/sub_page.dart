@@ -210,6 +210,7 @@ class ListRow extends StatelessWidget {
     final enabled = onTap != null;
     final color = danger ? c.danger : (enabled ? c.text : c.textSecondary);
     final width = MediaQuery.sizeOf(context).width;
+    final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.3;
     final labels = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -237,6 +238,22 @@ class ListRow extends StatelessWidget {
                 const SizedBox(width: AppSpacing.x3),
                 if (value == null)
                   Expanded(child: labels)
+                else if (keepValueTogether && largeText)
+                  // No room for both on one line: the value goes under the label, still whole.
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        labels,
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(value!.replaceAll(' ', '\u00A0'), style: AppType.body.copyWith(color: c.textSecondary)),
+                        ),
+                      ],
+                    ),
+                  )
                 else if (keepValueTogether) ...[
                   // The value keeps its whole width; a long label wraps beside it.
                   Expanded(child: labels),
