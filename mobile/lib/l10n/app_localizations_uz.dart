@@ -229,12 +229,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get shopAppUserSoon => 'Sovgʻalarni koʻrishingiz mumkin. Tanga sarflash uchun markazga qoʻshiling.';
 
   @override
-  String get moreStudentSoon => 'Profil, reyting, dars jadvali va toʻlovlar shu yerda boʻladi.';
-
-  @override
-  String get moreAppUserSoon => 'Profil, vaucher va ochiq darslar shu yerda boʻladi.';
-
-  @override
   String get notifications => 'Bildirishnomalar';
 
   @override
@@ -448,4 +442,299 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get unread => 'Oʻqilmagan';
+
+  @override
+  String get editProfile => 'Profilni tahrirlash';
+
+  @override
+  String get leaderboard => 'Reyting';
+
+  @override
+  String get schedule => 'Dars jadvali';
+
+  @override
+  String get payments => 'Toʻlovlar';
+
+  @override
+  String get coinHistory => 'Tanga tarixi';
+
+  @override
+  String get myVoucher => 'Mening vaucherim';
+
+  @override
+  String get openLessons => 'Ochiq darslarim';
+
+  @override
+  String get language => 'Til';
+
+  @override
+  String get appearance => 'Koʻrinish';
+
+  @override
+  String get themeSystem => 'Tizim';
+
+  @override
+  String get themeLight => 'Yorugʻ';
+
+  @override
+  String get themeDark => 'Qorongʻi';
+
+  @override
+  String get aboutCentre => 'Markaz haqida';
+
+  @override
+  String get aboutEmpty => 'Markaz haqida maʼlumot hali qoʻshilmagan.';
+
+  @override
+  String get deleteAccount => 'Hisobni oʻchirish';
+
+  @override
+  String get deleteWillBeDeleted => 'Oʻchiriladi';
+
+  @override
+  String get deleteLogin => 'Login';
+
+  @override
+  String get deleteCoins => 'Tangalar';
+
+  @override
+  String get deleteResults => 'Natijalar';
+
+  @override
+  String get deleteBookings => 'Ochiq darsga yozilishlar';
+
+  @override
+  String get deleteKept => 'Markazda saqlanadi';
+
+  @override
+  String get deletePaymentRecords => 'Toʻlov yozuvlari';
+
+  @override
+  String get deleteAction => 'Oʻchirish';
+
+  @override
+  String get cancel => 'Bekor qilish';
+
+  @override
+  String get deleteFailed => 'Hisobni oʻchirib boʻlmadi. Qayta urinib koʻring';
+
+  @override
+  String you(String name) {
+    return '$name (siz)';
+  }
+
+  @override
+  String get scopeGroup => 'Guruhim';
+
+  @override
+  String get scopeCentre => 'Markaz';
+
+  @override
+  String get periodMonth => 'Shu oy';
+
+  @override
+  String get periodAll => 'Umumiy';
+
+  @override
+  String ofPeople(int count) {
+    return '$count kishidan';
+  }
+
+  @override
+  String get leaderboardEmpty => 'Hozircha reyting boʻsh';
+
+  @override
+  String get noGroupYet => 'Siz hali guruhga qoʻshilmagansiz';
+
+  @override
+  String get weekdaysShort => 'Du,Se,Cho,Pa,Ju,Sh,Ya';
+
+  @override
+  String weekRange(String from, String to) {
+    return '$from–$to';
+  }
+
+  @override
+  String get previousWeek => 'Oldingi hafta';
+
+  @override
+  String get nextWeek => 'Keyingi hafta';
+
+  @override
+  String dayWithDate(String weekday, String date) {
+    return '$weekday, $date';
+  }
+
+  @override
+  String get cancelled => 'Bekor qilindi';
+
+  @override
+  String get noLessonsThisWeek => 'Bu hafta dars yoʻq';
+
+  @override
+  String timeRange(String from, String to) {
+    return '$from–$to';
+  }
+
+  @override
+  String nextPaymentBy(String date) {
+    return 'Keyingi toʻlov ${date}gacha';
+  }
+
+  @override
+  String get balanceDue => 'Toʻlov kutilmoqda';
+
+  @override
+  String get balanceDebt => 'Qarz';
+
+  @override
+  String get payByCard => 'Karta orqali toʻlash';
+
+  @override
+  String get myReceipts => 'Mening cheklarim';
+
+  @override
+  String get comingSoon => 'Tez orada ochiladi';
+
+  @override
+  String get paymentReceived => 'Toʻlov qabul qilindi';
+
+  @override
+  String receiptLine(String date, String number) {
+    return '$date · kvitansiya №$number';
+  }
+
+  @override
+  String monthFee(String month) {
+    return '$month toʻlovi';
+  }
+
+  @override
+  String chargedLine(String date) {
+    return '$date · hisoblandi';
+  }
+
+  @override
+  String get adjustment => 'Tuzatish';
+
+  @override
+  String get monthsNominative => 'Yanvar,Fevral,Mart,Aprel,May,Iyun,Iyul,Avgust,Sentabr,Oktabr,Noyabr,Dekabr';
+
+  @override
+  String get paymentsEmpty => 'Hozircha toʻlovlar yoʻq';
+
+  @override
+  String get payAtReception => 'Qabulxonada toʻlang';
+
+  @override
+  String get payAtReceptionHint => 'Naqd yoki karta orqali';
+
+  @override
+  String get coinHistoryEmpty => 'Hozircha tangalar yoʻq';
+
+  @override
+  String get sourceAttendance => 'Darsga keldi';
+
+  @override
+  String get sourcePerfectMonth => 'Oylik aʼlo davomat';
+
+  @override
+  String get sourceOnTime => 'Toʻlov oʻz vaqtida';
+
+  @override
+  String get sourceReferral => 'Doʻstingiz yozildi';
+
+  @override
+  String get sourceTeacherAward => 'Oʻqituvchidan';
+
+  @override
+  String get sourceTeacherDeduction => 'Oʻqituvchi oldi';
+
+  @override
+  String get sourceAdjustment => 'Markaz tuzatishi';
+
+  @override
+  String get sourceRewardHold => 'Buyurtma';
+
+  @override
+  String get sourceRewardReturn => 'Buyurtma qaytarildi';
+
+  @override
+  String get sourceGameWin => 'Oʻyinda gʻalaba';
+
+  @override
+  String get sourceExam => 'Sinov imtihoni';
+
+  @override
+  String get voucherEmpty => 'Sizda hali vaucher yoʻq. Birinchi sinov imtihonidan keyin beriladi.';
+
+  @override
+  String get photo => 'Rasm';
+
+  @override
+  String get changePhoto => 'Rasmni oʻzgartirish';
+
+  @override
+  String get takePhoto => 'Kamera';
+
+  @override
+  String get chooseFromGallery => 'Galereya';
+
+  @override
+  String get removePhoto => 'Rasmni olib tashlash';
+
+  @override
+  String get cropTitle => 'Rasmni kesish';
+
+  @override
+  String get cropHint => 'Rasmni suring va kattalashtiring';
+
+  @override
+  String get done => 'Tayyor';
+
+  @override
+  String get photoFailed => 'Rasmni saqlab boʻlmadi. Qayta urinib koʻring';
+
+  @override
+  String get photoSaved => 'Rasm saqlandi';
+
+  @override
+  String get changePhone => 'Telefon raqamni oʻzgartirish';
+
+  @override
+  String get newPhone => 'Yangi telefon raqam';
+
+  @override
+  String get phoneChangeHint => 'Yangi raqamga SMS kod yuboramiz. Kod tasdiqlangach raqam oʻzgaradi.';
+
+  @override
+  String get phoneSame => 'Bu sizning hozirgi raqamingiz';
+
+  @override
+  String get phoneChanged => 'Telefon raqam oʻzgartirildi';
+
+  @override
+  String get changePassword => 'Parolni oʻzgartirish';
+
+  @override
+  String get staffOnlyHint => 'Ism, tugʻilgan sana va ota-ona maʼlumotlarini faqat markaz xodimlari oʻzgartiradi.';
+
+  @override
+  String get birthDate => 'Tugʻilgan sana';
+
+  @override
+  String get parentName => 'Ota-ona';
+
+  @override
+  String get parentPhone => 'Ota-ona telefoni';
+
+  @override
+  String fullDate(String day, int year) {
+    return '$day, $year';
+  }
+
+  @override
+  String weekInMonth(int from, int to, String month) {
+    return '$from–$to $month';
+  }
 }

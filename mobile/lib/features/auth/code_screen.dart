@@ -15,7 +15,7 @@ import '../../ui/tokens.dart';
 import '../../ui/widgets.dart';
 import 'auth_widgets.dart';
 
-enum CodePurpose { signUp, resetPassword }
+enum CodePurpose { signUp, resetPassword, phoneChange }
 
 /// Which phone the code went to, and what it is for.
 class CodeRequest {
@@ -82,10 +82,13 @@ class _CodeScreenState extends ConsumerState<CodeScreen> {
     final messenger = ScaffoldMessenger.of(context);
     setState(() => _failure = null);
     try {
-      if (widget.request.purpose == CodePurpose.signUp) {
-        await repository.resendSignUpCode(widget.request.phone);
-      } else {
-        await repository.sendResetCode(widget.request.phone);
+      switch (widget.request.purpose) {
+        case CodePurpose.signUp:
+          await repository.resendSignUpCode(widget.request.phone);
+        case CodePurpose.resetPassword:
+          await repository.sendResetCode(widget.request.phone);
+        case CodePurpose.phoneChange:
+          await repository.startPhoneChange(widget.request.phone);
       }
       if (!mounted) return;
       // A new code has its own tries.
@@ -107,6 +110,17 @@ class _CodeScreenState extends ConsumerState<CodeScreen> {
       _failure = null;
     });
     try {
+      if (widget.request.purpose == CodePurpose.phoneChange) {
+        final l = AppLocalizations.of(context);
+        final messenger = ScaffoldMessenger.of(context);
+        await ref.read(authRepositoryProvider).confirmPhoneChange(phone: widget.request.phone, code: _code.text);
+        // The profile now carries the new number.
+        await ref.read(authProvider.notifier).refreshProfile();
+        if (!mounted) return;
+        messenger.showSnackBar(SnackBar(content: Text(l.phoneChanged)));
+        context.go(Routes.editProfile);
+        return;
+      }
       await ref.read(authRepositoryProvider).verifyCode(phone: widget.request.phone, code: _code.text);
       if (!mounted) return;
       if (widget.request.purpose == CodePurpose.resetPassword) {

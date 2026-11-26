@@ -90,8 +90,6 @@
   "qrAppUserSoon": "QR orqali kirish faqat markaz oʻquvchilari uchun.",
   "shopStudentSoon": "Tangalaringizni sovgʻalarga almashtirasiz.",
   "shopAppUserSoon": "Sovgʻalarni koʻrishingiz mumkin. Tanga sarflash uchun markazga qoʻshiling.",
-  "moreStudentSoon": "Profil, reyting, dars jadvali va toʻlovlar shu yerda boʻladi.",
-  "moreAppUserSoon": "Profil, vaucher va ochiq darslar shu yerda boʻladi.",
   "notifications": "Bildirishnomalar",
   "logOut": "Chiqish",
   "money": "{amount} soʻm",
@@ -307,5 +305,194 @@
   },
   "markAllRead": "Hammasini oʻqildi deb belgilash",
   "notificationsEmpty": "Hozircha bildirishnomalar yoʻq",
-  "unread": "Oʻqilmagan"
+  "unread": "Oʻqilmagan",
+  "editProfile": "Profilni tahrirlash",
+  "leaderboard": "Reyting",
+  "schedule": "Dars jadvali",
+  "payments": "Toʻlovlar",
+  "coinHistory": "Tanga tarixi",
+  "myVoucher": "Mening vaucherim",
+  "openLessons": "Ochiq darslarim",
+  "language": "Til",
+  "appearance": "Koʻrinish",
+  "themeSystem": "Tizim",
+  "themeLight": "Yorugʻ",
+  "themeDark": "Qorongʻi",
+  "aboutCentre": "Markaz haqida",
+  "aboutEmpty": "Markaz haqida maʼlumot hali qoʻshilmagan.",
+  "deleteAccount": "Hisobni oʻchirish",
+  "deleteWillBeDeleted": "Oʻchiriladi",
+  "deleteLogin": "Login",
+  "deleteCoins": "Tangalar",
+  "deleteResults": "Natijalar",
+  "deleteBookings": "Ochiq darsga yozilishlar",
+  "deleteKept": "Markazda saqlanadi",
+  "deletePaymentRecords": "Toʻlov yozuvlari",
+  "deleteAction": "Oʻchirish",
+  "cancel": "Bekor qilish",
+  "deleteFailed": "Hisobni oʻchirib boʻlmadi. Qayta urinib koʻring",
+  "you": "{name} (siz)",
+  "@you": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "scopeGroup": "Guruhim",
+  "scopeCentre": "Markaz",
+  "periodMonth": "Shu oy",
+  "periodAll": "Umumiy",
+  "ofPeople": "{count} kishidan",
+  "@ofPeople": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderboardEmpty": "Hozircha reyting boʻsh",
+  "noGroupYet": "Siz hali guruhga qoʻshilmagansiz",
+  "weekdaysShort": "Du,Se,Cho,Pa,Ju,Sh,Ya",
+  "weekRange": "{from}–{to}",
+  "@weekRange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "previousWeek": "Oldingi hafta",
+  "nextWeek": "Keyingi hafta",
+  "dayWithDate": "{weekday}, {date}",
+  "@dayWithDate": {
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "cancelled": "Bekor qilindi",
+  "noLessonsThisWeek": "Bu hafta dars yoʻq",
+  "timeRange": "{from}–{to}",
+  "@timeRange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "nextPaymentBy": "Keyingi toʻlov {date}gacha",
+  "@nextPaymentBy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceDue": "Toʻlov kutilmoqda",
+  "balanceDebt": "Qarz",
+  "payByCard": "Karta orqali toʻlash",
+  "myReceipts": "Mening cheklarim",
+  "comingSoon": "Tez orada ochiladi",
+  "paymentReceived": "Toʻlov qabul qilindi",
+  "receiptLine": "{date} · kvitansiya №{number}",
+  "@receiptLine": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "monthFee": "{month} toʻlovi",
+  "@monthFee": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "chargedLine": "{date} · hisoblandi",
+  "@chargedLine": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adjustment": "Tuzatish",
+  "monthsNominative": "Yanvar,Fevral,Mart,Aprel,May,Iyun,Iyul,Avgust,Sentabr,Oktabr,Noyabr,Dekabr",
+  "paymentsEmpty": "Hozircha toʻlovlar yoʻq",
+  "payAtReception": "Qabulxonada toʻlang",
+  "payAtReceptionHint": "Naqd yoki karta orqali",
+  "coinHistoryEmpty": "Hozircha tangalar yoʻq",
+  "sourceAttendance": "Darsga keldi",
+  "sourcePerfectMonth": "Oylik aʼlo davomat",
+  "sourceOnTime": "Toʻlov oʻz vaqtida",
+  "sourceReferral": "Doʻstingiz yozildi",
+  "sourceTeacherAward": "Oʻqituvchidan",
+  "sourceTeacherDeduction": "Oʻqituvchi oldi",
+  "sourceAdjustment": "Markaz tuzatishi",
+  "sourceRewardHold": "Buyurtma",
+  "sourceRewardReturn": "Buyurtma qaytarildi",
+  "sourceGameWin": "Oʻyinda gʻalaba",
+  "sourceExam": "Sinov imtihoni",
+  "voucherEmpty": "Sizda hali vaucher yoʻq. Birinchi sinov imtihonidan keyin beriladi.",
+  "photo": "Rasm",
+  "changePhoto": "Rasmni oʻzgartirish",
+  "takePhoto": "Kamera",
+  "chooseFromGallery": "Galereya",
+  "removePhoto": "Rasmni olib tashlash",
+  "cropTitle": "Rasmni kesish",
+  "cropHint": "Rasmni suring va kattalashtiring",
+  "done": "Tayyor",
+  "photoFailed": "Rasmni saqlab boʻlmadi. Qayta urinib koʻring",
+  "photoSaved": "Rasm saqlandi",
+  "changePhone": "Telefon raqamni oʻzgartirish",
+  "newPhone": "Yangi telefon raqam",
+  "phoneChangeHint": "Yangi raqamga SMS kod yuboramiz. Kod tasdiqlangach raqam oʻzgaradi.",
+  "phoneSame": "Bu sizning hozirgi raqamingiz",
+  "phoneChanged": "Telefon raqam oʻzgartirildi",
+  "changePassword": "Parolni oʻzgartirish",
+  "staffOnlyHint": "Ism, tugʻilgan sana va ota-ona maʼlumotlarini faqat markaz xodimlari oʻzgartiradi.",
+  "birthDate": "Tugʻilgan sana",
+  "parentName": "Ota-ona",
+  "parentPhone": "Ota-ona telefoni",
+  "fullDate": "{day}, {year}",
+  "@fullDate": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "weekInMonth": "{from}–{to} {month}",
+  "@weekInMonth": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      },
+      "month": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -64,14 +64,12 @@ class RoleView extends ConsumerWidget {
 }
 
 class _Soon extends StatelessWidget {
-  const _Soon({required this.icon, required this.message, this.action});
+  const _Soon({required this.icon, required this.message});
 
   final IconData icon;
   final String message;
-  final Widget? action;
-
   @override
-  Widget build(BuildContext context) => EmptyState(icon: icon, title: AppLocalizations.of(context).soonTitle, message: message, action: action);
+  Widget build(BuildContext context) => EmptyState(icon: icon, title: AppLocalizations.of(context).soonTitle, message: message);
 }
 
 /// Home has no page title of its own: each version greets the person by name.
@@ -124,23 +122,6 @@ class ShopTab extends StatelessWidget {
       title: l.tabShop,
       student: _Soon(icon: Icons.shopping_bag_outlined, message: l.shopStudentSoon),
       appUser: _Soon(icon: Icons.shopping_bag_outlined, message: l.shopAppUserSoon),
-    );
-  }
-}
-
-/// Until the More pages are built, this tab holds the one thing a signed-in
-/// person must always be able to do: log out.
-class MoreTab extends ConsumerWidget {
-  const MoreTab({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = AppLocalizations.of(context);
-    final logOut = SecondaryButton(label: l.logOut, destructive: true, onPressed: () => ref.read(authProvider.notifier).signOut());
-    return RoleView(
-      title: l.tabMore,
-      student: _Soon(icon: Icons.person_outline, message: l.moreStudentSoon, action: logOut),
-      appUser: _Soon(icon: Icons.person_outline, message: l.moreAppUserSoon, action: logOut),
     );
   }
 }

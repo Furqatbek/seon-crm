@@ -369,3 +369,96 @@ class GradientOutline extends StatelessWidget {
     );
   }
 }
+
+/// Two or three choices side by side, one of them chosen: My group | Centre.
+class Segmented<T> extends StatelessWidget {
+  const Segmented({super.key, required this.options, required this.selected, required this.onChanged});
+
+  /// Each choice and its label.
+  final Map<T, String> options;
+  final T selected;
+  final ValueChanged<T> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppColors.of(context);
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.x1),
+      decoration: BoxDecoration(color: c.surface, borderRadius: BorderRadius.circular(AppRadii.button)),
+      child: Row(
+        children: [
+          for (final option in options.entries)
+            Expanded(
+              child: Semantics(
+                button: true,
+                selected: option.key == selected,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => onChanged(option.key),
+                  child: Container(
+                    constraints: const BoxConstraints(minHeight: AppSizes.tapTarget - AppSpacing.x2),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x2, vertical: AppSpacing.x2),
+                    decoration: option.key == selected
+                        ? BoxDecoration(
+                            color: c.bg,
+                            borderRadius: BorderRadius.circular(AppRadii.button - AppSpacing.x1),
+                            border: Border.all(color: c.border, width: AppSizes.hairline),
+                          )
+                        : null,
+                    child: Text(
+                      option.value,
+                      textAlign: TextAlign.center,
+                      style: AppType.footnote.copyWith(
+                        color: option.key == selected ? c.text : c.textSecondary,
+                        fontWeight: option.key == selected ? FontWeight.w600 : FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A round photo, or the person's initials until there is one.
+class Avatar extends StatelessWidget {
+  const Avatar({super.key, required this.initials, this.image, this.size = AppSizes.roundButton, this.ring = false});
+
+  final String initials;
+
+  /// The photo, when there is one.
+  final ImageProvider? image;
+  final double size;
+
+  /// A violet ring: first place.
+  final bool ring;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppColors.of(context);
+    return ExcludeSemantics(
+      child: Container(
+        width: size,
+        height: size,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: c.primaryTint,
+          shape: BoxShape.circle,
+          border: ring ? Border.all(color: c.primaryFill, width: AppSizes.outline) : null,
+          image: image == null ? null : DecorationImage(image: image!, fit: BoxFit.cover),
+        ),
+        child: image != null
+            ? null
+            : Text(
+                initials,
+                textScaler: TextScaler.noScaling,
+                style: (size >= AppSizes.avatar ? AppType.title : AppType.footnote).copyWith(color: c.text, fontWeight: FontWeight.w700),
+              ),
+      ),
+    );
+  }
+}

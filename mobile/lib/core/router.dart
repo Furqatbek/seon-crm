@@ -7,6 +7,12 @@ import '../features/auth/linked_screen.dart';
 import '../features/auth/sign_in_screens.dart';
 import '../features/auth/sign_up_screen.dart';
 import '../features/auth/welcome_screen.dart';
+import '../features/more/edit_profile.dart';
+import '../features/more/leaderboard.dart';
+import '../features/more/money_pages.dart';
+import '../features/more/more_tab.dart';
+import '../features/more/schedule.dart';
+import '../features/more/simple_pages.dart';
 import '../features/notifications/notifications_screen.dart';
 import '../features/shell/app_shell.dart';
 import '../features/tabs/tabs.dart';
@@ -69,7 +75,32 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [GoRoute(path: Routes.shop, builder: (_, _) => const ShopTab())],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: Routes.more, builder: (_, _) => const MoreTab())],
+            routes: [
+              GoRoute(
+                path: Routes.more,
+                builder: (_, _) => const MoreTab(),
+                routes: [
+                  GoRoute(
+                    path: 'profile',
+                    builder: (_, _) => const EditProfilePage(),
+                    routes: [
+                      GoRoute(path: 'phone', builder: (_, _) => const ChangePhonePage()),
+                      GoRoute(path: 'password', builder: (_, _) => const ChangePasswordPage()),
+                    ],
+                  ),
+                  GoRoute(path: 'leaderboard', builder: (_, _) => const LeaderboardPage()),
+                  GoRoute(path: 'schedule', builder: (_, _) => const SchedulePage()),
+                  GoRoute(path: 'payments', builder: (_, _) => const PaymentsPage()),
+                  GoRoute(path: 'coins', builder: (_, _) => const CoinHistoryPage()),
+                  GoRoute(path: 'voucher', builder: (_, _) => const VoucherPage()),
+                  GoRoute(path: 'open-lessons', builder: (_, _) => const OpenLessonsPage()),
+                  GoRoute(path: 'language', builder: (_, _) => const LanguagePage()),
+                  GoRoute(path: 'appearance', builder: (_, _) => const AppearancePage()),
+                  GoRoute(path: 'about', builder: (_, _) => const CentreTextPage(about: true)),
+                  GoRoute(path: 'privacy', builder: (_, _) => const CentreTextPage(about: false)),
+                ],
+              ),
+            ],
           ),
         ],
       ),

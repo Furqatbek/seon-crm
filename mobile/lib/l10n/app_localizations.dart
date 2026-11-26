@@ -508,18 +508,6 @@ abstract class AppLocalizations {
   /// **'Sovgʻalarni koʻrishingiz mumkin. Tanga sarflash uchun markazga qoʻshiling.'**
   String get shopAppUserSoon;
 
-  /// No description provided for @moreStudentSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Profil, reyting, dars jadvali va toʻlovlar shu yerda boʻladi.'**
-  String get moreStudentSoon;
-
-  /// No description provided for @moreAppUserSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Profil, vaucher va ochiq darslar shu yerda boʻladi.'**
-  String get moreAppUserSoon;
-
   /// No description provided for @notifications.
   ///
   /// In uz, this message translates to:
@@ -861,6 +849,552 @@ abstract class AppLocalizations {
   /// In uz, this message translates to:
   /// **'Oʻqilmagan'**
   String get unread;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In uz, this message translates to:
+  /// **'Profilni tahrirlash'**
+  String get editProfile;
+
+  /// No description provided for @leaderboard.
+  ///
+  /// In uz, this message translates to:
+  /// **'Reyting'**
+  String get leaderboard;
+
+  /// No description provided for @schedule.
+  ///
+  /// In uz, this message translates to:
+  /// **'Dars jadvali'**
+  String get schedule;
+
+  /// No description provided for @payments.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻlovlar'**
+  String get payments;
+
+  /// No description provided for @coinHistory.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tanga tarixi'**
+  String get coinHistory;
+
+  /// No description provided for @myVoucher.
+  ///
+  /// In uz, this message translates to:
+  /// **'Mening vaucherim'**
+  String get myVoucher;
+
+  /// No description provided for @openLessons.
+  ///
+  /// In uz, this message translates to:
+  /// **'Ochiq darslarim'**
+  String get openLessons;
+
+  /// No description provided for @language.
+  ///
+  /// In uz, this message translates to:
+  /// **'Til'**
+  String get language;
+
+  /// No description provided for @appearance.
+  ///
+  /// In uz, this message translates to:
+  /// **'Koʻrinish'**
+  String get appearance;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tizim'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yorugʻ'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qorongʻi'**
+  String get themeDark;
+
+  /// No description provided for @aboutCentre.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markaz haqida'**
+  String get aboutCentre;
+
+  /// No description provided for @aboutEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markaz haqida maʼlumot hali qoʻshilmagan.'**
+  String get aboutEmpty;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hisobni oʻchirish'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteWillBeDeleted.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻchiriladi'**
+  String get deleteWillBeDeleted;
+
+  /// No description provided for @deleteLogin.
+  ///
+  /// In uz, this message translates to:
+  /// **'Login'**
+  String get deleteLogin;
+
+  /// No description provided for @deleteCoins.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tangalar'**
+  String get deleteCoins;
+
+  /// No description provided for @deleteResults.
+  ///
+  /// In uz, this message translates to:
+  /// **'Natijalar'**
+  String get deleteResults;
+
+  /// No description provided for @deleteBookings.
+  ///
+  /// In uz, this message translates to:
+  /// **'Ochiq darsga yozilishlar'**
+  String get deleteBookings;
+
+  /// No description provided for @deleteKept.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markazda saqlanadi'**
+  String get deleteKept;
+
+  /// No description provided for @deletePaymentRecords.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻlov yozuvlari'**
+  String get deletePaymentRecords;
+
+  /// No description provided for @deleteAction.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻchirish'**
+  String get deleteAction;
+
+  /// No description provided for @cancel.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bekor qilish'**
+  String get cancel;
+
+  /// No description provided for @deleteFailed.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hisobni oʻchirib boʻlmadi. Qayta urinib koʻring'**
+  String get deleteFailed;
+
+  /// No description provided for @you.
+  ///
+  /// In uz, this message translates to:
+  /// **'{name} (siz)'**
+  String you(String name);
+
+  /// No description provided for @scopeGroup.
+  ///
+  /// In uz, this message translates to:
+  /// **'Guruhim'**
+  String get scopeGroup;
+
+  /// No description provided for @scopeCentre.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markaz'**
+  String get scopeCentre;
+
+  /// No description provided for @periodMonth.
+  ///
+  /// In uz, this message translates to:
+  /// **'Shu oy'**
+  String get periodMonth;
+
+  /// No description provided for @periodAll.
+  ///
+  /// In uz, this message translates to:
+  /// **'Umumiy'**
+  String get periodAll;
+
+  /// No description provided for @ofPeople.
+  ///
+  /// In uz, this message translates to:
+  /// **'{count} kishidan'**
+  String ofPeople(int count);
+
+  /// No description provided for @leaderboardEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hozircha reyting boʻsh'**
+  String get leaderboardEmpty;
+
+  /// No description provided for @noGroupYet.
+  ///
+  /// In uz, this message translates to:
+  /// **'Siz hali guruhga qoʻshilmagansiz'**
+  String get noGroupYet;
+
+  /// No description provided for @weekdaysShort.
+  ///
+  /// In uz, this message translates to:
+  /// **'Du,Se,Cho,Pa,Ju,Sh,Ya'**
+  String get weekdaysShort;
+
+  /// No description provided for @weekRange.
+  ///
+  /// In uz, this message translates to:
+  /// **'{from}–{to}'**
+  String weekRange(String from, String to);
+
+  /// No description provided for @previousWeek.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oldingi hafta'**
+  String get previousWeek;
+
+  /// No description provided for @nextWeek.
+  ///
+  /// In uz, this message translates to:
+  /// **'Keyingi hafta'**
+  String get nextWeek;
+
+  /// No description provided for @dayWithDate.
+  ///
+  /// In uz, this message translates to:
+  /// **'{weekday}, {date}'**
+  String dayWithDate(String weekday, String date);
+
+  /// No description provided for @cancelled.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bekor qilindi'**
+  String get cancelled;
+
+  /// No description provided for @noLessonsThisWeek.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu hafta dars yoʻq'**
+  String get noLessonsThisWeek;
+
+  /// No description provided for @timeRange.
+  ///
+  /// In uz, this message translates to:
+  /// **'{from}–{to}'**
+  String timeRange(String from, String to);
+
+  /// No description provided for @nextPaymentBy.
+  ///
+  /// In uz, this message translates to:
+  /// **'Keyingi toʻlov {date}gacha'**
+  String nextPaymentBy(String date);
+
+  /// No description provided for @balanceDue.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻlov kutilmoqda'**
+  String get balanceDue;
+
+  /// No description provided for @balanceDebt.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qarz'**
+  String get balanceDebt;
+
+  /// No description provided for @payByCard.
+  ///
+  /// In uz, this message translates to:
+  /// **'Karta orqali toʻlash'**
+  String get payByCard;
+
+  /// No description provided for @myReceipts.
+  ///
+  /// In uz, this message translates to:
+  /// **'Mening cheklarim'**
+  String get myReceipts;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tez orada ochiladi'**
+  String get comingSoon;
+
+  /// No description provided for @paymentReceived.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻlov qabul qilindi'**
+  String get paymentReceived;
+
+  /// No description provided for @receiptLine.
+  ///
+  /// In uz, this message translates to:
+  /// **'{date} · kvitansiya №{number}'**
+  String receiptLine(String date, String number);
+
+  /// No description provided for @monthFee.
+  ///
+  /// In uz, this message translates to:
+  /// **'{month} toʻlovi'**
+  String monthFee(String month);
+
+  /// No description provided for @chargedLine.
+  ///
+  /// In uz, this message translates to:
+  /// **'{date} · hisoblandi'**
+  String chargedLine(String date);
+
+  /// No description provided for @adjustment.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tuzatish'**
+  String get adjustment;
+
+  /// No description provided for @monthsNominative.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yanvar,Fevral,Mart,Aprel,May,Iyun,Iyul,Avgust,Sentabr,Oktabr,Noyabr,Dekabr'**
+  String get monthsNominative;
+
+  /// No description provided for @paymentsEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hozircha toʻlovlar yoʻq'**
+  String get paymentsEmpty;
+
+  /// No description provided for @payAtReception.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qabulxonada toʻlang'**
+  String get payAtReception;
+
+  /// No description provided for @payAtReceptionHint.
+  ///
+  /// In uz, this message translates to:
+  /// **'Naqd yoki karta orqali'**
+  String get payAtReceptionHint;
+
+  /// No description provided for @coinHistoryEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hozircha tangalar yoʻq'**
+  String get coinHistoryEmpty;
+
+  /// No description provided for @sourceAttendance.
+  ///
+  /// In uz, this message translates to:
+  /// **'Darsga keldi'**
+  String get sourceAttendance;
+
+  /// No description provided for @sourcePerfectMonth.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oylik aʼlo davomat'**
+  String get sourcePerfectMonth;
+
+  /// No description provided for @sourceOnTime.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻlov oʻz vaqtida'**
+  String get sourceOnTime;
+
+  /// No description provided for @sourceReferral.
+  ///
+  /// In uz, this message translates to:
+  /// **'Doʻstingiz yozildi'**
+  String get sourceReferral;
+
+  /// No description provided for @sourceTeacherAward.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻqituvchidan'**
+  String get sourceTeacherAward;
+
+  /// No description provided for @sourceTeacherDeduction.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻqituvchi oldi'**
+  String get sourceTeacherDeduction;
+
+  /// No description provided for @sourceAdjustment.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markaz tuzatishi'**
+  String get sourceAdjustment;
+
+  /// No description provided for @sourceRewardHold.
+  ///
+  /// In uz, this message translates to:
+  /// **'Buyurtma'**
+  String get sourceRewardHold;
+
+  /// No description provided for @sourceRewardReturn.
+  ///
+  /// In uz, this message translates to:
+  /// **'Buyurtma qaytarildi'**
+  String get sourceRewardReturn;
+
+  /// No description provided for @sourceGameWin.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻyinda gʻalaba'**
+  String get sourceGameWin;
+
+  /// No description provided for @sourceExam.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sinov imtihoni'**
+  String get sourceExam;
+
+  /// No description provided for @voucherEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sizda hali vaucher yoʻq. Birinchi sinov imtihonidan keyin beriladi.'**
+  String get voucherEmpty;
+
+  /// No description provided for @photo.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rasm'**
+  String get photo;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rasmni oʻzgartirish'**
+  String get changePhoto;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kamera'**
+  String get takePhoto;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In uz, this message translates to:
+  /// **'Galereya'**
+  String get chooseFromGallery;
+
+  /// No description provided for @removePhoto.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rasmni olib tashlash'**
+  String get removePhoto;
+
+  /// No description provided for @cropTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rasmni kesish'**
+  String get cropTitle;
+
+  /// No description provided for @cropHint.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rasmni suring va kattalashtiring'**
+  String get cropHint;
+
+  /// No description provided for @done.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tayyor'**
+  String get done;
+
+  /// No description provided for @photoFailed.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rasmni saqlab boʻlmadi. Qayta urinib koʻring'**
+  String get photoFailed;
+
+  /// No description provided for @photoSaved.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rasm saqlandi'**
+  String get photoSaved;
+
+  /// No description provided for @changePhone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Telefon raqamni oʻzgartirish'**
+  String get changePhone;
+
+  /// No description provided for @newPhone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yangi telefon raqam'**
+  String get newPhone;
+
+  /// No description provided for @phoneChangeHint.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yangi raqamga SMS kod yuboramiz. Kod tasdiqlangach raqam oʻzgaradi.'**
+  String get phoneChangeHint;
+
+  /// No description provided for @phoneSame.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu sizning hozirgi raqamingiz'**
+  String get phoneSame;
+
+  /// No description provided for @phoneChanged.
+  ///
+  /// In uz, this message translates to:
+  /// **'Telefon raqam oʻzgartirildi'**
+  String get phoneChanged;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In uz, this message translates to:
+  /// **'Parolni oʻzgartirish'**
+  String get changePassword;
+
+  /// No description provided for @staffOnlyHint.
+  ///
+  /// In uz, this message translates to:
+  /// **'Ism, tugʻilgan sana va ota-ona maʼlumotlarini faqat markaz xodimlari oʻzgartiradi.'**
+  String get staffOnlyHint;
+
+  /// No description provided for @birthDate.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tugʻilgan sana'**
+  String get birthDate;
+
+  /// No description provided for @parentName.
+  ///
+  /// In uz, this message translates to:
+  /// **'Ota-ona'**
+  String get parentName;
+
+  /// No description provided for @parentPhone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Ota-ona telefoni'**
+  String get parentPhone;
+
+  /// No description provided for @fullDate.
+  ///
+  /// In uz, this message translates to:
+  /// **'{day}, {year}'**
+  String fullDate(String day, int year);
+
+  /// No description provided for @weekInMonth.
+  ///
+  /// In uz, this message translates to:
+  /// **'{from}–{to} {month}'**
+  String weekInMonth(int from, int to, String month);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

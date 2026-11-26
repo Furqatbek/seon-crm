@@ -17,6 +17,19 @@ abstract final class Routes {
   static const shop = '/shop';
   static const more = '/more';
   static const notifications = '/notifications';
+  static const editProfile = '/more/profile';
+  static const changePhone = '/more/profile/phone';
+  static const changePassword = '/more/profile/password';
+  static const leaderboard = '/more/leaderboard';
+  static const schedule = '/more/schedule';
+  static const payments = '/more/payments';
+  static const coinHistory = '/more/coins';
+  static const voucher = '/more/voucher';
+  static const openLessons = '/more/open-lessons';
+  static const language = '/more/language';
+  static const appearance = '/more/appearance';
+  static const about = '/more/about';
+  static const morePrivacy = '/more/privacy';
 }
 
 const _byScreen = {
@@ -25,9 +38,11 @@ const _byScreen = {
   'qr': Routes.qr,
   'shop': Routes.shop,
   'more': Routes.more,
-  // Their own pages arrive with later phases; until then, the tab they live under.
-  'coins': Routes.more,
-  'payments': Routes.more,
+  'coins': Routes.coinHistory,
+  'payments': Routes.payments,
+  'schedule': Routes.schedule,
+  'leaderboard': Routes.leaderboard,
+  // Its own page arrives with a later phase; until then, the tab it lives under.
   'orders': Routes.shop,
   'notifications': Routes.notifications,
 };
@@ -35,16 +50,16 @@ const _byScreen = {
 const _byType = {
   'lesson_reminder': Routes.home,
   'account_linked': Routes.home,
-  'payment_due': Routes.more,
-  'payment_overdue': Routes.more,
-  'receipt_approved': Routes.more,
-  'receipt_rejected': Routes.more,
-  'points_weekly': Routes.more,
-  'points_deduction': Routes.more,
-  'points_month_result': Routes.more,
+  'payment_due': Routes.payments,
+  'payment_overdue': Routes.payments,
+  'receipt_approved': Routes.payments,
+  'receipt_rejected': Routes.payments,
+  'points_weekly': Routes.coinHistory,
+  'points_deduction': Routes.coinHistory,
+  'points_month_result': Routes.leaderboard,
   'reward_update': Routes.shop,
-  'voucher_expiring': Routes.more,
-  'open_lesson_reminder': Routes.more,
+  'voucher_expiring': Routes.voucher,
+  'open_lesson_reminder': Routes.openLessons,
 };
 
 /// The screen a tapped notification opens: the one its data names, else the

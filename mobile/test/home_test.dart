@@ -11,6 +11,9 @@ import 'package:student/features/home/app_user_home.dart';
 import 'package:student/features/home/home_widgets.dart';
 import 'package:student/features/home/student_home.dart';
 import 'package:student/features/notifications/notifications_screen.dart';
+import 'package:student/features/more/leaderboard.dart';
+import 'package:student/features/more/money_pages.dart';
+import 'package:student/features/more/simple_pages.dart';
 import 'package:student/features/tabs/tabs.dart';
 import 'package:student/ui/tokens.dart';
 import 'package:student/ui/widgets.dart';
@@ -316,7 +319,7 @@ void main() {
       await openStudentHome(tester);
       await tester.tap(find.widgetWithText(StatCard, l.coins));
       await tester.pumpAndSettle();
-      expect(find.byType(MoreTab), findsOneWidget);
+      expect(find.byType(CoinHistoryPage), findsOneWidget);
     });
   });
 
@@ -495,17 +498,17 @@ void main() {
 
     testWidgets('every type has a screen to open', (tester) async {
       final types = {
-        'points_weekly': MoreTab,
-        'points_deduction': MoreTab,
-        'points_month_result': MoreTab,
+        'points_weekly': CoinHistoryPage,
+        'points_deduction': CoinHistoryPage,
+        'points_month_result': LeaderboardPage,
         'reward_update': ShopTab,
-        'receipt_approved': MoreTab,
-        'receipt_rejected': MoreTab,
+        'receipt_approved': PaymentsPage,
+        'receipt_rejected': PaymentsPage,
         'lesson_reminder': HomeTab,
-        'payment_due': MoreTab,
-        'payment_overdue': MoreTab,
-        'voucher_expiring': MoreTab,
-        'open_lesson_reminder': MoreTab,
+        'payment_due': PaymentsPage,
+        'payment_overdue': PaymentsPage,
+        'voucher_expiring': VoucherPage,
+        'open_lesson_reminder': OpenLessonsPage,
         'account_linked': HomeTab,
       };
       for (final entry in types.entries) {

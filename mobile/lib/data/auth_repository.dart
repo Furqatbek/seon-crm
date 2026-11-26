@@ -31,6 +31,15 @@ abstract class AuthRepository {
 
   Future<void> signOut();
 
+  /// Edit profile: sends a code to the new number. The phone changes only when it is confirmed.
+  Future<void> startPhoneChange(String phone);
+
+  /// Confirms the code sent to the new number.
+  Future<void> confirmPhoneChange({required String phone, required String code});
+
+  /// Deletes the account at once and ends the session. The centre keeps its business records.
+  Future<void> deleteAccount();
+
   /// The signed-in person's profile; null when the account is not the app's.
   Future<Profile?> loadProfile();
 
@@ -116,10 +125,40 @@ class SupabaseAuthRepository implements AuthRepository {
   Future<void> signOut() => _guard(() => _auth.signOut());
 
   @override
+  Future<void> startPhoneChange(String phone) => _guard(() async {
+    await _auth.updateUser(UserAttributes(phone: phone));
+  });
+
+  @override
+  Future<void> confirmPhoneChange({required String phone, required String code}) => _guard(() async {
+    await _auth.verifyOTP(phone: phone, token: code, type: OtpType.phoneChange);
+  });
+
+  @override
+  Future<void> deleteAccount() async {
+    final id = _auth.currentUser?.id;
+    try {
+      // The photo goes first, while the account can still remove it; the server clears anything left.
+      if (id != null) {
+        final files = await _client.storage.from('avatars').list(path: id);
+        if (files.isNotEmpty) await _client.storage.from('avatars').remove([for (final file in files) '$id/${file.name}']);
+      }
+    } catch (_) {
+      // Not a reason to keep the account.
+    }
+    await _guard(() => _client.rpc('delete_my_account'));
+    try {
+      await _auth.signOut();
+    } catch (_) {
+      // The account is gone; the session on the phone is cleared either way.
+    }
+  }
+
+  @override
   Future<Profile?> loadProfile() async {
     final id = _auth.currentUser?.id;
     if (id == null) return null;
-    final row = await _client.from('profiles').select('id, full_name, role, language, theme, korean_level').eq('id', id).maybeSingle();
+    final row = await _client.from('profiles').select('id, full_name, role, language, theme, korean_level, phone, avatar_path').eq('id', id).maybeSingle();
     return row == null ? null : Profile.fromRow(row);
   }
 

@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:student/data/auth_failure.dart';
 import 'package:student/data/auth_repository.dart';
 import 'package:student/data/device_tokens.dart';
 import 'package:student/data/home.dart';
 import 'package:student/data/models.dart';
+import 'package:student/data/more.dart';
 import 'package:student/data/notifications.dart';
 import 'package:student/push/push_service.dart';
 
@@ -81,6 +83,7 @@ class FakeAuthRepository implements AuthRepository {
   Future<void> signIn({required String phone, required String password}) async {
     calls.add('signIn');
     _maybeFail();
+    if (deleted) throw const AuthFailureException(AuthFailure.invalidCredentials);
     _set(true);
   }
 
@@ -100,6 +103,45 @@ class FakeAuthRepository implements AuthRepository {
   @override
   Future<void> signOut() async {
     calls.add('signOut');
+    _set(false);
+  }
+
+  /// A deleted account is gone for good: nobody can sign in to it again.
+  bool deleted = false;
+  String? pendingPhone;
+
+  @override
+  Future<void> startPhoneChange(String phone) async {
+    calls.add('startPhoneChange:$phone');
+    _maybeFail();
+    if (registered.contains(phone)) throw const AuthFailureException(AuthFailure.alreadyRegistered);
+    pendingPhone = phone;
+  }
+
+  @override
+  Future<void> confirmPhoneChange({required String phone, required String code}) async {
+    calls.add('confirmPhoneChange:$code');
+    _maybeFail();
+    if (code != this.code || phone != pendingPhone) throw const AuthFailureException(AuthFailure.wrongCode);
+    final current = profile!;
+    profile = Profile(
+      id: current.id,
+      fullName: current.fullName,
+      role: current.role,
+      language: current.language,
+      theme: current.theme,
+      koreanLevel: current.koreanLevel,
+      phone: phone,
+      avatarPath: current.avatarPath,
+    );
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    calls.add('deleteAccount');
+    _maybeFail();
+    deleted = true;
+    profile = null;
     _set(false);
   }
 
@@ -166,6 +208,7 @@ const studentProfile = Profile(
   language: 'uz',
   theme: 'system',
   koreanLevel: KoreanLevel.topik2,
+  phone: '+998901234567',
 );
 const appUserProfile = Profile(
   id: 'p-app-user',
@@ -174,6 +217,7 @@ const appUserProfile = Profile(
   language: 'uz',
   theme: 'system',
   koreanLevel: KoreanLevel.topik1,
+  phone: '+998935551234',
 );
 
 /// 15:45 in Tashkent on Thursday 26 November 2026: the moment the design frames show.
@@ -292,5 +336,160 @@ class FakeNotificationsRepository implements NotificationsRepository {
   Future<void> markAllRead() async {
     markedAll += 1;
     items = [for (final item in items) item.read(testNow)];
+  }
+}
+
+/// The group board of frame 14a and the centre board of 14b.
+List<LeaderRow> groupBoard() => const [
+  LeaderRow(rank: 1, name: 'Jasur T.', coins: 164),
+  LeaderRow(rank: 2, name: 'Madina R.', coins: 151),
+  LeaderRow(rank: 3, name: 'Aziza K.', coins: 128, isMe: true),
+  LeaderRow(rank: 4, name: 'Otabek S.', coins: 120),
+  LeaderRow(rank: 5, name: 'Dilnoza A.', coins: 114),
+  LeaderRow(rank: 6, name: 'Sardor M.', coins: 97),
+  LeaderRow(rank: 7, name: 'Nilufar Y.', coins: 90),
+  LeaderRow(rank: 8, name: 'Bekzod H.', coins: 85),
+];
+
+List<LeaderRow> centreBoard() {
+  const top = ['Shahzod N.', 'Kamola E.', 'Temur A.', 'Zarina Q.', 'Malika O.', 'Jasur T.', 'Diyor R.', 'Sevara B.', 'Madina R.', 'Azizbek U.'];
+  const coins = [231, 218, 204, 189, 176, 164, 160, 157, 151, 149];
+  return [
+    for (var i = 0; i < 180; i++)
+      if (i < top.length)
+        LeaderRow(rank: i + 1, name: top[i], coins: coins[i])
+      else if (i == 26)
+        const LeaderRow(rank: 27, name: 'Aziza K.', coins: 128, isMe: true)
+      else
+        LeaderRow(rank: i + 1, name: 'Oʻquvchi ${String.fromCharCode(65 + i % 26)}.', coins: 148 - i ~/ 2),
+  ];
+}
+
+/// A week like frame 15: a lesson, a cancelled one, one today-ish, and a Saturday with an exam and a second group.
+List<ScheduleLesson> weekLessons(DateTime monday) => [
+  ScheduleLesson(id: 'w-1', groupName: 'TOPIK II', day: monday, startMinutes: 18 * 60, durationMin: 90, room: '204', teacher: 'Malika Tursunova'),
+  ScheduleLesson(
+    id: 'w-2',
+    groupName: 'TOPIK II',
+    day: monday.add(const Duration(days: 2)),
+    startMinutes: 18 * 60,
+    durationMin: 90,
+    room: '204',
+    teacher: 'Malika Tursunova',
+    cancelled: true,
+  ),
+  ScheduleLesson(
+    id: 'w-3',
+    groupName: 'TOPIK II',
+    day: monday.add(const Duration(days: 3)),
+    startMinutes: 18 * 60,
+    durationMin: 90,
+    room: '204',
+    teacher: 'Malika Tursunova',
+  ),
+  ScheduleLesson(
+    id: 'w-4',
+    groupName: 'TOPIK II',
+    day: monday.add(const Duration(days: 5)),
+    startMinutes: 10 * 60,
+    durationMin: 90,
+    room: '301',
+    isExam: true,
+    examTitle: 'Mock TOPIK II',
+  ),
+  ScheduleLesson(id: 'w-5', groupName: 'Matematika', day: monday.add(const Duration(days: 5)), startMinutes: 12 * 60, durationMin: 60),
+];
+
+List<LedgerEntry> sampleLedger() => [
+  LedgerEntry(at: DateTime.utc(2026, 11, 3, 6), amount: 600000, isPayment: true, receiptNo: 1043),
+  LedgerEntry(at: DateTime.utc(2026, 11, 1, 4), amount: -600000, isPayment: false, billingMonth: DateTime.utc(2026, 11)),
+  LedgerEntry(at: DateTime.utc(2026, 10, 4, 6), amount: 600000, isPayment: true, receiptNo: 987),
+  LedgerEntry(at: DateTime.utc(2026, 10, 1, 4), amount: -600000, isPayment: false, billingMonth: DateTime.utc(2026, 10)),
+];
+
+List<CoinEntry> sampleCoins() => [
+  CoinEntry(delta: 5, source: 'game_win', at: DateTime.utc(2026, 11, 26, 10, 20)),
+  CoinEntry(delta: 2, source: 'attendance', at: DateTime.utc(2026, 11, 26, 9, 52)),
+  CoinEntry(delta: 2, source: 'teacher_award', reason: 'Uy vazifasi bajarildi', at: DateTime.utc(2026, 11, 25, 12)),
+  CoinEntry(delta: -100, source: 'reward_hold', reason: 'Buyurtma: Brendli futbolka', at: DateTime.utc(2026, 11, 22, 8)),
+  CoinEntry(delta: 10, source: 'perfect_month', at: DateTime.utc(2026, 11, 1, 5)),
+];
+
+class FakeMoreRepository implements MoreRepository {
+  StudentDetails? details = StudentDetails(
+    fullName: 'Aziza Karimova',
+    birthDate: DateTime.utc(2009, 4, 12),
+    parentName: 'Dilfuza Karimova',
+    parentPhone: '+998971112233',
+  );
+  List<LeaderRow> group = groupBoard();
+  List<LeaderRow> centre = centreBoard();
+  List<ScheduleLesson> Function(DateTime monday) week = weekLessons;
+  List<LedgerEntry> ledgerEntries = sampleLedger();
+  List<CoinEntry> coins = sampleCoins();
+  String? aboutText = 'Seon Topik — Toshkentdagi koreys tili markazi.';
+  Object? failure;
+  final boards = <String>[];
+  final weeks = <(DateTime, DateTime)>[];
+  final uploads = <Uint8List>[];
+  final removed = <String>[];
+
+  /// Called when a photo is saved or removed, with the profile's new path.
+  void Function(String? path)? onAvatar;
+
+  void _check() {
+    if (failure != null) throw failure!;
+  }
+
+  @override
+  Future<StudentDetails?> studentDetails() async => details;
+
+  @override
+  Future<List<LeaderRow>> leaderboard({required String scope, String? groupId, required String period}) async {
+    _check();
+    boards.add('$scope:$period:${groupId ?? ''}');
+    return scope == 'group' ? group : centre;
+  }
+
+  @override
+  Future<List<ScheduleLesson>> schedule(DateTime from, DateTime to) async {
+    _check();
+    weeks.add((from, to));
+    return week(from);
+  }
+
+  @override
+  Future<List<LedgerEntry>> ledger() async {
+    _check();
+    return ledgerEntries;
+  }
+
+  @override
+  Future<List<CoinEntry>> coinHistory() async {
+    _check();
+    return coins;
+  }
+
+  @override
+  Future<String?> about(String language) async => aboutText;
+
+  @override
+  Future<String?> avatarUrl(String path) async => null;
+
+  @override
+  Future<String> saveAvatar(Uint8List png, {String? replacing}) async {
+    _check();
+    uploads.add(png);
+    if (replacing != null) removed.add(replacing);
+    const path = 'p-student/photo.png';
+    onAvatar?.call(path);
+    return path;
+  }
+
+  @override
+  Future<void> removeAvatar(String path) async {
+    _check();
+    removed.add(path);
+    onAvatar?.call(null);
   }
 }

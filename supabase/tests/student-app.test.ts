@@ -437,6 +437,29 @@ describe.skipIf(!DB_URL)("Student app groundwork", () => {
       });
     });
 
+    it("my_schedule returns the week of their own groups, with teacher and room, cancelled lessons included", async () => {
+      await as({ userId: STUDENT_USER }, async (s) => {
+        const rows = await s.rows<{ group_id: string; status: string; teacher: string; lesson_date: string }>(
+          `select group_id, status, teacher, lesson_date::text from my_schedule(tashkent_today(), tashkent_today() + 13)`);
+        expect(rows.length).toBeGreaterThan(1);
+        expect(new Set(rows.map((row) => row.group_id))).toEqual(new Set([seedGroup]));
+        expect(rows.some((row) => row.status === "cancelled")).toBe(true);
+        for (const row of rows) expect(row.teacher).toEqual(expect.any(String));
+        expect(rows.map((row) => row.lesson_date)).toEqual([...rows.map((row) => row.lesson_date)].sort());
+        expect(code(await s.attempt(`select * from my_schedule(tashkent_today(), tashkent_today() + 90)`))).toBe("22023");
+        expect(code(await s.attempt(`select * from my_schedule(tashkent_today(), tashkent_today() - 1)`))).toBe("22023");
+      }, async (s) => {
+        await setup(s);
+        await s.rows(
+          `update lessons set status = 'cancelled', cancel_reason = 'holiday' where id = (
+             select id from lessons where group_id = $1 and status = 'scheduled' and lesson_date > tashkent_today() order by lesson_date limit 1)`, [seedGroup]);
+      });
+      // Nobody else has a schedule here.
+      await as({ userId: OTHER_USER }, async (s) => {
+        expect(await s.rows(`select * from my_schedule(tashkent_today(), tashkent_today() + 13)`)).toEqual([]);
+      }, setup);
+    });
+
     it("the leaderboard shows linked students only, as first name and last initial", async () => {
       let classmate = "";
       await as({ userId: STUDENT_USER }, async (s) => {

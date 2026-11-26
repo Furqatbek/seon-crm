@@ -224,12 +224,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shopAppUserSoon => '리워드를 둘러볼 수 있습니다. 코인을 쓰려면 센터에 등록하세요.';
 
   @override
-  String get moreStudentSoon => '프로필, 순위표, 시간표, 결제 내역이 여기에 표시됩니다.';
-
-  @override
-  String get moreAppUserSoon => '프로필, 바우처, 공개 수업이 여기에 표시됩니다.';
-
-  @override
   String get notifications => '알림';
 
   @override
@@ -443,4 +437,299 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get unread => '읽지 않음';
+
+  @override
+  String get editProfile => '프로필 수정';
+
+  @override
+  String get leaderboard => '순위표';
+
+  @override
+  String get schedule => '시간표';
+
+  @override
+  String get payments => '결제';
+
+  @override
+  String get coinHistory => '코인 내역';
+
+  @override
+  String get myVoucher => '내 바우처';
+
+  @override
+  String get openLessons => '공개 수업';
+
+  @override
+  String get language => '언어';
+
+  @override
+  String get appearance => '화면 모드';
+
+  @override
+  String get themeSystem => '시스템';
+
+  @override
+  String get themeLight => '라이트';
+
+  @override
+  String get themeDark => '다크';
+
+  @override
+  String get aboutCentre => '센터 소개';
+
+  @override
+  String get aboutEmpty => '센터 소개가 아직 등록되지 않았습니다.';
+
+  @override
+  String get deleteAccount => '계정 삭제';
+
+  @override
+  String get deleteWillBeDeleted => '삭제되는 항목';
+
+  @override
+  String get deleteLogin => '로그인 정보';
+
+  @override
+  String get deleteCoins => '코인';
+
+  @override
+  String get deleteResults => '결과';
+
+  @override
+  String get deleteBookings => '공개 수업 예약';
+
+  @override
+  String get deleteKept => '센터에 보관되는 항목';
+
+  @override
+  String get deletePaymentRecords => '결제 기록';
+
+  @override
+  String get deleteAction => '삭제';
+
+  @override
+  String get cancel => '취소';
+
+  @override
+  String get deleteFailed => '계정을 삭제하지 못했습니다. 다시 시도하세요';
+
+  @override
+  String you(String name) {
+    return '$name (나)';
+  }
+
+  @override
+  String get scopeGroup => '내 그룹';
+
+  @override
+  String get scopeCentre => '센터';
+
+  @override
+  String get periodMonth => '이번 달';
+
+  @override
+  String get periodAll => '전체';
+
+  @override
+  String ofPeople(int count) {
+    return '$count명 중';
+  }
+
+  @override
+  String get leaderboardEmpty => '아직 순위가 없습니다';
+
+  @override
+  String get noGroupYet => '아직 그룹에 속해 있지 않습니다';
+
+  @override
+  String get weekdaysShort => '월,화,수,목,금,토,일';
+
+  @override
+  String weekRange(String from, String to) {
+    return '$from – $to';
+  }
+
+  @override
+  String get previousWeek => '이전 주';
+
+  @override
+  String get nextWeek => '다음 주';
+
+  @override
+  String dayWithDate(String weekday, String date) {
+    return '$date $weekday';
+  }
+
+  @override
+  String get cancelled => '취소됨';
+
+  @override
+  String get noLessonsThisWeek => '이번 주에는 수업이 없습니다';
+
+  @override
+  String timeRange(String from, String to) {
+    return '$from–$to';
+  }
+
+  @override
+  String nextPaymentBy(String date) {
+    return '다음 납부 기한 $date';
+  }
+
+  @override
+  String get balanceDue => '납부 예정';
+
+  @override
+  String get balanceDebt => '연체';
+
+  @override
+  String get payByCard => '카드로 납부';
+
+  @override
+  String get myReceipts => '내 영수증';
+
+  @override
+  String get comingSoon => '곧 제공됩니다';
+
+  @override
+  String get paymentReceived => '납부 확인';
+
+  @override
+  String receiptLine(String date, String number) {
+    return '$date · 영수증 $number번';
+  }
+
+  @override
+  String monthFee(String month) {
+    return '$month 수강료';
+  }
+
+  @override
+  String chargedLine(String date) {
+    return '$date · 청구';
+  }
+
+  @override
+  String get adjustment => '조정';
+
+  @override
+  String get monthsNominative => '1월,2월,3월,4월,5월,6월,7월,8월,9월,10월,11월,12월';
+
+  @override
+  String get paymentsEmpty => '아직 결제 내역이 없습니다';
+
+  @override
+  String get payAtReception => '안내 데스크에서 납부하세요';
+
+  @override
+  String get payAtReceptionHint => '현금 또는 카드';
+
+  @override
+  String get coinHistoryEmpty => '아직 코인이 없습니다';
+
+  @override
+  String get sourceAttendance => '수업 출석';
+
+  @override
+  String get sourcePerfectMonth => '개근 보너스';
+
+  @override
+  String get sourceOnTime => '기한 내 납부';
+
+  @override
+  String get sourceReferral => '친구 등록';
+
+  @override
+  String get sourceTeacherAward => '선생님 지급';
+
+  @override
+  String get sourceTeacherDeduction => '선생님 차감';
+
+  @override
+  String get sourceAdjustment => '센터 조정';
+
+  @override
+  String get sourceRewardHold => '주문';
+
+  @override
+  String get sourceRewardReturn => '주문 환불';
+
+  @override
+  String get sourceGameWin => '게임 승리';
+
+  @override
+  String get sourceExam => '모의고사';
+
+  @override
+  String get voucherEmpty => '아직 바우처가 없습니다. 첫 모의고사를 마치면 받을 수 있습니다.';
+
+  @override
+  String get photo => '사진';
+
+  @override
+  String get changePhoto => '사진 변경';
+
+  @override
+  String get takePhoto => '카메라';
+
+  @override
+  String get chooseFromGallery => '갤러리';
+
+  @override
+  String get removePhoto => '사진 삭제';
+
+  @override
+  String get cropTitle => '사진 자르기';
+
+  @override
+  String get cropHint => '사진을 이동하고 확대하세요';
+
+  @override
+  String get done => '완료';
+
+  @override
+  String get photoFailed => '사진을 저장하지 못했습니다. 다시 시도하세요';
+
+  @override
+  String get photoSaved => '사진을 저장했습니다';
+
+  @override
+  String get changePhone => '전화번호 변경';
+
+  @override
+  String get newPhone => '새 전화번호';
+
+  @override
+  String get phoneChangeHint => '새 번호로 SMS 코드를 보내 드립니다. 코드를 확인하면 번호가 변경됩니다.';
+
+  @override
+  String get phoneSame => '현재 사용 중인 번호입니다';
+
+  @override
+  String get phoneChanged => '전화번호를 변경했습니다';
+
+  @override
+  String get changePassword => '비밀번호 변경';
+
+  @override
+  String get staffOnlyHint => '이름, 생년월일, 학부모 정보는 센터 직원만 변경할 수 있습니다.';
+
+  @override
+  String get birthDate => '생년월일';
+
+  @override
+  String get parentName => '학부모';
+
+  @override
+  String get parentPhone => '학부모 전화번호';
+
+  @override
+  String fullDate(String day, int year) {
+    return '$year년 $day';
+  }
+
+  @override
+  String weekInMonth(int from, int to, String month) {
+    return '$month $from–$to일';
+  }
 }

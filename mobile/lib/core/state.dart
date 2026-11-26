@@ -182,6 +182,18 @@ class AuthController extends Notifier<AuthState> {
     }
   }
 
+  /// Delete account: at once, on the server and on this phone. Throws an
+  /// AuthFailureException and changes nothing when the server cannot be reached.
+  Future<void> deleteAccount() async {
+    await ref.read(authRepositoryProvider).deleteAccount();
+    _savedToken = null;
+    final preferences = ref.read(sharedPreferencesProvider);
+    for (final key in personalPreferenceKeys) {
+      await preferences.remove(key);
+    }
+    state = const AuthState(signedIn: false);
+  }
+
   /// Log out: the phone's push token goes first, while the account can still remove it.
   Future<void> signOut() async {
     final token = _savedToken ?? await ref.read(pushServiceProvider).token();
@@ -199,3 +211,6 @@ class AuthController extends Notifier<AuthState> {
 }
 
 final authProvider = NotifierProvider<AuthController, AuthState>(AuthController.new);
+
+/// What the phone remembers about the person: cleared when their account is deleted.
+const personalPreferenceKeys = ['home_group', 'home_cache'];

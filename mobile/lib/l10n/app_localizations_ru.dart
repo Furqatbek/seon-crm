@@ -232,12 +232,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get shopAppUserSoon => 'Призы можно будет посмотреть. Чтобы тратить монеты, присоединитесь к центру.';
 
   @override
-  String get moreStudentSoon => 'Здесь будут профиль, рейтинг, расписание и оплаты.';
-
-  @override
-  String get moreAppUserSoon => 'Здесь будут профиль, ваучер и открытые уроки.';
-
-  @override
   String get notifications => 'Уведомления';
 
   @override
@@ -474,4 +468,299 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get unread => 'Не прочитано';
+
+  @override
+  String get editProfile => 'Редактировать профиль';
+
+  @override
+  String get leaderboard => 'Рейтинг';
+
+  @override
+  String get schedule => 'Расписание';
+
+  @override
+  String get payments => 'Оплаты';
+
+  @override
+  String get coinHistory => 'История монет';
+
+  @override
+  String get myVoucher => 'Мой ваучер';
+
+  @override
+  String get openLessons => 'Открытые уроки';
+
+  @override
+  String get language => 'Язык';
+
+  @override
+  String get appearance => 'Оформление';
+
+  @override
+  String get themeSystem => 'Системная';
+
+  @override
+  String get themeLight => 'Светлая';
+
+  @override
+  String get themeDark => 'Тёмная';
+
+  @override
+  String get aboutCentre => 'О центре';
+
+  @override
+  String get aboutEmpty => 'Информация о центре ещё не добавлена.';
+
+  @override
+  String get deleteAccount => 'Удалить аккаунт';
+
+  @override
+  String get deleteWillBeDeleted => 'Будет удалено';
+
+  @override
+  String get deleteLogin => 'Вход в аккаунт';
+
+  @override
+  String get deleteCoins => 'Монеты';
+
+  @override
+  String get deleteResults => 'Результаты';
+
+  @override
+  String get deleteBookings => 'Записи на открытые уроки';
+
+  @override
+  String get deleteKept => 'Останется в центре';
+
+  @override
+  String get deletePaymentRecords => 'Записи об оплатах';
+
+  @override
+  String get deleteAction => 'Удалить';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get deleteFailed => 'Не удалось удалить аккаунт. Попробуйте ещё раз';
+
+  @override
+  String you(String name) {
+    return '$name (вы)';
+  }
+
+  @override
+  String get scopeGroup => 'Моя группа';
+
+  @override
+  String get scopeCentre => 'Центр';
+
+  @override
+  String get periodMonth => 'Этот месяц';
+
+  @override
+  String get periodAll => 'За всё время';
+
+  @override
+  String ofPeople(int count) {
+    return 'из $count';
+  }
+
+  @override
+  String get leaderboardEmpty => 'Рейтинг пока пуст';
+
+  @override
+  String get noGroupYet => 'Вы пока не в группе';
+
+  @override
+  String get weekdaysShort => 'Пн,Вт,Ср,Чт,Пт,Сб,Вс';
+
+  @override
+  String weekRange(String from, String to) {
+    return '$from – $to';
+  }
+
+  @override
+  String get previousWeek => 'Предыдущая неделя';
+
+  @override
+  String get nextWeek => 'Следующая неделя';
+
+  @override
+  String dayWithDate(String weekday, String date) {
+    return '$weekday, $date';
+  }
+
+  @override
+  String get cancelled => 'Отменён';
+
+  @override
+  String get noLessonsThisWeek => 'На этой неделе уроков нет';
+
+  @override
+  String timeRange(String from, String to) {
+    return '$from–$to';
+  }
+
+  @override
+  String nextPaymentBy(String date) {
+    return 'Следующая оплата до $date';
+  }
+
+  @override
+  String get balanceDue => 'Ожидается оплата';
+
+  @override
+  String get balanceDebt => 'Долг';
+
+  @override
+  String get payByCard => 'Оплатить картой';
+
+  @override
+  String get myReceipts => 'Мои чеки';
+
+  @override
+  String get comingSoon => 'Скоро появится';
+
+  @override
+  String get paymentReceived => 'Оплата принята';
+
+  @override
+  String receiptLine(String date, String number) {
+    return '$date · квитанция №$number';
+  }
+
+  @override
+  String monthFee(String month) {
+    return 'Оплата за $month';
+  }
+
+  @override
+  String chargedLine(String date) {
+    return '$date · начислено';
+  }
+
+  @override
+  String get adjustment => 'Корректировка';
+
+  @override
+  String get monthsNominative => 'Январь,Февраль,Март,Апрель,Май,Июнь,Июль,Август,Сентябрь,Октябрь,Ноябрь,Декабрь';
+
+  @override
+  String get paymentsEmpty => 'Оплат пока нет';
+
+  @override
+  String get payAtReception => 'Оплатите на ресепшене';
+
+  @override
+  String get payAtReceptionHint => 'Наличными или картой';
+
+  @override
+  String get coinHistoryEmpty => 'Монет пока нет';
+
+  @override
+  String get sourceAttendance => 'Пришёл на урок';
+
+  @override
+  String get sourcePerfectMonth => 'Месяц без пропусков';
+
+  @override
+  String get sourceOnTime => 'Оплата вовремя';
+
+  @override
+  String get sourceReferral => 'Друг записался';
+
+  @override
+  String get sourceTeacherAward => 'От учителя';
+
+  @override
+  String get sourceTeacherDeduction => 'Снято учителем';
+
+  @override
+  String get sourceAdjustment => 'Корректировка центра';
+
+  @override
+  String get sourceRewardHold => 'Заказ';
+
+  @override
+  String get sourceRewardReturn => 'Заказ возвращён';
+
+  @override
+  String get sourceGameWin => 'Победа в игре';
+
+  @override
+  String get sourceExam => 'Пробный экзамен';
+
+  @override
+  String get voucherEmpty => 'У вас пока нет ваучера. Он появится после первого пробного экзамена.';
+
+  @override
+  String get photo => 'Фото';
+
+  @override
+  String get changePhoto => 'Изменить фото';
+
+  @override
+  String get takePhoto => 'Камера';
+
+  @override
+  String get chooseFromGallery => 'Галерея';
+
+  @override
+  String get removePhoto => 'Удалить фото';
+
+  @override
+  String get cropTitle => 'Обрезать фото';
+
+  @override
+  String get cropHint => 'Двигайте и увеличивайте фото';
+
+  @override
+  String get done => 'Готово';
+
+  @override
+  String get photoFailed => 'Не удалось сохранить фото. Попробуйте ещё раз';
+
+  @override
+  String get photoSaved => 'Фото сохранено';
+
+  @override
+  String get changePhone => 'Изменить номер телефона';
+
+  @override
+  String get newPhone => 'Новый номер телефона';
+
+  @override
+  String get phoneChangeHint => 'Мы отправим код на новый номер. Номер изменится после подтверждения кода.';
+
+  @override
+  String get phoneSame => 'Это ваш текущий номер';
+
+  @override
+  String get phoneChanged => 'Номер телефона изменён';
+
+  @override
+  String get changePassword => 'Изменить пароль';
+
+  @override
+  String get staffOnlyHint => 'Имя, дату рождения и данные родителей меняют только сотрудники центра.';
+
+  @override
+  String get birthDate => 'Дата рождения';
+
+  @override
+  String get parentName => 'Родитель';
+
+  @override
+  String get parentPhone => 'Телефон родителя';
+
+  @override
+  String fullDate(String day, int year) {
+    return '$day $year';
+  }
+
+  @override
+  String weekInMonth(int from, int to, String month) {
+    return '$from–$to $month';
+  }
 }

@@ -11,6 +11,7 @@ import 'package:student/core/state.dart';
 import 'package:student/data/models.dart';
 import 'package:student/features/auth/welcome_screen.dart';
 import 'package:student/features/notifications/notifications_screen.dart';
+import 'package:student/features/more/money_pages.dart';
 import 'package:student/features/tabs/tabs.dart';
 import 'package:student/push/notification_routes.dart';
 import 'package:student/ui/theme.dart';
@@ -46,7 +47,7 @@ void main() {
     testWidgets('each tab shows the Student version to a linked student', (tester) async {
       useScreen(tester, phone);
       await TestApp(auth: signedIn(studentProfile)).pump(tester);
-      final expected = {l.tabGame: l.gameStudentSoon, l.tabQr: l.qrStudentSoon, l.tabShop: l.shopStudentSoon, l.tabMore: l.moreStudentSoon};
+      final expected = {l.tabGame: l.gameStudentSoon, l.tabQr: l.qrStudentSoon, l.tabShop: l.shopStudentSoon};
       for (final tab in expected.entries) {
         await tester.tap(find.bySemanticsLabel(tab.key).last);
         await tester.pumpAndSettle();
@@ -57,7 +58,7 @@ void main() {
     testWidgets('each tab shows the App user version to someone who is not linked', (tester) async {
       useScreen(tester, phone);
       await TestApp(auth: signedIn(appUserProfile)).pump(tester);
-      final expected = {l.tabGame: l.gameAppUserSoon, l.tabQr: l.qrAppUserSoon, l.tabShop: l.shopAppUserSoon, l.tabMore: l.moreAppUserSoon};
+      final expected = {l.tabGame: l.gameAppUserSoon, l.tabQr: l.qrAppUserSoon, l.tabShop: l.shopAppUserSoon};
       for (final tab in expected.entries) {
         await tester.tap(find.bySemanticsLabel(tab.key).last);
         await tester.pumpAndSettle();
@@ -277,7 +278,8 @@ void main() {
 
       await tester.tap(find.bySemanticsLabel(l.tabMore).last);
       await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(SecondaryButton, l.logOut));
+      await tester.ensureVisible(find.text(l.logOut));
+      await tester.tap(find.text(l.logOut));
       await tester.pumpAndSettle();
 
       expect(app.tokens.removed, ['device-token-1']);
@@ -317,7 +319,7 @@ void main() {
         auth: signedIn(studentProfile),
         push: FakePush(launch: {'type': 'points_weekly', 'screen': 'coins'}),
       ).pump(tester);
-      expect(find.byType(MoreTab), findsOneWidget);
+      expect(find.byType(CoinHistoryPage), findsOneWidget);
     });
 
     testWidgets('signed out, a tapped notification leads to Welcome', (tester) async {
@@ -333,9 +335,9 @@ void main() {
       expect(routeForNotification({'type': 'lesson_reminder'}), Routes.home);
       expect(routeForNotification({'type': 'account_linked', 'screen': 'home'}), Routes.home);
       expect(routeForNotification({'type': 'reward_update'}), Routes.shop);
-      expect(routeForNotification({'type': 'points_deduction'}), Routes.more);
-      expect(routeForNotification({'type': 'receipt_rejected'}), Routes.more);
-      expect(routeForNotification({'type': 'voucher_expiring'}), Routes.more);
+      expect(routeForNotification({'type': 'points_deduction'}), Routes.coinHistory);
+      expect(routeForNotification({'type': 'receipt_rejected'}), Routes.payments);
+      expect(routeForNotification({'type': 'voucher_expiring'}), Routes.voucher);
       // The screen the server names wins over the type.
       expect(routeForNotification({'type': 'points_weekly', 'screen': 'shop'}), Routes.shop);
       expect(routeForNotification({'type': 'something_new'}), Routes.notifications);

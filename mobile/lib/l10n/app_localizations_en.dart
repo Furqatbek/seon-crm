@@ -230,12 +230,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shopAppUserSoon => 'You can browse the rewards. Join the centre to spend coins.';
 
   @override
-  String get moreStudentSoon => 'Your profile, leaderboard, schedule and payments will be here.';
-
-  @override
-  String get moreAppUserSoon => 'Your profile, voucher and open lessons will be here.';
-
-  @override
   String get notifications => 'Notifications';
 
   @override
@@ -456,4 +450,299 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unread => 'Unread';
+
+  @override
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get leaderboard => 'Leaderboard';
+
+  @override
+  String get schedule => 'Schedule';
+
+  @override
+  String get payments => 'Payments';
+
+  @override
+  String get coinHistory => 'Coin history';
+
+  @override
+  String get myVoucher => 'My voucher';
+
+  @override
+  String get openLessons => 'Open lessons';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get aboutCentre => 'About the centre';
+
+  @override
+  String get aboutEmpty => 'Nothing has been written about the centre yet.';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteWillBeDeleted => 'Will be deleted';
+
+  @override
+  String get deleteLogin => 'Login';
+
+  @override
+  String get deleteCoins => 'Coins';
+
+  @override
+  String get deleteResults => 'Results';
+
+  @override
+  String get deleteBookings => 'Open lesson bookings';
+
+  @override
+  String get deleteKept => 'The centre keeps';
+
+  @override
+  String get deletePaymentRecords => 'Payment records';
+
+  @override
+  String get deleteAction => 'Delete';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get deleteFailed => 'The account could not be deleted. Try again';
+
+  @override
+  String you(String name) {
+    return '$name (you)';
+  }
+
+  @override
+  String get scopeGroup => 'My group';
+
+  @override
+  String get scopeCentre => 'Centre';
+
+  @override
+  String get periodMonth => 'This month';
+
+  @override
+  String get periodAll => 'All time';
+
+  @override
+  String ofPeople(int count) {
+    return 'of $count';
+  }
+
+  @override
+  String get leaderboardEmpty => 'The leaderboard is empty for now';
+
+  @override
+  String get noGroupYet => 'You are not in a group yet';
+
+  @override
+  String get weekdaysShort => 'Mon,Tue,Wed,Thu,Fri,Sat,Sun';
+
+  @override
+  String weekRange(String from, String to) {
+    return '$from – $to';
+  }
+
+  @override
+  String get previousWeek => 'Previous week';
+
+  @override
+  String get nextWeek => 'Next week';
+
+  @override
+  String dayWithDate(String weekday, String date) {
+    return '$weekday, $date';
+  }
+
+  @override
+  String get cancelled => 'Cancelled';
+
+  @override
+  String get noLessonsThisWeek => 'No lessons this week';
+
+  @override
+  String timeRange(String from, String to) {
+    return '$from–$to';
+  }
+
+  @override
+  String nextPaymentBy(String date) {
+    return 'Next payment by $date';
+  }
+
+  @override
+  String get balanceDue => 'Payment due';
+
+  @override
+  String get balanceDebt => 'Overdue';
+
+  @override
+  String get payByCard => 'Pay by card';
+
+  @override
+  String get myReceipts => 'My receipts';
+
+  @override
+  String get comingSoon => 'Coming soon';
+
+  @override
+  String get paymentReceived => 'Payment received';
+
+  @override
+  String receiptLine(String date, String number) {
+    return '$date · receipt no. $number';
+  }
+
+  @override
+  String monthFee(String month) {
+    return '$month fee';
+  }
+
+  @override
+  String chargedLine(String date) {
+    return '$date · charged';
+  }
+
+  @override
+  String get adjustment => 'Adjustment';
+
+  @override
+  String get monthsNominative => 'January,February,March,April,May,June,July,August,September,October,November,December';
+
+  @override
+  String get paymentsEmpty => 'No payments yet';
+
+  @override
+  String get payAtReception => 'Pay at reception';
+
+  @override
+  String get payAtReceptionHint => 'In cash or by card';
+
+  @override
+  String get coinHistoryEmpty => 'No coins yet';
+
+  @override
+  String get sourceAttendance => 'Came to the lesson';
+
+  @override
+  String get sourcePerfectMonth => 'Perfect month';
+
+  @override
+  String get sourceOnTime => 'Fee paid on time';
+
+  @override
+  String get sourceReferral => 'A friend enrolled';
+
+  @override
+  String get sourceTeacherAward => 'From the teacher';
+
+  @override
+  String get sourceTeacherDeduction => 'Taken by the teacher';
+
+  @override
+  String get sourceAdjustment => 'Changed by the centre';
+
+  @override
+  String get sourceRewardHold => 'Order';
+
+  @override
+  String get sourceRewardReturn => 'Order returned';
+
+  @override
+  String get sourceGameWin => 'Game win';
+
+  @override
+  String get sourceExam => 'Mock exam';
+
+  @override
+  String get voucherEmpty => 'You have no voucher yet. You get one after your first mock exam.';
+
+  @override
+  String get photo => 'Photo';
+
+  @override
+  String get changePhoto => 'Change photo';
+
+  @override
+  String get takePhoto => 'Camera';
+
+  @override
+  String get chooseFromGallery => 'Gallery';
+
+  @override
+  String get removePhoto => 'Remove photo';
+
+  @override
+  String get cropTitle => 'Crop the photo';
+
+  @override
+  String get cropHint => 'Move and zoom the photo';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get photoFailed => 'The photo could not be saved. Try again';
+
+  @override
+  String get photoSaved => 'Photo saved';
+
+  @override
+  String get changePhone => 'Change phone number';
+
+  @override
+  String get newPhone => 'New phone number';
+
+  @override
+  String get phoneChangeHint => 'We text a code to the new number. The number changes once the code is confirmed.';
+
+  @override
+  String get phoneSame => 'This is your current number';
+
+  @override
+  String get phoneChanged => 'Phone number changed';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get staffOnlyHint => 'Your name, birthday and parent details are changed by the centre\'s staff only.';
+
+  @override
+  String get birthDate => 'Birthday';
+
+  @override
+  String get parentName => 'Parent';
+
+  @override
+  String get parentPhone => 'Parent\'s phone';
+
+  @override
+  String fullDate(String day, int year) {
+    return '$day, $year';
+  }
+
+  @override
+  String weekInMonth(int from, int to, String month) {
+    return '$month $from–$to';
+  }
 }

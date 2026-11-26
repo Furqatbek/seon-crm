@@ -58,7 +58,7 @@ class AppUserHomeView extends ConsumerWidget {
                   if (data == null && !home.hasError) const Skeleton.card() else LockedCoinsCard(coins: data?.lockedCoins ?? 0),
                   if (data?.voucher != null) ...[const SizedBox(height: AppSpacing.x3), VoucherCard(voucher: data!.voucher!)],
                   const SizedBox(height: AppSpacing.x3),
-                  OpenLessonCard(onBook: () => context.go(Routes.more)),
+                  OpenLessonCard(onBook: () => context.go(Routes.openLessons)),
                 ],
               ),
             ),

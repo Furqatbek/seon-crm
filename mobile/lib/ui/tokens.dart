@@ -25,7 +25,13 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.danger,
     required this.glow,
     required this.elevatedShadow,
+    required this.groupedBg,
+    required this.groupedCard,
   });
+
+  /// A page of grouped lists (More): the page behind, and the cards on it.
+  final Color groupedBg;
+  final Color groupedCard;
 
   /// Page.
   final Color bg;
@@ -90,6 +96,8 @@ class AppColors extends ThemeExtension<AppColors> {
     danger: Color(0xFFD7263D),
     glow: [],
     elevatedShadow: [BoxShadow(color: Color(0x1F0F0F1A), blurRadius: 24, offset: Offset(0, 8))],
+    groupedBg: Color(0xFFF5F6FA),
+    groupedCard: Color(0xFFFFFFFF),
   );
 
   static const dark = AppColors(
@@ -110,6 +118,8 @@ class AppColors extends ThemeExtension<AppColors> {
     // 0 0 24 px violet at 35%.
     glow: [BoxShadow(color: Color(0x597C4DFF), blurRadius: 24)],
     elevatedShadow: [],
+    groupedBg: Color(0xFF0B0B14),
+    groupedCard: Color(0xFF151526),
   );
 
   /// A faint wash of the primary colour: icon circles, the unread dot's halo.
@@ -176,6 +186,16 @@ abstract final class AppSizes {
   /// The dot of an unread notification, and the least width of the bell's badge.
   static const dot = 8.0;
   static const counter = 20.0;
+
+  /// A row of a grouped list.
+  static const row = 52.0;
+
+  /// The photo on the More hero and on Edit profile, and on the podium.
+  static const avatar = 72.0;
+  static const avatarLarge = 96.0;
+
+  /// The side of the square a profile photo is saved as, in pixels.
+  static const avatarPixels = 512;
 
   /// How faded a disabled control is.
   static const disabledOpacity = 0.5;

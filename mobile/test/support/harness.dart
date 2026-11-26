@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -5,7 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/app.dart';
 import 'package:student/core/localization.dart';
 import 'package:student/core/home_state.dart';
+import 'package:student/core/more_state.dart';
 import 'package:student/core/state.dart';
+import 'package:student/data/models.dart';
 import 'package:student/l10n/app_localizations.dart';
 import 'package:student/ui/theme.dart';
 
@@ -28,6 +32,10 @@ class TestApp {
 
   final FakeHomeRepository home;
   final FakeNotificationsRepository notifications;
+  final more = FakeMoreRepository();
+
+  /// The photo the picker hands back; null as if the person backed out.
+  Uint8List? photo;
 
   /// The time the app believes it is.
   DateTime now = testNow;
@@ -42,6 +50,22 @@ class TestApp {
   late SharedPreferences saved;
 
   Future<Widget> build() async {
+    // A saved or removed photo shows up in the profile, as it does on the server.
+    more.onAvatar = (path) {
+      final current = auth.profile;
+      if (current != null) {
+        auth.profile = Profile(
+          id: current.id,
+          fullName: current.fullName,
+          role: current.role,
+          language: current.language,
+          theme: current.theme,
+          koreanLevel: current.koreanLevel,
+          phone: current.phone,
+          avatarPath: path,
+        );
+      }
+    };
     SharedPreferences.setMockInitialValues(preferences);
     saved = await SharedPreferences.getInstance();
     return ProviderScope(
@@ -51,6 +75,8 @@ class TestApp {
         homeRepositoryProvider.overrideWithValue(home),
         notificationsRepositoryProvider.overrideWithValue(notifications),
         clockProvider.overrideWithValue(() => now),
+        moreRepositoryProvider.overrideWithValue(more),
+        photoPickerProvider.overrideWithValue((_) async => photo),
         sharedPreferencesProvider.overrideWithValue(saved),
         pushServiceProvider.overrideWithValue(push),
         appVersionProvider.overrideWithValue('1.0.0'),

@@ -124,32 +124,32 @@ class _StudentHomeViewState extends ConsumerState<StudentHomeView> {
         ),
       ],
       const SizedBox(height: AppSpacing.x4),
-      HeroLessonCard(lesson: home.next, now: now, onTap: () => open(Routes.more)),
-      if (home.nextExam != null) ...[const SizedBox(height: AppSpacing.x3), ExamCard(exam: home.nextExam!, now: now, onTap: () => open(Routes.more))],
+      HeroLessonCard(lesson: home.next, now: now, onTap: () => open(Routes.schedule)),
+      if (home.nextExam != null) ...[const SizedBox(height: AppSpacing.x3), ExamCard(exam: home.nextExam!, now: now, onTap: () => open(Routes.schedule))],
       const SizedBox(height: AppSpacing.x3),
       CardPair(
         first: StatCard(
           label: l.rankInGroup,
           value: home.rank == null ? '—' : l.rankPlace(home.rank!),
           caption: home.rank == null ? l.rankNone : l.rankOf(home.rankOf ?? home.rank!),
-          onTap: () => open(Routes.more),
+          onTap: () => open(Routes.leaderboard),
         ),
         second: StatCard(
           label: l.coins,
           value: formatCoins(home.coins, l),
           caption: l.coinsThisWeek('${home.coinsWeek}'),
           captionColor: home.coinsWeek > 0 ? c.success : null,
-          onTap: () => open(Routes.more),
+          onTap: () => open(Routes.coinHistory),
         ),
       ),
       const SizedBox(height: AppSpacing.x3),
       CardPair(
-        first: StatCard(label: l.balance, value: balanceValue, valueColor: balanceColor, caption: balanceCaption, onTap: () => open(Routes.more)),
+        first: StatCard(label: l.balance, value: balanceValue, valueColor: balanceColor, caption: balanceCaption, onTap: () => open(Routes.payments)),
         second: StatCard(
           label: l.attendance,
           value: home.attendanceRate == null ? '—' : '${home.attendanceRate}%',
           caption: home.attendanceRate == null ? l.noLessonsYet : l.thisMonth,
-          onTap: () => open(Routes.more),
+          onTap: () => open(Routes.schedule),
         ),
       ),
     ];

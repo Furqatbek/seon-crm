@@ -27,7 +27,16 @@ const supportedLanguages = ['uz', 'ru', 'en', 'ko'];
 const supportedThemes = ['system', 'light', 'dark'];
 
 class Profile {
-  const Profile({required this.id, required this.fullName, required this.role, required this.language, required this.theme, this.koreanLevel});
+  const Profile({
+    required this.id,
+    required this.fullName,
+    required this.role,
+    required this.language,
+    required this.theme,
+    this.koreanLevel,
+    this.phone,
+    this.avatarPath,
+  });
 
   final String id;
   final String fullName;
@@ -39,6 +48,20 @@ class Profile {
   /// system, light or dark.
   final String theme;
   final KoreanLevel? koreanLevel;
+
+  /// +998XXXXXXXXX
+  final String? phone;
+
+  /// The photo's path in the avatars bucket.
+  final String? avatarPath;
+
+  /// "AK" for Aziza Karimova: shown until there is a photo.
+  String get initials {
+    final parts = fullName.trim().split(RegExp(r'\s+')).where((part) => part.isNotEmpty).toList();
+    if (parts.isEmpty) return '';
+    final first = parts.first.substring(0, 1);
+    return (parts.length > 1 ? first + parts.last.substring(0, 1) : first).toUpperCase();
+  }
 
   /// From a row of `profiles`. Null for an account that is not the app's
   /// (staff, a kiosk): it has nothing to see here.
@@ -58,6 +81,8 @@ class Profile {
       language: supportedLanguages.contains(language) ? language as String : 'uz',
       theme: supportedThemes.contains(theme) ? theme as String : 'system',
       koreanLevel: KoreanLevel.parse(row['korean_level']),
+      phone: row['phone'] as String?,
+      avatarPath: row['avatar_path'] as String?,
     );
   }
 }

@@ -24,6 +24,10 @@ Push is off until the Firebase files are added; everything else works without th
 ## Checks
 
 - `dart format .` · `flutter analyze` · `flutter test`
+- Integration tests: `flutter test integration_test` on a phone or emulator, or
+  `flutter test integration_test -d flutter-tester` without one. They run on an
+  in-memory stand-in for Supabase; the top of `integration_test/app_test.dart`
+  says how to run the account-deletion test against the dev project.
 - Screenshots: `flutter test --update-goldens test/goldens` rewrites the
   images in `test/goldens/` after a deliberate change of looks. They are drawn
   with Inter and a Korean test font, on Linux; another system may differ by a

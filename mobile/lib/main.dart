@@ -6,10 +6,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
 import 'core/home_state.dart';
+import 'core/more_state.dart';
 import 'core/state.dart';
 import 'data/auth_repository.dart';
 import 'data/device_tokens.dart';
 import 'data/home.dart';
+import 'data/more.dart';
+import 'data/photo_picker.dart';
 import 'data/notifications.dart';
 import 'env.dart';
 import 'push/push_service.dart';
@@ -32,6 +35,8 @@ Future<void> main() async {
         deviceTokenRepositoryProvider.overrideWithValue(SupabaseDeviceTokenRepository(client)),
         homeRepositoryProvider.overrideWithValue(SupabaseHomeRepository(client)),
         notificationsRepositoryProvider.overrideWithValue(SupabaseNotificationsRepository(client)),
+        moreRepositoryProvider.overrideWithValue(SupabaseMoreRepository(client)),
+        photoPickerProvider.overrideWithValue(pickPhoto),
         sharedPreferencesProvider.overrideWithValue(preferences),
         pushServiceProvider.overrideWithValue(push),
         appVersionProvider.overrideWithValue(package.version),
