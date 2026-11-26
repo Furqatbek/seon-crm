@@ -10,6 +10,7 @@ import 'package:student/core/router.dart';
 import 'package:student/core/state.dart';
 import 'package:student/data/models.dart';
 import 'package:student/features/auth/welcome_screen.dart';
+import 'package:student/features/notifications/notifications_screen.dart';
 import 'package:student/features/tabs/tabs.dart';
 import 'package:student/push/notification_routes.dart';
 import 'package:student/ui/theme.dart';
@@ -45,13 +46,7 @@ void main() {
     testWidgets('each tab shows the Student version to a linked student', (tester) async {
       useScreen(tester, phone);
       await TestApp(auth: signedIn(studentProfile)).pump(tester);
-      final expected = {
-        l.tabHome: l.homeStudentSoon,
-        l.tabGame: l.gameStudentSoon,
-        l.tabQr: l.qrStudentSoon,
-        l.tabShop: l.shopStudentSoon,
-        l.tabMore: l.moreStudentSoon,
-      };
+      final expected = {l.tabGame: l.gameStudentSoon, l.tabQr: l.qrStudentSoon, l.tabShop: l.shopStudentSoon, l.tabMore: l.moreStudentSoon};
       for (final tab in expected.entries) {
         await tester.tap(find.bySemanticsLabel(tab.key).last);
         await tester.pumpAndSettle();
@@ -62,13 +57,7 @@ void main() {
     testWidgets('each tab shows the App user version to someone who is not linked', (tester) async {
       useScreen(tester, phone);
       await TestApp(auth: signedIn(appUserProfile)).pump(tester);
-      final expected = {
-        l.tabHome: l.homeAppUserSoon,
-        l.tabGame: l.gameAppUserSoon,
-        l.tabQr: l.qrAppUserSoon,
-        l.tabShop: l.shopAppUserSoon,
-        l.tabMore: l.moreAppUserSoon,
-      };
+      final expected = {l.tabGame: l.gameAppUserSoon, l.tabQr: l.qrAppUserSoon, l.tabShop: l.shopAppUserSoon, l.tabMore: l.moreAppUserSoon};
       for (final tab in expected.entries) {
         await tester.tap(find.bySemanticsLabel(tab.key).last);
         await tester.pumpAndSettle();

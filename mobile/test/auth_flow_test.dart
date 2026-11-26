@@ -10,6 +10,8 @@ import 'package:student/features/auth/code_screen.dart';
 import 'package:student/features/auth/linked_screen.dart';
 import 'package:student/features/auth/sign_in_screens.dart';
 import 'package:student/features/auth/sign_up_screen.dart';
+import 'package:student/features/home/app_user_home.dart';
+import 'package:student/features/home/student_home.dart';
 import 'package:student/features/tabs/tabs.dart';
 import 'package:student/ui/widgets.dart';
 
@@ -249,7 +251,7 @@ void main() {
       expect(find.text('TOPIK II · Kechki'), findsOneWidget);
       await press(tester, l.start);
       expect(find.byType(HomeTab), findsOneWidget);
-      expect(find.text(l.homeStudentSoon), findsOneWidget);
+      expect(find.byType(StudentHomeView), findsOneWidget);
     });
 
     testWidgets('the right code of an unknown phone goes straight to the App user Home', (tester) async {
@@ -258,7 +260,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(LinkedScreen), findsNothing);
       expect(find.byType(HomeTab), findsOneWidget);
-      expect(find.text(l.homeAppUserSoon), findsOneWidget);
+      expect(find.byType(AppUserHomeView), findsOneWidget);
     });
   });
 

@@ -206,12 +206,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get soonTitle => '준비 중';
 
   @override
-  String get homeStudentSoon => '다음 수업, 순위, 코인, 잔액이 여기에 표시됩니다.';
-
-  @override
-  String get homeAppUserSoon => '모의고사, 공개 수업, 바우처가 여기에 표시됩니다.';
-
-  @override
   String get gameStudentSoon => '1대1 게임과 모의고사. 이기면 코인을 받습니다.';
 
   @override
@@ -239,9 +233,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get notifications => '알림';
 
   @override
-  String get notificationsSoon => '알림이 여기에 표시됩니다.';
-
-  @override
   String get logOut => '로그아웃';
 
   @override
@@ -254,4 +245,202 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$formatted코인');
     return '$_temp0';
   }
+
+  @override
+  String greeting(String name) {
+    return '안녕하세요, $name 님';
+  }
+
+  @override
+  String unreadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '읽지 않은 알림 $count개', zero: '읽지 않은 알림 없음');
+    return '$_temp0';
+  }
+
+  @override
+  String get chooseGroup => '그룹 선택';
+
+  @override
+  String get offlineBanner => '인터넷에 연결되어 있지 않습니다. 최신 정보가 아닐 수 있습니다.';
+
+  @override
+  String get loadFailedBanner => '정보를 새로 고치지 못했습니다. 아래로 당겨 다시 시도하세요.';
+
+  @override
+  String get retry => '다시 시도';
+
+  @override
+  String get nextLesson => '다음 수업';
+
+  @override
+  String get exam => '시험';
+
+  @override
+  String get nothingScheduled => '예정된 수업이 없습니다';
+
+  @override
+  String get today => '오늘';
+
+  @override
+  String get tomorrow => '내일';
+
+  @override
+  String get yesterday => '어제';
+
+  @override
+  String get earlier => '이전';
+
+  @override
+  String dayAtTime(String day, String time) {
+    return '$day $time';
+  }
+
+  @override
+  String roomNumber(String room) {
+    return '$room호';
+  }
+
+  @override
+  String get weekdays => '월요일,화요일,수요일,목요일,금요일,토요일,일요일';
+
+  @override
+  String get months => '1월,2월,3월,4월,5월,6월,7월,8월,9월,10월,11월,12월';
+
+  @override
+  String dayMonth(int day, String month) {
+    return '$month $day일';
+  }
+
+  @override
+  String inDays(int count) {
+    return '$count일 후';
+  }
+
+  @override
+  String inHoursMinutes(int hours, int minutes) {
+    return '$hours시간 $minutes분 후';
+  }
+
+  @override
+  String inHours(int hours) {
+    return '$hours시간 후';
+  }
+
+  @override
+  String inMinutes(int minutes) {
+    return '$minutes분 후';
+  }
+
+  @override
+  String get startingNow => '곧 시작합니다';
+
+  @override
+  String get rankInGroup => '그룹 내 순위';
+
+  @override
+  String rankPlace(int rank) {
+    return '$rank위';
+  }
+
+  @override
+  String rankOf(int count) {
+    return '$count명 중, 이번 달';
+  }
+
+  @override
+  String get rankNone => '이번 달 순위가 아직 없습니다';
+
+  @override
+  String get coins => '코인';
+
+  @override
+  String coinsThisWeek(String count) {
+    return '이번 주 +$count';
+  }
+
+  @override
+  String get balance => '잔액';
+
+  @override
+  String get balancePaid => '납부 완료';
+
+  @override
+  String nextPaymentOn(String date) {
+    return '다음 납부 $date';
+  }
+
+  @override
+  String balanceDueBy(String date) {
+    return '$date까지 납부';
+  }
+
+  @override
+  String balanceDebtSince(String date) {
+    return '연체, 납부 기한 $date';
+  }
+
+  @override
+  String get attendance => '출석';
+
+  @override
+  String get thisMonth => '이번 달';
+
+  @override
+  String get noLessonsYet => '이번 달에는 아직 수업이 없습니다';
+
+  @override
+  String levelPill(String level) {
+    return '$level 수준';
+  }
+
+  @override
+  String get mockExamTitle => '모의고사';
+
+  @override
+  String get mockExamSoon => 'TOPIK 형식의 연습 시험이 곧 여기에 준비됩니다.';
+
+  @override
+  String get lockedCoins => '잠긴 코인';
+
+  @override
+  String get lockedCoinsHint => '센터에 등록하면 사용할 수 있습니다';
+
+  @override
+  String get openLessonTitle => '무료 공개 수업';
+
+  @override
+  String get openLessonSoon => '공개 수업 예약이 곧 여기에 준비됩니다.';
+
+  @override
+  String get bookOpenLesson => '무료 공개 수업 예약';
+
+  @override
+  String get voucherTitle => '선물이 도착했습니다!';
+
+  @override
+  String voucherPercent(int percent) {
+    return '첫 달 $percent% 할인';
+  }
+
+  @override
+  String voucherFixed(String amount) {
+    return '첫 달 $amount 할인';
+  }
+
+  @override
+  String get voucherTrialWeek => '1주 무료 체험';
+
+  @override
+  String validUntil(String date) {
+    return '$date까지';
+  }
+
+  @override
+  String get markAllRead => '모두 읽음으로 표시';
+
+  @override
+  String get notificationsEmpty => '아직 알림이 없습니다';
+
+  @override
+  String get unread => '읽지 않음';
 }

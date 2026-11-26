@@ -7,6 +7,7 @@ import '../features/auth/linked_screen.dart';
 import '../features/auth/sign_in_screens.dart';
 import '../features/auth/sign_up_screen.dart';
 import '../features/auth/welcome_screen.dart';
+import '../features/notifications/notifications_screen.dart';
 import '../features/shell/app_shell.dart';
 import '../features/tabs/tabs.dart';
 import '../push/notification_routes.dart';

@@ -399,6 +399,14 @@ describe.skipIf(!DB_URL)("Student app groundwork", () => {
         expect(next.kind).toBe("exam");
         expect(next.exam_title).toBe("Monthly test");
         expect(Date.parse(next.starts_at)).toBeGreaterThan(Date.now());
+        // The exam is the next thing itself, so there is no second exam card; the teacher is named.
+        const home = (await s.rows<{ home: Record<string, unknown> }>(`select student_home() as home`))[0].home;
+        expect(home.next_exam).toBeNull();
+        expect((home.next as { teacher: string }).teacher).toEqual(expect.any(String));
+        expect(home.today).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+        expect(home.coins_week).toEqual(expect.any(Number));
+        expect(home.attendance).toEqual(expect.objectContaining({ marked: expect.any(Number) }));
+        expect(code(await s.attempt(`select student_home_lesson($1)`, [next.id]))).toBe(DENIED);
       }, async (s) => {
         await setup(s);
         const upcoming = await s.rows<{ id: string }>(
@@ -407,6 +415,25 @@ describe.skipIf(!DB_URL)("Student app groundwork", () => {
            order by lesson_date, start_time limit 2`, [seedGroup]);
         await s.rows(`update lessons set status = 'cancelled', cancel_reason = 'holiday' where id = $1`, [upcoming[0].id]);
         await s.rows(`update lessons set kind = 'exam', exam_title = 'Monthly test' where id = $1`, [upcoming[1].id]);
+      });
+    });
+
+    it("student_home shows a later exam under the next lesson, and this week's coins", async () => {
+      await as({ userId: STUDENT_USER }, async (s) => {
+        const home = (await s.rows<{ home: { next: { kind: string }; next_exam: { kind: string; exam_title: string }; coins_week: number; coins: number } }>(`select student_home() as home`))[0].home;
+        expect(home.next.kind).toBe("lesson");
+        expect(home.next_exam).toMatchObject({ kind: "exam", exam_title: "Final" });
+        expect(home.coins_week).toBe(7);
+      }, async (s) => {
+        await setup(s);
+        const upcoming = await s.rows<{ id: string }>(
+          `select id from lessons where group_id = $1 and status = 'scheduled'
+             and (lesson_date + start_time) at time zone 'Asia/Tashkent' > now()
+           order by lesson_date, start_time limit 3`, [seedGroup]);
+        await s.rows(`update lessons set kind = 'exam', exam_title = 'Final' where id = $1`, [upcoming[2].id]);
+        // Nothing else this week; one award now, and a reward that is spending, not earning.
+        await s.rows(`delete from points_ledger where student_id = $1 and created_at >= date_trunc('week', now())`, [seedStudent.id]);
+        await s.rows(`insert into points_ledger (student_id, delta, source, dedupe_key) values ($1, 7, 'attendance', 'test:week'), ($1, -3, 'reward_hold', 'test:hold')`, [seedStudent.id]);
       });
     });
 

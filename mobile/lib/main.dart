@@ -5,9 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
+import 'core/home_state.dart';
 import 'core/state.dart';
 import 'data/auth_repository.dart';
 import 'data/device_tokens.dart';
+import 'data/home.dart';
+import 'data/notifications.dart';
 import 'env.dart';
 import 'push/push_service.dart';
 
@@ -27,6 +30,8 @@ Future<void> main() async {
       overrides: [
         authRepositoryProvider.overrideWithValue(SupabaseAuthRepository(client)),
         deviceTokenRepositoryProvider.overrideWithValue(SupabaseDeviceTokenRepository(client)),
+        homeRepositoryProvider.overrideWithValue(SupabaseHomeRepository(client)),
+        notificationsRepositoryProvider.overrideWithValue(SupabaseNotificationsRepository(client)),
         sharedPreferencesProvider.overrideWithValue(preferences),
         pushServiceProvider.overrideWithValue(push),
         appVersionProvider.overrideWithValue(package.version),

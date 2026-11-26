@@ -214,12 +214,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get soonTitle => 'Скоро';
 
   @override
-  String get homeStudentSoon => 'Здесь будут следующий урок, ваше место, монеты и баланс.';
-
-  @override
-  String get homeAppUserSoon => 'Здесь будут пробные экзамены, открытые уроки и ваш ваучер.';
-
-  @override
   String get gameStudentSoon => 'Игра 1 на 1 и пробные экзамены. За победу — монеты.';
 
   @override
@@ -247,9 +241,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get notifications => 'Уведомления';
 
   @override
-  String get notificationsSoon => 'Здесь будут ваши уведомления.';
-
-  @override
   String get logOut => 'Выйти';
 
   @override
@@ -269,4 +260,218 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String greeting(String name) {
+    return 'Привет, $name';
+  }
+
+  @override
+  String unreadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count непрочитанного уведомления',
+      many: '$count непрочитанных уведомлений',
+      few: '$count непрочитанных уведомления',
+      one: '$count непрочитанное уведомление',
+      zero: 'Нет непрочитанных уведомлений',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chooseGroup => 'Выберите группу';
+
+  @override
+  String get offlineBanner => 'Нет подключения к интернету. Данные могут быть устаревшими.';
+
+  @override
+  String get loadFailedBanner => 'Не удалось обновить данные. Потяните вниз, чтобы попробовать ещё раз.';
+
+  @override
+  String get retry => 'Повторить';
+
+  @override
+  String get nextLesson => 'Следующий урок';
+
+  @override
+  String get exam => 'Экзамен';
+
+  @override
+  String get nothingScheduled => 'Ближайших уроков нет';
+
+  @override
+  String get today => 'Сегодня';
+
+  @override
+  String get tomorrow => 'Завтра';
+
+  @override
+  String get yesterday => 'Вчера';
+
+  @override
+  String get earlier => 'Ранее';
+
+  @override
+  String dayAtTime(String day, String time) {
+    return '$day, $time';
+  }
+
+  @override
+  String roomNumber(String room) {
+    return 'каб. $room';
+  }
+
+  @override
+  String get weekdays => 'Понедельник,Вторник,Среда,Четверг,Пятница,Суббота,Воскресенье';
+
+  @override
+  String get months => 'января,февраля,марта,апреля,мая,июня,июля,августа,сентября,октября,ноября,декабря';
+
+  @override
+  String dayMonth(int day, String month) {
+    return '$day $month';
+  }
+
+  @override
+  String inDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'через $count дня',
+      many: 'через $count дней',
+      few: 'через $count дня',
+      one: 'через $count день',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String inHoursMinutes(int hours, int minutes) {
+    return 'через $hours ч $minutes мин';
+  }
+
+  @override
+  String inHours(int hours) {
+    return 'через $hours ч';
+  }
+
+  @override
+  String inMinutes(int minutes) {
+    return 'через $minutes мин';
+  }
+
+  @override
+  String get startingNow => 'Начинается сейчас';
+
+  @override
+  String get rankInGroup => 'Место в группе';
+
+  @override
+  String rankPlace(int rank) {
+    return '$rank-е место';
+  }
+
+  @override
+  String rankOf(int count) {
+    return 'из $count, в этом месяце';
+  }
+
+  @override
+  String get rankNone => 'В этом месяце рейтинга пока нет';
+
+  @override
+  String get coins => 'Монеты';
+
+  @override
+  String coinsThisWeek(String count) {
+    return '+$count за неделю';
+  }
+
+  @override
+  String get balance => 'Баланс';
+
+  @override
+  String get balancePaid => 'Оплачено';
+
+  @override
+  String nextPaymentOn(String date) {
+    return 'следующая оплата $date';
+  }
+
+  @override
+  String balanceDueBy(String date) {
+    return 'оплатите до $date';
+  }
+
+  @override
+  String balanceDebtSince(String date) {
+    return 'долг, срок был $date';
+  }
+
+  @override
+  String get attendance => 'Посещаемость';
+
+  @override
+  String get thisMonth => 'в этом месяце';
+
+  @override
+  String get noLessonsYet => 'В этом месяце уроков ещё не было';
+
+  @override
+  String levelPill(String level) {
+    return 'Уровень: $level';
+  }
+
+  @override
+  String get mockExamTitle => 'Пробный экзамен';
+
+  @override
+  String get mockExamSoon => 'Скоро здесь появятся тренировочные экзамены в формате TOPIK.';
+
+  @override
+  String get lockedCoins => 'Заблокированные монеты';
+
+  @override
+  String get lockedCoinsHint => 'Откроются, когда вы присоединитесь к центру';
+
+  @override
+  String get openLessonTitle => 'Бесплатный открытый урок';
+
+  @override
+  String get openLessonSoon => 'Запись на открытые уроки скоро появится здесь.';
+
+  @override
+  String get bookOpenLesson => 'Записаться на бесплатный урок';
+
+  @override
+  String get voucherTitle => 'Вам подарок!';
+
+  @override
+  String voucherPercent(int percent) {
+    return 'Скидка $percent% на первый месяц';
+  }
+
+  @override
+  String voucherFixed(String amount) {
+    return 'Скидка $amount на первый месяц';
+  }
+
+  @override
+  String get voucherTrialWeek => 'Бесплатная пробная неделя';
+
+  @override
+  String validUntil(String date) {
+    return 'до $date';
+  }
+
+  @override
+  String get markAllRead => 'Отметить все как прочитанные';
+
+  @override
+  String get notificationsEmpty => 'Уведомлений пока нет';
+
+  @override
+  String get unread => 'Не прочитано';
 }

@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/app.dart';
 import 'package:student/core/localization.dart';
+import 'package:student/core/home_state.dart';
 import 'package:student/core/state.dart';
 import 'package:student/l10n/app_localizations.dart';
 import 'package:student/ui/theme.dart';
@@ -12,10 +13,24 @@ import 'fakes.dart';
 
 /// The whole app on fakes: what a test needs to drive it and to look at what it did.
 class TestApp {
-  TestApp({FakeAuthRepository? auth, FakePush? push, this.deviceLanguage = 'uz', this.preferences = const {}})
-    : auth = auth ?? FakeAuthRepository(),
-      push = push ?? FakePush(),
-      tokens = FakeDeviceTokens();
+  TestApp({
+    FakeAuthRepository? auth,
+    FakePush? push,
+    FakeHomeRepository? home,
+    FakeNotificationsRepository? notifications,
+    this.deviceLanguage = 'uz',
+    this.preferences = const {},
+  }) : auth = auth ?? FakeAuthRepository(),
+       push = push ?? FakePush(),
+       home = home ?? FakeHomeRepository(),
+       notifications = notifications ?? FakeNotificationsRepository(),
+       tokens = FakeDeviceTokens();
+
+  final FakeHomeRepository home;
+  final FakeNotificationsRepository notifications;
+
+  /// The time the app believes it is.
+  DateTime now = testNow;
 
   final FakeAuthRepository auth;
   final FakePush push;
@@ -33,6 +48,9 @@ class TestApp {
       overrides: [
         authRepositoryProvider.overrideWithValue(auth),
         deviceTokenRepositoryProvider.overrideWithValue(tokens),
+        homeRepositoryProvider.overrideWithValue(home),
+        notificationsRepositoryProvider.overrideWithValue(notifications),
+        clockProvider.overrideWithValue(() => now),
         sharedPreferencesProvider.overrideWithValue(saved),
         pushServiceProvider.overrideWithValue(push),
         appVersionProvider.overrideWithValue('1.0.0'),

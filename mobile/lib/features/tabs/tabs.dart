@@ -6,6 +6,8 @@ import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../ui/tokens.dart';
 import '../../ui/widgets.dart';
+import '../home/app_user_home.dart';
+import '../home/student_home.dart';
 
 // The five tabs. Each has a Student version and an App user version, chosen
 // from the profile's role. Until its phase is built, a version says what will
@@ -72,17 +74,15 @@ class _Soon extends StatelessWidget {
   Widget build(BuildContext context) => EmptyState(icon: icon, title: AppLocalizations.of(context).soonTitle, message: message, action: action);
 }
 
-class HomeTab extends StatelessWidget {
+/// Home has no page title of its own: each version greets the person by name.
+class HomeTab extends ConsumerWidget {
   const HomeTab({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    return RoleView(
-      title: l.tabHome,
-      student: _Soon(icon: Icons.home_outlined, message: l.homeStudentSoon),
-      appUser: _Soon(icon: Icons.home_outlined, message: l.homeAppUserSoon),
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(authProvider);
+    if (!auth.profileLoaded) return const SafeArea(bottom: false, child: HomeSkeleton());
+    return auth.profile?.role == AccountRole.student ? const StudentHomeView() : const AppUserHomeView();
   }
 }
 
@@ -141,23 +141,6 @@ class MoreTab extends ConsumerWidget {
       title: l.tabMore,
       student: _Soon(icon: Icons.person_outline, message: l.moreStudentSoon, action: logOut),
       appUser: _Soon(icon: Icons.person_outline, message: l.moreAppUserSoon, action: logOut),
-    );
-  }
-}
-
-/// Where a tapped notification lands until the notifications list is built.
-class NotificationsScreen extends StatelessWidget {
-  const NotificationsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final c = AppColors.of(context);
-    final l = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l.notifications, style: AppType.headline.copyWith(color: c.text)),
-      ),
-      body: EmptyState(icon: Icons.notifications_none, title: l.soonTitle, message: l.notificationsSoon),
     );
   }
 }

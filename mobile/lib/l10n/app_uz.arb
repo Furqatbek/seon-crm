@@ -84,8 +84,6 @@
   "tabShop": "Doʻkon",
   "tabMore": "Boshqa",
   "soonTitle": "Tez orada",
-  "homeStudentSoon": "Keyingi dars, oʻrningiz, tangalar va balans shu yerda boʻladi.",
-  "homeAppUserSoon": "Sinov imtihonlari, ochiq darslar va vaucheringiz shu yerda boʻladi.",
   "gameStudentSoon": "1 ga 1 oʻyin va sinov imtihonlari. Gʻalaba uchun tanga olasiz.",
   "gameAppUserSoon": "1 ga 1 oʻyin va sinov imtihonlari. Tangalar markazga qoʻshilganingizdan keyin beriladi.",
   "qrStudentSoon": "Markazga kirishda koʻrsatiladigan QR kodingiz shu yerda boʻladi.",
@@ -95,7 +93,6 @@
   "moreStudentSoon": "Profil, reyting, dars jadvali va toʻlovlar shu yerda boʻladi.",
   "moreAppUserSoon": "Profil, vaucher va ochiq darslar shu yerda boʻladi.",
   "notifications": "Bildirishnomalar",
-  "notificationsSoon": "Bildirishnomalaringiz shu yerda boʻladi.",
   "logOut": "Chiqish",
   "money": "{amount} soʻm",
   "@money": {
@@ -115,5 +112,200 @@
         "type": "String"
       }
     }
-  }
+  },
+  "greeting": "Salom, {name}",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unreadCount": "{count, plural, =0{Oʻqilmagan bildirishnoma yoʻq} other{{count} ta oʻqilmagan bildirishnoma}}",
+  "@unreadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chooseGroup": "Guruhni tanlang",
+  "offlineBanner": "Internet aloqasi yoʻq. Maʼlumotlar yangilanmagan boʻlishi mumkin.",
+  "loadFailedBanner": "Maʼlumotlarni yangilab boʻlmadi. Pastga tortib qayta urinib koʻring.",
+  "retry": "Qayta urinish",
+  "nextLesson": "Keyingi dars",
+  "exam": "Imtihon",
+  "nothingScheduled": "Yaqin darslar yoʻq",
+  "today": "Bugun",
+  "tomorrow": "Ertaga",
+  "yesterday": "Kecha",
+  "earlier": "Oldinroq",
+  "dayAtTime": "{day}, {time}",
+  "@dayAtTime": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "roomNumber": "{room}-xona",
+  "@roomNumber": {
+    "placeholders": {
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "weekdays": "Dushanba,Seshanba,Chorshanba,Payshanba,Juma,Shanba,Yakshanba",
+  "months": "yanvar,fevral,mart,aprel,may,iyun,iyul,avgust,sentabr,oktabr,noyabr,dekabr",
+  "dayMonth": "{day}-{month}",
+  "@dayMonth": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "inDays": "{count} kundan soʻng",
+  "@inDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inHoursMinutes": "{hours} soat {minutes} daqiqadan soʻng",
+  "@inHoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "inHours": "{hours} soatdan soʻng",
+  "@inHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "inMinutes": "{minutes} daqiqadan soʻng",
+  "@inMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "startingNow": "Hozir boshlanadi",
+  "rankInGroup": "Guruhdagi oʻrin",
+  "rankPlace": "{rank}-oʻrin",
+  "@rankPlace": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "rankOf": "{count} kishidan, shu oy",
+  "@rankOf": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankNone": "Bu oy hali reyting yoʻq",
+  "coins": "Tangalar",
+  "coinsThisWeek": "+{count} shu hafta",
+  "@coinsThisWeek": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "balance": "Balans",
+  "balancePaid": "Toʻlangan",
+  "nextPaymentOn": "keyingi toʻlov {date}",
+  "@nextPaymentOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceDueBy": "{date} gacha toʻlang",
+  "@balanceDueBy": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceDebtSince": "qarz, muddati {date} edi",
+  "@balanceDebtSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "attendance": "Davomat",
+  "thisMonth": "shu oy",
+  "noLessonsYet": "Bu oy hali dars boʻlmagan",
+  "levelPill": "{level} darajasi",
+  "@levelPill": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "mockExamTitle": "Sinov imtihoni",
+  "mockExamSoon": "TOPIK uslubidagi mashq imtihonlari tez orada shu yerda boʻladi.",
+  "lockedCoins": "Qulflangan tangalar",
+  "lockedCoinsHint": "Markazga qoʻshilganingizda ochiladi",
+  "openLessonTitle": "Bepul ochiq dars",
+  "openLessonSoon": "Ochiq darslarga yozilish tez orada shu yerda ochiladi.",
+  "bookOpenLesson": "Bepul ochiq darsga yozilish",
+  "voucherTitle": "Sizga sovgʻa!",
+  "voucherPercent": "Birinchi oyga {percent}% chegirma",
+  "@voucherPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "voucherFixed": "Birinchi oyga {amount} chegirma",
+  "@voucherFixed": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "voucherTrialWeek": "Bir haftalik bepul sinov darslari",
+  "validUntil": "{date}gacha",
+  "@validUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "markAllRead": "Hammasini oʻqildi deb belgilash",
+  "notificationsEmpty": "Hozircha bildirishnomalar yoʻq",
+  "unread": "Oʻqilmagan"
 }

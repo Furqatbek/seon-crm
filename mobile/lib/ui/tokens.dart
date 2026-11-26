@@ -112,6 +112,12 @@ class AppColors extends ThemeExtension<AppColors> {
     elevatedShadow: [],
   );
 
+  /// A faint wash of the primary colour: icon circles, the unread dot's halo.
+  Color get primaryTint => primary.withValues(alpha: 0.14);
+
+  /// Behind a warning, such as the offline banner.
+  Color get warningTint => warning.withValues(alpha: 0.14);
+
   static AppColors of(BuildContext context) => Theme.of(context).extension<AppColors>()!;
 
   @override
@@ -164,6 +170,13 @@ abstract final class AppSizes {
   static const logo = 160.0;
   static const logoSmall = 112.0;
 
+  /// The bell, a notification's icon circle and other round buttons.
+  static const roundButton = 44.0;
+
+  /// The dot of an unread notification, and the least width of the bell's badge.
+  static const dot = 8.0;
+  static const counter = 20.0;
+
   /// How faded a disabled control is.
   static const disabledOpacity = 0.5;
 }
@@ -186,18 +199,14 @@ abstract final class AppSpacing {
 String? get appFontFamily => defaultTargetPlatform == TargetPlatform.iOS ? null : 'Inter';
 const appFontFallback = ['Apple SD Gothic Neo', 'Noto Sans CJK KR', 'Noto Sans KR'];
 
-/// Type: size / line height. Numbers have equal widths. The two titles are
+/// Type: size / line height. The two titles are
 /// bold, as the approved designs draw them; the headline is semibold.
 abstract final class AppType {
-  static TextStyle _style(double size, double height, FontWeight weight) => TextStyle(
-    fontFamily: appFontFamily,
-    fontFamilyFallback: appFontFallback,
-    fontSize: size,
-    height: height / size,
-    fontWeight: weight,
-    letterSpacing: 0,
-    fontFeatures: const [FontFeature.tabularFigures()],
-  );
+  static TextStyle _style(double size, double height, FontWeight weight) =>
+      TextStyle(fontFamily: appFontFamily, fontFamilyFallback: appFontFallback, fontSize: size, height: height / size, fontWeight: weight, letterSpacing: 0);
+
+  /// Equal-width digits, for numbers that change or line up: money, coins, timers.
+  static TextStyle tabular(TextStyle style) => style.copyWith(fontFeatures: const [FontFeature.tabularFigures()]);
 
   static final largeTitle = _style(28, 34, FontWeight.w700);
   static final title = _style(22, 28, FontWeight.w700);

@@ -211,12 +211,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get soonTitle => 'Tez orada';
 
   @override
-  String get homeStudentSoon => 'Keyingi dars, oʻrningiz, tangalar va balans shu yerda boʻladi.';
-
-  @override
-  String get homeAppUserSoon => 'Sinov imtihonlari, ochiq darslar va vaucheringiz shu yerda boʻladi.';
-
-  @override
   String get gameStudentSoon => '1 ga 1 oʻyin va sinov imtihonlari. Gʻalaba uchun tanga olasiz.';
 
   @override
@@ -244,9 +238,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get notifications => 'Bildirishnomalar';
 
   @override
-  String get notificationsSoon => 'Bildirishnomalaringiz shu yerda boʻladi.';
-
-  @override
   String get logOut => 'Chiqish';
 
   @override
@@ -259,4 +250,202 @@ class AppLocalizationsUz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$formatted tanga');
     return '$_temp0';
   }
+
+  @override
+  String greeting(String name) {
+    return 'Salom, $name';
+  }
+
+  @override
+  String unreadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count ta oʻqilmagan bildirishnoma', zero: 'Oʻqilmagan bildirishnoma yoʻq');
+    return '$_temp0';
+  }
+
+  @override
+  String get chooseGroup => 'Guruhni tanlang';
+
+  @override
+  String get offlineBanner => 'Internet aloqasi yoʻq. Maʼlumotlar yangilanmagan boʻlishi mumkin.';
+
+  @override
+  String get loadFailedBanner => 'Maʼlumotlarni yangilab boʻlmadi. Pastga tortib qayta urinib koʻring.';
+
+  @override
+  String get retry => 'Qayta urinish';
+
+  @override
+  String get nextLesson => 'Keyingi dars';
+
+  @override
+  String get exam => 'Imtihon';
+
+  @override
+  String get nothingScheduled => 'Yaqin darslar yoʻq';
+
+  @override
+  String get today => 'Bugun';
+
+  @override
+  String get tomorrow => 'Ertaga';
+
+  @override
+  String get yesterday => 'Kecha';
+
+  @override
+  String get earlier => 'Oldinroq';
+
+  @override
+  String dayAtTime(String day, String time) {
+    return '$day, $time';
+  }
+
+  @override
+  String roomNumber(String room) {
+    return '$room-xona';
+  }
+
+  @override
+  String get weekdays => 'Dushanba,Seshanba,Chorshanba,Payshanba,Juma,Shanba,Yakshanba';
+
+  @override
+  String get months => 'yanvar,fevral,mart,aprel,may,iyun,iyul,avgust,sentabr,oktabr,noyabr,dekabr';
+
+  @override
+  String dayMonth(int day, String month) {
+    return '$day-$month';
+  }
+
+  @override
+  String inDays(int count) {
+    return '$count kundan soʻng';
+  }
+
+  @override
+  String inHoursMinutes(int hours, int minutes) {
+    return '$hours soat $minutes daqiqadan soʻng';
+  }
+
+  @override
+  String inHours(int hours) {
+    return '$hours soatdan soʻng';
+  }
+
+  @override
+  String inMinutes(int minutes) {
+    return '$minutes daqiqadan soʻng';
+  }
+
+  @override
+  String get startingNow => 'Hozir boshlanadi';
+
+  @override
+  String get rankInGroup => 'Guruhdagi oʻrin';
+
+  @override
+  String rankPlace(int rank) {
+    return '$rank-oʻrin';
+  }
+
+  @override
+  String rankOf(int count) {
+    return '$count kishidan, shu oy';
+  }
+
+  @override
+  String get rankNone => 'Bu oy hali reyting yoʻq';
+
+  @override
+  String get coins => 'Tangalar';
+
+  @override
+  String coinsThisWeek(String count) {
+    return '+$count shu hafta';
+  }
+
+  @override
+  String get balance => 'Balans';
+
+  @override
+  String get balancePaid => 'Toʻlangan';
+
+  @override
+  String nextPaymentOn(String date) {
+    return 'keyingi toʻlov $date';
+  }
+
+  @override
+  String balanceDueBy(String date) {
+    return '$date gacha toʻlang';
+  }
+
+  @override
+  String balanceDebtSince(String date) {
+    return 'qarz, muddati $date edi';
+  }
+
+  @override
+  String get attendance => 'Davomat';
+
+  @override
+  String get thisMonth => 'shu oy';
+
+  @override
+  String get noLessonsYet => 'Bu oy hali dars boʻlmagan';
+
+  @override
+  String levelPill(String level) {
+    return '$level darajasi';
+  }
+
+  @override
+  String get mockExamTitle => 'Sinov imtihoni';
+
+  @override
+  String get mockExamSoon => 'TOPIK uslubidagi mashq imtihonlari tez orada shu yerda boʻladi.';
+
+  @override
+  String get lockedCoins => 'Qulflangan tangalar';
+
+  @override
+  String get lockedCoinsHint => 'Markazga qoʻshilganingizda ochiladi';
+
+  @override
+  String get openLessonTitle => 'Bepul ochiq dars';
+
+  @override
+  String get openLessonSoon => 'Ochiq darslarga yozilish tez orada shu yerda ochiladi.';
+
+  @override
+  String get bookOpenLesson => 'Bepul ochiq darsga yozilish';
+
+  @override
+  String get voucherTitle => 'Sizga sovgʻa!';
+
+  @override
+  String voucherPercent(int percent) {
+    return 'Birinchi oyga $percent% chegirma';
+  }
+
+  @override
+  String voucherFixed(String amount) {
+    return 'Birinchi oyga $amount chegirma';
+  }
+
+  @override
+  String get voucherTrialWeek => 'Bir haftalik bepul sinov darslari';
+
+  @override
+  String validUntil(String date) {
+    return '${date}gacha';
+  }
+
+  @override
+  String get markAllRead => 'Hammasini oʻqildi deb belgilash';
+
+  @override
+  String get notificationsEmpty => 'Hozircha bildirishnomalar yoʻq';
+
+  @override
+  String get unread => 'Oʻqilmagan';
 }

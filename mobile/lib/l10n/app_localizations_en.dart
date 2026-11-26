@@ -212,12 +212,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get soonTitle => 'Coming soon';
 
   @override
-  String get homeStudentSoon => 'Your next lesson, rank, coins and balance will be here.';
-
-  @override
-  String get homeAppUserSoon => 'Mock exams, open lessons and your voucher will be here.';
-
-  @override
   String get gameStudentSoon => '1v1 games and mock exams. Wins earn coins.';
 
   @override
@@ -245,9 +239,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications => 'Notifications';
 
   @override
-  String get notificationsSoon => 'Your notifications will be here.';
-
-  @override
   String get logOut => 'Log out';
 
   @override
@@ -260,4 +251,209 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$formatted coins', one: '$formatted coin');
     return '$_temp0';
   }
+
+  @override
+  String greeting(String name) {
+    return 'Hello, $name';
+  }
+
+  @override
+  String unreadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count unread notifications',
+      one: '$count unread notification',
+      zero: 'No unread notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chooseGroup => 'Choose a group';
+
+  @override
+  String get offlineBanner => 'No internet connection. What you see may be out of date.';
+
+  @override
+  String get loadFailedBanner => 'The page could not be updated. Pull down to try again.';
+
+  @override
+  String get retry => 'Try again';
+
+  @override
+  String get nextLesson => 'Next lesson';
+
+  @override
+  String get exam => 'Exam';
+
+  @override
+  String get nothingScheduled => 'No lessons coming up';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get tomorrow => 'Tomorrow';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get earlier => 'Earlier';
+
+  @override
+  String dayAtTime(String day, String time) {
+    return '$day, $time';
+  }
+
+  @override
+  String roomNumber(String room) {
+    return 'Room $room';
+  }
+
+  @override
+  String get weekdays => 'Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday';
+
+  @override
+  String get months => 'January,February,March,April,May,June,July,August,September,October,November,December';
+
+  @override
+  String dayMonth(int day, String month) {
+    return '$month $day';
+  }
+
+  @override
+  String inDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: 'in $count days', one: 'in $count day');
+    return '$_temp0';
+  }
+
+  @override
+  String inHoursMinutes(int hours, int minutes) {
+    return 'in $hours h $minutes min';
+  }
+
+  @override
+  String inHours(int hours) {
+    return 'in $hours h';
+  }
+
+  @override
+  String inMinutes(int minutes) {
+    return 'in $minutes min';
+  }
+
+  @override
+  String get startingNow => 'Starting now';
+
+  @override
+  String get rankInGroup => 'Rank in group';
+
+  @override
+  String rankPlace(int rank) {
+    return '#$rank';
+  }
+
+  @override
+  String rankOf(int count) {
+    return 'of $count, this month';
+  }
+
+  @override
+  String get rankNone => 'No ranking yet this month';
+
+  @override
+  String get coins => 'Coins';
+
+  @override
+  String coinsThisWeek(String count) {
+    return '+$count this week';
+  }
+
+  @override
+  String get balance => 'Balance';
+
+  @override
+  String get balancePaid => 'Paid';
+
+  @override
+  String nextPaymentOn(String date) {
+    return 'next payment $date';
+  }
+
+  @override
+  String balanceDueBy(String date) {
+    return 'pay by $date';
+  }
+
+  @override
+  String balanceDebtSince(String date) {
+    return 'overdue since $date';
+  }
+
+  @override
+  String get attendance => 'Attendance';
+
+  @override
+  String get thisMonth => 'this month';
+
+  @override
+  String get noLessonsYet => 'No lessons yet this month';
+
+  @override
+  String levelPill(String level) {
+    return '$level level';
+  }
+
+  @override
+  String get mockExamTitle => 'Mock exam';
+
+  @override
+  String get mockExamSoon => 'TOPIK-style practice exams will be here soon.';
+
+  @override
+  String get lockedCoins => 'Locked coins';
+
+  @override
+  String get lockedCoinsHint => 'Unlocked when you join the centre';
+
+  @override
+  String get openLessonTitle => 'Free open lesson';
+
+  @override
+  String get openLessonSoon => 'Booking a free open lesson will be here soon.';
+
+  @override
+  String get bookOpenLesson => 'Book a free open lesson';
+
+  @override
+  String get voucherTitle => 'A gift for you!';
+
+  @override
+  String voucherPercent(int percent) {
+    return '$percent% off your first month';
+  }
+
+  @override
+  String voucherFixed(String amount) {
+    return '$amount off your first month';
+  }
+
+  @override
+  String get voucherTrialWeek => 'A free trial week';
+
+  @override
+  String validUntil(String date) {
+    return 'until $date';
+  }
+
+  @override
+  String get markAllRead => 'Mark all as read';
+
+  @override
+  String get notificationsEmpty => 'No notifications yet';
+
+  @override
+  String get unread => 'Unread';
 }

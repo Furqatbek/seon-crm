@@ -30,48 +30,52 @@ class AppShell extends StatelessWidget {
         ),
         child: SafeArea(
           top: false,
-          child: SizedBox(
-            height: AppSizes.tabBarHeight,
-            child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.topCenter,
-              children: [
-                Row(
-                  children: [
-                    _Tab(icon: Icons.home_outlined, label: l.tabHome, selected: current == 0, onTap: () => _open(0)),
-                    _Tab(icon: Icons.sports_esports_outlined, label: l.tabGame, selected: current == 1, onTap: () => _open(1)),
-                    // Room for the raised button.
-                    const Expanded(child: SizedBox()),
-                    _Tab(icon: Icons.shopping_bag_outlined, label: l.tabShop, selected: current == 3, onTap: () => _open(3)),
-                    _Tab(icon: Icons.menu, label: l.tabMore, selected: current == 4, onTap: () => _open(4)),
-                  ],
-                ),
-                Positioned(
-                  top: -AppSpacing.x5,
-                  child: Semantics(
-                    button: true,
-                    selected: current == qrIndex,
-                    label: l.tabQr,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => _open(qrIndex),
-                      // A ring in the bar's colour lifts the button off the hairline.
-                      child: Container(
-                        padding: const EdgeInsets.all(AppSpacing.x1),
-                        decoration: BoxDecoration(color: c.surface, shape: BoxShape.circle),
+          // The bar keeps its size at large text sizes, as phone tab bars do; each tab is named to screen readers.
+          child: MediaQuery.withClampedTextScaling(
+            maxScaleFactor: 1,
+            child: SizedBox(
+              height: AppSizes.tabBarHeight,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.topCenter,
+                children: [
+                  Row(
+                    children: [
+                      _Tab(icon: Icons.home_outlined, label: l.tabHome, selected: current == 0, onTap: () => _open(0)),
+                      _Tab(icon: Icons.sports_esports_outlined, label: l.tabGame, selected: current == 1, onTap: () => _open(1)),
+                      // Room for the raised button.
+                      const Expanded(child: SizedBox()),
+                      _Tab(icon: Icons.shopping_bag_outlined, label: l.tabShop, selected: current == 3, onTap: () => _open(3)),
+                      _Tab(icon: Icons.menu, label: l.tabMore, selected: current == 4, onTap: () => _open(4)),
+                    ],
+                  ),
+                  Positioned(
+                    top: -AppSpacing.x5,
+                    child: Semantics(
+                      button: true,
+                      selected: current == qrIndex,
+                      label: l.tabQr,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => _open(qrIndex),
+                        // A ring in the bar's colour lifts the button off the hairline.
                         child: Container(
-                          width: AppSizes.qrTab,
-                          height: AppSizes.qrTab,
-                          decoration: BoxDecoration(color: c.primaryFill, shape: BoxShape.circle, boxShadow: c.glow),
-                          child: ExcludeSemantics(
-                            child: Icon(Icons.qr_code_2, color: c.onPrimaryFill, size: AppSpacing.x8),
+                          padding: const EdgeInsets.all(AppSpacing.x1),
+                          decoration: BoxDecoration(color: c.surface, shape: BoxShape.circle),
+                          child: Container(
+                            width: AppSizes.qrTab,
+                            height: AppSizes.qrTab,
+                            decoration: BoxDecoration(color: c.primaryFill, shape: BoxShape.circle, boxShadow: c.glow),
+                            child: ExcludeSemantics(
+                              child: Icon(Icons.qr_code_2, color: c.onPrimaryFill, size: AppSpacing.x8),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

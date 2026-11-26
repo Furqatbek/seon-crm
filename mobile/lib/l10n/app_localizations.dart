@@ -472,18 +472,6 @@ abstract class AppLocalizations {
   /// **'Tez orada'**
   String get soonTitle;
 
-  /// No description provided for @homeStudentSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Keyingi dars, oʻrningiz, tangalar va balans shu yerda boʻladi.'**
-  String get homeStudentSoon;
-
-  /// No description provided for @homeAppUserSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Sinov imtihonlari, ochiq darslar va vaucheringiz shu yerda boʻladi.'**
-  String get homeAppUserSoon;
-
   /// No description provided for @gameStudentSoon.
   ///
   /// In uz, this message translates to:
@@ -538,12 +526,6 @@ abstract class AppLocalizations {
   /// **'Bildirishnomalar'**
   String get notifications;
 
-  /// No description provided for @notificationsSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Bildirishnomalaringiz shu yerda boʻladi.'**
-  String get notificationsSoon;
-
   /// No description provided for @logOut.
   ///
   /// In uz, this message translates to:
@@ -561,6 +543,324 @@ abstract class AppLocalizations {
   /// In uz, this message translates to:
   /// **'{count, plural, other{{formatted} tanga}}'**
   String coinsCount(int count, String formatted);
+
+  /// No description provided for @greeting.
+  ///
+  /// In uz, this message translates to:
+  /// **'Salom, {name}'**
+  String greeting(String name);
+
+  /// No description provided for @unreadCount.
+  ///
+  /// In uz, this message translates to:
+  /// **'{count, plural, =0{Oʻqilmagan bildirishnoma yoʻq} other{{count} ta oʻqilmagan bildirishnoma}}'**
+  String unreadCount(int count);
+
+  /// No description provided for @chooseGroup.
+  ///
+  /// In uz, this message translates to:
+  /// **'Guruhni tanlang'**
+  String get chooseGroup;
+
+  /// No description provided for @offlineBanner.
+  ///
+  /// In uz, this message translates to:
+  /// **'Internet aloqasi yoʻq. Maʼlumotlar yangilanmagan boʻlishi mumkin.'**
+  String get offlineBanner;
+
+  /// No description provided for @loadFailedBanner.
+  ///
+  /// In uz, this message translates to:
+  /// **'Maʼlumotlarni yangilab boʻlmadi. Pastga tortib qayta urinib koʻring.'**
+  String get loadFailedBanner;
+
+  /// No description provided for @retry.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qayta urinish'**
+  String get retry;
+
+  /// No description provided for @nextLesson.
+  ///
+  /// In uz, this message translates to:
+  /// **'Keyingi dars'**
+  String get nextLesson;
+
+  /// No description provided for @exam.
+  ///
+  /// In uz, this message translates to:
+  /// **'Imtihon'**
+  String get exam;
+
+  /// No description provided for @nothingScheduled.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yaqin darslar yoʻq'**
+  String get nothingScheduled;
+
+  /// No description provided for @today.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bugun'**
+  String get today;
+
+  /// No description provided for @tomorrow.
+  ///
+  /// In uz, this message translates to:
+  /// **'Ertaga'**
+  String get tomorrow;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kecha'**
+  String get yesterday;
+
+  /// No description provided for @earlier.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oldinroq'**
+  String get earlier;
+
+  /// No description provided for @dayAtTime.
+  ///
+  /// In uz, this message translates to:
+  /// **'{day}, {time}'**
+  String dayAtTime(String day, String time);
+
+  /// No description provided for @roomNumber.
+  ///
+  /// In uz, this message translates to:
+  /// **'{room}-xona'**
+  String roomNumber(String room);
+
+  /// No description provided for @weekdays.
+  ///
+  /// In uz, this message translates to:
+  /// **'Dushanba,Seshanba,Chorshanba,Payshanba,Juma,Shanba,Yakshanba'**
+  String get weekdays;
+
+  /// No description provided for @months.
+  ///
+  /// In uz, this message translates to:
+  /// **'yanvar,fevral,mart,aprel,may,iyun,iyul,avgust,sentabr,oktabr,noyabr,dekabr'**
+  String get months;
+
+  /// No description provided for @dayMonth.
+  ///
+  /// In uz, this message translates to:
+  /// **'{day}-{month}'**
+  String dayMonth(int day, String month);
+
+  /// No description provided for @inDays.
+  ///
+  /// In uz, this message translates to:
+  /// **'{count} kundan soʻng'**
+  String inDays(int count);
+
+  /// No description provided for @inHoursMinutes.
+  ///
+  /// In uz, this message translates to:
+  /// **'{hours} soat {minutes} daqiqadan soʻng'**
+  String inHoursMinutes(int hours, int minutes);
+
+  /// No description provided for @inHours.
+  ///
+  /// In uz, this message translates to:
+  /// **'{hours} soatdan soʻng'**
+  String inHours(int hours);
+
+  /// No description provided for @inMinutes.
+  ///
+  /// In uz, this message translates to:
+  /// **'{minutes} daqiqadan soʻng'**
+  String inMinutes(int minutes);
+
+  /// No description provided for @startingNow.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hozir boshlanadi'**
+  String get startingNow;
+
+  /// No description provided for @rankInGroup.
+  ///
+  /// In uz, this message translates to:
+  /// **'Guruhdagi oʻrin'**
+  String get rankInGroup;
+
+  /// No description provided for @rankPlace.
+  ///
+  /// In uz, this message translates to:
+  /// **'{rank}-oʻrin'**
+  String rankPlace(int rank);
+
+  /// No description provided for @rankOf.
+  ///
+  /// In uz, this message translates to:
+  /// **'{count} kishidan, shu oy'**
+  String rankOf(int count);
+
+  /// No description provided for @rankNone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu oy hali reyting yoʻq'**
+  String get rankNone;
+
+  /// No description provided for @coins.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tangalar'**
+  String get coins;
+
+  /// No description provided for @coinsThisWeek.
+  ///
+  /// In uz, this message translates to:
+  /// **'+{count} shu hafta'**
+  String coinsThisWeek(String count);
+
+  /// No description provided for @balance.
+  ///
+  /// In uz, this message translates to:
+  /// **'Balans'**
+  String get balance;
+
+  /// No description provided for @balancePaid.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻlangan'**
+  String get balancePaid;
+
+  /// No description provided for @nextPaymentOn.
+  ///
+  /// In uz, this message translates to:
+  /// **'keyingi toʻlov {date}'**
+  String nextPaymentOn(String date);
+
+  /// No description provided for @balanceDueBy.
+  ///
+  /// In uz, this message translates to:
+  /// **'{date} gacha toʻlang'**
+  String balanceDueBy(String date);
+
+  /// No description provided for @balanceDebtSince.
+  ///
+  /// In uz, this message translates to:
+  /// **'qarz, muddati {date} edi'**
+  String balanceDebtSince(String date);
+
+  /// No description provided for @attendance.
+  ///
+  /// In uz, this message translates to:
+  /// **'Davomat'**
+  String get attendance;
+
+  /// No description provided for @thisMonth.
+  ///
+  /// In uz, this message translates to:
+  /// **'shu oy'**
+  String get thisMonth;
+
+  /// No description provided for @noLessonsYet.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu oy hali dars boʻlmagan'**
+  String get noLessonsYet;
+
+  /// No description provided for @levelPill.
+  ///
+  /// In uz, this message translates to:
+  /// **'{level} darajasi'**
+  String levelPill(String level);
+
+  /// No description provided for @mockExamTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sinov imtihoni'**
+  String get mockExamTitle;
+
+  /// No description provided for @mockExamSoon.
+  ///
+  /// In uz, this message translates to:
+  /// **'TOPIK uslubidagi mashq imtihonlari tez orada shu yerda boʻladi.'**
+  String get mockExamSoon;
+
+  /// No description provided for @lockedCoins.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qulflangan tangalar'**
+  String get lockedCoins;
+
+  /// No description provided for @lockedCoinsHint.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markazga qoʻshilganingizda ochiladi'**
+  String get lockedCoinsHint;
+
+  /// No description provided for @openLessonTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bepul ochiq dars'**
+  String get openLessonTitle;
+
+  /// No description provided for @openLessonSoon.
+  ///
+  /// In uz, this message translates to:
+  /// **'Ochiq darslarga yozilish tez orada shu yerda ochiladi.'**
+  String get openLessonSoon;
+
+  /// No description provided for @bookOpenLesson.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bepul ochiq darsga yozilish'**
+  String get bookOpenLesson;
+
+  /// No description provided for @voucherTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sizga sovgʻa!'**
+  String get voucherTitle;
+
+  /// No description provided for @voucherPercent.
+  ///
+  /// In uz, this message translates to:
+  /// **'Birinchi oyga {percent}% chegirma'**
+  String voucherPercent(int percent);
+
+  /// No description provided for @voucherFixed.
+  ///
+  /// In uz, this message translates to:
+  /// **'Birinchi oyga {amount} chegirma'**
+  String voucherFixed(String amount);
+
+  /// No description provided for @voucherTrialWeek.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bir haftalik bepul sinov darslari'**
+  String get voucherTrialWeek;
+
+  /// No description provided for @validUntil.
+  ///
+  /// In uz, this message translates to:
+  /// **'{date}gacha'**
+  String validUntil(String date);
+
+  /// No description provided for @markAllRead.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hammasini oʻqildi deb belgilash'**
+  String get markAllRead;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hozircha bildirishnomalar yoʻq'**
+  String get notificationsEmpty;
+
+  /// No description provided for @unread.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻqilmagan'**
+  String get unread;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

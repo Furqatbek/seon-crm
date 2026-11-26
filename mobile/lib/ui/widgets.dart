@@ -36,6 +36,9 @@ class AppCard extends StatelessWidget {
   }
 }
 
+/// "5-dekabr" and "3-oʻrin" are one word each: a line never breaks at their hyphen.
+String keepTogether(String text) => text.replaceAll('-', '\u2011');
+
 /// A label, a big value and a line under it: Rank, Coins, Balance, Attendance.
 class StatCard extends StatelessWidget {
   const StatCard({super.key, required this.label, required this.value, this.caption, this.valueColor, this.captionColor, this.onTap});
@@ -58,10 +61,10 @@ class StatCard extends StatelessWidget {
         children: [
           Text(label, style: AppType.footnote.copyWith(color: c.textSecondary)),
           const SizedBox(height: AppSpacing.x1),
-          Text(value, style: AppType.title.copyWith(color: valueColor ?? c.text)),
+          Text(keepTogether(value), style: AppType.title.copyWith(color: valueColor ?? c.text)),
           if (caption != null) ...[
             const SizedBox(height: AppSpacing.x1),
-            Text(caption!, style: AppType.footnote.copyWith(color: captionColor ?? c.textSecondary)),
+            Text(keepTogether(caption!), style: AppType.footnote.copyWith(color: captionColor ?? c.textSecondary)),
           ],
         ],
       ),
@@ -133,7 +136,8 @@ class MoneyText extends StatelessWidget {
   final TextStyle? style;
 
   @override
-  Widget build(BuildContext context) => Text(formatMoney(amount, AppLocalizations.of(context)), style: style);
+  Widget build(BuildContext context) =>
+      Text(formatMoney(amount, AppLocalizations.of(context)), style: AppType.tabular(style ?? DefaultTextStyle.of(context).style));
 }
 
 /// A number of coins: tanga, монеты, coins, 코인.
@@ -144,7 +148,8 @@ class CoinsText extends StatelessWidget {
   final TextStyle? style;
 
   @override
-  Widget build(BuildContext context) => Text(formatCoins(coins, AppLocalizations.of(context)), style: style);
+  Widget build(BuildContext context) =>
+      Text(formatCoins(coins, AppLocalizations.of(context)), style: AppType.tabular(style ?? DefaultTextStyle.of(context).style));
 }
 
 /// Nothing to show yet: an icon, a title, a line of explanation and, when
