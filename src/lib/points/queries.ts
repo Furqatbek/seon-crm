@@ -215,6 +215,16 @@ export async function getTvBoard(token: string): Promise<TvBoard | null> {
 export type Reward = Pick<Tables<"rewards">, "id" | "name" | "description" | "cost" | "stock" | "is_active" | "photo_path"> & {
   /** A link to the photo that works for an hour, or null without a photo. */
   photoUrl: string | null;
+  /** Variants on offer, such as sizes. With any, the reward is ordered by variant and its own stock is not used. */
+  variants: RewardVariant[];
+};
+
+export type RewardVariant = {
+  id: string;
+  /** In uz, ru, en and ko. */
+  name: Record<"uz" | "ru" | "en" | "ko", string>;
+  /** null = unlimited */
+  stock: number | null;
 };
 
 /** The catalogue, cheapest first. Staff get the rewards that are switched off too; archived ones never. */
@@ -222,7 +232,7 @@ export async function getRewards(options: { activeOnly: boolean }): Promise<Rewa
   const supabase = await db();
   let query = supabase
     .from("rewards")
-    .select("id, name, description, cost, stock, is_active, photo_path")
+    .select("id, name, description, cost, stock, is_active, photo_path, reward_variants(id, name, stock, archived_at, created_at)")
     .is("archived_at", null)
     .order("cost")
     .order("name");
@@ -240,7 +250,17 @@ export async function getRewards(options: { activeOnly: boolean }): Promise<Rewa
     const signed = await supabase.storage.from("reward-photos").createSignedUrls(paths, 60 * 60);
     for (const link of signed.data ?? []) if (link.path && link.signedUrl) links.set(link.path, link.signedUrl);
   }
-  return data.map((reward) => ({ ...reward, photoUrl: (reward.photo_path && links.get(reward.photo_path)) || null }));
+  return data.map(({ reward_variants: variants, ...reward }) => ({
+    ...reward,
+    photoUrl: (reward.photo_path && links.get(reward.photo_path)) || null,
+    variants: variants
+      .filter((variant) => variant.archived_at === null)
+      .sort((a, b) => a.created_at.localeCompare(b.created_at))
+      .map((variant) => {
+        const name = (variant.name ?? {}) as Record<string, string>;
+        return { id: variant.id, name: { uz: name.uz ?? "", ru: name.ru ?? "", en: name.en ?? "", ko: name.ko ?? "" }, stock: variant.stock };
+      }),
+  }));
 }
 
 export type RedemptionRow = {
@@ -248,8 +268,10 @@ export type RedemptionRow = {
   at: string;
   student: { id: string; name: string };
   reward: string;
+  /** The variant ordered, in its four languages; null for a reward without variants. */
+  variant: unknown;
   cost: number;
-  via: "bot" | "desk";
+  via: "bot" | "desk" | "app";
   status: Enums<"redemption_status">;
   note: string | null;
   handledBy: string | null;
@@ -258,13 +280,13 @@ export type RedemptionRow = {
 /** The most requests shown on the Requests tab. */
 export const REQUESTS_SHOWN = 100;
 
-/** Reward requests: the open ones first (oldest first), then the latest handled ones. */
+/** Reward requests: the open ones first (oldest first), then the latest closed ones. */
 export async function getRedemptions(): Promise<RedemptionRow[]> {
   const supabase = await db();
   const { data, error } = await supabase
     .from("redemptions")
     .select(
-      "id, created_at, cost, via, status, note, student:students(id, full_name), reward:rewards(name), handler:profiles!redemptions_handled_by_fkey(full_name)",
+      "id, created_at, cost, via, status, note, student:students(id, full_name), reward:rewards(name), variant:reward_variants(name), handler:profiles!redemptions_handled_by_fkey(full_name)",
     )
     .order("created_at", { ascending: false })
     .limit(REQUESTS_SHOWN);
@@ -277,14 +299,17 @@ export async function getRedemptions(): Promise<RedemptionRow[]> {
     at: row.created_at,
     student: { id: row.student.id, name: row.student.full_name },
     reward: row.reward.name,
+    variant: row.variant?.name ?? null,
     cost: row.cost,
-    via: row.via as "bot" | "desk",
+    via: row.via as "bot" | "desk" | "app",
     status: row.status,
     note: row.note,
     handledBy: row.handler?.full_name ?? null,
   }));
-  const open = rows.filter((row) => row.status === "requested").reverse();
-  return [...open, ...rows.filter((row) => row.status !== "requested")];
+  // Waiting for staff first (oldest first), then waiting to be collected, then the closed ones.
+  const waiting = rows.filter((row) => row.status === "requested").reverse();
+  const ready = rows.filter((row) => row.status === "ready").reverse();
+  return [...waiting, ...ready, ...rows.filter((row) => row.status !== "requested" && row.status !== "ready")];
 }
 
 /** How many reward requests wait for staff: the number beside Points in the sidebar. 0 for a teacher. */

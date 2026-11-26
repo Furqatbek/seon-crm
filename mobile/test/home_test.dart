@@ -14,6 +14,7 @@ import 'package:student/features/notifications/notifications_screen.dart';
 import 'package:student/features/more/leaderboard.dart';
 import 'package:student/features/more/money_pages.dart';
 import 'package:student/features/more/simple_pages.dart';
+import 'package:student/features/shop/orders_page.dart';
 import 'package:student/features/tabs/tabs.dart';
 import 'package:student/ui/tokens.dart';
 import 'package:student/ui/widgets.dart';
@@ -458,7 +459,7 @@ void main() {
       await tester.tap(find.text('Buyurtmangiz olib ketishga tayyor: Brendli futbolka (M)'));
       await tester.pumpAndSettle();
       expect(app.notifications.markedRead, ['n-2']);
-      expect(find.byType(ShopTab), findsOneWidget);
+      expect(find.byType(OrdersPage), findsOneWidget);
 
       // Back on Home, the bell counts one fewer.
       await tester.tap(find.bySemanticsLabel(l.tabHome).last);
@@ -501,7 +502,7 @@ void main() {
         'points_weekly': CoinHistoryPage,
         'points_deduction': CoinHistoryPage,
         'points_month_result': LeaderboardPage,
-        'reward_update': ShopTab,
+        'reward_update': OrdersPage,
         'receipt_approved': PaymentsPage,
         'receipt_rejected': PaymentsPage,
         'lesson_reminder': HomeTab,

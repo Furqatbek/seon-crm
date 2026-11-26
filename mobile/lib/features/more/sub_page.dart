@@ -10,10 +10,13 @@ import '../../ui/widgets.dart';
 
 /// A page under More: a back chevron, a large title and the content.
 class SubPage extends StatelessWidget {
-  const SubPage({super.key, required this.title, required this.child, this.grouped = false, this.padded = true});
+  const SubPage({super.key, required this.title, required this.child, this.grouped = false, this.padded = true, this.home = Routes.more});
 
   final String title;
   final Widget child;
+
+  /// Where Back leads when the page was opened on its own.
+  final String home;
 
   /// On the grey page of grouped lists.
   final bool grouped;
@@ -24,7 +27,6 @@ class SubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppColors.of(context);
-    final l = AppLocalizations.of(context);
     return ColoredBox(
       color: grouped ? c.groupedBg : c.bg,
       child: SafeArea(
@@ -34,27 +36,7 @@ class SubPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.page),
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Semantics(
-                  button: true,
-                  label: l.back,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => context.canPop() ? context.pop() : context.go(Routes.more),
-                    child: SizedBox(
-                      width: AppSizes.tapTarget,
-                      height: AppSizes.tapTarget,
-                      child: Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: ExcludeSemantics(
-                          child: Icon(Icons.arrow_back_ios_new, color: c.primary, size: AppSpacing.x5),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              child: BackChevron(home: home),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(AppSpacing.page, 0, AppSpacing.page, AppSpacing.x4),
@@ -72,6 +54,40 @@ class SubPage extends StatelessWidget {
                   : child,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The back chevron at the top of a page: to the page before, or to `home`
+/// when the page was opened on its own.
+class BackChevron extends StatelessWidget {
+  const BackChevron({super.key, this.home = Routes.more});
+
+  final String home;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppColors.of(context);
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Semantics(
+        button: true,
+        label: AppLocalizations.of(context).back,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => context.canPop() ? context.pop() : context.go(home),
+          child: SizedBox(
+            width: AppSizes.tapTarget,
+            height: AppSizes.tapTarget,
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: ExcludeSemantics(
+                child: Icon(Icons.arrow_back_ios_new, color: c.primary, size: AppSpacing.x5),
+              ),
+            ),
+          ),
         ),
       ),
     );

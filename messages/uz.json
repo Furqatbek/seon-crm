@@ -1299,7 +1299,8 @@
     "reward": {
       "requested": "soʻrov qabul qilindi, {points} ta tanga ushlab qolindi. Qabulxonadan oling.",
       "given": "topshirildi. Tabriklaymiz!",
-      "rejected": "soʻrov rad etildi ({reason}). {points} ta tanga qaytarildi."
+      "rejected": "soʻrov rad etildi ({reason}). {points} ta tanga qaytarildi.",
+      "ready": "olib ketishga tayyor. Qabulxonadan oling."
     },
     "source": {
       "attendance": "Davomat",
@@ -1761,7 +1762,9 @@
       "outOfStock": "Bu sovgʻa tugagan.",
       "alreadyHandled": "Bu soʻrov allaqachon koʻrib chiqilgan.",
       "notOnOffer": "Bu sovgʻa endi taklif qilinmaydi.",
-      "photoInvalid": "2 MB gacha JPG, PNG yoki WebP rasm tanlang."
+      "photoInvalid": "2 MB gacha JPG, PNG yoki WebP rasm tanlang.",
+      "variantRequired": "Variantni tanlang.",
+      "variantNameRequired": "Har bir variantning oʻzbekcha nomini kiriting."
     },
     "history": {
       "title": "Tarix",
@@ -1905,7 +1908,14 @@
       "active": "Taklif qilinadi",
       "saved": "Sovgʻa saqlandi",
       "archived": "Sovgʻa arxivlandi",
-      "archive": "Arxivlash"
+      "archive": "Arxivlash",
+      "variants": "Variantlar",
+      "variantsHint": "Masalan, oʻlchamlar. Variantlar boʻlsa, qoldiq har bir variant uchun alohida yuritiladi.",
+      "addVariant": "Variant qoʻshish",
+      "removeVariant": "Variantni olib tashlash",
+      "variantName": "Nomi ({language})",
+      "variantStock": "Qoldiq",
+      "chooseVariant": "Variantni tanlang"
     },
     "requests": {
       "empty": "Hali sovgʻa soʻrovlari yoʻq.",
@@ -1917,7 +1927,8 @@
       "status": "Holat",
       "via": {
         "bot": "Bot",
-        "desk": "Qabulxona"
+        "desk": "Qabulxona",
+        "app": "Ilova"
       },
       "statuses": {
         "requested": "Kutmoqda",
@@ -1931,7 +1942,10 @@
       "given": "{name}: sovgʻa berildi",
       "rejected": "{name}: soʻrov rad etildi, tangalar qaytarildi",
       "rejectTitle": "{name} soʻrovi rad etilsinmi?",
-      "rejectBody": "Oʻquvchiga {count} ta tanga qaytadi, sovgʻa esa zaxiraga qaytadi."
+      "rejectBody": "Oʻquvchiga {count} ta tanga qaytadi, sovgʻa esa zaxiraga qaytadi.",
+      "ready": "Tayyor",
+      "markedReady": "{name}: olib ketishga tayyor, oʻquvchiga xabar yuborildi",
+      "cancelledByStudent": "Oʻquvchi bekor qildi"
     },
     "redeem": {
       "open": "Sovgʻa berish",

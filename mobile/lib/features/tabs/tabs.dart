@@ -111,17 +111,3 @@ class QrTab extends StatelessWidget {
     );
   }
 }
-
-class ShopTab extends StatelessWidget {
-  const ShopTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    return RoleView(
-      title: l.tabShop,
-      student: _Soon(icon: Icons.shopping_bag_outlined, message: l.shopStudentSoon),
-      appUser: _Soon(icon: Icons.shopping_bag_outlined, message: l.shopAppUserSoon),
-    );
-  }
-}

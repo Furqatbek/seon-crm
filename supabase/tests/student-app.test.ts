@@ -395,7 +395,7 @@ describe.skipIf(!DB_URL)("Student app groundwork", () => {
 
     it("student_home skips a cancelled lesson and says when an exam is next", async () => {
       await as({ userId: STUDENT_USER }, async (s) => {
-        const next = (await s.rows<{ next: { kind: string; exam_title: string; starts_at: string } }>(`select student_home() -> 'next' as next`))[0].next;
+        const next = (await s.rows<{ next: { id: string; kind: string; exam_title: string; starts_at: string } }>(`select student_home() -> 'next' as next`))[0].next;
         expect(next.kind).toBe("exam");
         expect(next.exam_title).toBe("Monthly test");
         expect(Date.parse(next.starts_at)).toBeGreaterThan(Date.now());

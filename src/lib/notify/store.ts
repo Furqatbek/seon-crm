@@ -226,13 +226,16 @@ export function botStore(admin: Db): BotStore {
     async rewards() {
       const { data, error } = await admin
         .from("rewards")
-        .select("id, name, cost, stock")
+        .select("id, name, cost, stock, reward_variants(id, archived_at)")
         .eq("is_active", true)
         .is("archived_at", null)
         .order("cost")
         .order("name");
       if (error) throw new Error(error.message);
-      return data;
+      // A reward with variants (sizes) is ordered in the app or at the desk, where the variant can be chosen.
+      return data
+        .filter((reward) => reward.reward_variants.every((variant) => variant.archived_at !== null))
+        .map(({ id, name, cost, stock }) => ({ id, name, cost, stock }));
     },
     async requestReward(studentId, rewardId, role, key) {
       const { error } = await admin.rpc("request_reward", {
@@ -337,8 +340,8 @@ export function pointsMessageData(admin: Db): PointsMessageData {
       const from = since.toISOString();
       const { data, error } = await admin
         .from("redemptions")
-        .select("id, student_id, cost, status, note, created_at, handled_at, reward:rewards(name)")
-        .or(`created_at.gte.${from},handled_at.gte.${from}`)
+        .select("id, student_id, cost, status, note, created_at, ready_at, handled_at, reward:rewards(name)")
+        .or(`created_at.gte.${from},ready_at.gte.${from},handled_at.gte.${from}`)
         .order("created_at");
       if (error) throw new Error(error.message);
       const chats = await chatsFor(data.map((row) => row.student_id));
@@ -353,8 +356,12 @@ export function pointsMessageData(admin: Db): PointsMessageData {
           ...(chats.get(row.student_id) ?? none),
         };
         if (row.created_at >= from) events.push({ ...base, update: "requested" });
-        if (row.handled_at && row.handled_at >= from && row.status !== "requested") {
-          events.push({ ...base, update: row.status === "given" ? "given" : "rejected" });
+        // Ready for pickup, unless it has been closed since.
+        if (row.ready_at && row.ready_at >= from && row.status === "ready") events.push({ ...base, update: "ready" });
+        // An order the student cancelled themselves needs no message.
+        if (row.handled_at && row.handled_at >= from && row.note !== "cancelled_by_student") {
+          if (row.status === "given") events.push({ ...base, update: "given" });
+          else if (row.status === "rejected" || row.status === "cancelled") events.push({ ...base, update: "rejected" });
         }
       }
       return events;

@@ -223,12 +223,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get qrAppUserSoon => 'QR orqali kirish faqat markaz oʻquvchilari uchun.';
 
   @override
-  String get shopStudentSoon => 'Tangalaringizni sovgʻalarga almashtirasiz.';
-
-  @override
-  String get shopAppUserSoon => 'Sovgʻalarni koʻrishingiz mumkin. Tanga sarflash uchun markazga qoʻshiling.';
-
-  @override
   String get notifications => 'Bildirishnomalar';
 
   @override
@@ -737,4 +731,103 @@ class AppLocalizationsUz extends AppLocalizations {
   String weekInMonth(int from, int to, String month) {
     return '$from–$to $month';
   }
+
+  @override
+  String get myOrders => 'Mening buyurtmalarim';
+
+  @override
+  String get shopEmpty => 'Hozircha sovgʻalar yoʻq';
+
+  @override
+  String get soldOut => 'Tugagan';
+
+  @override
+  String moreCoinsNeeded(String coins) {
+    return 'Yana $coins kerak';
+  }
+
+  @override
+  String get shopJoinBanner => 'Tangalarni sarflash uchun markazga qoʻshiling';
+
+  @override
+  String get freeLesson => 'Bepul dars';
+
+  @override
+  String get shopVariant => 'Variant';
+
+  @override
+  String get chooseVariant => 'Variantni tanlang';
+
+  @override
+  String unitsLeft(int count) {
+    return '$count dona qoldi';
+  }
+
+  @override
+  String get orderAction => 'Buyurtma berish';
+
+  @override
+  String get confirmOrderTitle => 'Buyurtmani tasdiqlang';
+
+  @override
+  String get balanceNow => 'Hozirgi balans';
+
+  @override
+  String get balanceAfter => 'Buyurtmadan keyin';
+
+  @override
+  String get pickupNote => 'Mahsulotni qabulxonadan olasiz';
+
+  @override
+  String get orderPlaced => 'Buyurtma qabul qilindi';
+
+  @override
+  String get orderRequested => 'Soʻraldi';
+
+  @override
+  String get orderReady => 'Olib ketishga tayyor';
+
+  @override
+  String get orderGiven => 'Topshirildi';
+
+  @override
+  String get orderRejected => 'Rad etildi';
+
+  @override
+  String get orderCancelled => 'Bekor qilindi';
+
+  @override
+  String get pickupNow => 'Qabulxonadan olib keting';
+
+  @override
+  String givenOn(String date) {
+    return 'Topshirildi, $date';
+  }
+
+  @override
+  String get coinsReturned => 'Tangalar qaytarildi';
+
+  @override
+  String get orderCancelDone => 'Buyurtma bekor qilindi, tangalar qaytarildi';
+
+  @override
+  String get cancelOrder => 'Buyurtmani bekor qilish';
+
+  @override
+  String get ordersEmpty => 'Hali buyurtma yoʻq';
+
+  @override
+  String get shopErrorCoins => 'Tangalar yetarli emas';
+
+  @override
+  String get shopErrorSoldOut => 'Afsus, bu mahsulot tugadi';
+
+  @override
+  String get shopErrorNotOnOffer => 'Bu mahsulot endi sotuvda yoʻq';
+
+  @override
+  String get shopErrorTooLate => 'Bu buyurtmani endi bekor qilib boʻlmaydi';
+
+  @override
+  String get productGone => 'Mahsulot topilmadi';
 }

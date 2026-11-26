@@ -85,16 +85,22 @@ isOneToOne: false
                   Relationships: []
                 },"reward_variants": {
                   Row: {
-                    "id": string,"reward_id": string,"name": Json,"stock": number | null,"created_at": string
+                    "id": string,"reward_id": string,"name": Json,"stock": number | null,"created_at": string,"archived_at": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "id"?: string,"reward_id": string,"name": Json,"stock"?: number | null,"created_at"?: string
+                    "id"?: string,"reward_id": string,"name": Json,"stock"?: number | null,"created_at"?: string,"archived_at"?: string | null
                   }
                   Update: {
-                    "id"?: string,"reward_id"?: string,"name"?: Json,"stock"?: number | null,"created_at"?: string
+                    "id"?: string,"reward_id"?: string,"name"?: Json,"stock"?: number | null,"created_at"?: string,"archived_at"?: string | null
                   }
-                  Relationships: []
+                  Relationships: [{
+      foreignKeyName: "reward_variants_reward_id_fkey"
+      columns: ["reward_id"]
+isOneToOne: false
+      referencedRelation: "rewards"
+      referencedColumns: ["id"]
+    }]
                 },"locked_coins": {
                   Row: {
                     "id": string,"profile_id": string,"amount": number,"exam_attempt_id": string | null,"created_at": string,"moved_at": string | null
@@ -983,16 +989,22 @@ isOneToOne: false
                   ]
                 },"redemptions": {
                   Row: {
-                    "cost": number,"created_at": string,"created_by": string | null,"handled_at": string | null,"handled_by": string | null,"id": string,"note": string | null,"request_key": string | null,"requested_by": string,"reward_id": string,"status": Database["public"]['Enums']["redemption_status"],"student_id": string,"took_stock": boolean,"via": string,"variant_id": string | null
+                    "cost": number,"created_at": string,"created_by": string | null,"handled_at": string | null,"handled_by": string | null,"id": string,"note": string | null,"request_key": string | null,"requested_by": string,"reward_id": string,"status": Database["public"]['Enums']["redemption_status"],"student_id": string,"took_stock": boolean,"via": string,"variant_id": string | null,"ready_at": string | null,"ready_by": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "cost": number,"created_at"?: string,"created_by"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"request_key"?: string | null,"requested_by": string,"reward_id": string,"status"?: Database["public"]['Enums']["redemption_status"],"student_id": string,"took_stock"?: boolean,"via": string,"variant_id"?: string | null
+                    "cost": number,"created_at"?: string,"created_by"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"request_key"?: string | null,"requested_by": string,"reward_id": string,"status"?: Database["public"]['Enums']["redemption_status"],"student_id": string,"took_stock"?: boolean,"via": string,"variant_id"?: string | null,"ready_at"?: string | null,"ready_by"?: string | null
                   }
                   Update: {
-                    "cost"?: number,"created_at"?: string,"created_by"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"request_key"?: string | null,"requested_by"?: string,"reward_id"?: string,"status"?: Database["public"]['Enums']["redemption_status"],"student_id"?: string,"took_stock"?: boolean,"via"?: string,"variant_id"?: string | null
+                    "cost"?: number,"created_at"?: string,"created_by"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"request_key"?: string | null,"requested_by"?: string,"reward_id"?: string,"status"?: Database["public"]['Enums']["redemption_status"],"student_id"?: string,"took_stock"?: boolean,"via"?: string,"variant_id"?: string | null,"ready_at"?: string | null,"ready_by"?: string | null
                   }
-                  Relationships: [
+                  Relationships: [{
+      foreignKeyName: "redemptions_variant_id_fkey"
+      columns: ["variant_id"]
+isOneToOne: false
+      referencedRelation: "reward_variants"
+      referencedColumns: ["id"]
+    },
                     {
       foreignKeyName: "redemptions_created_by_fkey"
       columns: ["created_by"]
@@ -1562,7 +1574,7 @@ isOneToOne: false
             }[]
                            },
 "request_reward":
-{ Args: { "p_request_key"?: string,"p_requested_by"?: string,"p_reward_id": string,"p_student_id": string,"p_via"?: string }; Returns: string
+{ Args: { "p_request_key"?: string,"p_requested_by"?: string,"p_reward_id": string,"p_student_id": string,"p_via"?: string,"p_variant_id"?: string }; Returns: string
                            },
 "restore_lesson":
 { Args: { "p_lesson_id": string }; Returns: undefined

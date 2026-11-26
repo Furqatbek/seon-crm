@@ -1299,7 +1299,8 @@
     "reward": {
       "requested": "요청이 접수되어 {points}코인이 보류되었습니다. 안내 데스크에서 받아 가세요.",
       "given": "전달되었습니다. 축하합니다!",
-      "rejected": "요청이 거절되었습니다({reason}). {points}코인이 반환되었습니다."
+      "rejected": "요청이 거절되었습니다({reason}). {points}코인이 반환되었습니다.",
+      "ready": "수령 준비가 완료되었습니다. 안내 데스크에서 받아 가세요."
     },
     "source": {
       "attendance": "출석",
@@ -1761,7 +1762,9 @@
       "outOfStock": "이 리워드는 품절되었습니다.",
       "alreadyHandled": "이미 처리된 요청입니다.",
       "notOnOffer": "이 리워드는 더 이상 제공되지 않습니다.",
-      "photoInvalid": "2 MB 이하의 JPG, PNG 또는 WebP 사진을 선택하세요."
+      "photoInvalid": "2 MB 이하의 JPG, PNG 또는 WebP 사진을 선택하세요.",
+      "variantRequired": "옵션을 선택하세요.",
+      "variantNameRequired": "각 옵션의 우즈베크어 이름을 입력하세요."
     },
     "history": {
       "title": "내역",
@@ -1905,7 +1908,14 @@
       "active": "제공 중",
       "saved": "리워드가 저장되었습니다",
       "archived": "리워드가 보관되었습니다",
-      "archive": "보관"
+      "archive": "보관",
+      "variants": "옵션",
+      "variantsHint": "예: 사이즈. 옵션이 있으면 재고는 옵션별로 관리됩니다.",
+      "addVariant": "옵션 추가",
+      "removeVariant": "옵션 삭제",
+      "variantName": "이름 ({language})",
+      "variantStock": "재고",
+      "chooseVariant": "옵션 선택"
     },
     "requests": {
       "empty": "아직 리워드 요청이 없습니다.",
@@ -1917,7 +1927,8 @@
       "status": "상태",
       "via": {
         "bot": "봇",
-        "desk": "데스크"
+        "desk": "데스크",
+        "app": "앱"
       },
       "statuses": {
         "requested": "대기 중",
@@ -1931,7 +1942,10 @@
       "given": "{name}: 리워드가 지급되었습니다",
       "rejected": "{name}: 요청이 거절되어 코인이 반환되었습니다",
       "rejectTitle": "{name} 님의 요청을 거절할까요?",
-      "rejectBody": "{count, plural, other {#코인}}이 학생에게 반환되고 리워드는 재고로 돌아갑니다."
+      "rejectBody": "{count, plural, other {#코인}}이 학생에게 반환되고 리워드는 재고로 돌아갑니다.",
+      "ready": "준비 완료",
+      "markedReady": "{name}: 수령 준비 완료, 학생에게 알렸습니다",
+      "cancelledByStudent": "학생이 취소함"
     },
     "redeem": {
       "open": "리워드 교환",

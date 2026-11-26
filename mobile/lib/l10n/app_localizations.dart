@@ -496,18 +496,6 @@ abstract class AppLocalizations {
   /// **'QR orqali kirish faqat markaz oʻquvchilari uchun.'**
   String get qrAppUserSoon;
 
-  /// No description provided for @shopStudentSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Tangalaringizni sovgʻalarga almashtirasiz.'**
-  String get shopStudentSoon;
-
-  /// No description provided for @shopAppUserSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Sovgʻalarni koʻrishingiz mumkin. Tanga sarflash uchun markazga qoʻshiling.'**
-  String get shopAppUserSoon;
-
   /// No description provided for @notifications.
   ///
   /// In uz, this message translates to:
@@ -1395,6 +1383,192 @@ abstract class AppLocalizations {
   /// In uz, this message translates to:
   /// **'{from}–{to} {month}'**
   String weekInMonth(int from, int to, String month);
+
+  /// No description provided for @myOrders.
+  ///
+  /// In uz, this message translates to:
+  /// **'Mening buyurtmalarim'**
+  String get myOrders;
+
+  /// No description provided for @shopEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hozircha sovgʻalar yoʻq'**
+  String get shopEmpty;
+
+  /// No description provided for @soldOut.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tugagan'**
+  String get soldOut;
+
+  /// No description provided for @moreCoinsNeeded.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yana {coins} kerak'**
+  String moreCoinsNeeded(String coins);
+
+  /// No description provided for @shopJoinBanner.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tangalarni sarflash uchun markazga qoʻshiling'**
+  String get shopJoinBanner;
+
+  /// No description provided for @freeLesson.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bepul dars'**
+  String get freeLesson;
+
+  /// No description provided for @shopVariant.
+  ///
+  /// In uz, this message translates to:
+  /// **'Variant'**
+  String get shopVariant;
+
+  /// No description provided for @chooseVariant.
+  ///
+  /// In uz, this message translates to:
+  /// **'Variantni tanlang'**
+  String get chooseVariant;
+
+  /// No description provided for @unitsLeft.
+  ///
+  /// In uz, this message translates to:
+  /// **'{count} dona qoldi'**
+  String unitsLeft(int count);
+
+  /// No description provided for @orderAction.
+  ///
+  /// In uz, this message translates to:
+  /// **'Buyurtma berish'**
+  String get orderAction;
+
+  /// No description provided for @confirmOrderTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Buyurtmani tasdiqlang'**
+  String get confirmOrderTitle;
+
+  /// No description provided for @balanceNow.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hozirgi balans'**
+  String get balanceNow;
+
+  /// No description provided for @balanceAfter.
+  ///
+  /// In uz, this message translates to:
+  /// **'Buyurtmadan keyin'**
+  String get balanceAfter;
+
+  /// No description provided for @pickupNote.
+  ///
+  /// In uz, this message translates to:
+  /// **'Mahsulotni qabulxonadan olasiz'**
+  String get pickupNote;
+
+  /// No description provided for @orderPlaced.
+  ///
+  /// In uz, this message translates to:
+  /// **'Buyurtma qabul qilindi'**
+  String get orderPlaced;
+
+  /// No description provided for @orderRequested.
+  ///
+  /// In uz, this message translates to:
+  /// **'Soʻraldi'**
+  String get orderRequested;
+
+  /// No description provided for @orderReady.
+  ///
+  /// In uz, this message translates to:
+  /// **'Olib ketishga tayyor'**
+  String get orderReady;
+
+  /// No description provided for @orderGiven.
+  ///
+  /// In uz, this message translates to:
+  /// **'Topshirildi'**
+  String get orderGiven;
+
+  /// No description provided for @orderRejected.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rad etildi'**
+  String get orderRejected;
+
+  /// No description provided for @orderCancelled.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bekor qilindi'**
+  String get orderCancelled;
+
+  /// No description provided for @pickupNow.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qabulxonadan olib keting'**
+  String get pickupNow;
+
+  /// No description provided for @givenOn.
+  ///
+  /// In uz, this message translates to:
+  /// **'Topshirildi, {date}'**
+  String givenOn(String date);
+
+  /// No description provided for @coinsReturned.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tangalar qaytarildi'**
+  String get coinsReturned;
+
+  /// No description provided for @orderCancelDone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Buyurtma bekor qilindi, tangalar qaytarildi'**
+  String get orderCancelDone;
+
+  /// No description provided for @cancelOrder.
+  ///
+  /// In uz, this message translates to:
+  /// **'Buyurtmani bekor qilish'**
+  String get cancelOrder;
+
+  /// No description provided for @ordersEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hali buyurtma yoʻq'**
+  String get ordersEmpty;
+
+  /// No description provided for @shopErrorCoins.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tangalar yetarli emas'**
+  String get shopErrorCoins;
+
+  /// No description provided for @shopErrorSoldOut.
+  ///
+  /// In uz, this message translates to:
+  /// **'Afsus, bu mahsulot tugadi'**
+  String get shopErrorSoldOut;
+
+  /// No description provided for @shopErrorNotOnOffer.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu mahsulot endi sotuvda yoʻq'**
+  String get shopErrorNotOnOffer;
+
+  /// No description provided for @shopErrorTooLate.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu buyurtmani endi bekor qilib boʻlmaydi'**
+  String get shopErrorTooLate;
+
+  /// No description provided for @productGone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Mahsulot topilmadi'**
+  String get productGone;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

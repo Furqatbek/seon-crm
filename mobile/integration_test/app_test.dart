@@ -18,18 +18,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/app.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
+import 'package:student/core/shop_state.dart';
 import 'package:student/core/state.dart';
 import 'package:student/data/auth_repository.dart';
 import 'package:student/data/device_tokens.dart';
 import 'package:student/data/home.dart';
 import 'package:student/data/more.dart';
 import 'package:student/data/notifications.dart';
+import 'package:student/data/shop.dart';
 import 'package:student/env.dart';
 import 'package:student/features/auth/sign_in_screens.dart';
 import 'package:student/features/auth/welcome_screen.dart';
 import 'package:student/features/home/student_home.dart';
 import 'package:student/features/more/more_tab.dart';
 import 'package:student/features/more/sub_page.dart';
+import 'package:student/features/shop/orders_page.dart';
+import 'package:student/features/shop/product_page.dart';
 import 'package:student/l10n/app_localizations.dart';
 import 'package:student/ui/widgets.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -46,17 +50,24 @@ final uz = lookupAppLocalizations(const Locale('uz'));
 final ko = lookupAppLocalizations(const Locale('ko'));
 
 /// The app on the in-memory stand-in, signed in or not.
-Future<FakeAuthRepository> pumpInMemory(WidgetTester tester, {required bool signedIn}) async {
+Future<FakeAuthRepository> pumpInMemory(WidgetTester tester, {required bool signedIn, FakeShopRepository? shop}) async {
   SharedPreferences.setMockInitialValues({});
+  // The shop spends and returns the coins Home shows, as the server does.
+  final home = FakeHomeRepository();
+  shop ??= FakeShopRepository();
+  shop
+    ..balance = (() => (home.home['coins'] as num).toInt())
+    ..setBalance = ((coins) => home.home = {...home.home, 'coins': coins});
   final auth = FakeAuthRepository(signedIn: signedIn, profile: studentProfile);
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
         authRepositoryProvider.overrideWithValue(auth),
         deviceTokenRepositoryProvider.overrideWithValue(FakeDeviceTokens()),
-        homeRepositoryProvider.overrideWithValue(FakeHomeRepository()),
+        homeRepositoryProvider.overrideWithValue(home),
         notificationsRepositoryProvider.overrideWithValue(FakeNotificationsRepository()),
         moreRepositoryProvider.overrideWithValue(FakeMoreRepository()),
+        shopRepositoryProvider.overrideWithValue(shop),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
         clockProvider.overrideWithValue(() => testNow),
         deviceLanguageProvider.overrideWithValue('uz'),
@@ -82,6 +93,7 @@ Future<void> pumpOnDevProject(WidgetTester tester) async {
         homeRepositoryProvider.overrideWithValue(SupabaseHomeRepository(client)),
         notificationsRepositoryProvider.overrideWithValue(SupabaseNotificationsRepository(client)),
         moreRepositoryProvider.overrideWithValue(SupabaseMoreRepository(client)),
+        shopRepositoryProvider.overrideWithValue(SupabaseShopRepository(client)),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
         deviceLanguageProvider.overrideWithValue('uz'),
       ],
@@ -176,5 +188,64 @@ void main() {
     await signIn(tester, phone, password);
     expect(find.byType(SignInScreen), findsOneWidget);
     expect(find.text(uz.errorInvalidCredentials), findsOneWidget);
+  });
+
+  // The centre's side is the in-memory stand-in's: it does what the CRM's
+  // Requests tab does through handle_redemption(). The same steps against the
+  // real database are in supabase/tests/shop.test.ts.
+  testWidgets('a size M T-shirt is ordered in the app, marked ready and given by the centre, and the app follows', (tester) async {
+    final shop = FakeShopRepository(orders: []);
+    await pumpInMemory(tester, signedIn: true, shop: shop);
+
+    // Shop → the T-shirt → size M → Order → Confirm.
+    await tester.tap(find.bySemanticsLabel(uz.tabShop).last);
+    await tester.pumpAndSettle();
+    expect(find.text('128 tanga'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Brendli futbolka'), 200, scrollable: find.byType(Scrollable).last);
+    await tester.drag(find.byType(Scrollable).last, const Offset(0, -150));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Brendli futbolka'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ProductPage), findsOneWidget);
+    await tester.scrollUntilVisible(find.widgetWithText(Pill, 'M'), 200, scrollable: find.byType(Scrollable).last);
+    await tester.drag(find.byType(Scrollable).last, const Offset(0, -150));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(Pill, 'M'));
+    await tester.pumpAndSettle();
+    expect(find.text('M: ${uz.unitsLeft(3)}'), findsOneWidget);
+    await tester.tap(find.widgetWithText(PrimaryButton, uz.orderAction));
+    await tester.pumpAndSettle();
+    expect(find.text('28 tanga'), findsOneWidget);
+    await tester.tap(find.widgetWithText(PrimaryButton, uz.confirm));
+    await tester.pumpAndSettle();
+
+    // My orders: Requested, and it can still be cancelled. The centre sees it too.
+    expect(find.byType(OrdersPage), findsOneWidget);
+    expect(find.text('Brendli futbolka (M)'), findsOneWidget);
+    expect(find.widgetWithText(Pill, uz.orderRequested), findsOneWidget);
+    expect(find.text(uz.cancel), findsOneWidget);
+    final order = shop.shopOrders.single;
+    expect(order.status, OrderStatus.requested);
+    expect(shop.balance(), 28);
+
+    // The centre marks it ready: the app shows the steps and where to collect it, with no Cancel.
+    shop.markReady(order.id);
+    await tester.pumpAndSettle();
+    expect(find.byType(OrderSteps), findsOneWidget);
+    expect(find.text(uz.pickupNow), findsOneWidget);
+    expect(find.text(uz.cancel), findsNothing);
+
+    // The centre hands it over: Given, with the day.
+    shop.give(order.id);
+    await tester.pumpAndSettle();
+    expect(find.byType(OrderSteps), findsNothing);
+    expect(find.text(uz.givenOn('26-noyabr')), findsOneWidget);
+
+    // The coins stay spent, and one M fewer is left.
+    await tester.pump(const Duration(seconds: 5));
+    await tester.tap(find.bySemanticsLabel(uz.back));
+    await tester.pumpAndSettle();
+    expect(find.text('28 tanga'), findsOneWidget);
+    expect(shop.shopItems.firstWhere((item) => item.id == 'r-shirt').variants.firstWhere((variant) => variant.names['uz'] == 'M').stock, 2);
   });
 }

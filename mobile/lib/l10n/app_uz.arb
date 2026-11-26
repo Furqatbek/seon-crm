@@ -88,8 +88,6 @@
   "gameAppUserSoon": "1 ga 1 oʻyin va sinov imtihonlari. Tangalar markazga qoʻshilganingizdan keyin beriladi.",
   "qrStudentSoon": "Markazga kirishda koʻrsatiladigan QR kodingiz shu yerda boʻladi.",
   "qrAppUserSoon": "QR orqali kirish faqat markaz oʻquvchilari uchun.",
-  "shopStudentSoon": "Tangalaringizni sovgʻalarga almashtirasiz.",
-  "shopAppUserSoon": "Sovgʻalarni koʻrishingiz mumkin. Tanga sarflash uchun markazga qoʻshiling.",
   "notifications": "Bildirishnomalar",
   "logOut": "Chiqish",
   "money": "{amount} soʻm",
@@ -494,5 +492,57 @@
         "type": "String"
       }
     }
-  }
+  },
+  "myOrders": "Mening buyurtmalarim",
+  "shopEmpty": "Hozircha sovgʻalar yoʻq",
+  "soldOut": "Tugagan",
+  "moreCoinsNeeded": "Yana {coins} kerak",
+  "@moreCoinsNeeded": {
+    "placeholders": {
+      "coins": {
+        "type": "String"
+      }
+    }
+  },
+  "shopJoinBanner": "Tangalarni sarflash uchun markazga qoʻshiling",
+  "freeLesson": "Bepul dars",
+  "shopVariant": "Variant",
+  "chooseVariant": "Variantni tanlang",
+  "unitsLeft": "{count} dona qoldi",
+  "@unitsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orderAction": "Buyurtma berish",
+  "confirmOrderTitle": "Buyurtmani tasdiqlang",
+  "balanceNow": "Hozirgi balans",
+  "balanceAfter": "Buyurtmadan keyin",
+  "pickupNote": "Mahsulotni qabulxonadan olasiz",
+  "orderPlaced": "Buyurtma qabul qilindi",
+  "orderRequested": "Soʻraldi",
+  "orderReady": "Olib ketishga tayyor",
+  "orderGiven": "Topshirildi",
+  "orderRejected": "Rad etildi",
+  "orderCancelled": "Bekor qilindi",
+  "pickupNow": "Qabulxonadan olib keting",
+  "givenOn": "Topshirildi, {date}",
+  "@givenOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "coinsReturned": "Tangalar qaytarildi",
+  "orderCancelDone": "Buyurtma bekor qilindi, tangalar qaytarildi",
+  "cancelOrder": "Buyurtmani bekor qilish",
+  "ordersEmpty": "Hali buyurtma yoʻq",
+  "shopErrorCoins": "Tangalar yetarli emas",
+  "shopErrorSoldOut": "Afsus, bu mahsulot tugadi",
+  "shopErrorNotOnOffer": "Bu mahsulot endi sotuvda yoʻq",
+  "shopErrorTooLate": "Bu buyurtmani endi bekor qilib boʻlmaydi",
+  "productGone": "Mahsulot topilmadi"
 }

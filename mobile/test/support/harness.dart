@@ -8,6 +8,7 @@ import 'package:student/app.dart';
 import 'package:student/core/localization.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
+import 'package:student/core/shop_state.dart';
 import 'package:student/core/state.dart';
 import 'package:student/data/models.dart';
 import 'package:student/l10n/app_localizations.dart';
@@ -33,6 +34,7 @@ class TestApp {
   final FakeHomeRepository home;
   final FakeNotificationsRepository notifications;
   final more = FakeMoreRepository();
+  final shop = FakeShopRepository();
 
   /// The photo the picker hands back; null as if the person backed out.
   Uint8List? photo;
@@ -66,6 +68,12 @@ class TestApp {
         );
       }
     };
+    // The shop spends and returns the coins Home shows, and only a student may order.
+    shop
+      ..balance = (() => (home.home['coins'] as num).toInt())
+      ..setBalance = ((coins) => home.home = {...home.home, 'coins': coins})
+      ..allowed = auth.profile?.role == AccountRole.student
+      ..clock = () => now;
     SharedPreferences.setMockInitialValues(preferences);
     saved = await SharedPreferences.getInstance();
     return ProviderScope(
@@ -76,6 +84,7 @@ class TestApp {
         notificationsRepositoryProvider.overrideWithValue(notifications),
         clockProvider.overrideWithValue(() => now),
         moreRepositoryProvider.overrideWithValue(more),
+        shopRepositoryProvider.overrideWithValue(shop),
         photoPickerProvider.overrideWithValue((_) async => photo),
         sharedPreferencesProvider.overrideWithValue(saved),
         pushServiceProvider.overrideWithValue(push),

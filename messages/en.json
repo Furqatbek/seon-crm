@@ -1299,7 +1299,8 @@
     "reward": {
       "requested": "request received, {points} coins are held. Collect it at the front desk.",
       "given": "handed over. Enjoy!",
-      "rejected": "the request was declined ({reason}). {points} coins are back."
+      "rejected": "the request was declined ({reason}). {points} coins are back.",
+      "ready": "ready for pickup. Collect it at the front desk."
     },
     "source": {
       "attendance": "Attendance",
@@ -1761,7 +1762,9 @@
       "outOfStock": "This reward is out of stock.",
       "alreadyHandled": "This request was already handled.",
       "notOnOffer": "This reward is no longer on offer.",
-      "photoInvalid": "Choose a JPG, PNG or WebP photo of up to 2 MB."
+      "photoInvalid": "Choose a JPG, PNG or WebP photo of up to 2 MB.",
+      "variantRequired": "Choose a variant.",
+      "variantNameRequired": "Enter each variant's name in Uzbek."
     },
     "history": {
       "title": "History",
@@ -1905,7 +1908,14 @@
       "active": "On offer",
       "saved": "Reward saved",
       "archived": "Reward archived",
-      "archive": "Archive"
+      "archive": "Archive",
+      "variants": "Variants",
+      "variantsHint": "Sizes, for example. With variants, stock is kept per variant.",
+      "addVariant": "Add variant",
+      "removeVariant": "Remove variant",
+      "variantName": "Name ({language})",
+      "variantStock": "In stock",
+      "chooseVariant": "Choose a variant"
     },
     "requests": {
       "empty": "No reward requests yet.",
@@ -1917,7 +1927,8 @@
       "status": "Status",
       "via": {
         "bot": "Bot",
-        "desk": "Desk"
+        "desk": "Desk",
+        "app": "App"
       },
       "statuses": {
         "requested": "Waiting",
@@ -1931,7 +1942,10 @@
       "given": "{name}: reward given",
       "rejected": "{name}: request rejected, coins returned",
       "rejectTitle": "Reject the request of {name}?",
-      "rejectBody": "{count, plural, one {# coin returns} other {# coins return}} to the student, and the reward goes back in stock."
+      "rejectBody": "{count, plural, one {# coin returns} other {# coins return}} to the student, and the reward goes back in stock.",
+      "ready": "Mark ready",
+      "markedReady": "{name}: ready for pickup, the student has been told",
+      "cancelledByStudent": "Cancelled by the student"
     },
     "redeem": {
       "open": "Redeem reward",

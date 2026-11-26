@@ -76,6 +76,33 @@ export const PHOTO_TYPES = { "image/jpeg": "jpg", "image/png": "png", "image/web
 export const PHOTO_MAX_BYTES = 2 * 1024 * 1024;
 
 /** Add or edit a reward. An empty stock means unlimited. */
+/** The most variants one reward has. */
+export const VARIANTS_MAX = 12;
+/** The languages a variant is named in: the student app's four. */
+export const VARIANT_LANGUAGES = ["uz", "ru", "en", "ko"] as const;
+
+const variantName = z.string().trim().max(30, "tooLong");
+/** One variant: its name in Uzbek (the others fall back to it) and its stock, empty for unlimited. */
+export const rewardVariantSchema = z.object({
+  id: z.uuid().optional(),
+  uz: variantName.min(1, "variantNameRequired"),
+  ru: variantName,
+  en: variantName,
+  ko: variantName,
+  stock: z.string().transform((value, ctx) => {
+    if (value.trim() === "") return null;
+    const stock = Number(value);
+    if (!Number.isInteger(stock) || stock < 0 || stock > 100_000) {
+      ctx.addIssue({ code: "custom", message: "stockInvalid" });
+      return z.NEVER;
+    }
+    return stock;
+  }),
+  /** The stock as the form loaded it: saved only when the owner changed it. */
+  stock_loaded: z.string().optional(),
+});
+export type RewardVariantInput = z.input<typeof rewardVariantSchema>;
+
 export const rewardSchema = z.object({
   id: z.uuid().optional(),
   name: z.string().trim().min(1, "nameRequired").max(80, "tooLong"),
@@ -102,6 +129,8 @@ export const rewardSchema = z.object({
     .string()
     .regex(/^[0-9a-f-]{36}\.(jpg|png|webp)$/)
     .nullable(),
+  /** Variants, such as sizes. A reward with variants is ordered by variant and its own stock is not used. */
+  variants: z.array(rewardVariantSchema).max(VARIANTS_MAX, "tooLong").default([]),
 });
 export type RewardInput = z.input<typeof rewardSchema>;
 export type RewardValues = z.output<typeof rewardSchema>;
@@ -110,14 +139,16 @@ export type RewardValues = z.output<typeof rewardSchema>;
 export const handleRedemptionSchema = z
   .object({
     id: z.uuid(),
-    action: z.enum(["give", "reject", "cancel"]),
+    action: z.enum(["ready", "give", "reject", "cancel"]),
     note: reason,
   })
   .superRefine((value, ctx) => {
-    if (value.action !== "give" && !value.note) ctx.addIssue({ code: "custom", path: ["note"], message: "reasonRequired" });
+    if ((value.action === "reject" || value.action === "cancel") && !value.note) {
+      ctx.addIssue({ code: "custom", path: ["note"], message: "reasonRequired" });
+    }
   });
 
-export const requestRewardSchema = z.object({ student_id: z.uuid(), reward_id: z.uuid() });
+export const requestRewardSchema = z.object({ student_id: z.uuid(), reward_id: z.uuid(), variant_id: z.uuid().nullish() });
 
 /** Owner adjustment: any amount, reason required. */
 export const adjustSchema = z.object({
@@ -177,6 +208,8 @@ export type PointsErrorKey =
   | "alreadyHandled"
   | "notOnOffer"
   | "photoInvalid"
+  | "variantRequired"
+  | "variantNameRequired"
   | "notAllowed"
   | "notFound"
   | "generic";
@@ -195,6 +228,9 @@ export const POINTS_ERRORS: Record<string, PointsErrorKey> = {
   ER003: "alreadyHandled",
   ER004: "reasonRequired",
   ER005: "notOnOffer",
+  // The Shop: supabase/migrations/20261208100000_shop.sql.
+  ER006: "variantRequired",
+  ER007: "alreadyHandled",
   "42501": "notAllowed",
   P0002: "notFound",
 };

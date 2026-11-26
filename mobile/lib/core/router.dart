@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +15,9 @@ import '../features/more/schedule.dart';
 import '../features/more/simple_pages.dart';
 import '../features/notifications/notifications_screen.dart';
 import '../features/shell/app_shell.dart';
+import '../features/shop/orders_page.dart';
+import '../features/shop/product_page.dart';
+import '../features/shop/shop_tab.dart';
 import '../features/tabs/tabs.dart';
 import '../push/notification_routes.dart';
 import 'state.dart';
@@ -40,7 +43,10 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.listen(authProvider, (_, next) => signedIn.value = next.signedIn);
   ref.onDispose(signedIn.dispose);
 
+  // Pages that cover the tab bar open on this navigator.
+  final root = GlobalKey<NavigatorState>();
   final router = GoRouter(
+    navigatorKey: root,
     initialLocation: Routes.home,
     refreshListenable: signedIn,
     redirect: (context, state) => redirectFor(signedIn: signedIn.value, path: state.matchedLocation),
@@ -72,7 +78,20 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [GoRoute(path: Routes.qr, builder: (_, _) => const QrTab())],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: Routes.shop, builder: (_, _) => const ShopTab())],
+            routes: [
+              GoRoute(
+                path: Routes.shop,
+                builder: (_, _) => const ShopTab(),
+                routes: [
+                  GoRoute(path: 'orders', builder: (_, _) => const OrdersPage()),
+                  GoRoute(
+                    path: 'product/:id',
+                    parentNavigatorKey: root,
+                    builder: (_, state) => ProductPage(id: state.pathParameters['id']!),
+                  ),
+                ],
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [

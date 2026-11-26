@@ -233,6 +233,42 @@ describe("student messages: push when the app is installed, otherwise Telegram",
     // Only the parent's chat got the Telegram message.
     expect(providers.telegram.sent.map((message) => message.recipient)).toEqual(["201"]);
   });
+
+  it("an order marked Ready sends the student exactly one push", async () => {
+    const { store, rows } = fakeStore({ "student-1": account() });
+    const { push, sent } = fakePush();
+    const providers = fakeProviders();
+    const { log } = memoryLog();
+    const chats = { studentChat: chat(101), parentChat: chat(201) };
+    const order = { redemptionId: "order-1", studentId: "student-1", reward: "T-shirt", cost: 100, note: null, ...chats };
+    let events: PointsMessageData["rewardEvents"] = async () => [{ ...order, update: "requested" }, { ...order, update: "ready" }];
+    const data: PointsMessageData = {
+      settings: async () => ({ centreName: "Seon", remindersEnabled: true, pointsEnabled: true, quietFrom: "21:00", quietTo: "09:00", weeklyDay: 7, weeklyTime: "18:00" }),
+      templates: async () => [{ type: "reward_update" as const, channel: "telegram" as const, language: "uz" as const, body: "{reward}: {update}" }],
+      linkedStudents: async () => [],
+      summary: async () => ({ student_id: "student-1", name: "Akmal", active: true, month: "2026-11", balance: 28, week_points: 0, month_points: 0, centre_rank: null, groups: [], perfect_month_bonus: 0, last: [], next_reward: null }),
+      deductions: async () => [],
+      rewardEvents: (since) => events(since),
+    };
+    const texts = () => (key: string) => key;
+    const deps = { data, log, providers, texts, app: studentPush({ store, push }, async () => "Seon") };
+    const ready = () => sent.filter((message) => message.body === "T-shirt: reward.ready");
+
+    // Mark ready sends at once; the job that runs every few minutes sees the same order again.
+    await runPointsMessages(now, deps);
+    await runPointsMessages(now, deps);
+    expect(ready()).toHaveLength(1);
+    expect(ready()[0]).toMatchObject({ token: "token-a", title: "Seon", data: { type: "reward_update" } });
+    expect(rows.filter((row) => row.body === "T-shirt: reward.ready")).toHaveLength(1);
+    // The parent hears on Telegram, once; the student's own chat is not written to as well.
+    expect(providers.telegram.sent.filter((message) => message.body.includes("reward.ready")).map((message) => message.recipient)).toEqual(["201"]);
+
+    // Given later is its own message and does not repeat Ready.
+    events = async () => [{ ...order, update: "ready" }, { ...order, update: "given" }];
+    await runPointsMessages(now, deps);
+    expect(ready()).toHaveLength(1);
+    expect(sent.map((message) => message.body)).toEqual(["T-shirt: reward.requested", "T-shirt: reward.ready", "T-shirt: reward.given"]);
+  });
 });
 
 describe("Firebase push (FCM HTTP v1)", () => {

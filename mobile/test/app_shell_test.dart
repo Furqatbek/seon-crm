@@ -12,6 +12,7 @@ import 'package:student/data/models.dart';
 import 'package:student/features/auth/welcome_screen.dart';
 import 'package:student/features/notifications/notifications_screen.dart';
 import 'package:student/features/more/money_pages.dart';
+import 'package:student/features/shop/orders_page.dart';
 import 'package:student/features/tabs/tabs.dart';
 import 'package:student/push/notification_routes.dart';
 import 'package:student/ui/theme.dart';
@@ -47,7 +48,7 @@ void main() {
     testWidgets('each tab shows the Student version to a linked student', (tester) async {
       useScreen(tester, phone);
       await TestApp(auth: signedIn(studentProfile)).pump(tester);
-      final expected = {l.tabGame: l.gameStudentSoon, l.tabQr: l.qrStudentSoon, l.tabShop: l.shopStudentSoon};
+      final expected = {l.tabGame: l.gameStudentSoon, l.tabQr: l.qrStudentSoon, l.tabShop: l.myOrders};
       for (final tab in expected.entries) {
         await tester.tap(find.bySemanticsLabel(tab.key).last);
         await tester.pumpAndSettle();
@@ -58,12 +59,12 @@ void main() {
     testWidgets('each tab shows the App user version to someone who is not linked', (tester) async {
       useScreen(tester, phone);
       await TestApp(auth: signedIn(appUserProfile)).pump(tester);
-      final expected = {l.tabGame: l.gameAppUserSoon, l.tabQr: l.qrAppUserSoon, l.tabShop: l.shopAppUserSoon};
+      final expected = {l.tabGame: l.gameAppUserSoon, l.tabQr: l.qrAppUserSoon, l.tabShop: l.shopJoinBanner};
       for (final tab in expected.entries) {
         await tester.tap(find.bySemanticsLabel(tab.key).last);
         await tester.pumpAndSettle();
         expect(find.text(tab.value), findsOneWidget, reason: tab.key);
-        expect(find.byType(EmptyState), findsOneWidget);
+        expect(find.byType(EmptyState), tab.key == l.tabShop ? findsNothing : findsOneWidget);
       }
     });
 
@@ -304,7 +305,7 @@ void main() {
       await app.pump(tester);
       app.push.taps.add({'type': 'reward_update'});
       await tester.pumpAndSettle();
-      expect(find.byType(ShopTab), findsOneWidget);
+      expect(find.byType(OrdersPage), findsOneWidget);
       app.push.taps.add({'type': 'lesson_reminder'});
       await tester.pumpAndSettle();
       expect(find.byType(HomeTab), findsOneWidget);
@@ -334,7 +335,7 @@ void main() {
     test('every notification type has a screen', () {
       expect(routeForNotification({'type': 'lesson_reminder'}), Routes.home);
       expect(routeForNotification({'type': 'account_linked', 'screen': 'home'}), Routes.home);
-      expect(routeForNotification({'type': 'reward_update'}), Routes.shop);
+      expect(routeForNotification({'type': 'reward_update'}), Routes.orders);
       expect(routeForNotification({'type': 'points_deduction'}), Routes.coinHistory);
       expect(routeForNotification({'type': 'receipt_rejected'}), Routes.payments);
       expect(routeForNotification({'type': 'voucher_expiring'}), Routes.voucher);

@@ -8,6 +8,7 @@ import 'package:student/data/home.dart';
 import 'package:student/data/models.dart';
 import 'package:student/data/more.dart';
 import 'package:student/data/notifications.dart';
+import 'package:student/data/shop.dart';
 import 'package:student/push/push_service.dart';
 
 /// Supabase Auth, as far as the app can tell: accounts by phone, one code,
@@ -492,4 +493,186 @@ class FakeMoreRepository implements MoreRepository {
     removed.add(path);
     onAvatar?.call(null);
   }
+}
+
+// ── Shop ──
+
+ShopVariant _size(String name, int? stock) => ShopVariant(id: 'v-${name.toLowerCase()}', names: {'uz': name, 'ru': name, 'en': name, 'ko': name}, stock: stock);
+
+List<ShopItem> sampleShop() => [
+  ShopItem(id: 'r-pens', name: 'Ruchka toʻplami', cost: 25),
+  ShopItem(id: 'r-notebook', name: 'Daftar toʻplami', cost: 40, stock: 12),
+  ShopItem(id: 'r-mug', name: 'Termos krujka', cost: 80, stock: 4),
+  ShopItem(
+    id: 'r-shirt',
+    name: 'Brendli futbolka',
+    description: 'Markazimizning brendli paxta futbolkasi. Yumshoq mato, koʻkrak qismida logotip.',
+    cost: 100,
+    variants: [_size('S', 5), _size('M', 3), _size('L', 0), _size('XL', 2)],
+  ),
+  ShopItem(id: 'r-ticket', name: 'Kino chiptasi', cost: 150, stock: 6),
+  ShopItem(id: 'r-bag', name: 'Ryukzak', cost: 200, stock: 0),
+];
+
+List<ShopOrder> sampleOrders() => [
+  ShopOrder(id: 'o-3', rewardId: 'r-pens', rewardName: 'Ruchka toʻplami', cost: 25, status: OrderStatus.requested, createdAt: DateTime.utc(2026, 11, 26, 9)),
+  ShopOrder(
+    id: 'o-2',
+    rewardId: 'r-shirt',
+    rewardName: 'Brendli futbolka',
+    variantNames: const {'uz': 'M', 'ru': 'M', 'en': 'M', 'ko': 'M'},
+    cost: 100,
+    status: OrderStatus.ready,
+    createdAt: DateTime.utc(2026, 11, 20, 9),
+    readyAt: DateTime.utc(2026, 11, 25, 9),
+  ),
+  ShopOrder(
+    id: 'o-1',
+    rewardId: 'r-notebook',
+    rewardName: 'Daftar toʻplami',
+    cost: 40,
+    status: OrderStatus.given,
+    createdAt: DateTime.utc(2026, 10, 30, 9),
+    handledAt: DateTime.utc(2026, 11, 2, 9),
+  ),
+];
+
+/// The shop as the server keeps it: coins are held and stock is taken when an
+/// order is placed, and both come back when it is cancelled or rejected. The
+/// methods at the end are the centre's side, as the CRM's Requests tab.
+class FakeShopRepository implements ShopRepository {
+  FakeShopRepository({List<ShopItem>? items, List<ShopOrder>? orders}) : shopItems = items ?? sampleShop(), shopOrders = orders ?? sampleOrders();
+
+  List<ShopItem> shopItems;
+  List<ShopOrder> shopOrders;
+
+  /// The student's coins. The test app points these at the Home it serves.
+  int Function() balance = () => 128;
+  void Function(int coins) setBalance = (_) {};
+
+  /// A linked student may order; the database refuses anyone else.
+  bool allowed = true;
+  DateTime Function() clock = () => testNow;
+  Object? failure;
+  final _changes = StreamController<void>.broadcast();
+  final _keys = <String>{};
+  var _next = 100;
+
+  void _check() {
+    if (failure != null) throw failure!;
+  }
+
+  void _restock(String rewardId, String? variantName, int by) {
+    shopItems = [
+      for (final item in shopItems)
+        if (item.id != rewardId)
+          item
+        else
+          ShopItem(
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            cost: item.cost,
+            photoPath: item.photoPath,
+            stock: variantName == null && item.stock != null ? item.stock! + by : item.stock,
+            variants: [
+              for (final variant in item.variants)
+                variant.names['uz'] == variantName && variant.stock != null
+                    ? ShopVariant(id: variant.id, names: variant.names, stock: variant.stock! + by)
+                    : variant,
+            ],
+          ),
+    ];
+  }
+
+  void _close(String orderId, OrderStatus status, {String? note, bool giveBack = false}) {
+    final order = shopOrders.firstWhere((order) => order.id == orderId);
+    shopOrders = [
+      for (final each in shopOrders)
+        if (each.id != orderId)
+          each
+        else
+          ShopOrder(
+            id: each.id,
+            rewardId: each.rewardId,
+            rewardName: each.rewardName,
+            cost: each.cost,
+            status: status,
+            createdAt: each.createdAt,
+            photoPath: each.photoPath,
+            variantNames: each.variantNames,
+            readyAt: status == OrderStatus.ready ? clock() : each.readyAt,
+            handledAt: status == OrderStatus.ready ? null : clock(),
+            note: note,
+          ),
+    ];
+    if (giveBack) {
+      setBalance(balance() + order.cost);
+      _restock(order.rewardId, order.variantNames?['uz'], 1);
+    }
+    _changes.add(null);
+  }
+
+  @override
+  Future<List<ShopItem>> items() async {
+    _check();
+    return shopItems;
+  }
+
+  @override
+  Future<List<ShopOrder>> orders() async {
+    _check();
+    return allowed ? shopOrders : const [];
+  }
+
+  @override
+  Future<void> order({required String rewardId, String? variantId, required String requestKey}) async {
+    _check();
+    if (!allowed) throw const ShopException(ShopFailure.notAllowed);
+    if (!_keys.add(requestKey)) return;
+    final item = shopItems.where((item) => item.id == rewardId).firstOrNull;
+    if (item == null) throw const ShopException(ShopFailure.notOnOffer);
+    final variant = item.variants.where((variant) => variant.id == variantId).firstOrNull;
+    if (item.variants.isNotEmpty && variant == null) throw const ShopException(ShopFailure.chooseVariant);
+    if (balance() < item.cost) throw const ShopException(ShopFailure.notEnoughCoins);
+    if ((variant?.stock ?? item.stock) == 0) throw const ShopException(ShopFailure.soldOut);
+    setBalance(balance() - item.cost);
+    _restock(item.id, variant?.names['uz'], -1);
+    shopOrders = [
+      ShopOrder(
+        id: 'o-${_next++}',
+        rewardId: item.id,
+        rewardName: item.name,
+        cost: item.cost,
+        status: OrderStatus.requested,
+        createdAt: clock(),
+        photoPath: item.photoPath,
+        variantNames: variant?.names,
+      ),
+      ...shopOrders,
+    ];
+    _changes.add(null);
+  }
+
+  @override
+  Future<void> cancel(String orderId) async {
+    _check();
+    final order = shopOrders.where((order) => order.id == orderId).firstOrNull;
+    if (order == null || order.status != OrderStatus.requested) throw const ShopException(ShopFailure.tooLate);
+    _close(orderId, OrderStatus.cancelled, giveBack: true);
+  }
+
+  @override
+  Stream<void> orderChanges() => _changes.stream;
+
+  @override
+  Future<String?> photoUrl(String path) async => null;
+
+  // The centre's side.
+
+  void markReady(String orderId) => _close(orderId, OrderStatus.ready);
+
+  void give(String orderId) => _close(orderId, OrderStatus.given);
+
+  void reject(String orderId, String reason) => _close(orderId, OrderStatus.rejected, note: reason, giveBack: true);
 }

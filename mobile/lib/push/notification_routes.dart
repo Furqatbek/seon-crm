@@ -15,6 +15,8 @@ abstract final class Routes {
   static const game = '/game';
   static const qr = '/qr';
   static const shop = '/shop';
+  static const orders = '/shop/orders';
+  static String product(String id) => '/shop/product/$id';
   static const more = '/more';
   static const notifications = '/notifications';
   static const editProfile = '/more/profile';
@@ -42,8 +44,7 @@ const _byScreen = {
   'payments': Routes.payments,
   'schedule': Routes.schedule,
   'leaderboard': Routes.leaderboard,
-  // Its own page arrives with a later phase; until then, the tab it lives under.
-  'orders': Routes.shop,
+  'orders': Routes.orders,
   'notifications': Routes.notifications,
 };
 
@@ -57,7 +58,7 @@ const _byType = {
   'points_weekly': Routes.coinHistory,
   'points_deduction': Routes.coinHistory,
   'points_month_result': Routes.leaderboard,
-  'reward_update': Routes.shop,
+  'reward_update': Routes.orders,
   'voucher_expiring': Routes.voucher,
   'open_lesson_reminder': Routes.openLessons,
 };

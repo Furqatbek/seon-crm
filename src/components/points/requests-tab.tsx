@@ -17,6 +17,7 @@ import { Link } from "@/i18n/navigation";
 import { formatDateTime } from "@/lib/format";
 import { handleRedemption } from "@/lib/points/actions";
 import type { RedemptionRow } from "@/lib/points/queries";
+import { variantLabel } from "@/lib/points/variants";
 import type { PointsErrorKey } from "@/lib/validation/points";
 
 const STATUS_TONE: Record<RedemptionRow["status"], BadgeTone> = {
@@ -28,8 +29,9 @@ const STATUS_TONE: Record<RedemptionRow["status"], BadgeTone> = {
 };
 
 /**
- * Reward requests: the open ones first. Give marks a reward handed over and is
- * final; Reject needs a reason and returns the points and the stock.
+ * Reward requests: the open ones first. Mark ready tells the student to come
+ * and collect; Give marks a reward handed over and is final; Reject needs a
+ * reason and returns the coins and the stock.
  */
 export function RequestsTab({ rows }: { rows: RedemptionRow[] }) {
   const t = useTranslations("points");
@@ -39,6 +41,13 @@ export function RequestsTab({ rows }: { rows: RedemptionRow[] }) {
   const [rejecting, setRejecting] = useState<RedemptionRow | null>(null);
   const [reason, setReason] = useState("");
   const [error, setError] = useState<PointsErrorKey | null>(null);
+
+  function markReady(row: RedemptionRow) {
+    startTransition(async () => {
+      const result = await handleRedemption({ id: row.id, action: "ready", note: "" });
+      toast(result.ok ? t("requests.markedReady", { name: row.student.name }) : t(`errors.${result.error}`));
+    });
+  }
 
   function give(row: RedemptionRow) {
     startTransition(async () => {
@@ -88,7 +97,10 @@ export function RequestsTab({ rows }: { rows: RedemptionRow[] }) {
                   {row.student.name}
                 </Link>
               </TableCell>
-              <TableCell className="min-w-40">{row.reward}</TableCell>
+              <TableCell className="min-w-40">
+                {row.reward}
+                {row.variant ? <span className="text-text-secondary"> · {variantLabel(row.variant, locale)}</span> : null}
+              </TableCell>
               <TableCell numeric>{row.cost}</TableCell>
               <TableCell className="whitespace-nowrap text-text-secondary">{t(`requests.via.${row.via}`)}</TableCell>
               <TableCell>
@@ -96,13 +108,24 @@ export function RequestsTab({ rows }: { rows: RedemptionRow[] }) {
                   <StatusPill tone={STATUS_TONE[row.status]} className="self-start">
                     {t(`requests.statuses.${row.status}`)}
                   </StatusPill>
-                  {row.note ? <span className="text-footnote text-text-secondary">{row.note}</span> : null}
+                  {row.note ? (
+                    <span className="text-footnote text-text-secondary">
+                      {row.note === "cancelled_by_student" ? t("requests.cancelledByStudent") : row.note}
+                    </span>
+                  ) : null}
                 </span>
               </TableCell>
               <TableCell>
-                {row.status === "requested" ? (
+                {row.status === "requested" || row.status === "ready" ? (
                   <span className="flex justify-end gap-2">
-                    <Button variant="primary" disabled={pending} onClick={() => give(row)}>
+                    {/* Ready comes before Give: the student is told to come and collect. */}
+                    {row.status === "requested" ? (
+                      <Button variant="primary" disabled={pending} onClick={() => markReady(row)}>
+                        {t("requests.ready")}
+                        <span className="sr-only">: {row.student.name}</span>
+                      </Button>
+                    ) : null}
+                    <Button variant={row.status === "ready" ? "primary" : undefined} disabled={pending} onClick={() => give(row)}>
                       {t("requests.give")}
                       <span className="sr-only">: {row.student.name}</span>
                     </Button>

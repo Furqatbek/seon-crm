@@ -224,12 +224,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get qrAppUserSoon => 'QR check-in is for the centre\'s students.';
 
   @override
-  String get shopStudentSoon => 'You will spend your coins on rewards here.';
-
-  @override
-  String get shopAppUserSoon => 'You can browse the rewards. Join the centre to spend coins.';
-
-  @override
   String get notifications => 'Notifications';
 
   @override
@@ -745,4 +739,103 @@ class AppLocalizationsEn extends AppLocalizations {
   String weekInMonth(int from, int to, String month) {
     return '$month $from–$to';
   }
+
+  @override
+  String get myOrders => 'My orders';
+
+  @override
+  String get shopEmpty => 'No rewards yet';
+
+  @override
+  String get soldOut => 'Sold out';
+
+  @override
+  String moreCoinsNeeded(String coins) {
+    return '$coins more needed';
+  }
+
+  @override
+  String get shopJoinBanner => 'Join the centre to spend coins';
+
+  @override
+  String get freeLesson => 'Free lesson';
+
+  @override
+  String get shopVariant => 'Option';
+
+  @override
+  String get chooseVariant => 'Choose an option';
+
+  @override
+  String unitsLeft(int count) {
+    return '$count left';
+  }
+
+  @override
+  String get orderAction => 'Order';
+
+  @override
+  String get confirmOrderTitle => 'Confirm your order';
+
+  @override
+  String get balanceNow => 'Balance now';
+
+  @override
+  String get balanceAfter => 'After the order';
+
+  @override
+  String get pickupNote => 'You collect it at reception';
+
+  @override
+  String get orderPlaced => 'Order placed';
+
+  @override
+  String get orderRequested => 'Requested';
+
+  @override
+  String get orderReady => 'Ready for pickup';
+
+  @override
+  String get orderGiven => 'Given';
+
+  @override
+  String get orderRejected => 'Rejected';
+
+  @override
+  String get orderCancelled => 'Cancelled';
+
+  @override
+  String get pickupNow => 'Collect it at reception';
+
+  @override
+  String givenOn(String date) {
+    return 'Given, $date';
+  }
+
+  @override
+  String get coinsReturned => 'Coins returned';
+
+  @override
+  String get orderCancelDone => 'Order cancelled, coins returned';
+
+  @override
+  String get cancelOrder => 'Cancel order';
+
+  @override
+  String get ordersEmpty => 'No orders yet';
+
+  @override
+  String get shopErrorCoins => 'Not enough coins';
+
+  @override
+  String get shopErrorSoldOut => 'Sorry, this has just sold out';
+
+  @override
+  String get shopErrorNotOnOffer => 'This is no longer on offer';
+
+  @override
+  String get shopErrorTooLate => 'This order can no longer be cancelled';
+
+  @override
+  String get productGone => 'This item was not found';
 }

@@ -54,7 +54,8 @@ export type RewardEvent = Chats & {
   studentId: string;
   reward: string;
   cost: number;
-  update: "requested" | "given" | "rejected";
+  /** requested: received; ready: come and collect; given: handed over; rejected: declined, with the reason. */
+  update: "requested" | "ready" | "given" | "rejected";
   /** Why it was rejected or cancelled. */
   note: string | null;
 };

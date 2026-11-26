@@ -226,12 +226,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get qrAppUserSoon => 'Вход по QR — только для учеников центра.';
 
   @override
-  String get shopStudentSoon => 'Здесь можно будет обменять монеты на призы.';
-
-  @override
-  String get shopAppUserSoon => 'Призы можно будет посмотреть. Чтобы тратить монеты, присоединитесь к центру.';
-
-  @override
   String get notifications => 'Уведомления';
 
   @override
@@ -763,4 +757,103 @@ class AppLocalizationsRu extends AppLocalizations {
   String weekInMonth(int from, int to, String month) {
     return '$from–$to $month';
   }
+
+  @override
+  String get myOrders => 'Мои заказы';
+
+  @override
+  String get shopEmpty => 'Пока подарков нет';
+
+  @override
+  String get soldOut => 'Закончилось';
+
+  @override
+  String moreCoinsNeeded(String coins) {
+    return 'Нужно ещё $coins';
+  }
+
+  @override
+  String get shopJoinBanner => 'Чтобы тратить монеты, запишитесь в центр';
+
+  @override
+  String get freeLesson => 'Бесплатный урок';
+
+  @override
+  String get shopVariant => 'Вариант';
+
+  @override
+  String get chooseVariant => 'Выберите вариант';
+
+  @override
+  String unitsLeft(int count) {
+    return 'Осталось: $count шт.';
+  }
+
+  @override
+  String get orderAction => 'Заказать';
+
+  @override
+  String get confirmOrderTitle => 'Подтвердите заказ';
+
+  @override
+  String get balanceNow => 'Сейчас на балансе';
+
+  @override
+  String get balanceAfter => 'После заказа';
+
+  @override
+  String get pickupNote => 'Заказ вы заберёте на ресепшене';
+
+  @override
+  String get orderPlaced => 'Заказ принят';
+
+  @override
+  String get orderRequested => 'Запрошен';
+
+  @override
+  String get orderReady => 'Готов к выдаче';
+
+  @override
+  String get orderGiven => 'Выдан';
+
+  @override
+  String get orderRejected => 'Отклонён';
+
+  @override
+  String get orderCancelled => 'Отменён';
+
+  @override
+  String get pickupNow => 'Заберите на ресепшене';
+
+  @override
+  String givenOn(String date) {
+    return 'Выдан, $date';
+  }
+
+  @override
+  String get coinsReturned => 'Монеты возвращены';
+
+  @override
+  String get orderCancelDone => 'Заказ отменён, монеты возвращены';
+
+  @override
+  String get cancelOrder => 'Отменить заказ';
+
+  @override
+  String get ordersEmpty => 'Заказов пока нет';
+
+  @override
+  String get shopErrorCoins => 'Не хватает монет';
+
+  @override
+  String get shopErrorSoldOut => 'К сожалению, это закончилось';
+
+  @override
+  String get shopErrorNotOnOffer => 'Этого подарка больше нет';
+
+  @override
+  String get shopErrorTooLate => 'Этот заказ уже нельзя отменить';
+
+  @override
+  String get productGone => 'Подарок не найден';
 }

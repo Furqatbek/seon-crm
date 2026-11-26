@@ -1,10 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Gift, Pencil, Plus } from "lucide-react";
+import { Gift, Pencil, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,8 @@ import type { Reward } from "@/lib/points/queries";
 import {
   PHOTO_MAX_BYTES,
   PHOTO_TYPES,
+  VARIANT_LANGUAGES,
+  VARIANTS_MAX,
   rewardSchema,
   type PointsErrorKey,
   type RewardInput,
@@ -31,6 +33,7 @@ import { RewardCard } from "./reward-card";
 function RewardForm({ reward, onClose }: { reward: Reward | null; onClose: () => void }) {
   const t = useTranslations("points");
   const tCommon = useTranslations("common");
+  const tLanguages = useTranslations("language");
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<PointsErrorKey | null>(null);
   // A newly chosen photo is uploaded when the form is saved.
@@ -50,9 +53,16 @@ function RewardForm({ reward, onClose }: { reward: Reward | null; onClose: () =>
           stock: reward.stock === null ? "" : String(reward.stock),
           is_active: reward.is_active,
           photo_path: reward.photo_path,
+          variants: reward.variants.map((variant) => ({
+            id: variant.id,
+            ...variant.name,
+            stock: variant.stock === null ? "" : String(variant.stock),
+          })),
         }
-      : { name: "", description: "", cost: "", stock: "", is_active: true, photo_path: null },
+      : { name: "", description: "", cost: "", stock: "", is_active: true, photo_path: null, variants: [] },
   });
+  const variants = useFieldArray({ control, name: "variants", keyName: "key" });
+  const loadedVariantStock = new Map(reward?.variants.map((variant) => [variant.id, variant.stock === null ? "" : String(variant.stock)]));
   const message = (key: string | undefined) => (key ? t(`errors.${key as PointsErrorKey}`) : null);
 
   const onSubmit = handleSubmit((values) => {
@@ -72,6 +82,11 @@ function RewardForm({ reward, onClose }: { reward: Reward | null; onClose: () =>
         description: values.description ?? "",
         stock: values.stock === null ? "" : String(values.stock),
         photo_path: photoPath,
+        variants: values.variants.map((variant) => ({
+          ...variant,
+          stock: variant.stock === null ? "" : String(variant.stock),
+          ...(variant.id && loadedVariantStock.has(variant.id) ? { stock_loaded: loadedVariantStock.get(variant.id) } : {}),
+        })),
         ...(reward ? { id: reward.id, stock_loaded: reward.stock === null ? "" : String(reward.stock) } : {}),
       });
       if (!result.ok) return setError(result.error);
@@ -109,6 +124,53 @@ function RewardForm({ reward, onClose }: { reward: Reward | null; onClose: () =>
             <p className="text-footnote text-text-secondary">{t("rewards.stockHint")}</p>
           </Field>
         </div>
+        <fieldset className="flex flex-col gap-3" data-slot="variants">
+          <legend className="text-body font-medium text-text">{t("rewards.variants")}</legend>
+          <p className="text-footnote text-text-secondary">{t("rewards.variantsHint")}</p>
+          {variants.fields.map((variant, index) => (
+            <div key={variant.key} className="flex flex-col gap-3 rounded-md border border-border p-3" data-slot="variant">
+              <div className="grid gap-3 sm:grid-cols-2">
+                {VARIANT_LANGUAGES.map((language) => (
+                  <Field
+                    key={language}
+                    label={t("rewards.variantName", { language: tLanguages(language) })}
+                    htmlFor={`variant-${index}-${language}`}
+                    error={message(errors.variants?.[index]?.[language]?.message)}
+                  >
+                    <Input
+                      id={`variant-${index}-${language}`}
+                      autoComplete="off"
+                      maxLength={30}
+                      aria-invalid={errors.variants?.[index]?.[language] ? true : undefined}
+                      {...register(`variants.${index}.${language}`)}
+                    />
+                  </Field>
+                ))}
+              </div>
+              <div className="flex items-end justify-between gap-3">
+                <Field label={t("rewards.variantStock")} htmlFor={`variant-${index}-stock`} error={message(errors.variants?.[index]?.stock?.message)}>
+                  <Input
+                    id={`variant-${index}-stock`}
+                    inputMode="numeric"
+                    autoComplete="off"
+                    className="numeric"
+                    aria-invalid={errors.variants?.[index]?.stock ? true : undefined}
+                    {...register(`variants.${index}.stock`)}
+                  />
+                </Field>
+                <Button variant="ghost" onClick={() => variants.remove(index)} aria-label={t("rewards.removeVariant")}>
+                  <Trash2 aria-hidden />
+                </Button>
+              </div>
+            </div>
+          ))}
+          {variants.fields.length < VARIANTS_MAX ? (
+            <Button onClick={() => variants.append({ uz: "", ru: "", en: "", ko: "", stock: "" })} className="self-start">
+              <Plus aria-hidden />
+              {t("rewards.addVariant")}
+            </Button>
+          ) : null}
+        </fieldset>
         <Field label={t("rewards.photo")} htmlFor="reward-photo">
           <Input
             id="reward-photo"

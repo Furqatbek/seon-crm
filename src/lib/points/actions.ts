@@ -5,6 +5,11 @@ import { z } from "zod";
 
 import { getSignedInUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { studentPush } from "@/lib/notify/app-notify";
+import { botTexts } from "@/lib/notify/bot-texts";
+import { runPointsMessages } from "@/lib/notify/points-messages";
+import { appEventData, appNotifyStore, getProviders, getPushSender, messageLog, pointsMessageData } from "@/lib/notify/store";
+import { createAdminClient } from "@/lib/supabase/admin";
 import {
   PHOTO_MAX_BYTES,
   PHOTO_TYPES,
@@ -232,7 +237,8 @@ export async function saveReward(input: unknown): Promise<PointsResult> {
   const ctx = await session("owner");
   if (!ctx) return { ok: false, error: "notAllowed" };
 
-  const { id, stock_loaded: loaded, ...values } = parsed.data;
+  const { id, stock_loaded: loaded, variants, ...values } = parsed.data;
+  let rewardId = id;
   if (id) {
     // Requests take and return units while the form is open: the stock is
     // written only when the owner typed a different number.
@@ -247,8 +253,36 @@ export async function saveReward(input: unknown): Promise<PointsResult> {
     if (error) return failure(error);
     if (data.length === 0) return { ok: false, error: "notFound" };
   } else {
-    const { error } = await ctx.supabase.from("rewards").insert(values);
+    const { data, error } = await ctx.supabase.from("rewards").insert(values).select("id").single();
     if (error) return failure(error);
+    rewardId = data.id;
+  }
+
+  // Variants: new ones are added, kept ones renamed, removed ones archived
+  // (old orders still name them). As with the reward, a variant's stock is
+  // written only when the owner typed a different number.
+  const kept = variants.flatMap((variant) => (variant.id ? [variant.id] : []));
+  const existing = await ctx.supabase.from("reward_variants").select("id").eq("reward_id", rewardId!).is("archived_at", null);
+  if (existing.error) return failure(existing.error);
+  const removed = existing.data.map((row) => row.id).filter((variantId) => !kept.includes(variantId));
+  if (removed.length > 0) {
+    const { error } = await ctx.supabase.from("reward_variants").update({ archived_at: new Date().toISOString() }).in("id", removed);
+    if (error) return failure(error);
+  }
+  for (const variant of variants) {
+    const name = { uz: variant.uz, ru: variant.ru || variant.uz, en: variant.en || variant.uz, ko: variant.ko || variant.uz };
+    if (variant.id) {
+      const changed = variant.stock_loaded === undefined || variant.stock_loaded.trim() !== (variant.stock === null ? "" : String(variant.stock));
+      const { error } = await ctx.supabase
+        .from("reward_variants")
+        .update(changed ? { name, stock: variant.stock } : { name })
+        .eq("id", variant.id)
+        .eq("reward_id", rewardId!);
+      if (error) return failure(error);
+    } else {
+      const { error } = await ctx.supabase.from("reward_variants").insert({ reward_id: rewardId!, name, stock: variant.stock });
+      if (error) return failure(error);
+    }
   }
 
   refresh();
@@ -280,6 +314,7 @@ export async function requestReward(input: unknown): Promise<PointsResult> {
   const { error } = await ctx.supabase.rpc("request_reward", {
     p_student_id: parsed.data.student_id,
     p_reward_id: parsed.data.reward_id,
+    p_variant_id: parsed.data.variant_id ?? undefined,
   });
   if (error) return failure(error);
 
@@ -301,6 +336,30 @@ export async function handleRedemption(input: unknown): Promise<PointsResult> {
   });
   if (error) return failure(error);
 
+  // Mark ready tells the student at once: a push when they have the app,
+  // otherwise Telegram. The scheduled run sends it if this one cannot (quiet
+  // hours, no server key); the dedupe key keeps it to one message.
+  if (parsed.data.action === "ready") await sendPointsMessagesNow();
+
   refresh();
   return { ok: true };
+}
+
+/** Runs the points messages now, as the 15-minute job does. Never fails the action it follows. */
+async function sendPointsMessagesNow(): Promise<void> {
+  try {
+    const admin = createAdminClient();
+    if (!admin) return;
+    const store = appNotifyStore(admin);
+    const events = appEventData(admin);
+    await runPointsMessages(new Date(), {
+      data: pointsMessageData(admin),
+      log: messageLog(admin, admin),
+      providers: getProviders(),
+      texts: botTexts,
+      app: studentPush({ store, push: getPushSender() }, events.centreName),
+    });
+  } catch (error) {
+    console.error("points messages", error);
+  }
 }

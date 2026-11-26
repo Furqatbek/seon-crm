@@ -218,12 +218,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get qrAppUserSoon => 'QR 체크인은 센터 수강생만 사용할 수 있습니다.';
 
   @override
-  String get shopStudentSoon => '코인으로 리워드를 받을 수 있습니다.';
-
-  @override
-  String get shopAppUserSoon => '리워드를 둘러볼 수 있습니다. 코인을 쓰려면 센터에 등록하세요.';
-
-  @override
   String get notifications => '알림';
 
   @override
@@ -732,4 +726,103 @@ class AppLocalizationsKo extends AppLocalizations {
   String weekInMonth(int from, int to, String month) {
     return '$month $from–$to일';
   }
+
+  @override
+  String get myOrders => '내 주문';
+
+  @override
+  String get shopEmpty => '아직 상품이 없습니다';
+
+  @override
+  String get soldOut => '품절';
+
+  @override
+  String moreCoinsNeeded(String coins) {
+    return '$coins 더 필요';
+  }
+
+  @override
+  String get shopJoinBanner => '코인을 쓰려면 센터에 등록하세요';
+
+  @override
+  String get freeLesson => '무료 수업';
+
+  @override
+  String get shopVariant => '옵션';
+
+  @override
+  String get chooseVariant => '옵션을 선택하세요';
+
+  @override
+  String unitsLeft(int count) {
+    return '$count개 남음';
+  }
+
+  @override
+  String get orderAction => '주문하기';
+
+  @override
+  String get confirmOrderTitle => '주문 확인';
+
+  @override
+  String get balanceNow => '현재 잔액';
+
+  @override
+  String get balanceAfter => '주문 후';
+
+  @override
+  String get pickupNote => '상품은 안내 데스크에서 받습니다';
+
+  @override
+  String get orderPlaced => '주문이 접수되었습니다';
+
+  @override
+  String get orderRequested => '요청됨';
+
+  @override
+  String get orderReady => '수령 준비 완료';
+
+  @override
+  String get orderGiven => '수령 완료';
+
+  @override
+  String get orderRejected => '거절됨';
+
+  @override
+  String get orderCancelled => '취소됨';
+
+  @override
+  String get pickupNow => '안내 데스크에서 받아 가세요';
+
+  @override
+  String givenOn(String date) {
+    return '수령 완료, $date';
+  }
+
+  @override
+  String get coinsReturned => '코인이 반환되었습니다';
+
+  @override
+  String get orderCancelDone => '주문이 취소되고 코인이 반환되었습니다';
+
+  @override
+  String get cancelOrder => '주문 취소';
+
+  @override
+  String get ordersEmpty => '아직 주문이 없습니다';
+
+  @override
+  String get shopErrorCoins => '코인이 부족합니다';
+
+  @override
+  String get shopErrorSoldOut => '죄송합니다, 품절되었습니다';
+
+  @override
+  String get shopErrorNotOnOffer => '더 이상 제공되지 않는 상품입니다';
+
+  @override
+  String get shopErrorTooLate => '이 주문은 더 이상 취소할 수 없습니다';
+
+  @override
+  String get productGone => '상품을 찾을 수 없습니다';
 }
