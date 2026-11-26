@@ -3,6 +3,7 @@ import {
   GraduationCap,
   History,
   Presentation,
+  ScanLine,
   Settings,
   Star,
   Trophy,
@@ -20,6 +21,7 @@ export type BlockKey =
   | "teachers"
   | "finance"
   | "reports"
+  | "checkin"
   | "settings"
   | "myGroups"
   | "pointsHistory"
@@ -36,6 +38,8 @@ export const BLOCKS: Block[] = [
   { key: "teachers", href: "/teachers", icon: Presentation },
   { key: "finance", href: "/finance", icon: Wallet },
   { key: "reports", href: "/reports", icon: ChartColumn },
+  // The reception scanner: a full-screen page of its own.
+  { key: "checkin", href: "/checkin", icon: ScanLine },
 ];
 
 /** Shown at the bottom of the sidebar, to the owner only. */

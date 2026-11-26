@@ -97,17 +97,3 @@ class GameTab extends StatelessWidget {
     );
   }
 }
-
-class QrTab extends StatelessWidget {
-  const QrTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    return RoleView(
-      title: l.tabQr,
-      student: _Soon(icon: Icons.qr_code_2, message: l.qrStudentSoon),
-      appUser: _Soon(icon: Icons.lock_outline, message: l.qrAppUserSoon),
-    );
-  }
-}

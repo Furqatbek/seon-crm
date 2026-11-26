@@ -65,8 +65,6 @@
   "soonTitle": "준비 중",
   "gameStudentSoon": "1대1 게임과 모의고사. 이기면 코인을 받습니다.",
   "gameAppUserSoon": "1대1 게임과 모의고사. 코인은 센터에 등록한 후에 받을 수 있습니다.",
-  "qrStudentSoon": "안내 데스크에서 보여 줄 QR 코드가 여기에 표시됩니다.",
-  "qrAppUserSoon": "QR 체크인은 센터 수강생만 사용할 수 있습니다.",
   "notifications": "알림",
   "logOut": "로그아웃",
   "money": "{amount}숨",
@@ -245,5 +243,16 @@
   "shopErrorSoldOut": "죄송합니다, 품절되었습니다",
   "shopErrorNotOnOffer": "더 이상 제공되지 않는 상품입니다",
   "shopErrorTooLate": "이 주문은 더 이상 취소할 수 없습니다",
-  "productGone": "상품을 찾을 수 없습니다"
+  "productGone": "상품을 찾을 수 없습니다",
+  "qrRotates": "코드는 30초마다 바뀝니다",
+  "qrShowAtReception": "안내 데스크에서 보여 주세요",
+  "qrWorksOffline": "인터넷 없이도 작동합니다",
+  "qrTodayArrived": "오늘: {time} 등원",
+  "qrTodayLeft": "오늘: {time} 하원",
+  "qrTodayNone": "오늘 아직 등원하지 않음",
+  "qrLockedTitle": "QR 코드는 센터 학생용입니다",
+  "qrLockedHint": "센터에 등록하면 사용할 수 있습니다",
+  "qrBookFreeLesson": "무료 공개 수업 신청",
+  "qrNeedsInternet": "코드를 처음 받으려면 인터넷에 연결하세요",
+  "qrCodeLabel": "센터 출입용 QR 코드"
 }

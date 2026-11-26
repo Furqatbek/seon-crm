@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:student/data/auth_failure.dart';
 import 'package:student/data/auth_repository.dart';
+import 'package:student/data/checkin.dart';
 import 'package:student/data/device_tokens.dart';
 import 'package:student/data/home.dart';
 import 'package:student/data/models.dart';
@@ -675,4 +676,79 @@ class FakeShopRepository implements ShopRepository {
   void give(String orderId) => _close(orderId, OrderStatus.given);
 
   void reject(String orderId, String reason) => _close(orderId, OrderStatus.rejected, note: reason, giveBack: true);
+}
+
+// ── QR check-in ──
+
+/// The same fixed secret and student as supabase/tests/checkin.test.ts.
+const testQrIdentity = QrIdentity(
+  studentId: '11111111-2222-4333-8444-555555555555',
+  secret: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+);
+
+class FakeCheckinRepository implements CheckinRepository {
+  /// What the server would hand out now.
+  QrIdentity serverIdentity = testQrIdentity;
+
+  /// Today's visits, the oldest first, as reception scanned them.
+  List<Visit> visits = [];
+  Object? failure;
+  int asked = 0;
+  final _changes = StreamController<void>.broadcast();
+
+  /// Reception scans the code: Arrived, then Left, and so on.
+  void scan(DateTime at) {
+    visits = [...visits, Visit(arrived: visits.isEmpty || !visits.last.arrived, at: at)];
+    _changes.add(null);
+  }
+
+  @override
+  Future<QrIdentity> identity() async {
+    asked++;
+    if (failure != null) throw failure!;
+    return serverIdentity;
+  }
+
+  @override
+  Future<Visit?> lastVisitToday(DateTime now) async {
+    if (failure != null) throw failure!;
+    return visits.isEmpty ? null : visits.last;
+  }
+
+  @override
+  Stream<void> visitChanges() => _changes.stream;
+}
+
+/// The phone's secure storage, in memory.
+class FakeQrSecretStore implements QrSecretStore {
+  String? profileId;
+  QrIdentity? kept;
+
+  @override
+  Future<QrIdentity?> read(String profileId) async => this.profileId == profileId ? kept : null;
+
+  @override
+  Future<void> write(String profileId, QrIdentity identity) async {
+    this.profileId = profileId;
+    kept = identity;
+  }
+
+  @override
+  Future<void> clear() async {
+    profileId = null;
+    kept = null;
+  }
+}
+
+class FakeScreenLight implements ScreenLight {
+  /// 'raise' and 'restore', in the order they were asked for.
+  final calls = <String>[];
+
+  bool get raised => calls.isNotEmpty && calls.last == 'raise';
+
+  @override
+  Future<void> raise() async => calls.add('raise');
+
+  @override
+  Future<void> restore() async => calls.add('restore');
 }

@@ -149,6 +149,7 @@ export function NotificationsTab({ settings, integrations }: { settings: CentreS
     resolver: zodResolver(notificationsSchema),
     defaultValues: {
       reminders_enabled: settings.reminders_enabled,
+      parent_visit_alerts: settings.parent_visit_alerts,
       lesson_reminder_hours: settings.lesson_reminder_hours,
       quiet_from: settings.quiet_from,
       quiet_to: settings.quiet_to,
@@ -182,6 +183,17 @@ export function NotificationsTab({ settings, integrations }: { settings: CentreS
             control={control}
             name="reminders_enabled"
             render={({ field }) => <Switch id="reminders-enabled" checked={field.value} onCheckedChange={field.onChange} />}
+          />
+        </div>
+        <div className="flex items-start justify-between gap-4">
+          <label htmlFor="visit-alerts" className="flex flex-col gap-0.5">
+            <span className="text-body font-medium text-text">{t("notifications.visitAlerts")}</span>
+            <span className="text-footnote text-text-secondary">{t("notifications.visitAlertsHint")}</span>
+          </label>
+          <Controller
+            control={control}
+            name="parent_visit_alerts"
+            render={({ field }) => <Switch id="visit-alerts" checked={field.value} onCheckedChange={field.onChange} />}
           />
         </div>
         <Field

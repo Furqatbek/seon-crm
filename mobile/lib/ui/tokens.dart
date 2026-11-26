@@ -178,6 +178,9 @@ abstract final class AppSizes {
 
   /// The logo on Welcome, and the smaller one on Sign in.
   static const logo = 160.0;
+
+  /// The check-in code at its largest.
+  static const qrMax = 260.0;
   static const logoSmall = 112.0;
 
   /// The bell, a notification's icon circle and other round buttons.

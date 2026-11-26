@@ -6,7 +6,7 @@ import { InboxProvider } from "@/components/leads/inbox-provider";
 import { AppShell } from "@/components/shell/app-shell";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import type { Locale } from "@/i18n/routing";
-import { getSignedInUser } from "@/lib/auth";
+import { getCheckinUser, getSignedInUser } from "@/lib/auth";
 import { getCentreName } from "@/lib/centre";
 import { getAlertSound, getInbox } from "@/lib/leads/inbox";
 import { getOpenRequestCount } from "@/lib/points/queries";
@@ -23,7 +23,11 @@ async function SignedIn({ locale, children }: { locale: Locale; children: React.
     getInbox(),
     getAlertSound(),
   ]);
-  if (!user) redirect(`/auth/sign-out?locale=${locale}`);
+  if (!user) {
+    // A kiosk account has one page: the reception scanner.
+    if ((await getCheckinUser())?.role === "kiosk") redirect(`/${locale}/checkin`);
+    redirect(`/auth/sign-out?locale=${locale}`);
+  }
   const centreName = name ?? (await getTranslations({ locale, namespace: "app" }))("name");
   return (
     // The shared inbox is live on every page: the count in the sidebar and the

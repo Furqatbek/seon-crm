@@ -212,12 +212,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get gameAppUserSoon => '1대1 게임과 모의고사. 코인은 센터에 등록한 후에 받을 수 있습니다.';
 
   @override
-  String get qrStudentSoon => '안내 데스크에서 보여 줄 QR 코드가 여기에 표시됩니다.';
-
-  @override
-  String get qrAppUserSoon => 'QR 체크인은 센터 수강생만 사용할 수 있습니다.';
-
-  @override
   String get notifications => '알림';
 
   @override
@@ -825,4 +819,41 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get productGone => '상품을 찾을 수 없습니다';
+
+  @override
+  String get qrRotates => '코드는 30초마다 바뀝니다';
+
+  @override
+  String get qrShowAtReception => '안내 데스크에서 보여 주세요';
+
+  @override
+  String get qrWorksOffline => '인터넷 없이도 작동합니다';
+
+  @override
+  String qrTodayArrived(String time) {
+    return '오늘: $time 등원';
+  }
+
+  @override
+  String qrTodayLeft(String time) {
+    return '오늘: $time 하원';
+  }
+
+  @override
+  String get qrTodayNone => '오늘 아직 등원하지 않음';
+
+  @override
+  String get qrLockedTitle => 'QR 코드는 센터 학생용입니다';
+
+  @override
+  String get qrLockedHint => '센터에 등록하면 사용할 수 있습니다';
+
+  @override
+  String get qrBookFreeLesson => '무료 공개 수업 신청';
+
+  @override
+  String get qrNeedsInternet => '코드를 처음 받으려면 인터넷에 연결하세요';
+
+  @override
+  String get qrCodeLabel => '센터 출입용 QR 코드';
 }

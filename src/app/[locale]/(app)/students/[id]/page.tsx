@@ -9,6 +9,7 @@ import { LedgerTab } from "@/components/students/ledger-tab";
 import { MessagesTab } from "@/components/students/messages-tab";
 import { OverviewTab } from "@/components/students/overview-tab";
 import { PointsTab } from "@/components/students/points-tab";
+import { VisitsTab } from "@/components/students/visits-tab";
 import { StudentScreen } from "@/components/students/student-screen";
 import { RecordSkeleton } from "@/components/ui/skeleton";
 import { routing } from "@/i18n/routing";
@@ -25,6 +26,7 @@ import {
   getStudentAttendance,
   getStudentLedger,
   getStudentMessages,
+  getStudentVisits,
   type StudentDetail,
 } from "@/lib/students/queries";
 import { studentSearchSchema } from "@/lib/validation/students";
@@ -87,6 +89,10 @@ async function Points({ student, role }: { student: StudentDetail; role: UserRol
   );
 }
 
+async function Visits({ id }: { id: string }) {
+  return <VisitsTab visits={await getStudentVisits(id)} />;
+}
+
 async function Messages({ id }: { id: string }) {
   return <MessagesTab messages={await getStudentMessages(id)} />;
 }
@@ -144,6 +150,7 @@ async function Student({ params, searchParams }: Props) {
         />
       ) : null}
       {tab === "points" ? <Points student={student} role={user.role} /> : null}
+      {tab === "visits" ? <Visits id={student.id} /> : null}
       {tab === "messages" ? <Messages id={student.id} /> : null}
     </StudentScreen>
   );

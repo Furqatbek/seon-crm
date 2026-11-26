@@ -55,7 +55,8 @@
     "points": "Tangalar",
     "openRequests": "Kutayotgan sovgʻa soʻrovlari:",
     "pointsReport": "Hisobotlar",
-    "waitingLeads": "Kutayotgan lidlar:"
+    "waitingLeads": "Kutayotgan lidlar:",
+    "checkin": "Kelish-ketish"
   },
   "language": {
     "label": "Til",
@@ -313,7 +314,8 @@
       "ledger": "Hisob-kitob",
       "attendance": "Davomat",
       "messages": "Xabarlar",
-      "points": "Tangalar"
+      "points": "Tangalar",
+      "visits": "Kelish-ketish"
     },
     "fields": {
       "name": "Ism",
@@ -509,6 +511,21 @@
       "relinked": "{name}: ilova hisobi ulandi",
       "unlinkTitle": "{name}ning ilova hisobi uzilsinmi?",
       "unlinkBody": "Hisob oʻchirilmaydi: egasi ilovaga kira oladi, lekin bu oʻquvchining darslari, tangalari va toʻlovlarini koʻrmaydi. Keyin qayta ulash mumkin."
+    },
+    "visits": {
+      "empty": "Hali kelish-ketish qayd etilmagan.",
+      "date": "Sana va vaqt",
+      "kind": "Holat",
+      "method": "Usul",
+      "by": "Kim belgiladi",
+      "kinds": {
+        "arrived": "Keldi",
+        "left": "Ketdi"
+      },
+      "methods": {
+        "qr": "QR kod",
+        "manual": "Qoʻlda"
+      }
     }
   },
   "groups": {
@@ -1446,7 +1463,9 @@
       "sendTest": "Sinov SMS yuborish",
       "testHint": "Eskizning belgilangan sinov matni bilan bitta haqiqiy SMS yuboradi.",
       "testSent": "Sinov SMS {phone} raqamiga yuborildi",
-      "serverNotReady": "Serverda SUPABASE_SECRET_KEY kiritilmagan: eslatmalar, xabarlar va takliflar hozircha ishlamaydi."
+      "serverNotReady": "Serverda SUPABASE_SECRET_KEY kiritilmagan: eslatmalar, xabarlar va takliflar hozircha ishlamaydi.",
+      "visitAlerts": "Ota-onaga kelish va ketish xabarlari",
+      "visitAlertsHint": "QR kod skanerlanganda ota-onaning Telegramiga darhol yuboriladi, tinch soatlarda ham."
     },
     "templates": {
       "type": "Xabar",
@@ -2259,5 +2278,38 @@
       "body": "{centre}: darslaringiz, tangalaringiz va toʻlovlaringiz endi ilovada."
     },
     "inviteSms": "{centre}: dars jadvali, tangalar va toʻlovlar ilovada. Yuklab oling: {links}"
+  },
+  "checkin": {
+    "title": "Kelish-ketish",
+    "camera": "Kamera",
+    "cameraTurnOn": "Kamerani yoqish",
+    "cameraTurnOff": "Kamerani oʻchirish",
+    "cameraOffHint": "Kamera oʻchirilgan. Skaner yoki ism boʻyicha qidiruvdan foydalaning.",
+    "cameraBlocked": "Kamera ishlamayapti yoki unga ruxsat berilmagan. Skaner yoki ism boʻyicha qidiruvdan foydalaning.",
+    "scannerHint": "Qoʻl skaneri ham ishlaydi: kodni skanerlang.",
+    "idle": "QR kodni kameraga koʻrsating",
+    "idleHint": "Oʻquvchi ilovadagi QR kodini koʻrsatadi.",
+    "arrived": "Keldi",
+    "left": "Ketdi",
+    "repeat": "Hozirgina belgilangan",
+    "debt": "Qarz bor",
+    "todayLessons": "Bugungi darslar",
+    "noLessons": "Bugun dars yoʻq",
+    "room": "{room}-xona",
+    "exam": "Imtihon",
+    "search": "Ism boʻyicha qidirish",
+    "searchPlaceholder": "Oʻquvchining ismi",
+    "searchEmpty": "Oʻquvchi topilmadi",
+    "checkIn": "Belgilash",
+    "backToCrm": "CRMga qaytish",
+    "signOut": "Chiqish",
+    "errors": {
+      "invalid": "Bu markazning QR kodi emas.",
+      "expired": "Kod eskirgan. Oʻquvchi kodni qaytadan koʻrsatsin.",
+      "clock": "Telefon soati notoʻgʻri. Oʻquvchi vaqtni avtomatik qilib qoʻysin.",
+      "unknown": "Oʻquvchi topilmadi. Ism boʻyicha qidiring.",
+      "notAllowed": "Bu login bilan belgilab boʻlmaydi.",
+      "offline": "Aloqa yoʻq. Qayta urinib koʻring."
+    }
   }
 }

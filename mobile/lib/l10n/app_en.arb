@@ -65,8 +65,6 @@
   "soonTitle": "Coming soon",
   "gameStudentSoon": "1v1 games and mock exams. Wins earn coins.",
   "gameAppUserSoon": "1v1 games and mock exams. No coins until you join the centre.",
-  "qrStudentSoon": "Your QR code for check-in at reception will be here.",
-  "qrAppUserSoon": "QR check-in is for the centre's students.",
   "notifications": "Notifications",
   "logOut": "Log out",
   "money": "UZS {amount}",
@@ -245,5 +243,16 @@
   "shopErrorSoldOut": "Sorry, this has just sold out",
   "shopErrorNotOnOffer": "This is no longer on offer",
   "shopErrorTooLate": "This order can no longer be cancelled",
-  "productGone": "This item was not found"
+  "productGone": "This item was not found",
+  "qrRotates": "The code changes every 30 seconds",
+  "qrShowAtReception": "Show this at reception",
+  "qrWorksOffline": "Works without the internet too",
+  "qrTodayArrived": "Today: arrived {time}",
+  "qrTodayLeft": "Today: left {time}",
+  "qrTodayNone": "Not arrived yet today",
+  "qrLockedTitle": "The QR code is for the centre's students",
+  "qrLockedHint": "It works once you join the centre",
+  "qrBookFreeLesson": "Book a free open lesson",
+  "qrNeedsInternet": "Connect to the internet once to get your code",
+  "qrCodeLabel": "QR code for checking in at the centre"
 }

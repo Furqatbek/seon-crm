@@ -220,12 +220,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get gameAppUserSoon => 'Игра 1 на 1 и пробные экзамены. Монеты — после того, как вы присоединитесь к центру.';
 
   @override
-  String get qrStudentSoon => 'Здесь будет ваш QR-код для отметки на ресепшене.';
-
-  @override
-  String get qrAppUserSoon => 'Вход по QR — только для учеников центра.';
-
-  @override
   String get notifications => 'Уведомления';
 
   @override
@@ -856,4 +850,41 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get productGone => 'Подарок не найден';
+
+  @override
+  String get qrRotates => 'Код обновляется каждые 30 секунд';
+
+  @override
+  String get qrShowAtReception => 'Покажите это на ресепшене';
+
+  @override
+  String get qrWorksOffline => 'Работает и без интернета';
+
+  @override
+  String qrTodayArrived(String time) {
+    return 'Сегодня: пришёл(ла) в $time';
+  }
+
+  @override
+  String qrTodayLeft(String time) {
+    return 'Сегодня: ушёл(ла) в $time';
+  }
+
+  @override
+  String get qrTodayNone => 'Сегодня ещё не приходил(а)';
+
+  @override
+  String get qrLockedTitle => 'QR-код — для учеников центра';
+
+  @override
+  String get qrLockedHint => 'Заработает, когда вы запишетесь в центр';
+
+  @override
+  String get qrBookFreeLesson => 'Записаться на бесплатный открытый урок';
+
+  @override
+  String get qrNeedsInternet => 'Чтобы получить код в первый раз, подключитесь к интернету';
+
+  @override
+  String get qrCodeLabel => 'QR-код для входа в центр';
 }

@@ -55,7 +55,8 @@
     "points": "코인",
     "openRequests": "대기 중인 리워드 요청:",
     "pointsReport": "보고서",
-    "waitingLeads": "대기 중인 리드:"
+    "waitingLeads": "대기 중인 리드:",
+    "checkin": "출입 체크"
   },
   "language": {
     "label": "언어",
@@ -313,7 +314,8 @@
       "ledger": "정산 내역",
       "attendance": "출석",
       "messages": "메시지",
-      "points": "코인"
+      "points": "코인",
+      "visits": "출입 기록"
     },
     "fields": {
       "name": "이름",
@@ -509,6 +511,21 @@
       "relinked": "{name}: 앱 계정을 연결했습니다",
       "unlinkTitle": "{name} 님의 앱 계정 연결을 해제할까요?",
       "unlinkBody": "계정은 삭제되지 않습니다. 계정 주인은 앱에 로그인할 수 있지만 이 학생의 수업, 코인, 결제 내역은 볼 수 없습니다. 나중에 다시 연결할 수 있습니다."
+    },
+    "visits": {
+      "empty": "아직 출입 기록이 없습니다.",
+      "date": "날짜와 시간",
+      "kind": "구분",
+      "method": "방법",
+      "by": "처리자",
+      "kinds": {
+        "arrived": "등원",
+        "left": "하원"
+      },
+      "methods": {
+        "qr": "QR 코드",
+        "manual": "수동"
+      }
     }
   },
   "groups": {
@@ -1446,7 +1463,9 @@
       "sendTest": "테스트 SMS 보내기",
       "testHint": "Eskiz의 고정 테스트 문구로 실제 SMS 한 건을 발송합니다.",
       "testSent": "{phone} 번호로 테스트 SMS를 보냈습니다",
-      "serverNotReady": "서버에 SUPABASE_SECRET_KEY가 설정되지 않았습니다. 알림, 메시지, 초대 기능이 아직 작동하지 않습니다."
+      "serverNotReady": "서버에 SUPABASE_SECRET_KEY가 설정되지 않았습니다. 알림, 메시지, 초대 기능이 아직 작동하지 않습니다.",
+      "visitAlerts": "학부모에게 등원·하원 메시지 보내기",
+      "visitAlertsHint": "QR 코드를 스캔하면 방해 금지 시간에도 학부모의 Telegram으로 즉시 전송됩니다."
     },
     "templates": {
       "type": "메시지",
@@ -2259,5 +2278,38 @@
       "body": "{centre}: 이제 앱에서 수업, 코인, 결제 내역을 볼 수 있습니다."
     },
     "inviteSms": "{centre}: 시간표, 코인, 결제 내역을 앱에서 확인하세요. 다운로드: {links}"
+  },
+  "checkin": {
+    "title": "출입 체크",
+    "camera": "카메라",
+    "cameraTurnOn": "카메라 켜기",
+    "cameraTurnOff": "카메라 끄기",
+    "cameraOffHint": "카메라가 꺼져 있습니다. 스캐너나 이름 검색을 사용하세요.",
+    "cameraBlocked": "카메라를 사용할 수 없거나 권한이 없습니다. 스캐너나 이름 검색을 사용하세요.",
+    "scannerHint": "핸드 스캐너도 사용할 수 있습니다. 코드를 스캔하세요.",
+    "idle": "QR 코드를 카메라에 보여 주세요",
+    "idleHint": "학생이 앱의 QR 코드를 보여 줍니다.",
+    "arrived": "등원",
+    "left": "하원",
+    "repeat": "방금 처리됨",
+    "debt": "미납",
+    "todayLessons": "오늘 수업",
+    "noLessons": "오늘은 수업이 없습니다",
+    "room": "{room}호",
+    "exam": "시험",
+    "search": "이름으로 검색",
+    "searchPlaceholder": "학생 이름",
+    "searchEmpty": "학생을 찾을 수 없습니다",
+    "checkIn": "체크",
+    "backToCrm": "CRM으로 돌아가기",
+    "signOut": "로그아웃",
+    "errors": {
+      "invalid": "센터의 QR 코드가 아닙니다.",
+      "expired": "코드가 만료되었습니다. 학생에게 다시 보여 달라고 하세요.",
+      "clock": "휴대폰 시간이 맞지 않습니다. 자동 시간 설정을 켜 달라고 하세요.",
+      "unknown": "학생을 찾을 수 없습니다. 이름으로 검색하세요.",
+      "notAllowed": "이 계정으로는 체크할 수 없습니다.",
+      "offline": "연결되지 않았습니다. 다시 시도하세요."
+    }
   }
 }

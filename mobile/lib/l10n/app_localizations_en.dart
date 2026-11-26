@@ -218,12 +218,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameAppUserSoon => '1v1 games and mock exams. No coins until you join the centre.';
 
   @override
-  String get qrStudentSoon => 'Your QR code for check-in at reception will be here.';
-
-  @override
-  String get qrAppUserSoon => 'QR check-in is for the centre\'s students.';
-
-  @override
   String get notifications => 'Notifications';
 
   @override
@@ -838,4 +832,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productGone => 'This item was not found';
+
+  @override
+  String get qrRotates => 'The code changes every 30 seconds';
+
+  @override
+  String get qrShowAtReception => 'Show this at reception';
+
+  @override
+  String get qrWorksOffline => 'Works without the internet too';
+
+  @override
+  String qrTodayArrived(String time) {
+    return 'Today: arrived $time';
+  }
+
+  @override
+  String qrTodayLeft(String time) {
+    return 'Today: left $time';
+  }
+
+  @override
+  String get qrTodayNone => 'Not arrived yet today';
+
+  @override
+  String get qrLockedTitle => 'The QR code is for the centre\'s students';
+
+  @override
+  String get qrLockedHint => 'It works once you join the centre';
+
+  @override
+  String get qrBookFreeLesson => 'Book a free open lesson';
+
+  @override
+  String get qrNeedsInternet => 'Connect to the internet once to get your code';
+
+  @override
+  String get qrCodeLabel => 'QR code for checking in at the centre';
 }

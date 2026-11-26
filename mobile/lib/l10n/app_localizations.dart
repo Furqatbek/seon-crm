@@ -484,18 +484,6 @@ abstract class AppLocalizations {
   /// **'1 ga 1 oʻyin va sinov imtihonlari. Tangalar markazga qoʻshilganingizdan keyin beriladi.'**
   String get gameAppUserSoon;
 
-  /// No description provided for @qrStudentSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Markazga kirishda koʻrsatiladigan QR kodingiz shu yerda boʻladi.'**
-  String get qrStudentSoon;
-
-  /// No description provided for @qrAppUserSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'QR orqali kirish faqat markaz oʻquvchilari uchun.'**
-  String get qrAppUserSoon;
-
   /// No description provided for @notifications.
   ///
   /// In uz, this message translates to:
@@ -1569,6 +1557,72 @@ abstract class AppLocalizations {
   /// In uz, this message translates to:
   /// **'Mahsulot topilmadi'**
   String get productGone;
+
+  /// No description provided for @qrRotates.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kod har 30 soniyada yangilanadi'**
+  String get qrRotates;
+
+  /// No description provided for @qrShowAtReception.
+  ///
+  /// In uz, this message translates to:
+  /// **'Buni qabulxonada koʻrsating'**
+  String get qrShowAtReception;
+
+  /// No description provided for @qrWorksOffline.
+  ///
+  /// In uz, this message translates to:
+  /// **'Internet boʻlmasa ham ishlaydi'**
+  String get qrWorksOffline;
+
+  /// No description provided for @qrTodayArrived.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bugun: Keldi {time}'**
+  String qrTodayArrived(String time);
+
+  /// No description provided for @qrTodayLeft.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bugun: Ketdi {time}'**
+  String qrTodayLeft(String time);
+
+  /// No description provided for @qrTodayNone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bugun hali kelmagan'**
+  String get qrTodayNone;
+
+  /// No description provided for @qrLockedTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'QR kod markaz oʻquvchilari uchun'**
+  String get qrLockedTitle;
+
+  /// No description provided for @qrLockedHint.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markazga qoʻshilganingizda ishlaydi'**
+  String get qrLockedHint;
+
+  /// No description provided for @qrBookFreeLesson.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bepul ochiq darsga yozilish'**
+  String get qrBookFreeLesson;
+
+  /// No description provided for @qrNeedsInternet.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kodni birinchi marta olish uchun internetga ulaning'**
+  String get qrNeedsInternet;
+
+  /// No description provided for @qrCodeLabel.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markazga kirish uchun QR kod'**
+  String get qrCodeLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

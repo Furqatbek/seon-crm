@@ -25,6 +25,10 @@ dependencies:
   cupertino_ui: ^1.1.7
   image_picker: ^1.2.4
   cached_network_image: ^4.0.7
+  qr_flutter: ^4.1.0
+  flutter_secure_storage: ^11.2.0
+  crypto: ^3.0.8
+  screen_brightness: ^2.1.12
 
 dev_dependencies:
   flutter_test:

@@ -1573,6 +1573,15 @@ isOneToOne: false
               "active": number,"joined": number,"left_count": number,"month": string
             }[]
                            },
+"verify_checkin":
+{ Args: { "p_code": string }; Returns: Json
+                           },
+"manual_checkin":
+{ Args: { "p_student_id": string }; Returns: Json
+                           },
+"checkin_search":
+{ Args: { "p_query": string }; Returns: { "student_id": string,"full_name": string,"groups": string | null }[]
+                           },
 "request_reward":
 { Args: { "p_request_key"?: string,"p_requested_by"?: string,"p_reward_id": string,"p_student_id": string,"p_via"?: string,"p_variant_id"?: string }; Returns: string
                            },

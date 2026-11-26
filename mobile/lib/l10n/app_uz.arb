@@ -86,8 +86,6 @@
   "soonTitle": "Tez orada",
   "gameStudentSoon": "1 ga 1 oʻyin va sinov imtihonlari. Gʻalaba uchun tanga olasiz.",
   "gameAppUserSoon": "1 ga 1 oʻyin va sinov imtihonlari. Tangalar markazga qoʻshilganingizdan keyin beriladi.",
-  "qrStudentSoon": "Markazga kirishda koʻrsatiladigan QR kodingiz shu yerda boʻladi.",
-  "qrAppUserSoon": "QR orqali kirish faqat markaz oʻquvchilari uchun.",
   "notifications": "Bildirishnomalar",
   "logOut": "Chiqish",
   "money": "{amount} soʻm",
@@ -544,5 +542,30 @@
   "shopErrorSoldOut": "Afsus, bu mahsulot tugadi",
   "shopErrorNotOnOffer": "Bu mahsulot endi sotuvda yoʻq",
   "shopErrorTooLate": "Bu buyurtmani endi bekor qilib boʻlmaydi",
-  "productGone": "Mahsulot topilmadi"
+  "productGone": "Mahsulot topilmadi",
+  "qrRotates": "Kod har 30 soniyada yangilanadi",
+  "qrShowAtReception": "Buni qabulxonada koʻrsating",
+  "qrWorksOffline": "Internet boʻlmasa ham ishlaydi",
+  "qrTodayArrived": "Bugun: Keldi {time}",
+  "@qrTodayArrived": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "qrTodayLeft": "Bugun: Ketdi {time}",
+  "@qrTodayLeft": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "qrTodayNone": "Bugun hali kelmagan",
+  "qrLockedTitle": "QR kod markaz oʻquvchilari uchun",
+  "qrLockedHint": "Markazga qoʻshilganingizda ishlaydi",
+  "qrBookFreeLesson": "Bepul ochiq darsga yozilish",
+  "qrNeedsInternet": "Kodni birinchi marta olish uchun internetga ulaning",
+  "qrCodeLabel": "Markazga kirish uchun QR kod"
 }

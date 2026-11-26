@@ -21,6 +21,7 @@ export type CentreSettings = Pick<
   | "billing_day"
   | "due_day"
   | "reminders_enabled"
+  | "parent_visit_alerts"
   | "lesson_reminder_hours"
   | "quiet_from"
   | "quiet_to"
@@ -32,7 +33,7 @@ export async function getCentreSettings(): Promise<CentreSettings> {
   const { data, error } = await supabase
     .from("centre_settings")
     .select(
-      "centre_name, billing_day, due_day, reminders_enabled, lesson_reminder_hours, quiet_from, quiet_to, telegram_bot_username",
+      "centre_name, billing_day, due_day, reminders_enabled, parent_visit_alerts, lesson_reminder_hours, quiet_from, quiet_to, telegram_bot_username",
     )
     .single();
   if (error) throw new Error(error.message);

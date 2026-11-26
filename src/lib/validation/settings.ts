@@ -33,9 +33,11 @@ export const MESSAGE_TYPES = [
   "points_deduction",
   "points_month_result",
   "reward_update",
+  "visit_arrived",
+  "visit_left",
 ] as const;
-/** Points messages are never sent by SMS: they have a Telegram template only. */
-export const TELEGRAM_ONLY_TYPES: readonly string[] = ["points_weekly", "points_deduction", "points_month_result", "reward_update"];
+/** Points and visit messages are never sent by SMS: they have a Telegram template only. */
+export const TELEGRAM_ONLY_TYPES: readonly string[] = ["points_weekly", "points_deduction", "points_month_result", "reward_update", "visit_arrived", "visit_left"];
 export const MESSAGE_CHANNELS = ["telegram", "sms"] as const;
 export const TEMPLATE_LANGUAGES = LANGUAGES;
 /** The languages the interface comes in. Messages to families stay in LANGUAGES. */
@@ -104,9 +106,10 @@ export const userRoleSchema = z
   .transform(withTeacher);
 export const userActiveSchema = z.object({ user_id: z.uuid(), active: z.boolean() });
 
-/** Notifications: on or off, lesson reminder hours, quiet hours. */
+/** Notifications: on or off, visit messages to parents, lesson reminder hours, quiet hours. */
 export const notificationsSchema = z.object({
   reminders_enabled: z.boolean(),
+  parent_visit_alerts: z.boolean(),
   lesson_reminder_hours: z.coerce.number("hoursInvalid").int("hoursInvalid").min(1, "hoursInvalid").max(48, "hoursInvalid"),
   quiet_from: time,
   quiet_to: time,

@@ -14,6 +14,7 @@ import '../features/more/more_tab.dart';
 import '../features/more/schedule.dart';
 import '../features/more/simple_pages.dart';
 import '../features/notifications/notifications_screen.dart';
+import '../features/qr/qr_tab.dart';
 import '../features/shell/app_shell.dart';
 import '../features/shop/orders_page.dart';
 import '../features/shop/product_page.dart';

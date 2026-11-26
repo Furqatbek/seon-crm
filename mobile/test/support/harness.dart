@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/app.dart';
+import 'package:student/core/checkin_state.dart';
 import 'package:student/core/localization.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
@@ -35,6 +36,9 @@ class TestApp {
   final FakeNotificationsRepository notifications;
   final more = FakeMoreRepository();
   final shop = FakeShopRepository();
+  final checkin = FakeCheckinRepository();
+  final secrets = FakeQrSecretStore();
+  final light = FakeScreenLight();
 
   /// The photo the picker hands back; null as if the person backed out.
   Uint8List? photo;
@@ -85,6 +89,9 @@ class TestApp {
         clockProvider.overrideWithValue(() => now),
         moreRepositoryProvider.overrideWithValue(more),
         shopRepositoryProvider.overrideWithValue(shop),
+        checkinRepositoryProvider.overrideWithValue(checkin),
+        qrSecretStoreProvider.overrideWithValue(secrets),
+        screenLightProvider.overrideWithValue(light),
         photoPickerProvider.overrideWithValue((_) async => photo),
         sharedPreferencesProvider.overrideWithValue(saved),
         pushServiceProvider.overrideWithValue(push),

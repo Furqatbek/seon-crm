@@ -1,3 +1,5 @@
+import 'checkin_state.dart';
+
 import 'dart:async';
 import 'dart:ui';
 
@@ -187,6 +189,8 @@ class AuthController extends Notifier<AuthState> {
   Future<void> deleteAccount() async {
     await ref.read(authRepositoryProvider).deleteAccount();
     _savedToken = null;
+    // The check-in secret does not outlive the account on this phone.
+    await ref.read(qrSecretStoreProvider).clear();
     final preferences = ref.read(sharedPreferencesProvider);
     for (final key in personalPreferenceKeys) {
       await preferences.remove(key);
@@ -205,6 +209,7 @@ class AuthController extends Notifier<AuthState> {
       }
     }
     _savedToken = null;
+    await ref.read(qrSecretStoreProvider).clear();
     await ref.read(authRepositoryProvider).signOut();
     state = const AuthState(signedIn: false);
   }

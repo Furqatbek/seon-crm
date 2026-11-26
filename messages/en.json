@@ -55,7 +55,8 @@
     "points": "Coins",
     "openRequests": "Reward requests waiting:",
     "pointsReport": "Reports",
-    "waitingLeads": "Leads waiting:"
+    "waitingLeads": "Leads waiting:",
+    "checkin": "Check-in"
   },
   "language": {
     "label": "Language",
@@ -313,7 +314,8 @@
       "ledger": "Ledger",
       "attendance": "Attendance",
       "messages": "Messages",
-      "points": "Coins"
+      "points": "Coins",
+      "visits": "Visits"
     },
     "fields": {
       "name": "Name",
@@ -509,6 +511,21 @@
       "relinked": "{name}: app account linked",
       "unlinkTitle": "Unlink the app account of {name}?",
       "unlinkBody": "The account is not deleted: its owner can still sign in to the app but no longer sees this student's lessons, coins or payments. You can link it again later."
+    },
+    "visits": {
+      "empty": "No visits yet.",
+      "date": "Date and time",
+      "kind": "Event",
+      "method": "How",
+      "by": "Marked by",
+      "kinds": {
+        "arrived": "Arrived",
+        "left": "Left"
+      },
+      "methods": {
+        "qr": "QR code",
+        "manual": "By hand"
+      }
     }
   },
   "groups": {
@@ -1446,7 +1463,9 @@
       "sendTest": "Send test SMS",
       "testHint": "Sends one real SMS with Eskiz's fixed test text.",
       "testSent": "Test SMS sent to {phone}",
-      "serverNotReady": "SUPABASE_SECRET_KEY is not set on the server: reminders, messages and invitations cannot work yet."
+      "serverNotReady": "SUPABASE_SECRET_KEY is not set on the server: reminders, messages and invitations cannot work yet.",
+      "visitAlerts": "Arrival and leaving messages to parents",
+      "visitAlertsHint": "Sent to the parent's Telegram as soon as the QR code is scanned, even in quiet hours."
     },
     "templates": {
       "type": "Message",
@@ -2259,5 +2278,38 @@
       "body": "{centre}: your lessons, coins and payments are now in the app."
     },
     "inviteSms": "{centre}: your schedule, coins and payments are in the app. Download: {links}"
+  },
+  "checkin": {
+    "title": "Check-in",
+    "camera": "Camera",
+    "cameraTurnOn": "Turn camera on",
+    "cameraTurnOff": "Turn camera off",
+    "cameraOffHint": "The camera is off. Use the scanner or search by name.",
+    "cameraBlocked": "The camera is not available or not allowed. Use the scanner or search by name.",
+    "scannerHint": "A handheld scanner works too: just scan the code.",
+    "idle": "Show the QR code to the camera",
+    "idleHint": "The student shows the QR code in their app.",
+    "arrived": "Arrived",
+    "left": "Left",
+    "repeat": "Just scanned",
+    "debt": "Debt",
+    "todayLessons": "Today's lessons",
+    "noLessons": "No lessons today",
+    "room": "Room {room}",
+    "exam": "Exam",
+    "search": "Search by name",
+    "searchPlaceholder": "Student's name",
+    "searchEmpty": "No student found",
+    "checkIn": "Check in",
+    "backToCrm": "Back to the CRM",
+    "signOut": "Log out",
+    "errors": {
+      "invalid": "This is not the centre's QR code.",
+      "expired": "The code is out of date. Ask the student to show it again.",
+      "clock": "The phone's clock is wrong. Ask the student to set the time automatically.",
+      "unknown": "Student not found. Search by name.",
+      "notAllowed": "This login cannot check students in.",
+      "offline": "No connection. Try again."
+    }
   }
 }

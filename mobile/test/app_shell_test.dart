@@ -48,7 +48,7 @@ void main() {
     testWidgets('each tab shows the Student version to a linked student', (tester) async {
       useScreen(tester, phone);
       await TestApp(auth: signedIn(studentProfile)).pump(tester);
-      final expected = {l.tabGame: l.gameStudentSoon, l.tabQr: l.qrStudentSoon, l.tabShop: l.myOrders};
+      final expected = {l.tabGame: l.gameStudentSoon, l.tabQr: l.qrShowAtReception, l.tabShop: l.myOrders};
       for (final tab in expected.entries) {
         await tester.tap(find.bySemanticsLabel(tab.key).last);
         await tester.pumpAndSettle();
@@ -59,12 +59,12 @@ void main() {
     testWidgets('each tab shows the App user version to someone who is not linked', (tester) async {
       useScreen(tester, phone);
       await TestApp(auth: signedIn(appUserProfile)).pump(tester);
-      final expected = {l.tabGame: l.gameAppUserSoon, l.tabQr: l.qrAppUserSoon, l.tabShop: l.shopJoinBanner};
+      final expected = {l.tabGame: l.gameAppUserSoon, l.tabQr: l.qrLockedTitle, l.tabShop: l.shopJoinBanner};
       for (final tab in expected.entries) {
         await tester.tap(find.bySemanticsLabel(tab.key).last);
         await tester.pumpAndSettle();
         expect(find.text(tab.value), findsOneWidget, reason: tab.key);
-        expect(find.byType(EmptyState), tab.key == l.tabShop ? findsNothing : findsOneWidget);
+        expect(find.byType(EmptyState), tab.key == l.tabGame ? findsOneWidget : findsNothing);
       }
     });
 

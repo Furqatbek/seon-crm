@@ -217,12 +217,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get gameAppUserSoon => '1 ga 1 oʻyin va sinov imtihonlari. Tangalar markazga qoʻshilganingizdan keyin beriladi.';
 
   @override
-  String get qrStudentSoon => 'Markazga kirishda koʻrsatiladigan QR kodingiz shu yerda boʻladi.';
-
-  @override
-  String get qrAppUserSoon => 'QR orqali kirish faqat markaz oʻquvchilari uchun.';
-
-  @override
   String get notifications => 'Bildirishnomalar';
 
   @override
@@ -830,4 +824,41 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get productGone => 'Mahsulot topilmadi';
+
+  @override
+  String get qrRotates => 'Kod har 30 soniyada yangilanadi';
+
+  @override
+  String get qrShowAtReception => 'Buni qabulxonada koʻrsating';
+
+  @override
+  String get qrWorksOffline => 'Internet boʻlmasa ham ishlaydi';
+
+  @override
+  String qrTodayArrived(String time) {
+    return 'Bugun: Keldi $time';
+  }
+
+  @override
+  String qrTodayLeft(String time) {
+    return 'Bugun: Ketdi $time';
+  }
+
+  @override
+  String get qrTodayNone => 'Bugun hali kelmagan';
+
+  @override
+  String get qrLockedTitle => 'QR kod markaz oʻquvchilari uchun';
+
+  @override
+  String get qrLockedHint => 'Markazga qoʻshilganingizda ishlaydi';
+
+  @override
+  String get qrBookFreeLesson => 'Bepul ochiq darsga yozilish';
+
+  @override
+  String get qrNeedsInternet => 'Kodni birinchi marta olish uchun internetga ulaning';
+
+  @override
+  String get qrCodeLabel => 'Markazga kirish uchun QR kod';
 }

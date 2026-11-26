@@ -72,6 +72,26 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   return user && user.role !== "teacher" ? user : null;
 });
 
+export type CheckinUser = { id: string; fullName: string; role: UserRole | "kiosk" };
+
+/**
+ * Whoever may use the reception scanner at /checkin: a kiosk account (which
+ * can open nothing else), the owner or a manager. The database asks the same
+ * question again inside verify_checkin().
+ */
+export const getCheckinUser = cache(async (): Promise<CheckinUser | null> => {
+  const staff = await getCurrentUser();
+  if (staff) return { id: staff.id, fullName: staff.fullName, role: staff.role };
+  const supabase = await createClient();
+  if (!supabase) return null;
+  const { data } = await supabase.auth.getClaims();
+  const id = data?.claims?.sub;
+  if (!id) return null;
+  const profile = await supabase.from("profiles").select("full_name, role, is_active").eq("id", id).maybeSingle();
+  if (!profile.data?.is_active || profile.data.role !== "kiosk") return null;
+  return { id, fullName: profile.data.full_name, role: "kiosk" };
+});
+
 /** The signed-in teacher, or null. */
 export const getTeacherUser = cache(async () => {
   const user = await getSignedInUser();

@@ -342,3 +342,37 @@ export async function getStudentMessages(id: string): Promise<StudentMessage[]> 
   if (error) throw new Error(error.message);
   return data;
 }
+
+export type StudentVisit = {
+  id: string;
+  kind: "arrived" | "left";
+  at: string;
+  method: "qr" | "manual";
+  /** Who scanned or marked it: a kiosk's name or a member of staff. */
+  scannedBy: string | null;
+};
+
+/** Arrivals and leavings at reception, the newest first. */
+export async function getStudentVisits(id: string): Promise<StudentVisit[]> {
+  const supabase = await db();
+  const { data, error } = await supabase
+    .from("visits")
+    .select("id, kind, at, method, scanned_by")
+    .eq("student_id", id)
+    .order("at", { ascending: false })
+    .limit(200);
+  if (error) throw new Error(error.message);
+  const scanners = [...new Set(data.flatMap((visit) => (visit.scanned_by ? [visit.scanned_by] : [])))];
+  const names = new Map<string, string>();
+  if (scanners.length > 0) {
+    const people = await supabase.from("profiles").select("id, full_name").in("id", scanners);
+    for (const person of people.data ?? []) names.set(person.id, person.full_name);
+  }
+  return data.map((visit) => ({
+    id: visit.id,
+    kind: visit.kind,
+    at: visit.at,
+    method: visit.method,
+    scannedBy: visit.scanned_by ? (names.get(visit.scanned_by) ?? null) : null,
+  }));
+}

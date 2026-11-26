@@ -16,11 +16,13 @@ import 'package:integration_test/integration_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/app.dart';
+import 'package:student/core/checkin_state.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
 import 'package:student/core/shop_state.dart';
 import 'package:student/core/state.dart';
 import 'package:student/data/auth_repository.dart';
+import 'package:student/data/checkin.dart';
 import 'package:student/data/device_tokens.dart';
 import 'package:student/data/home.dart';
 import 'package:student/data/more.dart';
@@ -68,6 +70,9 @@ Future<FakeAuthRepository> pumpInMemory(WidgetTester tester, {required bool sign
         notificationsRepositoryProvider.overrideWithValue(FakeNotificationsRepository()),
         moreRepositoryProvider.overrideWithValue(FakeMoreRepository()),
         shopRepositoryProvider.overrideWithValue(shop),
+        checkinRepositoryProvider.overrideWithValue(FakeCheckinRepository()),
+        qrSecretStoreProvider.overrideWithValue(FakeQrSecretStore()),
+        screenLightProvider.overrideWithValue(FakeScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
         clockProvider.overrideWithValue(() => testNow),
         deviceLanguageProvider.overrideWithValue('uz'),
@@ -94,6 +99,9 @@ Future<void> pumpOnDevProject(WidgetTester tester) async {
         notificationsRepositoryProvider.overrideWithValue(SupabaseNotificationsRepository(client)),
         moreRepositoryProvider.overrideWithValue(SupabaseMoreRepository(client)),
         shopRepositoryProvider.overrideWithValue(SupabaseShopRepository(client)),
+        checkinRepositoryProvider.overrideWithValue(SupabaseCheckinRepository(client)),
+        qrSecretStoreProvider.overrideWithValue(const SecureQrSecretStore()),
+        screenLightProvider.overrideWithValue(const DeviceScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
         deviceLanguageProvider.overrideWithValue('uz'),
       ],
