@@ -15,6 +15,7 @@ import 'package:student/features/more/leaderboard.dart';
 import 'package:student/features/more/money_pages.dart';
 import 'package:student/features/more/simple_pages.dart';
 import 'package:student/features/shop/orders_page.dart';
+import 'package:student/features/game/game_tab.dart';
 import 'package:student/features/tabs/tabs.dart';
 import 'package:student/ui/tokens.dart';
 import 'package:student/ui/widgets.dart';

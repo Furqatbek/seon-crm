@@ -206,12 +206,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get soonTitle => '준비 중';
 
   @override
-  String get gameStudentSoon => '1대1 게임과 모의고사. 이기면 코인을 받습니다.';
-
-  @override
-  String get gameAppUserSoon => '1대1 게임과 모의고사. 코인은 센터에 등록한 후에 받을 수 있습니다.';
-
-  @override
   String get notifications => '알림';
 
   @override
@@ -856,4 +850,213 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get qrCodeLabel => '센터 출입용 QR 코드';
+
+  @override
+  String get gameZone => '게임 존';
+
+  @override
+  String get gameDuel => '1대1';
+
+  @override
+  String get gameExams => '모의고사';
+
+  @override
+  String get gameExamsSoon => '모의고사가 곧 여기에 열립니다.';
+
+  @override
+  String gamePitch(String coins) {
+    return '1대1 대결. 승자에게 $coins 지급.';
+  }
+
+  @override
+  String get gamePitchNoCoins => '1대1 대결: 10문제, 줄을 내 쪽으로 당기세요.';
+
+  @override
+  String get gameNoCoinsAppUser => '센터에 등록하기 전에는 코인이 지급되지 않습니다';
+
+  @override
+  String get gamePlayNow => '지금 플레이';
+
+  @override
+  String get gameChallenge => '같은 반 친구에게 도전';
+
+  @override
+  String get gameBankNotReady => '이 과목은 아직 문제가 부족합니다';
+
+  @override
+  String gameRewardedWins(int done, int of) {
+    return '오늘 보상 승리: $done/$of';
+  }
+
+  @override
+  String get gameRecent => '최근 대전';
+
+  @override
+  String get gameRecentEmpty => '아직 대전이 없습니다';
+
+  @override
+  String get gameWin => '승리';
+
+  @override
+  String get gameLoss => '패배';
+
+  @override
+  String get gameDraw => '무승부';
+
+  @override
+  String get gameComputer => '컴퓨터';
+
+  @override
+  String get gameSearching => '상대를 찾는 중…';
+
+  @override
+  String get gameNobodyFree => '지금은 대전 가능한 상대가 없습니다';
+
+  @override
+  String get gamePractice => '컴퓨터와 연습';
+
+  @override
+  String get gamePracticeNoCoins => '연습에서는 코인이 지급되지 않습니다';
+
+  @override
+  String get gameWaitMore => '더 기다리기';
+
+  @override
+  String get gameInvite => '도전';
+
+  @override
+  String get gameInviteWaiting => '대기 중…';
+
+  @override
+  String gameInviteDeclined(String name) {
+    return '$name 님이 도전을 거절했습니다';
+  }
+
+  @override
+  String gameInviteExpired(String name) {
+    return '$name 님이 응답하지 않았습니다';
+  }
+
+  @override
+  String get gameClassmatesEmpty => '이 반에는 아직 앱을 쓰는 친구가 없습니다';
+
+  @override
+  String get gameSearchHint => '검색';
+
+  @override
+  String gameInvitedYou(String name) {
+    return '$name 님이 게임을 신청했습니다';
+  }
+
+  @override
+  String get gameAccept => '수락';
+
+  @override
+  String get gameDecline => '거절';
+
+  @override
+  String get gameInviteGone => '도전 시간이 지났습니다';
+
+  @override
+  String get gameInMatch => '지금 대전 중입니다';
+
+  @override
+  String get gameGetReady => '준비하세요';
+
+  @override
+  String gameQuestionOf(int n, int of) {
+    return '$n/$of';
+  }
+
+  @override
+  String get gameCorrect => '정답!';
+
+  @override
+  String get gameCorrectFaster => '정답! 더 빨랐습니다';
+
+  @override
+  String get gameCorrectSlower => '정답이지만 상대가 더 빨랐습니다';
+
+  @override
+  String get gameWrong => '오답';
+
+  @override
+  String get gameTimeUp => '시간 초과';
+
+  @override
+  String get gameOpponentAnswered => '상대가 답했습니다';
+
+  @override
+  String get gameWaitingOpponent => '상대의 답을 기다리는 중…';
+
+  @override
+  String get gameReconnecting => '연결이 끊겼습니다. 다시 연결하는 중…';
+
+  @override
+  String get gameMatchGone => '대전을 찾을 수 없습니다';
+
+  @override
+  String get gameCancelled => '대전이 취소되었습니다';
+
+  @override
+  String get gameBackToLobby => '게임 존으로 돌아가기';
+
+  @override
+  String get gameWinTitle => '승리!';
+
+  @override
+  String get gameLossTitle => '패배';
+
+  @override
+  String get gameDrawTitle => '무승부';
+
+  @override
+  String get gameForfeitWin => '상대가 대전을 떠났습니다';
+
+  @override
+  String get gameForfeitLoss => '연결이 끊겨 대전이 끝났습니다';
+
+  @override
+  String gameCorrectAnswers(int you, int opponent) {
+    return '정답 수: $you – $opponent';
+  }
+
+  @override
+  String get gameLimitReached => '오늘 한도에 도달했습니다 — 코인 미지급';
+
+  @override
+  String get gameOpponentNotStudent => '상대가 센터 학생이 아닙니다 — 코인 미지급';
+
+  @override
+  String get gamePlayAgain => '다시 플레이';
+
+  @override
+  String get gameSeeQuestions => '문제 보기';
+
+  @override
+  String get gameQuestions => '문제';
+
+  @override
+  String get gameRightAnswer => '정답:';
+
+  @override
+  String gameYourAnswer(String answer) {
+    return '내 답: $answer';
+  }
+
+  @override
+  String get gameNoAnswer => '응답 없음';
+
+  @override
+  String get gameYou => '나';
+
+  @override
+  String gameRopeLabel(int position) {
+    return '줄: $position';
+  }
+
+  @override
+  String gameSecondsLeft(int seconds) {
+    return '$seconds초 남음';
+  }
 }

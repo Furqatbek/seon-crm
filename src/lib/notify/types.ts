@@ -21,6 +21,8 @@ export type MessageType =
   | "visit_arrived"
   | "visit_left"
   | "account_linked"
+  /** A classmate's challenge in the 1v1 game. */
+  | "game_invite"
   | "voucher_expiring"
   | "open_lesson_reminder"
   | "receipt_approved"

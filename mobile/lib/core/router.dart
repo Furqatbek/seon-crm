@@ -7,6 +7,9 @@ import '../features/auth/linked_screen.dart';
 import '../features/auth/sign_in_screens.dart';
 import '../features/auth/sign_up_screen.dart';
 import '../features/auth/welcome_screen.dart';
+import '../features/game/finding.dart';
+import '../features/game/game_tab.dart';
+import '../features/game/match_screen.dart';
 import '../features/more/edit_profile.dart';
 import '../features/more/leaderboard.dart';
 import '../features/more/money_pages.dart';
@@ -73,7 +76,42 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [GoRoute(path: Routes.home, builder: (_, _) => const HomeTab())],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: Routes.game, builder: (_, _) => const GameTab())],
+            routes: [
+              GoRoute(
+                path: Routes.game,
+                builder: (_, _) => const GameTab(),
+                // Looking for an opponent and the match itself cover the tab bar.
+                routes: [
+                  GoRoute(
+                    path: 'search',
+                    parentNavigatorKey: root,
+                    builder: (_, state) => FindingScreen(groupId: state.uri.queryParameters['group']),
+                  ),
+                  GoRoute(
+                    path: 'classmates',
+                    parentNavigatorKey: root,
+                    redirect: (_, state) => state.uri.queryParameters['group'] == null ? Routes.game : null,
+                    builder: (_, state) => ClassmatesScreen(groupId: state.uri.queryParameters['group']!),
+                  ),
+                  GoRoute(
+                    path: 'match/:id',
+                    parentNavigatorKey: root,
+                    builder: (_, state) => MatchScreen(
+                      key: ValueKey(state.pathParameters['id']),
+                      matchId: state.pathParameters['id']!,
+                      groupId: state.uri.queryParameters['group'],
+                    ),
+                    routes: [
+                      GoRoute(
+                        path: 'review',
+                        parentNavigatorKey: root,
+                        builder: (_, state) => MatchReviewScreen(matchId: state.pathParameters['id']!),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: Routes.qr, builder: (_, _) => const QrTab())],

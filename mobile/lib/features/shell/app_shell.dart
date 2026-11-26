@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../game/finding.dart';
 import '../../l10n/app_localizations.dart';
 import '../../ui/tokens.dart';
 
@@ -20,7 +21,8 @@ class AppShell extends StatelessWidget {
     final l = AppLocalizations.of(context);
     final current = shell.currentIndex;
     return Scaffold(
-      body: shell,
+      // A classmate's challenge shows over whatever tab is open.
+      body: InviteListener(child: shell),
       bottomNavigationBar: DecoratedBox(
         decoration: BoxDecoration(
           color: c.surface,

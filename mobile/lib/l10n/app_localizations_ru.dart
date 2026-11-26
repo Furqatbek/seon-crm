@@ -214,12 +214,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get soonTitle => 'Скоро';
 
   @override
-  String get gameStudentSoon => 'Игра 1 на 1 и пробные экзамены. За победу — монеты.';
-
-  @override
-  String get gameAppUserSoon => 'Игра 1 на 1 и пробные экзамены. Монеты — после того, как вы присоединитесь к центру.';
-
-  @override
   String get notifications => 'Уведомления';
 
   @override
@@ -887,4 +881,213 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get qrCodeLabel => 'QR-код для входа в центр';
+
+  @override
+  String get gameZone => 'Игровая зона';
+
+  @override
+  String get gameDuel => '1 на 1';
+
+  @override
+  String get gameExams => 'Пробные экзамены';
+
+  @override
+  String get gameExamsSoon => 'Пробные экзамены скоро появятся здесь.';
+
+  @override
+  String gamePitch(String coins) {
+    return 'Дуэль 1 на 1. Победитель получает $coins.';
+  }
+
+  @override
+  String get gamePitchNoCoins => 'Дуэль 1 на 1: 10 вопросов, перетяните канат на свою сторону.';
+
+  @override
+  String get gameNoCoinsAppUser => 'Монеты не начисляются, пока вы не запишетесь в центр';
+
+  @override
+  String get gamePlayNow => 'Играть сейчас';
+
+  @override
+  String get gameChallenge => 'Вызвать одноклассника';
+
+  @override
+  String get gameBankNotReady => 'В этом предмете пока мало вопросов';
+
+  @override
+  String gameRewardedWins(int done, int of) {
+    return 'Побед с наградой сегодня: $done/$of';
+  }
+
+  @override
+  String get gameRecent => 'Последние игры';
+
+  @override
+  String get gameRecentEmpty => 'Игр пока не было';
+
+  @override
+  String get gameWin => 'Победа';
+
+  @override
+  String get gameLoss => 'Поражение';
+
+  @override
+  String get gameDraw => 'Ничья';
+
+  @override
+  String get gameComputer => 'Компьютер';
+
+  @override
+  String get gameSearching => 'Ищем соперника…';
+
+  @override
+  String get gameNobodyFree => 'Сейчас нет свободного соперника';
+
+  @override
+  String get gamePractice => 'Тренировка с компьютером';
+
+  @override
+  String get gamePracticeNoCoins => 'За тренировку монеты не даются';
+
+  @override
+  String get gameWaitMore => 'Подождать ещё';
+
+  @override
+  String get gameInvite => 'Вызвать';
+
+  @override
+  String get gameInviteWaiting => 'Ждём ответа…';
+
+  @override
+  String gameInviteDeclined(String name) {
+    return '$name отклонил(а) вызов';
+  }
+
+  @override
+  String gameInviteExpired(String name) {
+    return '$name не ответил(а)';
+  }
+
+  @override
+  String get gameClassmatesEmpty => 'В этой группе пока нет одноклассников с приложением';
+
+  @override
+  String get gameSearchHint => 'Поиск';
+
+  @override
+  String gameInvitedYou(String name) {
+    return '$name вызывает вас на игру';
+  }
+
+  @override
+  String get gameAccept => 'Принять';
+
+  @override
+  String get gameDecline => 'Отклонить';
+
+  @override
+  String get gameInviteGone => 'Вызов больше не действует';
+
+  @override
+  String get gameInMatch => 'Вы сейчас в игре';
+
+  @override
+  String get gameGetReady => 'Приготовьтесь';
+
+  @override
+  String gameQuestionOf(int n, int of) {
+    return '$n/$of';
+  }
+
+  @override
+  String get gameCorrect => 'Верно!';
+
+  @override
+  String get gameCorrectFaster => 'Верно! Вы были быстрее';
+
+  @override
+  String get gameCorrectSlower => 'Верно, но соперник был быстрее';
+
+  @override
+  String get gameWrong => 'Неверно';
+
+  @override
+  String get gameTimeUp => 'Время вышло';
+
+  @override
+  String get gameOpponentAnswered => 'Соперник ответил';
+
+  @override
+  String get gameWaitingOpponent => 'Ждём ответа соперника…';
+
+  @override
+  String get gameReconnecting => 'Связь потеряна. Переподключаемся…';
+
+  @override
+  String get gameMatchGone => 'Эта игра не найдена';
+
+  @override
+  String get gameCancelled => 'Игра отменена';
+
+  @override
+  String get gameBackToLobby => 'Назад в игровую зону';
+
+  @override
+  String get gameWinTitle => 'Победа!';
+
+  @override
+  String get gameLossTitle => 'Поражение';
+
+  @override
+  String get gameDrawTitle => 'Ничья';
+
+  @override
+  String get gameForfeitWin => 'Соперник покинул игру';
+
+  @override
+  String get gameForfeitLoss => 'Игра завершена из-за потери связи';
+
+  @override
+  String gameCorrectAnswers(int you, int opponent) {
+    return 'Верных ответов: $you – $opponent';
+  }
+
+  @override
+  String get gameLimitReached => 'Дневной лимит исчерпан — монеты не начислены';
+
+  @override
+  String get gameOpponentNotStudent => 'Соперник не ученик центра — монеты не начислены';
+
+  @override
+  String get gamePlayAgain => 'Играть ещё';
+
+  @override
+  String get gameSeeQuestions => 'Посмотреть вопросы';
+
+  @override
+  String get gameQuestions => 'Вопросы';
+
+  @override
+  String get gameRightAnswer => 'Верный ответ:';
+
+  @override
+  String gameYourAnswer(String answer) {
+    return 'Ваш ответ: $answer';
+  }
+
+  @override
+  String get gameNoAnswer => 'Без ответа';
+
+  @override
+  String get gameYou => 'Вы';
+
+  @override
+  String gameRopeLabel(int position) {
+    return 'Канат: $position';
+  }
+
+  @override
+  String gameSecondsLeft(int seconds) {
+    return 'Осталось секунд: $seconds';
+  }
 }

@@ -9,6 +9,13 @@
 //
 //   flutter test integration_test --dart-define-from-file=env/dev.json \
 //     --dart-define=TEST_PHONE=+998770000001 --dart-define=TEST_PASSWORD=...
+//
+// The match test plays on the dev project too when a second account, an App
+// user, is given as well. The first must be a linked student whose only group
+// is a TOPIK I group, so both are in the same bank (see "Rules → 1v1 game"),
+// and that bank needs its 30 active questions:
+//
+//     --dart-define=TEST_PHONE_2=+998770000002 --dart-define=TEST_PASSWORD_2=...
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,6 +24,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/app.dart';
 import 'package:student/core/checkin_state.dart';
+import 'package:student/core/game_state.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
 import 'package:student/core/shop_state.dart';
@@ -24,6 +32,7 @@ import 'package:student/core/state.dart';
 import 'package:student/data/auth_repository.dart';
 import 'package:student/data/checkin.dart';
 import 'package:student/data/device_tokens.dart';
+import 'package:student/data/game.dart';
 import 'package:student/data/home.dart';
 import 'package:student/data/more.dart';
 import 'package:student/data/notifications.dart';
@@ -31,6 +40,8 @@ import 'package:student/data/shop.dart';
 import 'package:student/env.dart';
 import 'package:student/features/auth/sign_in_screens.dart';
 import 'package:student/features/auth/welcome_screen.dart';
+import 'package:student/features/game/finding.dart';
+import 'package:student/features/game/match_screen.dart';
 import 'package:student/features/home/student_home.dart';
 import 'package:student/features/more/more_tab.dart';
 import 'package:student/features/more/sub_page.dart';
@@ -40,10 +51,13 @@ import 'package:student/l10n/app_localizations.dart';
 import 'package:student/ui/widgets.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../test/support/fake_game.dart';
 import '../test/support/fakes.dart';
 
 const testPhone = String.fromEnvironment('TEST_PHONE');
 const testPassword = String.fromEnvironment('TEST_PASSWORD');
+const testPhone2 = String.fromEnvironment('TEST_PHONE_2');
+const testPassword2 = String.fromEnvironment('TEST_PASSWORD_2');
 
 /// Against the dev project when it and a throwaway account are given; otherwise in memory.
 bool get onDevProject => isConfigured && testPhone.isNotEmpty && testPassword.isNotEmpty;
@@ -52,7 +66,13 @@ final uz = lookupAppLocalizations(const Locale('uz'));
 final ko = lookupAppLocalizations(const Locale('ko'));
 
 /// The app on the in-memory stand-in, signed in or not.
-Future<FakeAuthRepository> pumpInMemory(WidgetTester tester, {required bool signedIn, FakeShopRepository? shop}) async {
+Future<FakeAuthRepository> pumpInMemory(
+  WidgetTester tester, {
+  required bool signedIn,
+  FakeShopRepository? shop,
+  GameRepository? game,
+  DateTime Function()? clock,
+}) async {
   SharedPreferences.setMockInitialValues({});
   // The shop spends and returns the coins Home shows, as the server does.
   final home = FakeHomeRepository();
@@ -71,10 +91,13 @@ Future<FakeAuthRepository> pumpInMemory(WidgetTester tester, {required bool sign
         moreRepositoryProvider.overrideWithValue(FakeMoreRepository()),
         shopRepositoryProvider.overrideWithValue(shop),
         checkinRepositoryProvider.overrideWithValue(FakeCheckinRepository()),
+        gameRepositoryProvider.overrideWithValue(
+          game ?? FakeGameRepository((FakeGameServer(now: DateTime.now)..add(FakePlayer(studentProfile.id, 'Aziza K.'))), studentProfile.id),
+        ),
         qrSecretStoreProvider.overrideWithValue(FakeQrSecretStore()),
         screenLightProvider.overrideWithValue(FakeScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
-        clockProvider.overrideWithValue(() => testNow),
+        clockProvider.overrideWithValue(clock ?? () => testNow),
         deviceLanguageProvider.overrideWithValue('uz'),
       ],
       child: const StudentApp(),
@@ -100,6 +123,7 @@ Future<void> pumpOnDevProject(WidgetTester tester) async {
         moreRepositoryProvider.overrideWithValue(SupabaseMoreRepository(client)),
         shopRepositoryProvider.overrideWithValue(SupabaseShopRepository(client)),
         checkinRepositoryProvider.overrideWithValue(SupabaseCheckinRepository(client)),
+        gameRepositoryProvider.overrideWithValue(SupabaseGameRepository(client)),
         qrSecretStoreProvider.overrideWithValue(const SecureQrSecretStore()),
         screenLightProvider.overrideWithValue(const DeviceScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
@@ -255,5 +279,101 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('28 tanga'), findsOneWidget);
     expect(shop.shopItems.firstWhere((item) => item.id == 'r-shirt').variants.firstWhere((variant) => variant.names['uz'] == 'M').stock, 2);
+  });
+
+  // Two clients on one server: the app itself, signed in as a linked student,
+  // and a second connection playing as an App user. On the dev project both
+  // are real accounts and the server is the real one; without it, the server
+  // is the in-memory stand-in with the same rules.
+  testWidgets('a full match between a student in the app and an App user: no coins for anyone', (tester) async {
+    final live = onDevProject && testPhone2.isNotEmpty && testPassword2.isNotEmpty;
+    late final GameRepository guest;
+    if (live) {
+      await pumpOnDevProject(tester);
+      await signIn(tester, testPhone, testPassword);
+      final second = SupabaseClient(supabaseUrl, supabasePublishableKey);
+      await second.auth.signInWithPassword(phone: testPhone2, password: testPassword2);
+      guest = SupabaseGameRepository(second);
+    } else {
+      final server = FakeGameServer(now: DateTime.now)
+        ..add(FakePlayer(studentProfile.id, 'Aziza K.', level: 'topik1'))
+        ..add(FakePlayer('p-guest', 'Sardor M.', student: false, groupId: null, level: 'topik1'));
+      guest = FakeGameRepository(server, 'p-guest');
+      await pumpInMemory(tester, signedIn: true, game: FakeGameRepository(server, studentProfile.id), clock: DateTime.now);
+    }
+
+    // Wait, in real time, until something is on screen.
+    Future<void> until(Finder finder, {Duration within = const Duration(seconds: 25)}) async {
+      final deadline = DateTime.now().add(within);
+      while (finder.evaluate().isEmpty && DateTime.now().isBefore(deadline)) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(finder, findsWidgets);
+    }
+
+    // The App user is already waiting; the student presses Play now and they are paired.
+    expect((await guest.joinQueue(null)).queuedAt, isNotNull);
+    await tester.tap(find.bySemanticsLabel(uz.tabGame).last);
+    await until(find.widgetWithText(PrimaryButton, uz.gamePlayNow));
+    await tester.tap(find.widgetWithText(PrimaryButton, uz.gamePlayNow));
+    await until(find.byType(MatchScreen));
+    // The searching screen slides away.
+    await tester.pump(const Duration(milliseconds: 800));
+    expect(find.byType(FindingScreen), findsNothing);
+    final matchId = (await guest.lobby(null)).activeMatchId!;
+
+    // 3-2-1, then ten questions. Each side answers with the first choice: the
+    // student in the app a moment before the App user through their own connection.
+    var played = 0;
+    while (find.byType(MatchResultView).evaluate().isEmpty && played < 10) {
+      await until(find.byType(ChoiceTile));
+      final theirs = await guest.matchState(matchId);
+      if (theirs.question == null) {
+        await tester.pump(const Duration(milliseconds: 200));
+        continue;
+      }
+      final index = theirs.question!.index;
+      await tester.tap(find.byType(ChoiceTile).first, warnIfMissed: false);
+      await tester.pump(const Duration(milliseconds: 400));
+      final answer = await guest.submit(matchId, index, theirs.question!.options.first.id);
+      expect(answer.accepted || answer.reason == 'late', isTrue);
+      played++;
+      // The question is settled; the next is shown two seconds later.
+      final next = DateTime.now().add(const Duration(seconds: 12));
+      while (DateTime.now().isBefore(next) && find.byType(MatchResultView).evaluate().isEmpty) {
+        await tester.pump(const Duration(milliseconds: 200));
+        final state = await guest.matchState(matchId);
+        if (state.over || (state.question != null && state.question!.index > index)) break;
+      }
+    }
+
+    // The result, on both sides: the server's own verdict.
+    await until(find.byType(MatchResultView), within: const Duration(seconds: 40));
+    final end = await guest.matchState(matchId);
+    expect(end.status, MatchStatus.finished);
+    expect(end.coinsEligible, isFalse);
+    expect(end.result!.rewarded, isFalse);
+    expect(end.result!.coins, 0);
+    expect(end.result!.review, isNotEmpty);
+    final title = switch (end.result!.outcome) {
+      // What the App user lost, the student won.
+      MatchOutcome.loss => uz.gameWinTitle,
+      MatchOutcome.win => uz.gameLossTitle,
+      MatchOutcome.draw => uz.gameDrawTitle,
+    };
+    expect(find.text(title), findsOneWidget);
+    // No coins for anyone in a match with an App user, and the student is told why.
+    expect(find.textContaining('+'), findsNothing);
+    if (end.result!.outcome == MatchOutcome.loss) expect(find.text(uz.gameOpponentNotStudent), findsOneWidget);
+    if (!live) {
+      // Both gave the first choice every time: right on four questions, where the student was faster.
+      expect(end.result!.outcome, MatchOutcome.loss);
+      expect(find.text(uz.gameCorrectAnswers(4, 4)), findsOneWidget);
+    }
+
+    // The question review.
+    await tester.tap(find.widgetWithText(SecondaryButton, uz.gameSeeQuestions));
+    await until(find.byType(MatchReviewScreen));
+    expect(find.textContaining(uz.gameRightAnswer, findRichText: true), findsWidgets);
   });
 }

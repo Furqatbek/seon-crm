@@ -211,12 +211,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get soonTitle => 'Tez orada';
 
   @override
-  String get gameStudentSoon => '1 ga 1 oʻyin va sinov imtihonlari. Gʻalaba uchun tanga olasiz.';
-
-  @override
-  String get gameAppUserSoon => '1 ga 1 oʻyin va sinov imtihonlari. Tangalar markazga qoʻshilganingizdan keyin beriladi.';
-
-  @override
   String get notifications => 'Bildirishnomalar';
 
   @override
@@ -861,4 +855,213 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get qrCodeLabel => 'Markazga kirish uchun QR kod';
+
+  @override
+  String get gameZone => 'Oʻyin zonasi';
+
+  @override
+  String get gameDuel => '1 ga 1';
+
+  @override
+  String get gameExams => 'Sinov imtihonlari';
+
+  @override
+  String get gameExamsSoon => 'Sinov imtihonlari tez orada shu yerda boʻladi.';
+
+  @override
+  String gamePitch(String coins) {
+    return '1 ga 1 bellashuv. Gʻolib $coins oladi.';
+  }
+
+  @override
+  String get gamePitchNoCoins => '1 ga 1 bellashuv: 10 ta savol, arqonni oʻz tomoningizga torting.';
+
+  @override
+  String get gameNoCoinsAppUser => 'Markazga qoʻshilmaguningizcha tanga berilmaydi';
+
+  @override
+  String get gamePlayNow => 'Hozir oʻynash';
+
+  @override
+  String get gameChallenge => 'Sinfdoshni chaqirish';
+
+  @override
+  String get gameBankNotReady => 'Bu fanda savollar hali yetarli emas';
+
+  @override
+  String gameRewardedWins(int done, int of) {
+    return 'Bugungi mukofotli gʻalabalar: $done/$of';
+  }
+
+  @override
+  String get gameRecent => 'Oxirgi oʻyinlar';
+
+  @override
+  String get gameRecentEmpty => 'Hali oʻyin oʻynalmagan';
+
+  @override
+  String get gameWin => 'Gʻalaba';
+
+  @override
+  String get gameLoss => 'Magʻlubiyat';
+
+  @override
+  String get gameDraw => 'Durang';
+
+  @override
+  String get gameComputer => 'Kompyuter';
+
+  @override
+  String get gameSearching => 'Raqib qidirilmoqda…';
+
+  @override
+  String get gameNobodyFree => 'Hozir boʻsh raqib yoʻq';
+
+  @override
+  String get gamePractice => 'Kompyuter bilan mashq';
+
+  @override
+  String get gamePracticeNoCoins => 'Mashqda tanga berilmaydi';
+
+  @override
+  String get gameWaitMore => 'Yana kutish';
+
+  @override
+  String get gameInvite => 'Chaqirish';
+
+  @override
+  String get gameInviteWaiting => 'Kutilmoqda…';
+
+  @override
+  String gameInviteDeclined(String name) {
+    return '$name chaqiruvni rad etdi';
+  }
+
+  @override
+  String gameInviteExpired(String name) {
+    return '$name javob bermadi';
+  }
+
+  @override
+  String get gameClassmatesEmpty => 'Bu guruhda ilovasi bor sinfdosh hali yoʻq';
+
+  @override
+  String get gameSearchHint => 'Qidirish';
+
+  @override
+  String gameInvitedYou(String name) {
+    return '$name sizni oʻyinga chaqirdi';
+  }
+
+  @override
+  String get gameAccept => 'Qabul qilish';
+
+  @override
+  String get gameDecline => 'Rad etish';
+
+  @override
+  String get gameInviteGone => 'Chaqiruv muddati tugadi';
+
+  @override
+  String get gameInMatch => 'Siz hozir oʻyindasiz';
+
+  @override
+  String get gameGetReady => 'Tayyorlaning';
+
+  @override
+  String gameQuestionOf(int n, int of) {
+    return '$n/$of';
+  }
+
+  @override
+  String get gameCorrect => 'Toʻgʻri!';
+
+  @override
+  String get gameCorrectFaster => 'Toʻgʻri! Siz tezroq edingiz';
+
+  @override
+  String get gameCorrectSlower => 'Toʻgʻri, lekin raqib tezroq edi';
+
+  @override
+  String get gameWrong => 'Notoʻgʻri';
+
+  @override
+  String get gameTimeUp => 'Vaqt tugadi';
+
+  @override
+  String get gameOpponentAnswered => 'Raqib javob berdi';
+
+  @override
+  String get gameWaitingOpponent => 'Raqib javobi kutilmoqda…';
+
+  @override
+  String get gameReconnecting => 'Aloqa uzildi. Qayta ulanmoqda…';
+
+  @override
+  String get gameMatchGone => 'Bu oʻyin topilmadi';
+
+  @override
+  String get gameCancelled => 'Oʻyin bekor qilindi';
+
+  @override
+  String get gameBackToLobby => 'Oʻyin zonasiga qaytish';
+
+  @override
+  String get gameWinTitle => 'Gʻalaba!';
+
+  @override
+  String get gameLossTitle => 'Magʻlubiyat';
+
+  @override
+  String get gameDrawTitle => 'Durang';
+
+  @override
+  String get gameForfeitWin => 'Raqib oʻyinni tark etdi';
+
+  @override
+  String get gameForfeitLoss => 'Aloqa uzilgani uchun oʻyin tugadi';
+
+  @override
+  String gameCorrectAnswers(int you, int opponent) {
+    return 'Toʻgʻri javoblar: $you – $opponent';
+  }
+
+  @override
+  String get gameLimitReached => 'Bugungi limit tugadi — tanga berilmadi';
+
+  @override
+  String get gameOpponentNotStudent => 'Raqib markaz oʻquvchisi emas — tanga berilmadi';
+
+  @override
+  String get gamePlayAgain => 'Yana oʻynash';
+
+  @override
+  String get gameSeeQuestions => 'Savollarni koʻrish';
+
+  @override
+  String get gameQuestions => 'Savollar';
+
+  @override
+  String get gameRightAnswer => 'Toʻgʻri javob:';
+
+  @override
+  String gameYourAnswer(String answer) {
+    return 'Sizning javobingiz: $answer';
+  }
+
+  @override
+  String get gameNoAnswer => 'Javob berilmadi';
+
+  @override
+  String get gameYou => 'Siz';
+
+  @override
+  String gameRopeLabel(int position) {
+    return 'Arqon: $position';
+  }
+
+  @override
+  String gameSecondsLeft(int seconds) {
+    return '$seconds soniya qoldi';
+  }
 }

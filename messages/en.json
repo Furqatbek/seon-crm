@@ -463,7 +463,8 @@
         "open_lesson_reminder": "Open lesson reminder",
         "receipt_approved": "Receipt approved",
         "receipt_rejected": "Receipt rejected",
-        "staff_new_receipt": "New receipt (staff)"
+        "staff_new_receipt": "New receipt (staff)",
+        "game_invite": "Game challenge"
       },
       "channels": {
         "telegram": "Telegram",
@@ -2285,7 +2286,10 @@
       "title": "Your account is linked to the centre",
       "body": "{centre}: your lessons, coins and payments are now in the app."
     },
-    "inviteSms": "{centre}: your schedule, coins and payments are in the app. Download: {links}"
+    "inviteSms": "{centre}: your schedule, coins and payments are in the app. Download: {links}",
+    "game_invite": {
+      "body": "{name} challenged you to a 1v1 game. Answer within 60 seconds."
+    }
   },
   "checkin": {
     "title": "Check-in",

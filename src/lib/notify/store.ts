@@ -425,6 +425,19 @@ export function appNotifyStore(admin: Db): AppNotifyStore {
   };
 }
 
+/** A classmate's challenge with the invited student's app account, for its push. */
+export async function inviteToPush(admin: Db, id: string, shortName: (fullName: string) => string) {
+  const { data, error } = await admin.from("match_invites").select("id, status, expires_at, from_profile, to_profile").eq("id", id).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) return null;
+  const [from, to] = await Promise.all([
+    admin.from("profiles").select("full_name").eq("id", data.from_profile).maybeSingle(),
+    admin.from("profiles").select(ACCOUNT_COLUMNS).eq("id", data.to_profile).eq("is_active", true).maybeSingle(),
+  ]);
+  if (!to.data) return null;
+  return { id: data.id, fromName: shortName(from.data?.full_name ?? ""), to: toAccount(to.data), status: data.status, expiresAt: new Date(data.expires_at) };
+}
+
 /** What the app's own notifications read, with the service role. */
 export function appEventData(admin: Db): AppEventData {
   return {

@@ -463,7 +463,8 @@
         "open_lesson_reminder": "Ochiq dars eslatmasi",
         "receipt_approved": "Chek tasdiqlandi",
         "receipt_rejected": "Chek rad etildi",
-        "staff_new_receipt": "Yangi chek (xodimlarga)"
+        "staff_new_receipt": "Yangi chek (xodimlarga)",
+        "game_invite": "Oʻyinga chaqiruv"
       },
       "channels": {
         "telegram": "Telegram",
@@ -2285,7 +2286,10 @@
       "title": "Hisobingiz markazga ulandi",
       "body": "{centre}: darslaringiz, tangalaringiz va toʻlovlaringiz endi ilovada."
     },
-    "inviteSms": "{centre}: dars jadvali, tangalar va toʻlovlar ilovada. Yuklab oling: {links}"
+    "inviteSms": "{centre}: dars jadvali, tangalar va toʻlovlar ilovada. Yuklab oling: {links}",
+    "game_invite": {
+      "body": "{name} sizni 1 ga 1 oʻyinga chaqirdi. 60 soniya ichida javob bering."
+    }
   },
   "checkin": {
     "title": "Kelish-ketish",

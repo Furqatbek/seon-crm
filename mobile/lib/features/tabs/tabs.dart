@@ -3,7 +3,6 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../core/state.dart';
 import '../../data/models.dart';
-import '../../l10n/app_localizations.dart';
 import '../../ui/tokens.dart';
 import '../../ui/widgets.dart';
 import '../home/app_user_home.dart';
@@ -63,15 +62,6 @@ class RoleView extends ConsumerWidget {
   }
 }
 
-class _Soon extends StatelessWidget {
-  const _Soon({required this.icon, required this.message});
-
-  final IconData icon;
-  final String message;
-  @override
-  Widget build(BuildContext context) => EmptyState(icon: icon, title: AppLocalizations.of(context).soonTitle, message: message);
-}
-
 /// Home has no page title of its own: each version greets the person by name.
 class HomeTab extends ConsumerWidget {
   const HomeTab({super.key});
@@ -81,19 +71,5 @@ class HomeTab extends ConsumerWidget {
     final auth = ref.watch(authProvider);
     if (!auth.profileLoaded) return const SafeArea(bottom: false, child: HomeSkeleton());
     return auth.profile?.role == AccountRole.student ? const StudentHomeView() : const AppUserHomeView();
-  }
-}
-
-class GameTab extends StatelessWidget {
-  const GameTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    return RoleView(
-      title: l.tabGame,
-      student: _Soon(icon: Icons.sports_esports_outlined, message: l.gameStudentSoon),
-      appUser: _Soon(icon: Icons.sports_esports_outlined, message: l.gameAppUserSoon),
-    );
   }
 }

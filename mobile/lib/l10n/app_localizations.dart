@@ -472,18 +472,6 @@ abstract class AppLocalizations {
   /// **'Tez orada'**
   String get soonTitle;
 
-  /// No description provided for @gameStudentSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'1 ga 1 oʻyin va sinov imtihonlari. Gʻalaba uchun tanga olasiz.'**
-  String get gameStudentSoon;
-
-  /// No description provided for @gameAppUserSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'1 ga 1 oʻyin va sinov imtihonlari. Tangalar markazga qoʻshilganingizdan keyin beriladi.'**
-  String get gameAppUserSoon;
-
   /// No description provided for @notifications.
   ///
   /// In uz, this message translates to:
@@ -1623,6 +1611,384 @@ abstract class AppLocalizations {
   /// In uz, this message translates to:
   /// **'Markazga kirish uchun QR kod'**
   String get qrCodeLabel;
+
+  /// No description provided for @gameZone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻyin zonasi'**
+  String get gameZone;
+
+  /// No description provided for @gameDuel.
+  ///
+  /// In uz, this message translates to:
+  /// **'1 ga 1'**
+  String get gameDuel;
+
+  /// No description provided for @gameExams.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sinov imtihonlari'**
+  String get gameExams;
+
+  /// No description provided for @gameExamsSoon.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sinov imtihonlari tez orada shu yerda boʻladi.'**
+  String get gameExamsSoon;
+
+  /// No description provided for @gamePitch.
+  ///
+  /// In uz, this message translates to:
+  /// **'1 ga 1 bellashuv. Gʻolib {coins} oladi.'**
+  String gamePitch(String coins);
+
+  /// No description provided for @gamePitchNoCoins.
+  ///
+  /// In uz, this message translates to:
+  /// **'1 ga 1 bellashuv: 10 ta savol, arqonni oʻz tomoningizga torting.'**
+  String get gamePitchNoCoins;
+
+  /// No description provided for @gameNoCoinsAppUser.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markazga qoʻshilmaguningizcha tanga berilmaydi'**
+  String get gameNoCoinsAppUser;
+
+  /// No description provided for @gamePlayNow.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hozir oʻynash'**
+  String get gamePlayNow;
+
+  /// No description provided for @gameChallenge.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sinfdoshni chaqirish'**
+  String get gameChallenge;
+
+  /// No description provided for @gameBankNotReady.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu fanda savollar hali yetarli emas'**
+  String get gameBankNotReady;
+
+  /// No description provided for @gameRewardedWins.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bugungi mukofotli gʻalabalar: {done}/{of}'**
+  String gameRewardedWins(int done, int of);
+
+  /// No description provided for @gameRecent.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oxirgi oʻyinlar'**
+  String get gameRecent;
+
+  /// No description provided for @gameRecentEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hali oʻyin oʻynalmagan'**
+  String get gameRecentEmpty;
+
+  /// No description provided for @gameWin.
+  ///
+  /// In uz, this message translates to:
+  /// **'Gʻalaba'**
+  String get gameWin;
+
+  /// No description provided for @gameLoss.
+  ///
+  /// In uz, this message translates to:
+  /// **'Magʻlubiyat'**
+  String get gameLoss;
+
+  /// No description provided for @gameDraw.
+  ///
+  /// In uz, this message translates to:
+  /// **'Durang'**
+  String get gameDraw;
+
+  /// No description provided for @gameComputer.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kompyuter'**
+  String get gameComputer;
+
+  /// No description provided for @gameSearching.
+  ///
+  /// In uz, this message translates to:
+  /// **'Raqib qidirilmoqda…'**
+  String get gameSearching;
+
+  /// No description provided for @gameNobodyFree.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hozir boʻsh raqib yoʻq'**
+  String get gameNobodyFree;
+
+  /// No description provided for @gamePractice.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kompyuter bilan mashq'**
+  String get gamePractice;
+
+  /// No description provided for @gamePracticeNoCoins.
+  ///
+  /// In uz, this message translates to:
+  /// **'Mashqda tanga berilmaydi'**
+  String get gamePracticeNoCoins;
+
+  /// No description provided for @gameWaitMore.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yana kutish'**
+  String get gameWaitMore;
+
+  /// No description provided for @gameInvite.
+  ///
+  /// In uz, this message translates to:
+  /// **'Chaqirish'**
+  String get gameInvite;
+
+  /// No description provided for @gameInviteWaiting.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kutilmoqda…'**
+  String get gameInviteWaiting;
+
+  /// No description provided for @gameInviteDeclined.
+  ///
+  /// In uz, this message translates to:
+  /// **'{name} chaqiruvni rad etdi'**
+  String gameInviteDeclined(String name);
+
+  /// No description provided for @gameInviteExpired.
+  ///
+  /// In uz, this message translates to:
+  /// **'{name} javob bermadi'**
+  String gameInviteExpired(String name);
+
+  /// No description provided for @gameClassmatesEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu guruhda ilovasi bor sinfdosh hali yoʻq'**
+  String get gameClassmatesEmpty;
+
+  /// No description provided for @gameSearchHint.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qidirish'**
+  String get gameSearchHint;
+
+  /// No description provided for @gameInvitedYou.
+  ///
+  /// In uz, this message translates to:
+  /// **'{name} sizni oʻyinga chaqirdi'**
+  String gameInvitedYou(String name);
+
+  /// No description provided for @gameAccept.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qabul qilish'**
+  String get gameAccept;
+
+  /// No description provided for @gameDecline.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rad etish'**
+  String get gameDecline;
+
+  /// No description provided for @gameInviteGone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Chaqiruv muddati tugadi'**
+  String get gameInviteGone;
+
+  /// No description provided for @gameInMatch.
+  ///
+  /// In uz, this message translates to:
+  /// **'Siz hozir oʻyindasiz'**
+  String get gameInMatch;
+
+  /// No description provided for @gameGetReady.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tayyorlaning'**
+  String get gameGetReady;
+
+  /// No description provided for @gameQuestionOf.
+  ///
+  /// In uz, this message translates to:
+  /// **'{n}/{of}'**
+  String gameQuestionOf(int n, int of);
+
+  /// No description provided for @gameCorrect.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻgʻri!'**
+  String get gameCorrect;
+
+  /// No description provided for @gameCorrectFaster.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻgʻri! Siz tezroq edingiz'**
+  String get gameCorrectFaster;
+
+  /// No description provided for @gameCorrectSlower.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻgʻri, lekin raqib tezroq edi'**
+  String get gameCorrectSlower;
+
+  /// No description provided for @gameWrong.
+  ///
+  /// In uz, this message translates to:
+  /// **'Notoʻgʻri'**
+  String get gameWrong;
+
+  /// No description provided for @gameTimeUp.
+  ///
+  /// In uz, this message translates to:
+  /// **'Vaqt tugadi'**
+  String get gameTimeUp;
+
+  /// No description provided for @gameOpponentAnswered.
+  ///
+  /// In uz, this message translates to:
+  /// **'Raqib javob berdi'**
+  String get gameOpponentAnswered;
+
+  /// No description provided for @gameWaitingOpponent.
+  ///
+  /// In uz, this message translates to:
+  /// **'Raqib javobi kutilmoqda…'**
+  String get gameWaitingOpponent;
+
+  /// No description provided for @gameReconnecting.
+  ///
+  /// In uz, this message translates to:
+  /// **'Aloqa uzildi. Qayta ulanmoqda…'**
+  String get gameReconnecting;
+
+  /// No description provided for @gameMatchGone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu oʻyin topilmadi'**
+  String get gameMatchGone;
+
+  /// No description provided for @gameCancelled.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻyin bekor qilindi'**
+  String get gameCancelled;
+
+  /// No description provided for @gameBackToLobby.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻyin zonasiga qaytish'**
+  String get gameBackToLobby;
+
+  /// No description provided for @gameWinTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Gʻalaba!'**
+  String get gameWinTitle;
+
+  /// No description provided for @gameLossTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Magʻlubiyat'**
+  String get gameLossTitle;
+
+  /// No description provided for @gameDrawTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Durang'**
+  String get gameDrawTitle;
+
+  /// No description provided for @gameForfeitWin.
+  ///
+  /// In uz, this message translates to:
+  /// **'Raqib oʻyinni tark etdi'**
+  String get gameForfeitWin;
+
+  /// No description provided for @gameForfeitLoss.
+  ///
+  /// In uz, this message translates to:
+  /// **'Aloqa uzilgani uchun oʻyin tugadi'**
+  String get gameForfeitLoss;
+
+  /// No description provided for @gameCorrectAnswers.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻgʻri javoblar: {you} – {opponent}'**
+  String gameCorrectAnswers(int you, int opponent);
+
+  /// No description provided for @gameLimitReached.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bugungi limit tugadi — tanga berilmadi'**
+  String get gameLimitReached;
+
+  /// No description provided for @gameOpponentNotStudent.
+  ///
+  /// In uz, this message translates to:
+  /// **'Raqib markaz oʻquvchisi emas — tanga berilmadi'**
+  String get gameOpponentNotStudent;
+
+  /// No description provided for @gamePlayAgain.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yana oʻynash'**
+  String get gamePlayAgain;
+
+  /// No description provided for @gameSeeQuestions.
+  ///
+  /// In uz, this message translates to:
+  /// **'Savollarni koʻrish'**
+  String get gameSeeQuestions;
+
+  /// No description provided for @gameQuestions.
+  ///
+  /// In uz, this message translates to:
+  /// **'Savollar'**
+  String get gameQuestions;
+
+  /// No description provided for @gameRightAnswer.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻgʻri javob:'**
+  String get gameRightAnswer;
+
+  /// No description provided for @gameYourAnswer.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sizning javobingiz: {answer}'**
+  String gameYourAnswer(String answer);
+
+  /// No description provided for @gameNoAnswer.
+  ///
+  /// In uz, this message translates to:
+  /// **'Javob berilmadi'**
+  String get gameNoAnswer;
+
+  /// No description provided for @gameYou.
+  ///
+  /// In uz, this message translates to:
+  /// **'Siz'**
+  String get gameYou;
+
+  /// No description provided for @gameRopeLabel.
+  ///
+  /// In uz, this message translates to:
+  /// **'Arqon: {position}'**
+  String gameRopeLabel(int position);
+
+  /// No description provided for @gameSecondsLeft.
+  ///
+  /// In uz, this message translates to:
+  /// **'{seconds} soniya qoldi'**
+  String gameSecondsLeft(int seconds);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

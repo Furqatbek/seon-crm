@@ -84,8 +84,6 @@
   "tabShop": "Doʻkon",
   "tabMore": "Boshqa",
   "soonTitle": "Tez orada",
-  "gameStudentSoon": "1 ga 1 oʻyin va sinov imtihonlari. Gʻalaba uchun tanga olasiz.",
-  "gameAppUserSoon": "1 ga 1 oʻyin va sinov imtihonlari. Tangalar markazga qoʻshilganingizdan keyin beriladi.",
   "notifications": "Bildirishnomalar",
   "logOut": "Chiqish",
   "money": "{amount} soʻm",
@@ -567,5 +565,147 @@
   "qrLockedHint": "Markazga qoʻshilganingizda ishlaydi",
   "qrBookFreeLesson": "Bepul ochiq darsga yozilish",
   "qrNeedsInternet": "Kodni birinchi marta olish uchun internetga ulaning",
-  "qrCodeLabel": "Markazga kirish uchun QR kod"
+  "qrCodeLabel": "Markazga kirish uchun QR kod",
+  "gameZone": "Oʻyin zonasi",
+  "gameDuel": "1 ga 1",
+  "gameExams": "Sinov imtihonlari",
+  "gameExamsSoon": "Sinov imtihonlari tez orada shu yerda boʻladi.",
+  "gamePitch": "1 ga 1 bellashuv. Gʻolib {coins} oladi.",
+  "@gamePitch": {
+    "placeholders": {
+      "coins": {
+        "type": "String"
+      }
+    }
+  },
+  "gamePitchNoCoins": "1 ga 1 bellashuv: 10 ta savol, arqonni oʻz tomoningizga torting.",
+  "gameNoCoinsAppUser": "Markazga qoʻshilmaguningizcha tanga berilmaydi",
+  "gamePlayNow": "Hozir oʻynash",
+  "gameChallenge": "Sinfdoshni chaqirish",
+  "gameBankNotReady": "Bu fanda savollar hali yetarli emas",
+  "gameRewardedWins": "Bugungi mukofotli gʻalabalar: {done}/{of}",
+  "@gameRewardedWins": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "of": {
+        "type": "int"
+      }
+    }
+  },
+  "gameRecent": "Oxirgi oʻyinlar",
+  "gameRecentEmpty": "Hali oʻyin oʻynalmagan",
+  "gameWin": "Gʻalaba",
+  "gameLoss": "Magʻlubiyat",
+  "gameDraw": "Durang",
+  "gameComputer": "Kompyuter",
+  "gameSearching": "Raqib qidirilmoqda…",
+  "gameNobodyFree": "Hozir boʻsh raqib yoʻq",
+  "gamePractice": "Kompyuter bilan mashq",
+  "gamePracticeNoCoins": "Mashqda tanga berilmaydi",
+  "gameWaitMore": "Yana kutish",
+  "gameInvite": "Chaqirish",
+  "gameInviteWaiting": "Kutilmoqda…",
+  "gameInviteDeclined": "{name} chaqiruvni rad etdi",
+  "@gameInviteDeclined": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameInviteExpired": "{name} javob bermadi",
+  "@gameInviteExpired": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameClassmatesEmpty": "Bu guruhda ilovasi bor sinfdosh hali yoʻq",
+  "gameSearchHint": "Qidirish",
+  "gameInvitedYou": "{name} sizni oʻyinga chaqirdi",
+  "@gameInvitedYou": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAccept": "Qabul qilish",
+  "gameDecline": "Rad etish",
+  "gameInviteGone": "Chaqiruv muddati tugadi",
+  "gameInMatch": "Siz hozir oʻyindasiz",
+  "gameGetReady": "Tayyorlaning",
+  "gameQuestionOf": "{n}/{of}",
+  "@gameQuestionOf": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "of": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCorrect": "Toʻgʻri!",
+  "gameCorrectFaster": "Toʻgʻri! Siz tezroq edingiz",
+  "gameCorrectSlower": "Toʻgʻri, lekin raqib tezroq edi",
+  "gameWrong": "Notoʻgʻri",
+  "gameTimeUp": "Vaqt tugadi",
+  "gameOpponentAnswered": "Raqib javob berdi",
+  "gameWaitingOpponent": "Raqib javobi kutilmoqda…",
+  "gameReconnecting": "Aloqa uzildi. Qayta ulanmoqda…",
+  "gameMatchGone": "Bu oʻyin topilmadi",
+  "gameCancelled": "Oʻyin bekor qilindi",
+  "gameBackToLobby": "Oʻyin zonasiga qaytish",
+  "gameWinTitle": "Gʻalaba!",
+  "gameLossTitle": "Magʻlubiyat",
+  "gameDrawTitle": "Durang",
+  "gameForfeitWin": "Raqib oʻyinni tark etdi",
+  "gameForfeitLoss": "Aloqa uzilgani uchun oʻyin tugadi",
+  "gameCorrectAnswers": "Toʻgʻri javoblar: {you} – {opponent}",
+  "@gameCorrectAnswers": {
+    "placeholders": {
+      "you": {
+        "type": "int"
+      },
+      "opponent": {
+        "type": "int"
+      }
+    }
+  },
+  "gameLimitReached": "Bugungi limit tugadi — tanga berilmadi",
+  "gameOpponentNotStudent": "Raqib markaz oʻquvchisi emas — tanga berilmadi",
+  "gamePlayAgain": "Yana oʻynash",
+  "gameSeeQuestions": "Savollarni koʻrish",
+  "gameQuestions": "Savollar",
+  "gameRightAnswer": "Toʻgʻri javob:",
+  "gameYourAnswer": "Sizning javobingiz: {answer}",
+  "@gameYourAnswer": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "gameNoAnswer": "Javob berilmadi",
+  "gameYou": "Siz",
+  "gameRopeLabel": "Arqon: {position}",
+  "@gameRopeLabel": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "gameSecondsLeft": "{seconds} soniya qoldi",
+  "@gameSecondsLeft": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  }
 }

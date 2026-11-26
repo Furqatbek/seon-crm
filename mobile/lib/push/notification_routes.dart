@@ -15,6 +15,10 @@ abstract final class Routes {
   static const game = '/game';
   static const qr = '/qr';
   static const shop = '/shop';
+  static String gameSearch(String? groupId) => groupId == null ? '/game/search' : '/game/search?group=$groupId';
+  static String gameClassmates(String groupId) => '/game/classmates?group=$groupId';
+  static String match(String id, {String? groupId}) => groupId == null ? '/game/match/$id' : '/game/match/$id?group=$groupId';
+  static String matchReview(String id) => '/game/match/$id/review';
   static const orders = '/shop/orders';
   static String product(String id) => '/shop/product/$id';
   static const more = '/more';
@@ -50,6 +54,7 @@ const _byScreen = {
 
 const _byType = {
   'lesson_reminder': Routes.home,
+  'game_invite': Routes.game,
   'account_linked': Routes.home,
   'payment_due': Routes.payments,
   'payment_overdue': Routes.payments,

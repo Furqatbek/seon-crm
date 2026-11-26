@@ -463,7 +463,8 @@
         "open_lesson_reminder": "공개 수업 알림",
         "receipt_approved": "영수증 승인",
         "receipt_rejected": "영수증 거절",
-        "staff_new_receipt": "새 영수증 (직원)"
+        "staff_new_receipt": "새 영수증 (직원)",
+        "game_invite": "게임 신청"
       },
       "channels": {
         "telegram": "Telegram",
@@ -2285,7 +2286,10 @@
       "title": "계정이 센터에 연결되었습니다",
       "body": "{centre}: 이제 앱에서 수업, 코인, 결제 내역을 볼 수 있습니다."
     },
-    "inviteSms": "{centre}: 시간표, 코인, 결제 내역을 앱에서 확인하세요. 다운로드: {links}"
+    "inviteSms": "{centre}: 시간표, 코인, 결제 내역을 앱에서 확인하세요. 다운로드: {links}",
+    "game_invite": {
+      "body": "{name} 님이 1대1 게임을 신청했습니다. 60초 안에 응답하세요."
+    }
   },
   "checkin": {
     "title": "출입 체크",

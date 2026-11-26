@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/app.dart';
 import 'package:student/core/checkin_state.dart';
+import 'package:student/core/game_state.dart';
 import 'package:student/core/localization.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
@@ -15,6 +16,7 @@ import 'package:student/data/models.dart';
 import 'package:student/l10n/app_localizations.dart';
 import 'package:student/ui/theme.dart';
 
+import 'fake_game.dart';
 import 'fakes.dart';
 
 /// The whole app on fakes: what a test needs to drive it and to look at what it did.
@@ -39,6 +41,26 @@ class TestApp {
   final checkin = FakeCheckinRepository();
   final secrets = FakeQrSecretStore();
   final light = FakeScreenLight();
+  final feedback = FakeGameFeedback();
+
+  /// The game server, with the signed-in person and three classmates in it.
+  late final game = FakeGameServer(now: () => clock?.call() ?? now)
+    ..add(
+      FakePlayer(
+        auth.profile?.id ?? 'nobody',
+        'Aziza K.',
+        student: auth.profile?.role == AccountRole.student,
+        groupId: auth.profile?.role == AccountRole.student ? 'g-1' : null,
+      ),
+    )
+    ..add(FakePlayer('p-jasur', 'Jasur T.'))
+    ..add(FakePlayer('p-madina', 'Madina R.'))
+    ..add(FakePlayer('p-otabek', 'Otabek S.'))
+    ..add(FakePlayer('p-guest', 'Sardor M.', student: false, groupId: null));
+  late final gameRepository = FakeGameRepository(game, auth.profile?.id ?? 'nobody');
+
+  /// A clock that moves, for screens that count seconds: tests pass the test binding's.
+  DateTime Function()? clock;
 
   /// The photo the picker hands back; null as if the person backed out.
   Uint8List? photo;
@@ -86,10 +108,12 @@ class TestApp {
         deviceTokenRepositoryProvider.overrideWithValue(tokens),
         homeRepositoryProvider.overrideWithValue(home),
         notificationsRepositoryProvider.overrideWithValue(notifications),
-        clockProvider.overrideWithValue(() => now),
+        clockProvider.overrideWithValue(() => clock?.call() ?? now),
         moreRepositoryProvider.overrideWithValue(more),
         shopRepositoryProvider.overrideWithValue(shop),
         checkinRepositoryProvider.overrideWithValue(checkin),
+        gameRepositoryProvider.overrideWithValue(gameRepository),
+        gameFeedbackProvider.overrideWithValue(feedback),
         qrSecretStoreProvider.overrideWithValue(secrets),
         screenLightProvider.overrideWithValue(light),
         photoPickerProvider.overrideWithValue((_) async => photo),

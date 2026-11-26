@@ -212,12 +212,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get soonTitle => 'Coming soon';
 
   @override
-  String get gameStudentSoon => '1v1 games and mock exams. Wins earn coins.';
-
-  @override
-  String get gameAppUserSoon => '1v1 games and mock exams. No coins until you join the centre.';
-
-  @override
   String get notifications => 'Notifications';
 
   @override
@@ -869,4 +863,213 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get qrCodeLabel => 'QR code for checking in at the centre';
+
+  @override
+  String get gameZone => 'Game zone';
+
+  @override
+  String get gameDuel => '1v1';
+
+  @override
+  String get gameExams => 'Mock exams';
+
+  @override
+  String get gameExamsSoon => 'Mock exams will be here soon.';
+
+  @override
+  String gamePitch(String coins) {
+    return 'A 1v1 duel. The winner gets $coins.';
+  }
+
+  @override
+  String get gamePitchNoCoins => 'A 1v1 duel: 10 questions, pull the rope to your side.';
+
+  @override
+  String get gameNoCoinsAppUser => 'No coins until you join the centre';
+
+  @override
+  String get gamePlayNow => 'Play now';
+
+  @override
+  String get gameChallenge => 'Challenge a classmate';
+
+  @override
+  String get gameBankNotReady => 'This subject does not have enough questions yet';
+
+  @override
+  String gameRewardedWins(int done, int of) {
+    return 'Rewarded wins today: $done/$of';
+  }
+
+  @override
+  String get gameRecent => 'Recent matches';
+
+  @override
+  String get gameRecentEmpty => 'No matches yet';
+
+  @override
+  String get gameWin => 'Win';
+
+  @override
+  String get gameLoss => 'Loss';
+
+  @override
+  String get gameDraw => 'Draw';
+
+  @override
+  String get gameComputer => 'Computer';
+
+  @override
+  String get gameSearching => 'Looking for an opponent…';
+
+  @override
+  String get gameNobodyFree => 'Nobody is free right now';
+
+  @override
+  String get gamePractice => 'Practise against the computer';
+
+  @override
+  String get gamePracticeNoCoins => 'Practice gives no coins';
+
+  @override
+  String get gameWaitMore => 'Keep waiting';
+
+  @override
+  String get gameInvite => 'Challenge';
+
+  @override
+  String get gameInviteWaiting => 'Waiting…';
+
+  @override
+  String gameInviteDeclined(String name) {
+    return '$name declined the challenge';
+  }
+
+  @override
+  String gameInviteExpired(String name) {
+    return '$name did not answer';
+  }
+
+  @override
+  String get gameClassmatesEmpty => 'No classmate in this group has the app yet';
+
+  @override
+  String get gameSearchHint => 'Search';
+
+  @override
+  String gameInvitedYou(String name) {
+    return '$name challenged you to a game';
+  }
+
+  @override
+  String get gameAccept => 'Accept';
+
+  @override
+  String get gameDecline => 'Decline';
+
+  @override
+  String get gameInviteGone => 'The challenge is no longer open';
+
+  @override
+  String get gameInMatch => 'You are in a match';
+
+  @override
+  String get gameGetReady => 'Get ready';
+
+  @override
+  String gameQuestionOf(int n, int of) {
+    return '$n/$of';
+  }
+
+  @override
+  String get gameCorrect => 'Right!';
+
+  @override
+  String get gameCorrectFaster => 'Right! You were faster';
+
+  @override
+  String get gameCorrectSlower => 'Right, but your opponent was faster';
+
+  @override
+  String get gameWrong => 'Wrong';
+
+  @override
+  String get gameTimeUp => 'Time is up';
+
+  @override
+  String get gameOpponentAnswered => 'Your opponent has answered';
+
+  @override
+  String get gameWaitingOpponent => 'Waiting for your opponent…';
+
+  @override
+  String get gameReconnecting => 'Connection lost. Reconnecting…';
+
+  @override
+  String get gameMatchGone => 'This match was not found';
+
+  @override
+  String get gameCancelled => 'The match was cancelled';
+
+  @override
+  String get gameBackToLobby => 'Back to the game zone';
+
+  @override
+  String get gameWinTitle => 'You won!';
+
+  @override
+  String get gameLossTitle => 'You lost';
+
+  @override
+  String get gameDrawTitle => 'A draw';
+
+  @override
+  String get gameForfeitWin => 'Your opponent left the match';
+
+  @override
+  String get gameForfeitLoss => 'The match ended because the connection was lost';
+
+  @override
+  String gameCorrectAnswers(int you, int opponent) {
+    return 'Right answers: $you – $opponent';
+  }
+
+  @override
+  String get gameLimitReached => 'Today\'s limit is reached — no coins given';
+
+  @override
+  String get gameOpponentNotStudent => 'Your opponent is not the centre\'s student — no coins given';
+
+  @override
+  String get gamePlayAgain => 'Play again';
+
+  @override
+  String get gameSeeQuestions => 'See the questions';
+
+  @override
+  String get gameQuestions => 'Questions';
+
+  @override
+  String get gameRightAnswer => 'Right answer:';
+
+  @override
+  String gameYourAnswer(String answer) {
+    return 'Your answer: $answer';
+  }
+
+  @override
+  String get gameNoAnswer => 'No answer';
+
+  @override
+  String get gameYou => 'You';
+
+  @override
+  String gameRopeLabel(int position) {
+    return 'Rope: $position';
+  }
+
+  @override
+  String gameSecondsLeft(int seconds) {
+    return '$seconds seconds left';
+  }
 }
