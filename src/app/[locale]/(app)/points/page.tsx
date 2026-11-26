@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
+import { ExamsList } from "@/components/exams/exams-list";
 import { BoardTab, PointsScreen } from "@/components/points/points-screen";
 import { RequestsTab } from "@/components/points/requests-tab";
 import { QuestionsList } from "@/components/questions/questions-list";
@@ -9,6 +10,7 @@ import { ListSkeleton } from "@/components/ui/skeleton";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import { getCurrentUser } from "@/lib/auth";
 import { tashkentDate } from "@/lib/domain/time";
+import { getExams } from "@/lib/exams/queries";
 import { getLeaderboard, getOpenRequestCount, getPointsSettings, getRedemptions, getRewards } from "@/lib/points/queries";
 import { getBanks, getQuestions } from "@/lib/questions/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
@@ -58,13 +60,14 @@ async function Points({ searchParams }: { searchParams: SearchParams }) {
       {search.tab === "rewards" ? <RewardsTab rewards={await getRewards({ activeOnly: false })} role={user.role} /> : null}
       {search.tab === "requests" ? <RequestsTab rows={await getRedemptions()} /> : null}
       {search.tab === "questions" ? <Questions values={values} role={user.role} /> : null}
+      {search.tab === "exams" ? <ExamsList exams={await getExams()} basePath="/points/exams" /> : null}
     </PointsScreen>
   );
 }
 
 function Fallback() {
   const t = useTranslations("nav");
-  return <ListSkeleton title={t("points")} tabs={4} />;
+  return <ListSkeleton title={t("points")} tabs={5} />;
 }
 
 export default async function PointsPage({ params, searchParams }: LocaleParams & { searchParams: SearchParams }) {

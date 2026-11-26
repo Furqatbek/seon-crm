@@ -1091,6 +1091,62 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"exams": {
+                  Row: {
+                    "id": string,"title": string,"level": "topik1" | "topik2","audio_max_plays": number,"coins_per_correct": number | null,"level_thresholds": Json | null,"status": "draft" | "published","created_by": string | null,"published_by": string | null,"published_at": string | null,"archived_at": string | null,"created_at": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"title": string,"level": "topik1" | "topik2","audio_max_plays"?: number,"coins_per_correct"?: number | null,"level_thresholds"?: Json | null,"status"?: "draft" | "published","created_by"?: string | null,"published_by"?: string | null,"published_at"?: string | null,"archived_at"?: string | null,"created_at"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "id"?: string,"title"?: string,"level"?: "topik1" | "topik2","audio_max_plays"?: number,"coins_per_correct"?: number | null,"level_thresholds"?: Json | null,"status"?: "draft" | "published","created_by"?: string | null,"published_by"?: string | null,"published_at"?: string | null,"archived_at"?: string | null,"created_at"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"exam_sections": {
+                  Row: {
+                    "id": string,"exam_id": string,"kind": "listening" | "reading","position": number,"time_limit_sec": number,"question_count": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"exam_id": string,"kind": "listening" | "reading","position": number,"time_limit_sec": number,"question_count": number
+                  }
+                  Update: {
+                    "id"?: string,"exam_id"?: string,"kind"?: "listening" | "reading","position"?: number,"time_limit_sec"?: number,"question_count"?: number
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"exam_passages": {
+                  Row: {
+                    "id": string,"exam_id": string,"section_id": string,"kind": "text" | "audio","text": string | null,"image_path": string | null,"audio_path": string | null,"position": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"exam_id": string,"section_id": string,"kind": "text" | "audio","text"?: string | null,"image_path"?: string | null,"audio_path"?: string | null,"position": number
+                  }
+                  Update: {
+                    "id"?: string,"exam_id"?: string,"section_id"?: string,"kind"?: "text" | "audio","text"?: string | null,"image_path"?: string | null,"audio_path"?: string | null,"position"?: number
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"exam_questions": {
+                  Row: {
+                    "id": string,"section_id": string,"passage_id": string | null,"position": number,"prompt": string,"options": Json,"correct_option_id": string,"explanation": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"section_id": string,"passage_id"?: string | null,"position": number,"prompt": string,"options": Json,"correct_option_id": string,"explanation"?: string | null
+                  }
+                  Update: {
+                    "id"?: string,"section_id"?: string,"passage_id"?: string | null,"position"?: number,"prompt"?: string,"options"?: Json,"correct_option_id"?: string,"explanation"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"rewards": {
                   Row: {
                     "archived_at": string | null,"cost": number,"created_at": string,"description": string | null,"id": string,"is_active": boolean,"name": string,"photo_path": string | null,"stock": number | null,"updated_at": string
@@ -1626,6 +1682,15 @@ isOneToOne: false
                            },
 "game_banks":
 { Args: Record<PropertyKey, never>; Returns: { "subject": string,"level": string,"active_questions": number }[]
+                           },
+"publish_exam":
+{ Args: { "p_exam_id": string }; Returns: undefined
+                           },
+"unpublish_exam":
+{ Args: { "p_exam_id": string }; Returns: undefined
+                           },
+"exam_stats":
+{ Args: Record<PropertyKey, never>; Returns: { "exam_id": string,"attempts": number,"players": number,"average_correct": number | null }[]
                            },
 "request_reward":
 { Args: { "p_request_key"?: string,"p_requested_by"?: string,"p_reward_id": string,"p_student_id": string,"p_via"?: string,"p_variant_id"?: string }; Returns: string

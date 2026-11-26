@@ -65,7 +65,7 @@ export const boardSearchSchema = z.object({
 
 export const TV_LANGUAGES = ["uz", "ru", "en"] as const;
 
-export const POINTS_TABS = ["leaderboard", "rewards", "requests", "questions"] as const;
+export const POINTS_TABS = ["leaderboard", "rewards", "requests", "questions", "exams"] as const;
 export type PointsTab = (typeof POINTS_TABS)[number];
 
 /** URL state of /points: the tab, plus the leaderboard's own filters. */

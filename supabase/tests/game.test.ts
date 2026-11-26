@@ -311,7 +311,7 @@ describe.skipIf(!DB_URL)("The 1v1 game", () => {
         expect(end).toMatchObject({ status: "finished", previous: null, result: { outcome: "win", forfeit: true, review: [] } });
         // With only ten questions on, a new match must use that very question again: it was never seen.
         const first = await asDb(s, async () => (await s.rows<{ id: string }>(`select question_ids[1] as id from matches where id = $1`, [match]))[0].id);
-        await asDb(s, () => s.rows(`update questions set is_active = false where subject = $1 and id not in (select id from questions where subject = $1 and id <> $2 order by id limit 10)`, [BANK.subject, first]));
+        await asDb(s, () => s.rows(`update questions set is_active = false where subject = $1 and id not in (select id from questions where subject = $1 and id <> $2 order by id limit 9)`, [BANK.subject, first]));
         await asDb(s, () => s.rows(`update questions set is_active = true where id = $1`, [first]));
         await asDb(s, () => s.rows(`update points_settings set game_min_questions = 10`));
         const next = await matchOf(s, S1, S3);
