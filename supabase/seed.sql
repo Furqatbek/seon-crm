@@ -2,10 +2,11 @@
 --
 --   psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed.sql
 --
--- Logins (both use the same demo password, "EduCrm-demo-2026" unless you set
+-- Logins (all use the same demo password, "EduCrm-demo-2026" unless you set
 -- another one for this load: PGOPTIONS="-c seed.password=…" psql …):
 --   owner@demo.educrm.uz    — owner
 --   manager@demo.educrm.uz  — manager
+--   teacher@demo.educrm.uz  — teacher (Nodira Saidova: IELTS 6.5 and English Kids)
 --
 -- Everything is dated relative to today, so the current month always has
 -- lessons to mark, fees that are due and a few debtors. The data is
@@ -110,6 +111,32 @@ from seed_cfg c,
     (6, 'Zilola Hamidova', '+998911112206', array['Matematika', 'Fizika'], 12, null)
   ) as t (n, full_name, phone, subjects, months, notes);
 
+-- The teacher login: created after the teacher record it is linked to.
+insert into auth.users (
+  instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+  raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
+  confirmation_token, recovery_token, email_change_token_new, email_change
+)
+select
+  '00000000-0000-0000-0000-000000000000', pg_temp.uid(1, 3), 'authenticated', 'authenticated',
+  'teacher@demo.educrm.uz', extensions.crypt(c.password, extensions.gen_salt('bf')), now(),
+  jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email'),
+    'role', 'teacher', 'teacher_id', pg_temp.uid(2, 2)),
+  jsonb_build_object('full_name', 'Nodira Saidova', 'language', 'uz'),
+  now(), now(), '', '', '', ''
+from seed_cfg c;
+
+insert into auth.identities (
+  id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at
+)
+select
+  gen_random_uuid(), u.id, u.id::text, 'email',
+  jsonb_build_object('sub', u.id::text, 'email', u.email, 'email_verified', true),
+  now(), now(), now()
+from auth.users u
+where u.id = pg_temp.uid(1, 3);
+
+
 -- All three pay models, two teachers each. Two of them have a rate history;
 -- the rise for teacher 6 starts mid-month, so it first pays next month.
 insert into public.teacher_pay_rates (teacher_id, pay_type, amount, percent, effective_from)
@@ -130,27 +157,36 @@ from seed_cfg c,
 -- ───────────────────────────── Groups ──────────────────────────────
 -- Nine running groups and one still forming.
 
+-- Five rooms. Fixed ids: uid(7, n).
+insert into public.rooms (id, number, name, capacity)
+values
+  (pg_temp.uid(7, 1), '1', 'Ingliz tili xonasi', 14),
+  (pg_temp.uid(7, 2), '2', 'IELTS xonasi', 12),
+  (pg_temp.uid(7, 3), '3', 'Matematika xonasi', 16),
+  (pg_temp.uid(7, 4), '4', 'Rus tili xonasi', 12),
+  (pg_temp.uid(7, 5), '5', 'Kompyuter xonasi', 12);
+
 insert into public.groups (
   id, name, subject, level, teacher_id, monthly_fee, days, start_time, duration_min,
-  room, capacity, start_date, status
+  room_id, capacity, start_date, status
 )
 select
   pg_temp.uid(3, g.n), g.name, g.subject, g.level, pg_temp.uid(2, g.teacher), g.fee,
-  g.days::smallint[], g.start_time::time, g.duration, g.room, 12,
+  g.days::smallint[], g.start_time::time, g.duration, pg_temp.uid(7, g.room), 12,
   case when g.status = 'forming' then c.today + 14 else (c.m0 - interval '4 months')::date end,
   g.status::public.group_status
 from seed_cfg c,
   (values
-    (1, 'English A2', 'Ingliz tili', 'A2', 1, 500000, '{1,3,5}', '15:00', 90, '1-xona', 'active'),
-    (2, 'English B1', 'Ingliz tili', 'B1', 1, 600000, '{2,4,6}', '16:30', 90, '1-xona', 'active'),
-    (3, 'IELTS 6.5', 'IELTS', 'B2', 2, 900000, '{1,3,5}', '18:00', 120, '2-xona', 'active'),
-    (4, 'English Kids', 'Ingliz tili', 'A1', 2, 400000, '{2,4,6}', '10:00', 60, '2-xona', 'active'),
-    (5, 'Matematika 7-sinf', 'Matematika', '7-sinf', 3, 450000, '{1,3,5}', '14:00', 90, '3-xona', 'active'),
-    (6, 'Matematika 9-sinf', 'Matematika', '9-sinf', 6, 500000, '{2,4,6}', '15:30', 90, '3-xona', 'active'),
-    (7, 'Rus tili boshlangʻich', 'Rus tili', 'A1', 4, 450000, '{1,3,5}', '16:30', 90, '4-xona', 'active'),
-    (8, 'Rus tili davomi', 'Rus tili', 'A2', 4, 500000, '{2,4,6}', '18:00', 90, '4-xona', 'active'),
-    (9, 'Python dasturlash', 'Dasturlash', 'Boshlangʻich', 5, 800000, '{2,4}', '18:30', 120, '5-xona', 'active'),
-    (10, 'Fizika abituriyent', 'Fizika', '11-sinf', 6, 700000, '{1,3,5}', '17:00', 90, '3-xona', 'forming')
+    (1, 'English A2', 'Ingliz tili', 'A2', 1, 500000, '{1,3,5}', '15:00', 90, 1, 'active'),
+    (2, 'English B1', 'Ingliz tili', 'B1', 1, 600000, '{2,4,6}', '16:30', 90, 1, 'active'),
+    (3, 'IELTS 6.5', 'IELTS', 'B2', 2, 900000, '{1,3,5}', '18:00', 120, 2, 'active'),
+    (4, 'English Kids', 'Ingliz tili', 'A1', 2, 400000, '{2,4,6}', '10:00', 60, 2, 'active'),
+    (5, 'Matematika 7-sinf', 'Matematika', '7-sinf', 3, 450000, '{1,3,5}', '14:00', 90, 3, 'active'),
+    (6, 'Matematika 9-sinf', 'Matematika', '9-sinf', 6, 500000, '{2,4,6}', '15:30', 90, 3, 'active'),
+    (7, 'Rus tili boshlangʻich', 'Rus tili', 'A1', 4, 450000, '{1,3,5}', '16:30', 90, 4, 'active'),
+    (8, 'Rus tili davomi', 'Rus tili', 'A2', 4, 500000, '{2,4,6}', '18:00', 90, 4, 'active'),
+    (9, 'Python dasturlash', 'Dasturlash', 'Boshlangʻich', 5, 800000, '{2,4}', '18:30', 120, 5, 'active'),
+    (10, 'Fizika abituriyent', 'Fizika', '11-sinf', 6, 700000, '{1,3,5}', '17:00', 90, 3, 'forming')
   ) as g (n, name, subject, level, teacher, fee, days, start_time, duration, room, status);
 
 -- ──────────────────────────── Students ─────────────────────────────
@@ -171,7 +207,7 @@ select
 
 insert into public.students (
   id, full_name, phone, parent_name, parent_phone, birth_date, language,
-  telegram_chat_id, status, notes, created_at
+  status, notes, created_at
 )
 select
   pg_temp.uid(4, i),
@@ -189,12 +225,25 @@ select
   end,
   date '2008-01-15' + (i * 97) % 3650,
   (case when i % 13 = 0 then 'en' when i % 4 = 0 then 'ru' else 'uz' end)::public.app_language,
-  case when i % 5 in (1, 2) then 500000000 + i * 7919 end,
   (case when i >= 78 then 'left' when i >= 75 then 'paused' else 'active' end)::public.student_status,
   case when i = 75 then 'Yozgi taʼtilga ketgan, keyingi oy qaytadi'
        when i = 78 then 'Boshqa shaharga koʻchdi' end,
   pg_temp.tashkent((c.m0 - interval '3 months')::date - 10 + i % 20, '11:00')
 from seed_cfg c, seed_names n, generate_series(1, 80) as i;
+
+-- Two in five families have linked Telegram as a parent; half of those
+-- students have linked their own chat too.
+insert into public.telegram_links (student_id, role, chat_id, language)
+select pg_temp.uid(4, i), 'parent', 500000000 + i * 7919, s.language
+from generate_series(1, 80) as i
+join public.students s on s.id = pg_temp.uid(4, i)
+where i % 5 in (1, 2);
+
+insert into public.telegram_links (student_id, role, chat_id, language)
+select pg_temp.uid(4, i), 'student', 600000000 + i * 7919, s.language
+from generate_series(1, 80) as i
+join public.students s on s.id = pg_temp.uid(4, i)
+where i % 5 = 1;
 
 -- ─────────────────────────── Enrolments ────────────────────────────
 -- Everyone has one group; every 8th student has a second one. Eight students

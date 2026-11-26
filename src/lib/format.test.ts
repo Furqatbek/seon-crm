@@ -9,7 +9,9 @@ import {
   formatMonthShort,
   formatPercent,
   formatMonth,
+  formatNationalPhone,
   formatPhone,
+  nationalPhoneDigits,
 } from "./format";
 
 describe("formatMoney", () => {
@@ -73,6 +75,35 @@ describe("formatPhone", () => {
     expect(formatPhone("")).toBe("");
     expect(formatPhone("901234567")).toBe("901234567");
     expect(formatPhone("+7 912 345 67 89")).toBe("+7 912 345 67 89");
+  });
+});
+
+describe("nationalPhoneDigits", () => {
+  it("drops the country code from a full number", () => {
+    expect(nationalPhoneDigits("+998 90 123 45 67")).toBe("901234567");
+    expect(nationalPhoneDigits("998901234567")).toBe("901234567");
+    expect(nationalPhoneDigits("+998")).toBe("");
+  });
+
+  it("keeps a number typed without the code, even one that starts with 998", () => {
+    expect(nationalPhoneDigits("90 123 45 67")).toBe("901234567");
+    expect(nationalPhoneDigits("998 12 34 56")).toBe("998123456");
+    expect(nationalPhoneDigits("90 12")).toBe("9012");
+    // A tenth digit typed onto such a number is dropped, not read as a country code.
+    expect(nationalPhoneDigits("99 812 34 56 7")).toBe("998123456");
+  });
+
+  it("ignores letters and stops at nine digits", () => {
+    expect(nationalPhoneDigits("90-123-45-67 ext 5")).toBe("901234567");
+    expect(nationalPhoneDigits("")).toBe("");
+  });
+});
+
+describe("formatNationalPhone", () => {
+  it("groups the digits as they are typed", () => {
+    expect(formatNationalPhone("")).toBe("");
+    expect(formatNationalPhone("901")).toBe("90 1");
+    expect(formatNationalPhone("901234567")).toBe("90 123 45 67");
   });
 });
 
@@ -153,5 +184,14 @@ describe("formatMonthShort", () => {
     expect(formatMonthShort("2026-11", "en")).toBe("Nov 26");
     expect(formatMonthShort("2026-11-01", "uz")).toBe("noy 26");
     expect(formatMonthShort("2026-05", "ru")).toBe("май 26");
+  });
+});
+
+describe("Korean formats", () => {
+  it("writes money, dates and months the Korean way", () => {
+    expect(formatMoney(1_250_000, "ko")).toBe("1,250,000숨");
+    expect(formatDate("2026-11-10T04:00:00Z", "ko")).toBe("11월 10일");
+    expect(formatDate("2026-11-10T04:00:00Z", "ko", { year: true })).toBe("2026년 11월 10일");
+    expect(formatMonth("2026-11", "ko")).toBe("2026년 11월");
   });
 });

@@ -13,7 +13,7 @@ import { sendMessageSchema, type NotifyErrorKey, type NotifyFailure } from "@/li
 import { deliver, type Delivery } from "./deliver";
 import { compose, paymentMessage, tashkentNow, type DebtCandidate } from "./reminders";
 import { chooseChannel, dedupeKey, isQuiet, smsRecipient } from "./rules";
-import { getNotifySettings, getProviders, getTemplates, messageLog } from "./store";
+import { getChats, getNotifySettings, getProviders, getTemplates, messageLog } from "./store";
 import { forChannel } from "./templates";
 
 // Messages staff send by hand. The message row is inserted as the signed-in
@@ -49,7 +49,7 @@ function failure(error: unknown): NotifyFailure {
   return { ok: false, error: code === "42501" ? "notAllowed" : "generic" };
 }
 
-const STUDENT = "id, full_name, language, telegram_chat_id, parent_phone, phone, archived_at";
+const STUDENT = "id, full_name, language, parent_phone, phone, archived_at";
 
 export type MessageDraft = {
   telegramLinked: boolean;
@@ -65,8 +65,9 @@ export async function getMessageDraft(studentIdInput: unknown): Promise<MessageD
   const [supabase, user] = await Promise.all([createClient(), getCurrentUser()]);
   if (!studentId.success || !supabase || !user) return null;
 
-  const [student, templates, settings] = await Promise.all([
+  const [student, chats, templates, settings] = await Promise.all([
     supabase.from("students").select(STUDENT).eq("id", studentId.data).maybeSingle(),
+    getChats(supabase, studentId.data),
     getTemplates(supabase),
     getNotifySettings(supabase),
   ]);
@@ -79,8 +80,9 @@ export async function getMessageDraft(studentIdInput: unknown): Promise<MessageD
       channel,
     );
   return {
-    telegramLinked: row.telegram_chat_id !== null,
-    smsTo: smsRecipient({ telegramChatId: row.telegram_chat_id, parentPhone: row.parent_phone, phone: row.phone }),
+    // A one-off message goes to the parent's chat, or the student's own when there is no parent chat.
+    telegramLinked: chats.parentChat !== null || chats.studentChat !== null,
+    smsTo: smsRecipient({ parentPhone: row.parent_phone, phone: row.phone }),
     drafts: { telegram: draft("telegram"), sms: draft("sms") },
   };
 }
@@ -92,11 +94,14 @@ export async function sendMessage(input: unknown): Promise<{ ok: true; delivered
   const { blocked, ctx } = await context();
   if (blocked) return blocked;
 
-  const student = await ctx.supabase.from("students").select(STUDENT).eq("id", parsed.data.student_id).maybeSingle();
+  const [student, chats] = await Promise.all([
+    ctx.supabase.from("students").select(STUDENT).eq("id", parsed.data.student_id).maybeSingle(),
+    getChats(ctx.supabase, parsed.data.student_id),
+  ]);
   if (!student.data || student.data.archived_at) return { ok: false, error: "notFound" };
   const target = chooseChannel(
     "custom",
-    { telegramChatId: student.data.telegram_chat_id, parentPhone: student.data.parent_phone, phone: student.data.phone },
+    { ...chats, parentPhone: student.data.parent_phone, phone: student.data.phone },
     parsed.data.channel,
   );
   if (!target) return { ok: false, error: "noChannel" };
@@ -105,7 +110,14 @@ export async function sendMessage(input: unknown): Promise<{ ok: true; delivered
     const result = await deliver(
       ctx.log,
       getProviders(),
-      { studentId: student.data.id, type: "custom", ...target, body: parsed.data.body, dedupeKey: dedupeKey.custom(randomUUID()) },
+      {
+        studentId: student.data.id,
+        type: "custom",
+        channel: target.channel,
+        recipient: target.recipient,
+        body: parsed.data.body,
+        dedupeKey: dedupeKey.custom(randomUUID()),
+      },
       { now: () => ctx.now },
     );
     refresh();
@@ -119,8 +131,9 @@ type RemindOutcome = "sent" | "failed" | "already" | "noDebt" | "noTemplate" | "
 
 /** One Remind: the payment-overdue text, by Telegram or else SMS, at most once per student per day. */
 async function remind(ctx: Ready, studentId: string, templates: Awaited<ReturnType<typeof getTemplates>>): Promise<RemindOutcome> {
-  const [student, balance] = await Promise.all([
+  const [student, chats, balance] = await Promise.all([
     ctx.supabase.from("students").select(STUDENT).eq("id", studentId).maybeSingle(),
+    getChats(ctx.supabase, studentId),
     ctx.supabase.from("student_balances").select("balance, oldest_unpaid_month").eq("student_id", studentId).maybeSingle(),
   ]);
   if (!student.data || student.data.archived_at) return "notFound";
@@ -131,7 +144,9 @@ async function remind(ctx: Ready, studentId: string, templates: Awaited<ReturnTy
     id: student.data.id,
     fullName: student.data.full_name,
     language: student.data.language,
-    telegramChatId: student.data.telegram_chat_id,
+    // A payment reminder goes to the parent, never to the student's own chat.
+    studentChat: null,
+    parentChat: chats.parentChat,
     parentPhone: student.data.parent_phone,
     phone: student.data.phone,
     debt,

@@ -18,6 +18,7 @@ import type { Template } from "@/lib/notify/reminders";
 import { smsLength } from "@/lib/notify/sms-length";
 import {
   PLACEHOLDERS,
+  placeholdersFor,
   amountValue,
   dateValue,
   forChannel,
@@ -29,6 +30,7 @@ import { saveTemplate } from "@/lib/settings/actions";
 import {
   MESSAGE_CHANNELS,
   MESSAGE_TYPES,
+  TELEGRAM_ONLY_TYPES,
   TEMPLATE_LANGUAGES,
   type SettingsResult,
 } from "@/lib/validation/settings";
@@ -48,6 +50,18 @@ function sample(language: Template["language"], centreName: string, today: strin
     due_date: dateValue(`${today.slice(0, 7)}-05`, language),
     time: "18:00",
     centre: centreName,
+    week_points: "14",
+    month_points: "44",
+    points: "3",
+    balance: "92",
+    group_rank: "2",
+    centre_rank: "7",
+    reason: { uz: "Darsda telefon", ru: "Телефон на уроке", en: "Phone in class" }[language],
+    reward: "Brend futbolka",
+    points_needed: "8",
+    goal: { uz: "“Brend futbolka” uchun yana 8 ball kerak.", ru: "До «Brend futbolka» осталось 8 баллов.", en: "8 more points for “Brend futbolka”." }[language],
+    bonus: { uz: "Qoldirilmagan oy uchun bonus: +10.", ru: "Бонус за месяц без пропусков: +10.", en: "Perfect month bonus: +10." }[language],
+    update: { uz: "topshirildi. Tabriklaymiz!", ru: "выдано. Поздравляем!", en: "handed over. Enjoy!" }[language],
   };
 }
 
@@ -113,7 +127,7 @@ function Editor({
         <div className="flex flex-col gap-1.5">
           <span className="text-footnote text-text-secondary">{t("templates.placeholders")}</span>
           <div className="flex flex-wrap gap-1.5" data-slot="placeholder-chips">
-            {PLACEHOLDERS.map((placeholder) => (
+            {placeholdersFor(template.type).map((placeholder) => (
               <button
                 key={placeholder}
                 type="button"
@@ -181,7 +195,13 @@ export function TemplatesTab({ templates, centreName, today }: { templates: Temp
     <div className="flex flex-col gap-6">
       <div className="grid gap-3 sm:grid-cols-3 lg:max-w-2xl">
         <Field label={t("templates.type")} htmlFor="template-type">
-          <Select value={key.type} onValueChange={(type) => setKey({ ...key, type: type as Key["type"] })}>
+          <Select
+            value={key.type}
+            onValueChange={(type) =>
+              // Points messages are Telegram only.
+              setKey({ ...key, type: type as Key["type"], channel: TELEGRAM_ONLY_TYPES.includes(type) ? "telegram" : key.channel })
+            }
+          >
             <SelectTrigger id="template-type">
               <SelectValue>{tMessages(`types.${key.type}`)}</SelectValue>
             </SelectTrigger>
@@ -201,7 +221,7 @@ export function TemplatesTab({ templates, centreName, today }: { templates: Temp
             </SelectTrigger>
             <SelectContent>
               {MESSAGE_CHANNELS.map((channel) => (
-                <SelectItem key={channel} value={channel}>
+                <SelectItem key={channel} value={channel} disabled={channel === "sms" && TELEGRAM_ONLY_TYPES.includes(key.type)}>
                   {tMessages(`channels.${channel}`)}
                 </SelectItem>
               ))}

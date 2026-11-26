@@ -32,7 +32,7 @@ describe("connectWebhook", () => {
     expect(await connectWebhook({ token: "1:A", secret: "s3cret_token-1", appUrl: APP, fetch })).toEqual({ ok: true, username: "seon_bot" });
     expect(calls.at(-1)).toEqual({
       method: "setWebhook",
-      body: { url: "https://crm.example.uz/api/telegram/webhook", secret_token: "s3cret_token-1", allowed_updates: ["message"] },
+      body: { url: "https://crm.example.uz/api/telegram/webhook", secret_token: "s3cret_token-1", allowed_updates: ["message", "callback_query"] },
     });
   });
 

@@ -1,20 +1,15 @@
-import { createTranslator } from "next-intl";
-
 import { handleUpdate, type TelegramUpdate } from "@/lib/notify/bot";
+import { botTexts, staffBotTexts } from "@/lib/notify/bot-texts";
 import { secretMatches } from "@/lib/notify/secret";
-import { botStore, getProviders } from "@/lib/notify/store";
+import { botStore, getProviders, staffBotStore } from "@/lib/notify/store";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-import en from "../../../../../messages/en.json";
-import ru from "../../../../../messages/ru.json";
-import uz from "../../../../../messages/uz.json";
-
-const MESSAGES = { en, ru, uz };
-
 /**
- * Telegram calls this for every message to the bot. The request must carry
- * the secret token the webhook was registered with; anything else is refused.
- * /start <code> links the chat to a student, /stop unlinks.
+ * Telegram calls this for every message to the bot and every button pressed
+ * in it. The request must carry the secret token the webhook was registered
+ * with; anything else is refused. docs/SPEC.md → "Telegram for students and
+ * parents": /start s_<code> and p_<code>, /stop, /language, /points, /top,
+ * /rewards; and for staff, /start u_<code> and Take under a lead alert.
  */
 export async function POST(request: Request) {
   if (!secretMatches(request.headers.get("x-telegram-bot-api-secret-token"), process.env.TELEGRAM_WEBHOOK_SECRET)) {
@@ -26,11 +21,16 @@ export async function POST(request: Request) {
   const update = (await request.json().catch(() => null)) as TelegramUpdate | null;
   if (!update) return new Response("Bad request", { status: 400 });
 
-  const reply = await handleUpdate(update, botStore(admin));
-  if (reply) {
-    // Only the bot's own texts are loaded into the translator.
-    const t = createTranslator({ locale: reply.language, messages: { bot: MESSAGES[reply.language].bot }, namespace: "bot" });
-    await getProviders().telegram.send(String(reply.chatId), t(reply.text, { student: reply.values.student ?? "", centre: reply.values.centre }));
+  const telegram = getProviders().telegram;
+  try {
+    const reply = await handleUpdate(update, botStore(admin), botTexts, { store: staffBotStore(admin), texts: staffBotTexts });
+    if (reply) {
+      if (reply.callbackId) await telegram.answerCallback(reply.callbackId);
+      await telegram.sendWithButtons(String(reply.chatId), reply.text, reply.buttons);
+    }
+  } catch (error) {
+    // Still 200: Telegram would only send the same update again.
+    console.error("telegram webhook", error);
   }
   // Always 200 once the secret is right, so Telegram does not send the update again.
   return Response.json({ ok: true });

@@ -6,9 +6,40 @@ import { resetPasswordSchema } from "./auth";
 
 const LANGUAGES = ["uz", "ru", "en"] as const;
 export const ROLES = ["owner", "manager"] as const;
-export const MESSAGE_TYPES = ["payment_due", "payment_overdue", "lesson_reminder", "custom"] as const;
+/** Every role a login can have. A teacher is also linked to a teacher record. */
+export const LOGIN_ROLES = [...ROLES, "teacher"] as const;
+export type LoginRole = (typeof LOGIN_ROLES)[number];
+
+/** A teacher login names its teacher; nobody else has one. */
+const roleFields = {
+  role: z.enum(LOGIN_ROLES),
+  teacher_id: z.uuid("teacherRequired").nullish(),
+};
+function teacherLink<T extends { role: LoginRole; teacher_id?: string | null }>(value: T, ctx: z.RefinementCtx) {
+  if (value.role === "teacher" && !value.teacher_id) {
+    ctx.addIssue({ code: "custom", path: ["teacher_id"], message: "teacherRequired" });
+  }
+}
+const withTeacher = <T extends { role: LoginRole; teacher_id?: string | null }>(value: T) => ({
+  ...value,
+  teacher_id: value.role === "teacher" ? (value.teacher_id as string) : null,
+});
+export const MESSAGE_TYPES = [
+  "payment_due",
+  "payment_overdue",
+  "lesson_reminder",
+  "custom",
+  "points_weekly",
+  "points_deduction",
+  "points_month_result",
+  "reward_update",
+] as const;
+/** Points messages are never sent by SMS: they have a Telegram template only. */
+export const TELEGRAM_ONLY_TYPES: readonly string[] = ["points_weekly", "points_deduction", "points_month_result", "reward_update"];
 export const MESSAGE_CHANNELS = ["telegram", "sms"] as const;
 export const TEMPLATE_LANGUAGES = LANGUAGES;
+/** The languages the interface comes in. Messages to families stay in LANGUAGES. */
+export const UI_LANGUAGES = [...LANGUAGES, "ko"] as const;
 
 const name = z.string().trim().min(1, "nameRequired").max(100, "tooLong");
 /** A day of the month every month has: 1–28. */
@@ -22,16 +53,36 @@ export const centreSchema = z
 export type CentreInput = z.input<typeof centreSchema>;
 export type CentreValues = z.output<typeof centreSchema>;
 
-/** Invite a user by email. */
-export const inviteSchema = z.object({
-  email: z.email("emailInvalid").max(200, "tooLong"),
-  full_name: name,
-  role: z.enum(ROLES),
-  language: z.enum(LANGUAGES),
+/** Add or edit a room. */
+export const roomSchema = z.object({
+  number: z.string().trim().min(1, "numberRequired").max(20, "tooLong"),
+  name: z
+    .string()
+    .trim()
+    .max(60, "tooLong")
+    .transform((value) => value || null),
+  capacity: z.coerce.number("capacityInvalid").int("capacityInvalid").min(1, "capacityInvalid").max(500, "capacityInvalid"),
+  is_active: z.boolean(),
 });
+export type RoomInput = z.input<typeof roomSchema>;
+export type RoomValues = z.output<typeof roomSchema>;
+
+/** Invite a user by email. */
+export const inviteSchema = z
+  .object({
+    email: z.email("emailInvalid").max(200, "tooLong"),
+    full_name: name,
+    ...roleFields,
+    language: z.enum(UI_LANGUAGES),
+  })
+  .superRefine(teacherLink)
+  .transform(withTeacher);
 export type InviteInput = z.input<typeof inviteSchema>;
 
-export const userRoleSchema = z.object({ user_id: z.uuid(), role: z.enum(ROLES) });
+export const userRoleSchema = z
+  .object({ user_id: z.uuid(), ...roleFields })
+  .superRefine(teacherLink)
+  .transform(withTeacher);
 export const userActiveSchema = z.object({ user_id: z.uuid(), active: z.boolean() });
 
 /** Notifications: on or off, lesson reminder hours, quiet hours. */
@@ -47,15 +98,20 @@ export type NotificationsValues = z.output<typeof notificationsSchema>;
 export const testSmsSchema = z.object({ phone: z.string().regex(/^\+998\d{9}$/, "phoneInvalid") });
 
 /** One template: a message type on a channel in a language. */
-export const templateSchema = z.object({
-  type: z.enum(MESSAGE_TYPES),
-  channel: z.enum(MESSAGE_CHANNELS),
-  language: z.enum(LANGUAGES),
-  body: z.string().trim().min(1, "textRequired").max(1000, "tooLong"),
-});
+export const templateSchema = z
+  .object({
+    type: z.enum(MESSAGE_TYPES),
+    channel: z.enum(MESSAGE_CHANNELS),
+    language: z.enum(LANGUAGES),
+    body: z.string().trim().min(1, "textRequired").max(1000, "tooLong"),
+  })
+  .refine((value) => value.channel === "telegram" || !TELEGRAM_ONLY_TYPES.includes(value.type), {
+    path: ["channel"],
+    message: "notAllowed",
+  });
 
 /** Profile: name and interface language. */
-export const profileSchema = z.object({ full_name: name, language: z.enum(LANGUAGES) });
+export const profileSchema = z.object({ full_name: name, language: z.enum(UI_LANGUAGES) });
 export type ProfileInput = z.input<typeof profileSchema>;
 
 export const passwordSchema = resetPasswordSchema;
@@ -69,8 +125,15 @@ export type SettingsErrorKey =
   | "hoursInvalid"
   | "emailInvalid"
   | "emailTaken"
+  | "teacherRequired"
+  | "teacherTaken"
   | "phoneInvalid"
   | "textRequired"
+  | "numberRequired"
+  | "numberTaken"
+  | "capacityInvalid"
+  | "roomInUse"
+  | "capacityBelowGroup"
   | "passwordTooShort"
   | "passwordMismatch"
   | "notSelf"
@@ -89,10 +152,35 @@ export type SettingsResult<T = undefined> =
       detail?: string;
     };
 
-export const SETTINGS_TABS = ["centre", "users", "notifications", "templates", "profile"] as const;
+export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "points", "sources", "integrations", "profile"] as const;
 export type SettingsTab = (typeof SETTINGS_TABS)[number];
 
 /** URL state of /settings. */
 export const settingsSearchSchema = z.object({
   tab: z.enum(SETTINGS_TABS).optional().catch(undefined),
+  /** How "Connect with Facebook" ended: choose (pick Pages), cancelled, failed, state, not_configured. */
+  meta: z.enum(["choose", "cancelled", "failed", "state", "not_configured"]).optional().catch(undefined),
 });
+
+// ── Lead sources: keys for websites that post leads (docs/SPEC.md → "Public intake URL") ──
+
+/** Where an incoming field of a website goes. The same list as src/lib/intake/field-map.ts. */
+export const SOURCE_MAP_TARGETS = ["name", "phone", "subject", "preferred_time", "notes", "language", "answer", "ignore"] as const;
+
+/** Add or edit a lead source. */
+export const leadSourceSchema = z.object({
+  name: z.string().trim().min(1, "nameRequired").max(80, "tooLong"),
+  /** The funnel its leads count in; empty for none. */
+  form_id: z
+    .union([z.uuid(), z.literal("")])
+    .nullish()
+    .transform((value) => value || null),
+  /** One row per incoming field name. Rows with no name are dropped. */
+  fields: z
+    .array(z.object({ from: z.string().trim().max(80, "tooLong"), to: z.enum(SOURCE_MAP_TARGETS) }))
+    .max(40)
+    .default([])
+    .transform((rows) => rows.filter((row) => row.from !== "")),
+});
+export type LeadSourceInput = z.input<typeof leadSourceSchema>;
+export type LeadSourceValues = z.output<typeof leadSourceSchema>;

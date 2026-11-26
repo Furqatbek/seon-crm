@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Label } from "@/components/ui/label";
 import {
   Sheet,
@@ -67,7 +68,7 @@ function TeacherForm({
           is_active: teacher.is_active,
           notes: teacher.notes ?? "",
         }
-      : { full_name: "", phone: "+998 ", subjects: "", hired_on: "", is_active: true, notes: "" },
+      : { full_name: "", phone: "", subjects: "", hired_on: "", is_active: true, notes: "" },
   });
 
   const message = (key: string | undefined) =>
@@ -105,14 +106,19 @@ function TeacherForm({
           />
         </Field>
         <Field label={t("fields.phone")} htmlFor="teacher-phone" error={message(errors.phone?.message)}>
-          <Input
-            id="teacher-phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="off"
-            placeholder="+998 90 123 45 67"
-            aria-invalid={errors.phone ? true : undefined}
-            {...register("phone")}
+          <Controller
+            control={control}
+            name="phone"
+            render={({ field }) => (
+              <PhoneInput
+                id="teacher-phone"
+                aria-invalid={errors.phone ? true : undefined}
+                ref={field.ref}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              />
+            )}
           />
         </Field>
         <Field

@@ -158,6 +158,7 @@ export async function getTeacher(
           .from("teacher_payouts")
           .select("id, month, pay_type, calculated, bonus, deduction, final_amount, status")
           .eq("teacher_id", id)
+          .is("archived_at", null)
           .order("month", { ascending: false })
       : null,
   ]);

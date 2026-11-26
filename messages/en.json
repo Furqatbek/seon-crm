@@ -49,20 +49,34 @@
     "teachers": "Teachers",
     "finance": "Finance",
     "reports": "Reports",
-    "settings": "Settings"
+    "settings": "Settings",
+    "myGroups": "My groups",
+    "pointsHistory": "History",
+    "points": "Points",
+    "openRequests": "Reward requests waiting:",
+    "pointsReport": "Reports",
+    "waitingLeads": "Leads waiting:"
   },
   "language": {
     "label": "Language",
     "uz": "Oʻzbekcha",
     "ru": "Русский",
-    "en": "English"
+    "en": "English",
+    "ko": "한국어"
+  },
+  "theme": {
+    "label": "Theme",
+    "system": "Same as device",
+    "light": "Light",
+    "dark": "Dark"
   },
   "userMenu": {
     "label": "Account menu",
     "signOut": "Sign out",
     "roles": {
       "owner": "Owner",
-      "manager": "Manager"
+      "manager": "Manager",
+      "teacher": "Teacher"
     },
     "profile": "Profile"
   },
@@ -139,7 +153,9 @@
       "walk_in": "Walk-in",
       "referral": "Referral",
       "website": "Website",
-      "other": "Other"
+      "other": "Other",
+      "facebook": "Facebook",
+      "web_form": "Web form"
     },
     "lostReason": {
       "price": "Price",
@@ -161,12 +177,19 @@
       "created": "Created",
       "trial": "Trial lesson",
       "lostReason": "Lost because",
-      "unassigned": "Nobody"
+      "unassigned": "Nobody",
+      "referredBy": "Referred by",
+      "referredByHint": "The student who sent this lead. They get points when the lead enrols and makes a first payment."
     },
     "form": {
       "created": "Lead added",
       "saved": "Lead saved",
-      "chooseSource": "Choose a source"
+      "chooseSource": "Choose a source",
+      "title": "From a form",
+      "language": "Language: {language}",
+      "submitted": "Sent {time}",
+      "yes": "Yes",
+      "no": "No"
     },
     "actions": {
       "logCall": "Log call",
@@ -191,7 +214,8 @@
       "call": "Call",
       "note": "Note",
       "statusChange": "{from} → {to}",
-      "reason": "Reason: {reason}"
+      "reason": "Reason: {reason}",
+      "formResubmitted": "Submitted “{form}” again"
     },
     "lost": {
       "title": "Mark {name} as lost?",
@@ -233,6 +257,21 @@
       "notFound": "This lead no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."
+    },
+    "inbox": {
+      "title": "New from forms — {count} waiting",
+      "newToast": "New lead from “{form}”: {name}",
+      "newToastPlain": "New lead: {name}",
+      "take": "Take",
+      "assign": "Assign",
+      "assignTo": "Assign to",
+      "taken": "You took {lead}",
+      "assigned": "{lead} is assigned to {name}",
+      "takenBy": "{name} already took this lead",
+      "notWaiting": "This lead is no longer waiting",
+      "justNow": "just now",
+      "minutes": "{minutes} min",
+      "hours": "{hours} h {minutes} min"
     }
   },
   "students": {
@@ -251,7 +290,8 @@
     "status": {
       "active": "Active",
       "paused": "Paused",
-      "left": "Left"
+      "left": "Left",
+      "graduated": "Graduated"
     },
     "balance": {
       "debt": "Debt",
@@ -263,7 +303,8 @@
       "overview": "Overview",
       "ledger": "Ledger",
       "attendance": "Attendance",
-      "messages": "Messages"
+      "messages": "Messages",
+      "points": "Points"
     },
     "fields": {
       "name": "Name",
@@ -305,13 +346,15 @@
       "markLeft": "Mark as left",
       "archive": "Archive",
       "more": "More actions",
-      "addCredit": "Add credit"
+      "addCredit": "Add credit",
+      "markGraduated": "Mark as graduated"
     },
     "done": {
       "paused": "Student paused",
       "resumed": "Student is active again",
       "left": "Student marked as left",
-      "archived": "Student archived"
+      "archived": "Student archived",
+      "graduated": "Student marked as graduated"
     },
     "left": {
       "title": "Mark {name} as left?",
@@ -332,13 +375,20 @@
       "linked": "Linked",
       "linkedShort": "Linked",
       "notLinked": "Not linked",
-      "hint": "Send this link to the student or parent. When they press Start in the bot, reminders will arrive in Telegram.",
+      "hint": {
+        "student": "For the student's own Telegram: lesson reminders and their points. Not payment reminders.",
+        "parent": "For a parent's Telegram: payment reminders and the child's points."
+      },
       "copy": "Copy link",
       "copied": "Copied",
       "showQr": "Show QR code",
       "hideQr": "Hide QR code",
-      "qrLabel": "QR code with the Telegram link",
-      "noBot": "The Telegram bot is not connected yet. The owner connects it in Settings."
+      "qrLabel": "QR code with the Telegram link: {role}",
+      "noBot": "The Telegram bot is not connected yet. The owner connects it in Settings.",
+      "role": {
+        "student": "Student's own link",
+        "parent": "Parent's link"
+      }
     },
     "ledger": {
       "empty": "No charges or payments yet.",
@@ -386,7 +436,14 @@
         "payment_due": "Payment due",
         "payment_overdue": "Payment overdue",
         "lesson_reminder": "Lesson reminder",
-        "custom": "One-off message"
+        "custom": "One-off message",
+        "points_weekly": "Weekly points summary",
+        "points_deduction": "Points taken away",
+        "points_month_result": "Month results",
+        "reward_update": "Reward update",
+        "staff_new_lead": "New lead (staff)",
+        "staff_lead_reminder": "Lead reminder (staff)",
+        "staff_integration_alert": "Integration alert (staff)"
       },
       "channels": {
         "telegram": "Telegram",
@@ -410,7 +467,12 @@
       "notFound": "This student no longer exists.",
       "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."
-    }
+    },
+    "graduated": {
+      "title": "Mark {name} as graduated?",
+      "body": "The student finishes every group today and is no longer billed. Anything still owed stays on their balance."
+    },
+    "counts": "Studying now: {studying} · Left: {left} · Graduated: {graduated}"
   },
   "groups": {
     "newGroup": "New group",
@@ -426,7 +488,8 @@
       "students": "Students",
       "attendance": "Attendance",
       "lessons": "Lessons",
-      "trials": "Trials"
+      "trials": "Trials",
+      "leaderboard": "Leaderboard"
     },
     "status": {
       "forming": "Forming",
@@ -462,7 +525,9 @@
       "saved": "Group saved",
       "chooseTeacher": "Choose a teacher",
       "feeHint": "A changed fee applies from the next billing month, never to fees already charged.",
-      "scheduleHint": "Changing the days, time, teacher or dates rebuilds future lessons that have no attendance yet."
+      "scheduleHint": "Changing the days, time, teacher or dates rebuilds future lessons that have no attendance yet.",
+      "noRoom": "No room",
+      "roomOption": "{room} ({capacity, plural, one {# seat} other {# seats}})"
     },
     "today": {
       "empty": "No lessons today.",
@@ -492,7 +557,7 @@
       "locked": {
         "cancelled": "This lesson is cancelled. Restore it to mark attendance.",
         "future": "This lesson has not happened yet.",
-        "tooOld": "This lesson is more than 7 days old. Only the owner can change its attendance."
+        "tooOld": "This lesson was on another day. Attendance is marked on the day of the lesson."
       },
       "mark": {
         "present": "Present",
@@ -522,7 +587,8 @@
       "empty": "No students in this group yet.",
       "rowActions": "Actions for {name}",
       "transfer": "Transfer to another group",
-      "leave": "Leave group"
+      "leave": "Leave group",
+      "coins": "Coins"
     },
     "actions": {
       "addStudent": "Add student",
@@ -618,10 +684,14 @@
       "lessonFuture": "This lesson has not happened yet.",
       "notInGroup": "A student is not in this group on that day.",
       "sameGroup": "The student is already in this group.",
-      "attendanceLocked": "This lesson is more than 7 days old. Only the owner can change its attendance.",
+      "attendanceLocked": "Attendance is marked on the day of the lesson, and that day has passed.",
       "notFound": "This no longer exists.",
       "notAllowed": "You are not allowed to do this.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "capacityOverRoom": "The room holds {detail}. The group cannot be larger.",
+      "roomInvalid": "Choose a room from the list.",
+      "roomClash": "The room is taken at that time by {detail}.",
+      "roomUnavailable": "This room is no longer available. Choose another."
     }
   },
   "finance": {
@@ -634,9 +704,12 @@
       "adjustments": "Adjustments"
     },
     "strip": {
-      "collected": "Collected",
-      "billed": "Billed",
-      "debt": "Debt today",
+      "billed": "Billed for the month",
+      "paid": "Paid of it",
+      "unpaid": "Still unpaid of it",
+      "rule": "Billed = paid + still unpaid. The figures below are separate: money received counts everything taken during the month, also for other months, and debt is everything owed today.",
+      "collected": "Money received in the month",
+      "debt": "Debt today, all months",
       "expenses": "Expenses"
     },
     "method": {
@@ -769,11 +842,14 @@
         "marketing": "Marketing",
         "supplies": "Supplies",
         "other": "Other"
-      }
+      },
+      "edit": "Edit expense {what}",
+      "editTitle": "Edit expense",
+      "updated": "Expense changed"
     },
     "salaries": {
       "calculate": "Calculate",
-      "hint": "Each month is paid at the rate in effect on its 1st day. Paid payouts are not changed.",
+      "hint": "Each month is paid at the rate in effect on its 1st day. Drafts follow payments and lessons by themselves: a voided payment leaves the share at once. Paid payouts are not changed.",
       "empty": "No payouts for {month} yet. Press Calculate to create them.",
       "calculated": "{count, plural, =0 {Nothing to calculate} one {# payout calculated} other {# payouts calculated}}",
       "calculatedColumn": "Calculated",
@@ -803,13 +879,36 @@
       "markPaidTitle": "Mark the payout for {teacher} as paid?",
       "markPaidBody": "A paid payout is locked: it cannot be edited or recalculated.",
       "markedPaid": "Payout marked paid",
-      "monthOpenWarning": "{month} is not over yet. Lessons held and payments received after this will not be added to a paid payout."
+      "monthOpenWarning": "{month} is not over yet. Lessons held and payments received after this will not be added to a paid payout.",
+      "facts": {
+        "students": "{count, plural, one {# student learning} other {# students learning}}",
+        "paid": "{count, plural, one {# paid} other {# paid}}",
+        "discounted": "{count, plural, one {# with a discount} other {# with a discount}}",
+        "discountTotal": "Discounts this month:"
+      }
     },
     "adjustments": {
       "empty": "No credits or voided payments this month.",
       "credit": "Credit",
       "void": "Voided payment",
       "receipt": "Receipt {receipt}"
+    },
+    "archive": {
+      "action": "Archive",
+      "payment": "Archive receipt {what}",
+      "charge": "Archive the charge for {what}",
+      "expense": "Archive the expense of {what}",
+      "payout": "Archive the payout for {what}",
+      "title": "Archive this record?",
+      "body": "It is not deleted, but it leaves every list, balance, total and report. It cannot be brought back from the app.",
+      "bodyPayment": "The payment is voided and hidden: the student owes the amount again.",
+      "bodyCharge": "The student no longer owes this charge. A monthly fee can be generated again afterwards.",
+      "bodyPayout": "The payout leaves the salaries total. Calculate makes a new draft for this month.",
+      "done": "Archived",
+      "allCharges": "Archive all charges",
+      "allChargesTitle": "Archive every charge of {month}?",
+      "allChargesBody": "All {count, plural, one {# charge} other {# charges}} of this month leave the students' balances. Payments are not touched. You can generate the month again afterwards.",
+      "allChargesDone": "{count, plural, one {# charge archived} other {# charges archived}}"
     }
   },
   "teachers": {
@@ -1049,14 +1148,133 @@
       "0_30": "0–30 days",
       "31_60": "31–60 days",
       "over_60": "Over 60 days"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "points": "Points"
+    },
+    "points": {
+      "points": "Points",
+      "kpi": {
+        "earned": "Points earned",
+        "deducted": "Points deducted",
+        "spent": "Spent on rewards",
+        "unspent": "Unspent points",
+        "rewardsGiven": "Rewards given",
+        "studentsWithoutPoints": "Students with no points"
+      },
+      "bySource": {
+        "title": "Points earned by source"
+      },
+      "byTeacher": {
+        "title": "Awards and deductions per teacher",
+        "hint": "Undone ones are left out.",
+        "teacher": "Teacher",
+        "awards": "Awards",
+        "deductions": "Deductions"
+      },
+      "topStudents": {
+        "title": "Top 10 students",
+        "student": "Student"
+      },
+      "rewards": {
+        "title": "Rewards given",
+        "reward": "Reward",
+        "given": "Given",
+        "points": "Points spent"
+      },
+      "byGroup": {
+        "title": "Average points per student by group",
+        "hint": "The group's points in the period over the students in it now.",
+        "group": "Group",
+        "students": "Students",
+        "average": "Average"
+      }
+    },
+    "teacherTitle": "Points in my groups",
+    "forms": {
+      "title": "Leads by form",
+      "hint": "Views and leads in the period, how many were taken and became students, and how fast a lead was taken.",
+      "form": "Form",
+      "views": "Views",
+      "leads": "Leads",
+      "taken": "Taken",
+      "won": "Won",
+      "conversion": "Views → leads",
+      "medianTake": "Median time to Take",
+      "minutes": "{minutes} min"
     }
   },
   "bot": {
-    "linked": "{student} is now linked. Payment and lesson reminders from {centre} will come here. Send /stop to unlink.",
+    "linked": "{student} is now linked as a parent. Payment reminders and points news from {centre} will come here. Commands: /points /top /rewards /language /stop",
+    "linkedStudent": "{student}, you are linked. Lesson reminders and your points from {centre} will come here. Commands: /points /top /rewards /language /stop",
     "unknownCode": "This link is not valid. Ask {centre} for a new one.",
-    "stopped": "Unlinked. You will get no more messages from {centre}.",
+    "stopped": "Unlinked. You will get no more messages from {centre} in this chat.",
     "nothingLinked": "Nothing is linked to this chat.",
-    "help": "This bot sends reminders from {centre}. Open the personal link the centre gave you to connect."
+    "notLinked": "This chat is not linked yet. Open the personal link {centre} gave you.",
+    "help": "This bot sends reminders and points news from {centre}. Open the personal link the centre gave you to connect. Commands: /points /top /rewards /language /stop",
+    "chooseLanguage": "Choose the language of this chat:",
+    "languageSet": "Done. This chat is now in English.",
+    "whichChild": "Which child?",
+    "failed": "Something went wrong. Try again in a minute.",
+    "pointsCount": "{points, plural, one {# point} other {# points}}",
+    "goal": "{points, plural, one {# more point} other {# more points}} for “{reward}”.",
+    "bonus": "Perfect month bonus: +{points}.",
+    "points": {
+      "title": "{student}",
+      "balance": "To spend: {points}",
+      "month": "Earned this month: {points}",
+      "centreRank": "Centre: place {rank}",
+      "groupRank": "{group}: place {rank} ({points})",
+      "last": "Latest:"
+    },
+    "top": {
+      "centre": "Centre, top 10 this month",
+      "group": "{group}, top 5",
+      "own": "{student}: place {rank} ({points})",
+      "empty": "No points yet this month."
+    },
+    "rewards": {
+      "title": "Rewards. {student} has {points} to spend.",
+      "empty": "There are no rewards right now.",
+      "outOfStock": "out of stock",
+      "left": "{count} left",
+      "request": "Request: {reward}"
+    },
+    "request": {
+      "confirm": "Request “{reward}” for {points} points for {student}? The points are held at once.",
+      "yes": "Yes, request",
+      "no": "No",
+      "done": "Request received: “{reward}”. Collect it at the front desk of {centre}.",
+      "cancelled": "Nothing was requested.",
+      "notEnough": "Not enough points for this reward.",
+      "outOfStock": "This reward is out of stock.",
+      "notOnOffer": "This reward is no longer on offer.",
+      "failed": "The request did not go through. Try again in a minute."
+    },
+    "reward": {
+      "requested": "request received, {points} points are held. Collect it at the front desk.",
+      "given": "handed over. Enjoy!",
+      "rejected": "the request was declined ({reason}). {points} points are back."
+    },
+    "source": {
+      "attendance": "Attendance",
+      "perfect_month": "Perfect month",
+      "on_time_payment": "Fee paid on time",
+      "referral": "Friend enrolled",
+      "teacher_award": "Teacher",
+      "teacher_deduction": "Taken by teacher",
+      "owner_adjustment": "Adjustment",
+      "reward_hold": "Reward requested",
+      "reward_return": "Reward returned"
+    },
+    "commands": {
+      "points": "My points and places",
+      "top": "Top students this month",
+      "rewards": "Rewards and requests",
+      "language": "Change the language",
+      "stop": "Unlink this chat"
+    }
   },
   "notify": {
     "send": {
@@ -1096,10 +1314,14 @@
   "settings": {
     "tabs": {
       "centre": "Centre",
+      "rooms": "Rooms",
       "users": "Users",
       "notifications": "Notifications",
       "templates": "Templates",
-      "profile": "Profile"
+      "profile": "Profile",
+      "points": "Points",
+      "sources": "Lead sources",
+      "integrations": "Integrations"
     },
     "saved": "Saved",
     "centre": {
@@ -1133,7 +1355,14 @@
       "deactivated": "{name} is deactivated",
       "reactivated": "{name} can sign in again",
       "roleChanged": "{name} is now {role}",
-      "roleFor": "Role of {name}"
+      "roleFor": "Role of {name}",
+      "teacher": "Teacher",
+      "teacherHint": "They see only this teacher's groups: students' names, attendance and coins.",
+      "chooseTeacher": "Choose a teacher",
+      "noFreeTeachers": "Every teacher already has a login",
+      "linkTitle": "Which teacher is {name}?",
+      "linkBody": "As a teacher they see only that teacher's groups: students' names, attendance and coins. Nothing else in the app.",
+      "makeTeacher": "Make teacher"
     },
     "notifications": {
       "enabled": "Send automatic reminders",
@@ -1187,7 +1416,19 @@
         "amount": "Amount",
         "due_date": "Due date",
         "time": "Lesson time",
-        "centre": "Centre name"
+        "centre": "Centre name",
+        "week_points": "Points this week",
+        "month_points": "Points in the month",
+        "points": "Points",
+        "balance": "Points to spend",
+        "group_rank": "Place in the group",
+        "centre_rank": "Place in the centre",
+        "reason": "Reason",
+        "reward": "Reward",
+        "points_needed": "Points still needed",
+        "goal": "Next reward to save for (a sentence)",
+        "bonus": "Perfect-month bonus (a sentence)",
+        "update": "What happened to the request (a sentence)"
       }
     },
     "profile": {
@@ -1218,7 +1459,722 @@
       "notAllowed": "You are not allowed to do this.",
       "notConfigured": "This is not set up on the server yet.",
       "notFound": "This no longer exists.",
+      "generic": "Something went wrong. Try again.",
+      "numberRequired": "Enter the room number.",
+      "numberTaken": "Another room already has this number.",
+      "capacityInvalid": "Enter a capacity from 1 to 500.",
+      "roomInUse": "A group still uses this room.",
+      "capacityBelowGroup": "A group in this room is larger than that. Lower the group's capacity first.",
+      "teacherRequired": "Choose the teacher.",
+      "teacherTaken": "This teacher already has a login."
+    },
+    "rooms": {
+      "add": "Add room",
+      "addTitle": "New room",
+      "editTitle": "Edit room {room}",
+      "number": "Number",
+      "numberHint": "What is on the door: 3, 2A.",
+      "name": "Name",
+      "nameHint": "Optional. Shown after the number: 3 · Big hall.",
+      "capacity": "Capacity",
+      "capacityHint": "How many students fit. A group in this room cannot be larger.",
+      "active": "Available for new groups",
+      "activeHint": "Switch off to keep the room but stop offering it for new groups.",
+      "groups": "Groups",
+      "noGroups": "No groups",
+      "status": "Status",
+      "statusActive": "Active",
+      "statusInactive": "Not offered",
+      "edit": "Edit",
+      "editRoom": "Edit room {room}",
+      "archive": "Archive",
+      "archiveRoom": "Archive room {room}",
+      "archiveTitle": "Archive room {room}?",
+      "archiveBody": "The room leaves this list and can no longer be chosen. Groups that used it in the past keep it in their history.",
+      "archiveBlocked": "In use by a group. Move or finish the group first.",
+      "archived": "Room {room} archived",
+      "created": "Room {room} added",
+      "saved": "Room {room} saved",
+      "empty": "No rooms yet. Add the first one."
+    },
+    "alerts": {
+      "title": "Lead alerts",
+      "about": "When a lead comes in from a form, you hear about it here and on Telegram, and can take it from either.",
+      "linked": "Your Telegram is linked.",
+      "notLinked": "Your Telegram is not linked yet.",
+      "link": "Link Telegram",
+      "linkAgain": "Link another Telegram",
+      "noBot": "The centre's Telegram bot is not connected yet (Settings → Notifications).",
+      "unlink": "Unlink",
+      "unlinked": "Telegram is unlinked",
+      "telegram": "Alerts on Telegram",
+      "telegramHint": "Every new lead, and one reminder if nobody takes it in 30 minutes.",
+      "sound": "Sound for new leads",
+      "soundHint": "A short sound in this browser when a lead arrives."
+    },
+    "sources": {
+      "about": "A website or landing page can send its leads straight here. Give each one its own key.",
+      "noHost": "The forms address is not set up yet (FORMS_HOST), so the intake address is not known.",
+      "notReady": "Lead sources are not set up yet: the database migration for them has not been applied.",
+      "empty": "No sources yet. Add one to get a key for your website.",
+      "add": "Add source",
+      "edit": "Edit",
+      "create": "Create key",
+      "formHint": "Leads from this source arrive in the shared inbox like leads from a form.",
+      "name": "Name",
+      "namePlaceholder": "For example: Main website",
+      "funnel": "Funnel",
+      "noFunnel": "No funnel",
+      "funnelHint": "Optional: its leads are counted in that form's numbers.",
+      "map": "Field map",
+      "mapHint": "Common names are recognised without setup: name, ism, имя, phone, tel, telefon, телефон. Add a row only for a field your website names differently. Unmapped fields are kept with the lead's answers.",
+      "mapFrom": "Field name on the website, row {n}",
+      "mapFromPlaceholder": "field name",
+      "mapTo": "Goes to, row {n}",
+      "mapRemove": "Remove row {n}",
+      "mapAdd": "Add field",
+      "mapCount": "{count, plural, =0 {Built-in names only} one {# field of its own} other {# fields of its own}}",
+      "targets": {
+        "name": "Name",
+        "phone": "Phone",
+        "subject": "Subject",
+        "preferred_time": "Preferred time",
+        "notes": "Notes",
+        "language": "Language",
+        "answer": "Answers",
+        "ignore": "Ignore"
+      },
+      "on": "On",
+      "off": "Off",
+      "lastUsed": "Last used",
+      "never": "Never",
+      "requests": "Requests",
+      "keyTitle": "Save this key now",
+      "keyHint": "It is shown only once. If it is lost, add a new source and switch this one off.",
+      "key": "Key",
+      "example": "Example request",
+      "copyKey": "Copy key",
+      "copied": "Copied",
+      "keySaved": "I have saved it",
+      "logTitle": "Requests: {name}",
+      "logHint": "The last 100 requests and what became of each.",
+      "logLoading": "Loading…",
+      "logEmpty": "No requests yet.",
+      "openLead": "Open lead",
+      "outcomes": {
+        "created": "Lead created",
+        "merged": "Sent again",
+        "test": "Connection test",
+        "spam": "Spam",
+        "rate_limited": "Rate-limited",
+        "invalid": "Refused",
+        "error": "Error"
+      }
+    },
+    "meta": {
+      "title": "Facebook and Instagram lead ads",
+      "about": "Connect the centre's Facebook Page, and every lead submitted in an ad form arrives in the shared inbox within moments.",
+      "notReady": "Integrations are not set up yet: the database migration for them has not been applied.",
+      "setup": "Setup",
+      "notConfigured": "The Meta app is not set up for this CRM yet. Three settings must be added on the server first:",
+      "guide": "The steps are in docs/META_SETUP.md.",
+      "connect": "Connect with Facebook",
+      "connectAnother": "Connect another Page",
+      "reconnect": "Reconnect",
+      "none": "No Page is connected yet.",
+      "pages": "Connected Pages",
+      "connected": "Connected",
+      "needsReconnect": "Needs reconnect",
+      "reconnectHint": "Meta no longer accepts this Page's access. New leads are not arriving. Press Reconnect; leads from the last 48 hours are then picked up.",
+      "lastLead": "Last lead: {time}",
+      "noLeadsYet": "No leads yet",
+      "refreshForms": "Refresh forms",
+      "formsRefreshed": "The list of forms is up to date",
+      "forms": "Lead forms of this Page",
+      "noForms": "This Page has no lead forms yet. After you make one in Ads Manager, press Refresh forms.",
+      "funnelOf": "Funnel for {form}",
+      "choose": "Choose the Pages to connect",
+      "chooseHint": "These are the Pages your Facebook account manages.",
+      "noPages": "Facebook returned no Pages. Connect again and allow access to the Page in Facebook's dialog.",
+      "alreadyConnected": "already connected",
+      "connectChosen": "Connect",
+      "connectedToast": "{count, plural, one {# Page is connected} other {# Pages are connected}}",
+      "webhookUrl": "Webhook address (Callback URL in the Meta app)",
+      "verifyToken": "Verify token",
+      "verifyTokenSet": "Set on the server (META_VERIFY_TOKEN).",
+      "verifyTokenMissing": "Not set on the server yet (META_VERIFY_TOKEN): Meta cannot verify the webhook.",
+      "redirectUri": "Return address (Valid OAuth Redirect URI in the Meta app)",
+      "recent": "Recent requests from Meta",
+      "testLead": "Test lead",
+      "problems": {
+        "cancelled": "Connecting was cancelled in Facebook. Nothing was changed.",
+        "failed": "Facebook did not complete the connection. Try again.",
+        "state": "The connection was started in another window or took too long. Try again.",
+        "not_configured": "The Meta app is not set up on the server yet."
+      }
+    }
+  },
+  "myGroups": {
+    "title": "My groups",
+    "empty": "You have no groups yet. The centre's owner links groups to you.",
+    "students": "{count, plural, one {# student} other {# students}}",
+    "lessons": "Lessons",
+    "noLessons": "No lessons in the last week or the next two.",
+    "today": "Today",
+    "mark": "Mark attendance",
+    "editMarks": "Change attendance",
+    "ranking": "Students and coins",
+    "attendance": "Attendance",
+    "lessonCancelled": "This lesson is cancelled.",
+    "taught": "{count, plural, one {# lesson taught this month} other {# lessons taught this month}}"
+  },
+  "coins": {
+    "column": "Coins",
+    "place": "Place",
+    "placeShort": "#{place}",
+    "earned": "Earned here",
+    "balance": "To spend",
+    "count": "{count, plural, one {# coin} other {# coins}}",
+    "give": "Give coins",
+    "spend": "Spend coins",
+    "kind": "Give or spend",
+    "howMany": "How many",
+    "reasonOptional": "What for (optional)",
+    "spentOn": "What they were spent on",
+    "giveTitle": "Give coins to {name}",
+    "giveHint": "Up to 10 at a time. Coins decide the place in the group and can be spent at the front desk.",
+    "title": "Coins of {name}",
+    "staffHint": "Give coins, or spend the ones the student has: a prize, or a correction.",
+    "has": "{count, plural, one {# coin to spend} other {# coins to spend}}",
+    "given": "{name}: {count, plural, one {# coin given} other {# coins given}}",
+    "spent": "{name}: {count, plural, one {# coin spent} other {# coins spent}}",
+    "errors": {
+      "amountInvalid": "Enter a whole number of coins within the limit.",
+      "reasonRequired": "Say what the coins were spent on.",
+      "notEnough": "The student does not have that many coins.",
+      "notInGroup": "The student is not in this group.",
+      "tooLong": "This text is too long.",
+      "notFound": "This student no longer exists.",
+      "notAllowed": "You are not allowed to do this.",
       "generic": "Something went wrong. Try again."
     }
+  },
+  "points": {
+    "count": "{count, plural, one {# point} other {# points}}",
+    "giveTitle": "Give points to {name}",
+    "takeTitle": "Take points from {name}",
+    "giveHint": "Pick a reason, or give 1 to {max} points of your own.",
+    "takeHint": "Pick a reason, or take 1 to {max} points with a reason of your own. The student and parent are told.",
+    "custom": "Custom",
+    "howMany": "How many",
+    "reason": "Reason",
+    "give": "Give points",
+    "take": "Take points",
+    "giveTo": "Give points to {name}",
+    "takeFrom": "Take points from {name}",
+    "given": "{name}: +{count, plural, one {# point} other {# points}}",
+    "taken": "{name}: −{count, plural, one {# point} other {# points}}",
+    "takenReduced": "{name} had only {count, plural, one {# point} other {# points}}: all taken",
+    "nothingToTake": "{name} has no points to take",
+    "undo": "Undo",
+    "undone": "Undone",
+    "friend": "Friend: {name}",
+    "programmeOff": "The points programme is switched off in Settings. Points already earned stay.",
+    "errors": {
+      "programmeOff": "The points programme is switched off.",
+      "amountInvalid": "Enter a whole number of points within the limit.",
+      "reasonRequired": "Write the reason.",
+      "dailyLimit": "The daily limit for this student is reached.",
+      "dailyLimitLeft": "The daily limit for this student is reached: {count, plural, =0 {nothing} one {# point} other {# points}} left today.",
+      "notInGroup": "The student is not in this group.",
+      "undoTooLate": "Too late to undo.",
+      "notEnough": "The student does not have that many points.",
+      "valueInvalid": "Enter a whole number.",
+      "valueRange": "Enter a whole number from {min} to {max}.",
+      "labelRequired": "Write the name in all three languages.",
+      "tooLong": "Too long.",
+      "notAllowed": "You are not allowed to do this.",
+      "notFound": "Not found. It may have been removed.",
+      "generic": "Something went wrong. Try again.",
+      "nameRequired": "Enter a name.",
+      "costInvalid": "Enter a cost from 1 to 100,000 points.",
+      "stockInvalid": "Enter a whole number, or leave it empty for unlimited.",
+      "outOfStock": "This reward is out of stock.",
+      "alreadyHandled": "This request was already handled.",
+      "notOnOffer": "This reward is no longer on offer.",
+      "photoInvalid": "Choose a JPG, PNG or WebP photo of up to 2 MB."
+    },
+    "history": {
+      "title": "History",
+      "subtitle": "Every point you gave or took this month.",
+      "empty": "You have not given or taken any points this month.",
+      "undone": "Undone"
+    },
+    "totals": {
+      "balance": "To spend",
+      "earnedThisMonth": "Earned this month",
+      "earnedAllTime": "Earned in total"
+    },
+    "adjust": {
+      "action": "Adjust points",
+      "title": "Adjust points of {name}",
+      "hint": "{count, plural, one {# point} other {# points}} to spend now. The reason is kept in the ledger.",
+      "kind": "Add or take",
+      "add": "Add",
+      "take": "Take away",
+      "done": "Points adjusted"
+    },
+    "ledger": {
+      "empty": "No points yet.",
+      "date": "Date",
+      "what": "What for",
+      "by": "By",
+      "points": "Points",
+      "automatic": "Automatic"
+    },
+    "source": {
+      "attendance": "Attendance",
+      "perfect_month": "Perfect month",
+      "on_time_payment": "Fee paid on time",
+      "referral": "Friend enrolled",
+      "teacher_award": "Teacher award",
+      "teacher_deduction": "Teacher deduction",
+      "owner_adjustment": "Owner adjustment",
+      "reward_hold": "Reward requested",
+      "reward_return": "Reward returned"
+    },
+    "settings": {
+      "enabled": "Points programme",
+      "enabledHint": "Off stops new points. Points already earned stay.",
+      "values": "Point values",
+      "valuesHint": "A new value applies from now on, never to points already given.",
+      "limits": "Teacher limits",
+      "limitsHint": "How much a teacher can give or take.",
+      "present": "Present at a lesson",
+      "late": "Late to a lesson",
+      "perfect_month": "Perfect month",
+      "perfect_month_min_lessons": "Lessons needed for a perfect month",
+      "on_time": "Fee paid on time",
+      "referral": "Friend enrols",
+      "max_per_action": "Most points per award or deduction",
+      "teacher_daily_cap": "Most points per student per day"
+    },
+    "presets": {
+      "title": "Reasons for teachers",
+      "hint": "Teachers pick from these when they give or take points. Reasons worth more than the per-action limit are not offered.",
+      "kind": "Kind",
+      "kinds": {
+        "award": "Awards",
+        "deduction": "Deductions"
+      },
+      "points": "Points",
+      "label": {
+        "uz": "Name in Uzbek",
+        "ru": "Name in Russian",
+        "en": "Name in English"
+      },
+      "active": "Offered to teachers",
+      "off": "Off",
+      "edit": "Edit {name}",
+      "add": {
+        "award": "Add award",
+        "deduction": "Add deduction"
+      },
+      "editTitle": "Edit reason",
+      "newTitle": "New reason",
+      "saved": "Reason saved",
+      "removed": "Reason removed",
+      "remove": "Remove"
+    },
+    "board": {
+      "title": "Leaderboard",
+      "subtitle": "Points earned. Spending points on a reward does not lower the place.",
+      "scope": "Centre or group",
+      "centre": "Whole centre",
+      "period": "Period",
+      "periods": {
+        "month": "This month",
+        "all": "All-time"
+      },
+      "place": "Place",
+      "hidden": "Hidden from TV",
+      "empty": "No students here yet."
+    },
+    "hide": {
+      "label": "Hide from public leaderboards",
+      "hint": "The student is left out of the TV screen and the bot's top lists. Staff still see their place.",
+      "hidden": "Hidden from the TV",
+      "shown": "Shown on the TV again"
+    },
+    "tv": {
+      "title": "TV screen",
+      "hint": "Open this link on the TV in the centre. It needs no login and shows first names with a last initial. Anyone with the link can see it.",
+      "language": "TV language",
+      "languageSaved": "TV language saved",
+      "link": "TV link",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "regenerate": "New link",
+      "regenerateTitle": "Make a new TV link?",
+      "regenerateBody": "The old link stops working at once. Open the new link on every TV.",
+      "regenerated": "New link made"
+    },
+    "tabs": {
+      "leaderboard": "Leaderboard",
+      "rewards": "Rewards",
+      "requests": "Requests"
+    },
+    "rewards": {
+      "add": "Add reward",
+      "edit": "Edit",
+      "empty": "No rewards yet.",
+      "off": "Off",
+      "unlimited": "Unlimited",
+      "outOfStock": "Out of stock",
+      "left": "{count, plural, one {# left} other {# left}}",
+      "newTitle": "New reward",
+      "editTitle": "Edit reward",
+      "name": "Name",
+      "description": "Description",
+      "cost": "Cost, points",
+      "stock": "In stock",
+      "stockHint": "Leave empty for unlimited.",
+      "photo": "Photo",
+      "photoHint": "JPG, PNG or WebP, up to 2 MB. A new photo replaces the old one.",
+      "active": "On offer",
+      "saved": "Reward saved",
+      "archived": "Reward archived",
+      "archive": "Archive"
+    },
+    "requests": {
+      "empty": "No reward requests yet.",
+      "date": "Date",
+      "student": "Student",
+      "reward": "Reward",
+      "cost": "Points",
+      "from": "From",
+      "status": "Status",
+      "via": {
+        "bot": "Bot",
+        "desk": "Desk"
+      },
+      "statuses": {
+        "requested": "Waiting",
+        "given": "Given",
+        "rejected": "Rejected",
+        "cancelled": "Cancelled"
+      },
+      "give": "Give",
+      "reject": "Reject",
+      "given": "{name}: reward given",
+      "rejected": "{name}: request rejected, points returned",
+      "rejectTitle": "Reject the request of {name}?",
+      "rejectBody": "{count, plural, one {# point returns} other {# points return}} to the student, and the reward goes back in stock."
+    },
+    "redeem": {
+      "open": "Redeem reward",
+      "title": "Reward for {name}",
+      "hint": "{count, plural, one {# point} other {# points}} to spend. The points are held at once; hand the reward over from Points → Requests.",
+      "action": "Redeem",
+      "short": "{count, plural, one {# more point needed} other {# more points needed}}",
+      "done": "{reward}: request made, points held"
+    }
+  },
+  "tv": {
+    "centreTitle": "Top 10 this month",
+    "groupSubtitle": "Top 5 · {month}",
+    "updated": "Updated {time}",
+    "empty": "No points yet this month"
+  },
+  "publicForm": {
+    "errors": {
+      "required": "This field is required.",
+      "phone": "Enter a phone number, for example +998 90 123 45 67.",
+      "email": "Enter an email address, for example name@example.com.",
+      "number": "Enter a number.",
+      "date": "Choose a date.",
+      "choice": "Choose one of the options.",
+      "too_long": "This answer is too long."
+    },
+    "summary": "Please check the marked fields.",
+    "expired": "This page was open for too long. Please send the form again.",
+    "rateLimited": "Too many requests. Please try again later.",
+    "failed": "Something went wrong. Please try again.",
+    "choose": "Choose…",
+    "required": "required",
+    "language": "Language",
+    "leaveEmpty": "Leave this field empty"
+  },
+  "forms": {
+    "tabs": {
+      "label": "Leads sections",
+      "leads": "Leads",
+      "forms": "Forms"
+    },
+    "status": {
+      "draft": "Draft",
+      "live": "Live",
+      "closed": "Closed"
+    },
+    "list": {
+      "new": "New form",
+      "notReady": "Forms are not set up yet: the database migrations for forms have not been applied.",
+      "empty": "No forms yet. Make the first one from a template.",
+      "period": "Figures are for the last 30 days.",
+      "unpublished": "Unpublished changes",
+      "copy": "Copy",
+      "copied": "Copied",
+      "actions": "Actions for {name}",
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "archive": "Archive",
+      "duplicated": "A copy of “{name}” was made",
+      "archived": "“{name}” was archived",
+      "views": "Views",
+      "leads": "Leads",
+      "won": "Became students",
+      "conversion": "Views → leads",
+      "editedBy": "Last edited by {name}, {date}",
+      "edited": "Last edited {date}",
+      "archiveTitle": "Archive “{name}”?",
+      "archiveHint": "The form leaves this list and its page stops working. Leads that came through it stay.",
+      "cancel": "Cancel"
+    },
+    "new": {
+      "title": "New form",
+      "hint": "Start from a template or from a blank form. It stays a draft until you publish it.",
+      "blank": {
+        "name": "Blank form",
+        "about": "Name, phone and consent."
+      },
+      "course_signup": {
+        "name": "Course sign-up",
+        "about": "Level, preferred time and a comment."
+      },
+      "free_trial": {
+        "name": "Free trial lesson",
+        "about": "Age, day and preferred time."
+      },
+      "consultation": {
+        "name": "Consultation call",
+        "about": "What they are interested in and when to call."
+      }
+    },
+    "errors": {
+      "generic": "Something went wrong. Try again.",
+      "notAllowed": "You are not allowed to do this.",
+      "notFound": "This form no longer exists.",
+      "invalid": "The form could not be saved as it is.",
+      "incomplete": "The form is not ready to publish. Check that every choice has options and a redirect has an address.",
+      "consentOwner": "Only the owner can publish a form without the consent box.",
+      "slugFormat": "Use 2–60 lowercase Latin letters, digits and hyphens.",
+      "slugReserved": "This address is reserved. Choose another.",
+      "slugTaken": "Another form already has this address.",
+      "fileInvalid": "Choose a PNG, JPG or WebP picture up to 5 MB.",
+      "saveFailed": "The draft could not be saved, so nothing was published."
+    },
+    "editor": {
+      "textLanguage": "Language of these texts",
+      "missingTranslation": "Translation missing",
+      "back": "Back to forms",
+      "rename": "Rename",
+      "untitled": "Untitled form",
+      "save": {
+        "saved": "Saved",
+        "dirty": "Saving…",
+        "saving": "Saving…",
+        "error": "Not saved"
+      },
+      "undo": "Undo",
+      "redo": "Redo",
+      "previewLanguage": "Preview language",
+      "screenSize": "Screen size",
+      "device": {
+        "phone": "Phone {width}",
+        "tablet": "Tablet {width}",
+        "desktop": "Desktop {width}"
+      },
+      "openLive": "Open live",
+      "noFormsHost": "The forms address is not set up yet.",
+      "notPublished": "Publish the form first.",
+      "publish": "Publish",
+      "publishChanges": "Publish changes",
+      "publishing": "Publishing…",
+      "more": "More",
+      "close": "Close form",
+      "reopen": "Reopen form",
+      "published": "Published: version {n} is live",
+      "closedToast": "The form is closed. Visitors see the closed message.",
+      "reopenedToast": "The form is live again.",
+      "alsoEditing": "{count, plural, one {{names} is also editing} other {{names} are also editing}}. The later save wins.",
+      "panel": "Form settings",
+      "tabs": {
+        "fields": "Fields",
+        "design": "Design",
+        "settings": "Settings"
+      },
+      "openOnComputer": "Open on a computer",
+      "openOnComputerHint": "The form editor needs a wider screen, at least 1024 px."
+    },
+    "preview": {
+      "title": "Preview",
+      "size": "{width} px · {percent}%",
+      "showThanks": "Show thank-you screen"
+    },
+    "fields": {
+      "list": "Fields of the form",
+      "add": "Add field",
+      "addTitle": "Add a field",
+      "addHint": "Choose what to ask or show.",
+      "textsCard": "Heading and button",
+      "title": "Title",
+      "subtitle": "Subtitle",
+      "button": "Button text",
+      "drag": "Move {name}",
+      "delete": "Delete {name}",
+      "locked": "Every form has this field. It can be renamed, not deleted.",
+      "consentOwner": "Only the owner can remove the consent box.",
+      "hiddenName": "Name shown to staff",
+      "hiddenValue": "Value",
+      "hiddenHint": "Never shown to visitors; saved with every lead, e.g. a campaign name.",
+      "image": "Picture",
+      "consentText": "Consent text",
+      "text": "Text",
+      "label": "Label",
+      "placeholder": "Placeholder",
+      "help": "Help text",
+      "consentHint": "A link is written as [text](https://address).",
+      "shownAs": "Shown as",
+      "asButtons": "Radio buttons",
+      "asDropdown": "Dropdown",
+      "required": "Required",
+      "width": "Width",
+      "widthFull": "Full",
+      "widthHalf": "Half",
+      "mapsTo": "Saved to",
+      "options": "Options",
+      "optionN": "Option {n}",
+      "removeOption": "Remove option {n}",
+      "addOption": "Add option"
+    },
+    "types": {
+      "short_text": "Short text",
+      "long_text": "Long text",
+      "phone": "Phone",
+      "email": "Email",
+      "number": "Number",
+      "date": "Date",
+      "radio": "Single choice",
+      "dropdown": "Dropdown",
+      "multiple_choice": "Multiple choice",
+      "consent": "Consent",
+      "hidden": "Hidden value",
+      "heading": "Heading",
+      "paragraph": "Paragraph",
+      "image": "Picture"
+    },
+    "mapsTo": {
+      "custom": "The lead's answers",
+      "subject": "Subject",
+      "preferred_time": "Preferred time",
+      "notes": "Notes",
+      "name": "Name",
+      "phone": "Phone"
+    },
+    "design": {
+      "pickColour": "Pick a colour: {name}",
+      "swatches": "Ready colours: {name}",
+      "lowContrast": "Hard to read: contrast is {ratio}:1, it should be at least 4.5:1.",
+      "uploading": "Uploading…",
+      "replace": "Replace",
+      "upload": "Upload",
+      "remove": "Remove: {name}",
+      "uploadHint": "PNG, JPG or WebP, up to 5 MB.",
+      "logo": "Logo",
+      "logoFile": "Logo picture",
+      "logoPosition": "Logo position",
+      "positionTop": "On top",
+      "positionLeft": "On the left",
+      "background": "Background",
+      "backgroundColour": "Background colour",
+      "backgroundImage": "Background picture",
+      "overlay": "Darken the picture: {percent}%",
+      "colours": "Colours",
+      "text": "Page text",
+      "card": "Card",
+      "cardText": "Card text",
+      "button": "Button",
+      "buttonText": "Button text",
+      "font": "Font",
+      "fontSample": "Sign up 123",
+      "shape": "Shape",
+      "corners": "Corners",
+      "square": "Square",
+      "rounded": "Rounded",
+      "pill": "Pill",
+      "layout": "Layout",
+      "layoutCard": "Centred card",
+      "layoutSplit": "Split"
+    },
+    "settings": {
+      "general": "General",
+      "name": "Form name",
+      "address": "Address",
+      "saveAddress": "Save address",
+      "addressHint": "Lowercase Latin letters, digits and hyphens.",
+      "addressWarning": "This form is published. If you change the address, links already shared will stop working.",
+      "addressSaved": "Address saved",
+      "subject": "Subject",
+      "subjectHint": "Every lead from this form gets it automatically.",
+      "sourceTag": "Source tag",
+      "sourceTagHint": "For example: Autumn TOPIK ads.",
+      "languages": "Languages",
+      "languagesHint": "Visitors can switch between the languages that are on.",
+      "defaultLanguage": "Default language",
+      "afterSubmit": "After submit",
+      "showMessage": "Thank-you screen",
+      "redirect": "Redirect",
+      "redirectUrl": "Redirect to",
+      "redirectInvalid": "Enter a full address starting with https://",
+      "thankYouTitle": "Thank-you title",
+      "thankYouText": "Thank-you text",
+      "closed": "Closed form",
+      "closedHint": "Shown instead of the form after you close it.",
+      "closedText": "Closed message",
+      "share": "Link preview",
+      "shareHint": "What Telegram and other apps show when the link is shared.",
+      "pageTitle": "Page title",
+      "description": "Description",
+      "shareImage": "Share picture",
+      "embed": "Embed code",
+      "embedHint": "Paste it into another website. The frame resizes itself to the form.",
+      "embedUnavailable": "Available once the forms address is set up.",
+      "copyCode": "Copy code"
+    },
+    "history": {
+      "title": "Version history",
+      "hint": "Restore loads a version into the draft. Visitors see it after you publish.",
+      "loading": "Loading…",
+      "empty": "Nothing has been published yet.",
+      "version": "Version {n}",
+      "live": "published now",
+      "restore": "Restore",
+      "restored": "Version {n} is loaded into the draft"
+    }
+  },
+  "staffBot": {
+    "newLead": "🆕 New lead",
+    "reminder": "⏰ Still waiting: {minutes} min",
+    "form": "Form: {form}",
+    "open": "Open in CRM",
+    "take": "Take",
+    "taken": "✅ It is yours: {name}, {phone}",
+    "takenBy": "{name} already took this lead.",
+    "notWaiting": "This lead is no longer waiting.",
+    "gone": "This lead no longer exists.",
+    "linked": "{name}, you will get lead alerts from {centre} here. Turn them off in Profile, or send /stop.",
+    "unknownCode": "This link does not work. Open Profile in {centre}'s CRM and press Link Telegram again.",
+    "notLinked": "Only {centre}'s staff can take a lead. Link your Telegram in Profile first.",
+    "metaReconnect": "⚠️ Facebook leads have stopped: the Page “{page}” must be connected again. Open Settings → Integrations in the CRM and press Reconnect."
   }
 }

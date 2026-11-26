@@ -14,7 +14,19 @@ async function db() {
   return supabase;
 }
 
-export type MonthSummary = { collected: number; billed: number; debt: number; expenses: number };
+export type MonthSummary = {
+  /** The month's fees, credits taken off. Always paid + unpaid. */
+  billed: number;
+  /** How much of the month's fees has been paid, up to today. */
+  paid: number;
+  /** How much of the month's fees is still owed. */
+  unpaid: number;
+  /** Money received during the month, whatever it paid for. */
+  collected: number;
+  /** Everything owed today, over all months. */
+  debt: number;
+  expenses: number;
+};
 
 /** Owner only: the database refuses anyone else. */
 export async function getMonthSummary(month: string): Promise<MonthSummary> {
@@ -50,6 +62,7 @@ export async function getPayments(filters: {
       "id, paid_at, receipt_no, amount, method, note, voided_at, void_reason, student:students(id, full_name), group:groups(name), received:profiles!payments_received_by_fkey(full_name)",
       { count: "exact" },
     )
+    .is("archived_at", null)
     .gte("paid_at", start)
     .lt("paid_at", end)
     .order("paid_at", { ascending: false })
@@ -137,6 +150,7 @@ export async function getMonthCharges(
       { count: "exact" },
     )
     .eq("billing_month", `${month}-01`)
+    .is("archived_at", null)
     .order("created_at", { ascending: false })
     .order("id")
     .range(from, from + PAGE_SIZE - 1);
@@ -163,6 +177,7 @@ export async function getReceipt(id: string): Promise<Receipt | null> {
         "id, paid_at, receipt_no, amount, method, note, voided_at, void_reason, student:students(full_name), group:groups(name), received:profiles!payments_received_by_fkey(full_name)",
       )
       .eq("id", id)
+      .is("archived_at", null)
       .maybeSingle(),
     supabase.from("centre_settings").select("centre_name").maybeSingle(),
   ]);
@@ -215,8 +230,11 @@ export type PayoutRow = Pick<
   | "note"
 > & {
   teacher: { id: string; full_name: string } | null;
-  breakdown: PayoutLine[];
+  breakdown: Array<PayoutLine & { facts: GroupFacts | null }>;
 };
+
+/** What stands behind a group's line: who was learning, who paid, and the discounts. */
+export type GroupFacts = { students: number; paid: number; discounted: number; discountTotal: number };
 
 /** A month's payouts, one row per teacher, by name. */
 export async function getPayouts(month: string, locale: string): Promise<PayoutRow[]> {
@@ -226,10 +244,19 @@ export async function getPayouts(month: string, locale: string): Promise<PayoutR
     .select(
       "id, pay_type, basis, rate, calculated, bonus, deduction, final_amount, status, paid_at, note, breakdown, teacher:teachers(id, full_name)",
     )
-    .eq("month", `${month}-01`);
+    .eq("month", `${month}-01`)
+    .is("archived_at", null);
   if (error) throw new Error(error.message);
+  // Worked out now, to explain the lines; missing while a deploy is ahead of its migration.
+  const facts = await supabase.rpc("payout_group_facts", { p_month: `${month}-01` });
+  const byGroup = new Map(
+    (facts.error ? [] : (facts.data ?? [])).map((row) => [
+      row.group_id,
+      { students: row.students, paid: row.paid_students, discounted: row.discounted, discountTotal: Number(row.discount_total) },
+    ]),
+  );
   return data
-    .map((row) => ({ ...row, breakdown: row.breakdown as PayoutLine[] }))
+    .map((row) => ({ ...row, breakdown: (row.breakdown as PayoutLine[]).map((line) => ({ ...line, facts: byGroup.get(line.group_id) ?? null })) }))
     .sort((a, b) => (a.teacher?.full_name ?? "").localeCompare(b.teacher?.full_name ?? "", locale));
 }
 

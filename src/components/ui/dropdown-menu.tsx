@@ -68,7 +68,7 @@ function DropdownMenuRadioItem({
     >
       {children}
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check className="text-purple" aria-hidden />
+        <Check className="text-brand-ink" aria-hidden />
       </DropdownMenuPrimitive.ItemIndicator>
     </DropdownMenuPrimitive.RadioItem>
   );

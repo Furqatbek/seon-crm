@@ -104,23 +104,94 @@ describe.skipIf(!DB_URL)("Notifications", () => {
         const students = await s.rows<{ id: string }>(
           `select st.id from enrollments e join students st on st.id = e.student_id
            where e.group_id = $1 and e.status = 'active' and st.status = 'active' and st.archived_at is null
-             and st.telegram_chat_id is null limit 2`,
+             and not exists (select 1 from telegram_links t where t.student_id = st.id) limit 2`,
           [lesson.group_id],
         );
         expect(students).toHaveLength(2);
-        await s.rows(`update students set telegram_chat_id = 990000100 where id = any($1)`, [students.map((row) => row.id)]);
+        // The first has their own chat, the second only a parent's.
+        await s.rows(`insert into telegram_links (student_id, role, chat_id, language) values ($1, 'student', 990000100, 'ru'), ($2, 'parent', 990000101, 'uz')`, [students[0].id, students[1].id]);
         await s.rows(`update students set status = 'paused' where id = $1`, [students[1].id]);
-        const after = await s.rows<{ student_id: string; telegram_chat_id: string; start_time: string }>(
-          `select student_id, telegram_chat_id, start_time::text from public.notify_lessons(array[$1::date]) where lesson_id = $2`,
+        const after = await s.rows<{ student_id: string; student_chat_id: string | null; student_chat_language: string | null; parent_chat_id: string | null }>(
+          `select student_id, student_chat_id, student_chat_language, parent_chat_id from public.notify_lessons(array[$1::date]) where lesson_id = $2`,
           [lesson.day, lesson.id],
         );
         expect(after.length).toBe(before.length + 1);
+        expect(after.find((row) => row.student_id === students[0].id)).toEqual({
+          student_id: students[0].id, student_chat_id: "990000100", student_chat_language: "ru", parent_chat_id: null,
+        });
         expect(after.map((row) => row.student_id)).toContain(students[0].id);
         expect(after.map((row) => row.student_id)).not.toContain(students[1].id);
 
         // A cancelled lesson has no reminders.
         await s.rows(`update lessons set status = 'cancelled', cancel_reason = 'Test' where id = $1`, [lesson.id]);
         expect(await s.rows(`select 1 from public.notify_lessons(array[$1::date]) where lesson_id = $2`, [lesson.day, lesson.id])).toEqual([]);
+      });
+    });
+  });
+
+  describe("Telegram links", () => {
+    it("notify_debtors gives the parent's chat only: a payment message never goes to the student's own", async () => {
+      await admin(async (s) => {
+        const [{ student_id: id }] = await s.rows<{ student_id: string }>(`select student_id from public.notify_debtors() limit 1`);
+        await s.rows(`delete from telegram_links where student_id = $1`, [id]);
+        await s.rows(`insert into telegram_links (student_id, role, chat_id, language) values ($1, 'student', 990000200, 'uz')`, [id]);
+        const read = () => s.rows(`select parent_chat_id, parent_chat_language from public.notify_debtors() where student_id = $1`, [id]);
+        expect(await read()).toEqual([{ parent_chat_id: null, parent_chat_language: null }]);
+        await s.rows(`insert into telegram_links (student_id, role, chat_id, language) values ($1, 'parent', 990000201, 'en')`, [id]);
+        expect(await read()).toEqual([{ parent_chat_id: "990000201", parent_chat_language: "en" }]);
+        // One link per student and role.
+        expect((await s.attempt(`insert into telegram_links (student_id, role, chat_id) values ($1, 'parent', 990000202)`, [id])).ok).toBe(false);
+      });
+    });
+
+    it("staff see who is linked; nobody signed in changes a link; a teacher and a visitor see nothing", async () => {
+      await as("manager", async (s) => {
+        expect(await s.count("telegram_links")).toBeGreaterThan(0);
+        expect(code(await s.attempt(`update telegram_links set chat_id = 1`))).toBe(DENIED);
+        expect(code(await s.attempt(`delete from telegram_links`))).toBe(DENIED);
+        expect(code(await s.attempt(`select public.points_summary((select id from students limit 1))`))).toBe(DENIED);
+        expect(code(await s.attempt(`select public.bot_top((select id from students limit 1))`))).toBe(DENIED);
+      });
+      for (const who of ["teacher", "anon"] as const) {
+        await as(who, async (s) => {
+          const result = await s.attempt(`select 1 from telegram_links`);
+          expect(result.ok ? result.rowCount : 0).toBe(0);
+        });
+      }
+    });
+
+    it("points_summary gives the balance, the places and the nearest reward; bot_top the public boards", async () => {
+      await admin(async (s) => {
+        const [{ id }] = await s.rows<{ id: string }>(
+          `insert into students (full_name, phone) values ('Summary Test', '+998907770001') returning id`,
+        );
+        const [{ group_id: group }] = await s.rows<{ group_id: string }>(`select id as group_id from groups where status = 'active' and archived_at is null order by name limit 1`);
+        await s.rows(`insert into enrollments (group_id, student_id, joined_on) values ($1, $2, ${today} - 30)`, [group, id]);
+        await s.rows(`insert into points_ledger (student_id, delta, source, group_id, reason) values ($1, 90000, 'owner_adjustment', $2, 'Test')`, [id, group]);
+        await s.rows(`insert into rewards (name, cost, stock) values ('Out of reach', 95000, 1)`);
+        const [{ summary }] = await s.rows<{ summary: Record<string, unknown> }>(`select public.points_summary($1) as summary`, [id]);
+        expect(summary).toMatchObject({
+          name: "Summary Test",
+          active: true,
+          balance: 90000,
+          week_points: 90000,
+          month_points: 90000,
+          centre_rank: 1,
+          perfect_month_bonus: 0,
+          next_reward: { name: "Out of reach", cost: 95000, needed: 5000 },
+        });
+        expect(summary.groups).toMatchObject([{ points: 90000, rank: 1 }]);
+        expect(summary.last).toMatchObject([{ delta: 90000, source: "owner_adjustment", reason: "Test", preset: null }]);
+
+        const [{ top }] = await s.rows<{ top: { centre: Array<{ name: string; rank: number }>; own: unknown; groups: Array<{ own: unknown }> } }>(
+          `select public.bot_top($1) as top`,
+          [id],
+        );
+        // First name and last initial, as on the TV.
+        expect(top.centre[0]).toEqual({ name: "Summary T.", points: 90000, rank: 1 });
+        expect(top.centre.length).toBeLessThanOrEqual(10);
+        expect(top.own).toEqual({ rank: 1, points: 90000 });
+        expect(top.groups).toMatchObject([{ own: { rank: 1, points: 90000 } }]);
       });
     });
   });

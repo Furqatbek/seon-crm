@@ -1,7 +1,26 @@
-import type { Channel, Language } from "./types";
+import type { Channel, Language, MessageType } from "./types.ts";
 
-export const PLACEHOLDERS = ["student", "group", "month", "amount", "due_date", "time", "centre"] as const;
+export const PLACEHOLDERS = [
+  "student", "group", "month", "amount", "due_date", "time", "centre",
+  // Points messages.
+  "week_points", "month_points", "points", "balance", "group_rank", "centre_rank", "reason", "reward", "points_needed",
+  // Whole phrases written by the app in the chat's language: the next reward
+  // to save for, the perfect-month bonus, and what happened to a reward request.
+  "goal", "bonus", "update",
+] as const;
 export type Placeholder = (typeof PLACEHOLDERS)[number];
+
+const CLASSIC: Placeholder[] = ["student", "group", "month", "amount", "due_date", "time", "centre"];
+const BY_TYPE: Partial<Record<MessageType, Placeholder[]>> = {
+  points_weekly: ["student", "week_points", "balance", "group", "group_rank", "centre_rank", "goal", "reward", "points_needed", "centre"],
+  points_deduction: ["student", "points", "group", "reason", "balance", "centre"],
+  points_month_result: ["student", "month", "month_points", "group", "group_rank", "centre_rank", "bonus", "balance", "centre"],
+  reward_update: ["student", "reward", "update", "balance", "centre"],
+};
+/** The placeholders offered in the editor for a message type. */
+export function placeholdersFor(type: MessageType): Placeholder[] {
+  return BY_TYPE[type] ?? CLASSIC;
+}
 export type TemplateValues = Partial<Record<Placeholder, string>>;
 
 /**

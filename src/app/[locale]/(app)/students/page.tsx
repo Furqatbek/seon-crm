@@ -7,7 +7,7 @@ import { initLocale, type LocaleParams } from "@/i18n/params";
 import { getCurrentUser } from "@/lib/auth";
 import { tashkentDate } from "@/lib/domain/time";
 import { firstValues, type SearchParams } from "@/lib/search-params";
-import { getCentreBilling, getGroupOptions, getStudents } from "@/lib/students/queries";
+import { getCentreBilling, getGroupOptions, getStudentCounts, getStudents } from "@/lib/students/queries";
 import { studentsSearchSchema } from "@/lib/validation/students";
 
 async function Students({ searchParams }: { searchParams: SearchParams }) {
@@ -15,8 +15,9 @@ async function Students({ searchParams }: { searchParams: SearchParams }) {
   const user = await getCurrentUser();
   if (!user) return null;
 
-  const [{ rows, total }, groups, billing] = await Promise.all([
+  const [{ rows, total }, counts, groups, billing] = await Promise.all([
     getStudents(search),
+    getStudentCounts(),
     getGroupOptions(),
     getCentreBilling(),
   ]);
@@ -26,6 +27,7 @@ async function Students({ searchParams }: { searchParams: SearchParams }) {
       search={search}
       rows={rows}
       total={total}
+      counts={counts}
       groups={groups}
       today={tashkentDate(new Date())}
       dueDay={billing.dueDay}

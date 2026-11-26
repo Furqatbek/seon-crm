@@ -6,10 +6,10 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { toCsv, type CsvCell } from "@/lib/csv";
 
-// Chart colours come from the design tokens: purple for the main series,
+// Chart colours come from the design tokens: the brand orange for the main series,
 // dark grey for the comparison, a lighter grey for the rest. No gradients.
 export const SERIES = {
-  main: "var(--purple)",
+  main: "var(--brand)",
   comparison: "var(--text)",
   rest: "var(--text-tertiary)",
 } as const;

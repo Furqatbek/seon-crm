@@ -2,7 +2,7 @@ import type { BadgeTone } from "@/components/ui/badge";
 import type { Enums } from "@/lib/supabase/types";
 
 export const GROUP_TONE: Record<Enums<"group_status">, BadgeTone> = {
-  forming: "purple",
+  forming: "brand",
   active: "success",
   finished: "neutral",
 };

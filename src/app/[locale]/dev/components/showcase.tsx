@@ -357,7 +357,7 @@ export function Showcase() {
       <Section name="Badge · StatusPill">
         <Row>
           <Badge>English B1</Badge>
-          <Badge tone="purple">{t("active")}</Badge>
+          <Badge tone="brand">{t("active")}</Badge>
           <StatusPill tone="success" icon={Check}>
             {t("paid")}
           </StatusPill>

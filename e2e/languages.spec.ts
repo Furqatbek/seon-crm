@@ -43,7 +43,7 @@ async function problems(page: Page, where: string): Promise<string[]> {
   );
 }
 
-for (const locale of ["uz", "ru", "en"] as const) {
+for (const locale of ["uz", "ru", "en", "ko"] as const) {
   test(`every page in ${locale}: translated, no overflow, no cut-off text`, async ({ page }) => {
     const found: string[] = [];
     for (const entry of PUBLIC_PAGES) {

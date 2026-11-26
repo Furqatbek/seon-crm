@@ -50,6 +50,8 @@ import { useUrlState } from "@/lib/hooks/use-url-state";
 import { cn } from "@/lib/utils";
 import { PAYMENT_METHODS, type FinanceErrorKey, type PaymentMethod } from "@/lib/validation/finance";
 
+import { ArchiveButton } from "./archive-button";
+
 const ALL = "all";
 
 /** Date, receipt no., student, group, method, amount, received by. */
@@ -132,7 +134,7 @@ export function PaymentsTab({
                     {row.student ? (
                       <Link
                         href={`/students/${row.student.id}`}
-                        className="rounded-inner font-medium whitespace-nowrap outline-none hover:text-purple focus-visible:ring-3 focus-visible:ring-focus-ring"
+                        className="rounded-inner font-medium whitespace-nowrap outline-none hover:text-brand-ink focus-visible:ring-3 focus-visible:ring-focus-ring"
                       >
                         {row.student.full_name}
                       </Link>
@@ -153,6 +155,8 @@ export function PaymentsTab({
                   </TableCell>
                   <TableCell className="whitespace-nowrap">{row.received?.full_name ?? "—"}</TableCell>
                   <TableCell className="px-1">
+                    <span className="flex items-center justify-end">
+                    {role === "owner" ? <ArchiveButton kind="payment" id={row.id} what={String(row.receipt_no)} /> : null}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" aria-label={t("payments.rowActions", { receipt: row.receipt_no })}>
@@ -182,6 +186,7 @@ export function PaymentsTab({
                         ) : null}
                       </DropdownMenuContent>
                     </DropdownMenu>
+                    </span>
                   </TableCell>
                 </TableRow>
               ))}

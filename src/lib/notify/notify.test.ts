@@ -71,20 +71,30 @@ const TEMPLATES: Template[] = (["telegram", "sms"] as const).flatMap((channel) =
   { type: "lesson_reminder", channel, language: "en", body: "{student} has a {group} lesson today at {time}. {centre}" },
 ] satisfies Template[]);
 
-const person = (id: string, extra: Partial<Recipient> = {}): Recipient => ({
-  id,
-  fullName: `Student ${id}`,
-  language: "en",
-  telegramChatId: null,
-  parentPhone: null,
-  phone: "+998901110000",
-  ...extra,
-});
-const debtor = (id: string, extra: Partial<DebtCandidate> = {}): DebtCandidate => ({
-  ...person(id),
+/**
+ * `telegramChatId` links one chat to the person, in their language: as the
+ * parent's chat (payment messages) and the student's own (lesson reminders).
+ */
+type Extra<T> = Partial<T> & { telegramChatId?: number | null };
+const person = (id: string, { telegramChatId = null, ...extra }: Extra<Recipient> = {}): Recipient => {
+  const language = extra.language ?? "en";
+  const chat = telegramChatId === null ? null : { chatId: telegramChatId, language };
+  return {
+    id,
+    fullName: `Student ${id}`,
+    language,
+    studentChat: chat,
+    parentChat: chat,
+    parentPhone: null,
+    phone: "+998901110000",
+    ...extra,
+  };
+};
+const debtor = (id: string, extra: Extra<DebtCandidate> = {}): DebtCandidate => ({
+  ...person(id, extra),
   debt: 600_000,
   chargedMonths: ["2026-10", "2026-11"],
-  ...extra,
+  ...Object.fromEntries(Object.entries(extra).filter(([key]) => key !== "telegramChatId")),
 });
 
 function setup(options: { debtors?: DebtCandidate[]; lessons?: LessonCandidate[]; settings?: Partial<NotifySettings> } = {}) {
@@ -104,13 +114,14 @@ function setup(options: { debtors?: DebtCandidate[]; lessons?: LessonCandidate[]
 // ── Channel choice ──
 
 describe("channel choice", () => {
-  const linked = { telegramChatId: 777, parentPhone: "+998901234567", phone: "+998907654321" };
-  const unlinked = { ...linked, telegramChatId: null };
+  const chat = { chatId: 777, language: "uz" as const };
+  const linked = { studentChat: chat, parentChat: chat, parentPhone: "+998901234567", phone: "+998907654321" };
+  const unlinked = { ...linked, studentChat: null, parentChat: null };
 
   it("payment messages go by Telegram when it is linked, else by SMS", () => {
     for (const type of ["payment_due", "payment_overdue"] as const) {
-      expect(chooseChannel(type, linked)).toEqual({ channel: "telegram", recipient: "777" });
-      expect(chooseChannel(type, unlinked)).toEqual({ channel: "sms", recipient: "+998901234567" });
+      expect(chooseChannel(type, linked)).toMatchObject({ channel: "telegram", recipient: "777" });
+      expect(chooseChannel(type, unlinked)).toMatchObject({ channel: "sms", recipient: "+998901234567" });
     }
   });
 
@@ -118,17 +129,17 @@ describe("channel choice", () => {
     expect(smsRecipient(unlinked)).toBe("+998901234567");
     expect(smsRecipient({ ...unlinked, parentPhone: null })).toBe("+998907654321");
     expect(smsRecipient({ ...unlinked, parentPhone: "" })).toBe("+998907654321");
-    expect(chooseChannel("payment_due", { telegramChatId: null, parentPhone: null, phone: null })).toBeNull();
+    expect(chooseChannel("payment_due", { studentChat: null, parentChat: null, parentPhone: null, phone: null })).toBeNull();
   });
 
   it("lesson reminders are Telegram only", () => {
-    expect(chooseChannel("lesson_reminder", linked)).toEqual({ channel: "telegram", recipient: "777" });
+    expect(chooseChannel("lesson_reminder", linked)).toMatchObject({ channel: "telegram", recipient: "777" });
     expect(chooseChannel("lesson_reminder", unlinked)).toBeNull();
   });
 
   it("a custom message goes on the channel staff chose, if the student can be reached on it", () => {
-    expect(chooseChannel("custom", linked, "sms")).toEqual({ channel: "sms", recipient: "+998901234567" });
-    expect(chooseChannel("custom", linked, "telegram")).toEqual({ channel: "telegram", recipient: "777" });
+    expect(chooseChannel("custom", linked, "sms")).toMatchObject({ channel: "sms", recipient: "+998901234567" });
+    expect(chooseChannel("custom", linked, "telegram")).toMatchObject({ channel: "telegram", recipient: "777" });
     expect(chooseChannel("custom", unlinked, "telegram")).toBeNull();
   });
 });

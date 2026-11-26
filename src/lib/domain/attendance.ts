@@ -1,7 +1,5 @@
 // Attendance — docs/SPEC.md → "Business rules → Lessons and attendance".
 
-import { addDays } from "./time";
-
 export const ATTENDANCE_STATUSES = ["present", "late", "absent", "excused"] as const;
 export type AttendanceStatus = (typeof ATTENDANCE_STATUSES)[number];
 
@@ -20,14 +18,13 @@ export function attendanceRate(marks: readonly AttendanceStatus[]): number | nul
   return counted === 0 ? null : Math.round((attended / counted) * 100);
 }
 
-/** Managers can edit attendance for this many days after the lesson; the owner any time. */
-export const MANAGER_EDIT_DAYS = 7;
-
 export type AttendanceLock = "cancelled" | "future" | "tooOld" | null;
 
 /**
  * Why a lesson's attendance cannot be marked right now, or null when it can.
- * The database enforces the same rules (save_attendance and the attendance policies).
+ * Attendance is marked on the day of the lesson, by anyone: not before, not
+ * after. The database enforces the same rule (save_attendance and the
+ * attendance policies).
  */
 export function attendanceLock(lesson: {
   /** "YYYY-MM-DD" */
@@ -35,12 +32,12 @@ export function attendanceLock(lesson: {
   status: "scheduled" | "held" | "cancelled";
   /** "YYYY-MM-DD" in Tashkent. */
   today: string;
-  role: "owner" | "manager";
 }): AttendanceLock {
   if (lesson.status === "cancelled") return "cancelled";
   if (lesson.lessonDate > lesson.today) return "future";
-  if (lesson.role === "manager" && lesson.lessonDate < addDays(lesson.today, -MANAGER_EDIT_DAYS)) {
-    return "tooOld";
-  }
+  if (lesson.lessonDate < lesson.today) return "tooOld";
   return null;
 }
+
+/** The colour each mark is shown in when chosen: came green, late amber, absent red, excused plain. */
+export const MARK_TONE = { present: "success", late: "warning", absent: "danger", excused: "neutral" } as const satisfies Record<AttendanceStatus, string>;

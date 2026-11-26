@@ -463,15 +463,31 @@ describe.skipIf(!DB_URL)("Groups", () => {
       });
     });
 
-    it("a manager cannot mark a lesson more than 7 days old; the owner can", async () => {
-      const old = `select l.id as lesson, a.student_id as student from lessons l join attendance a on a.lesson_id = l.id
-                   where l.lesson_date < ${today} - 7 and l.status = 'held' order by l.lesson_date limit 1`;
+    it("attendance is marked on the day of the lesson: yesterday's is closed to a manager and to the owner", async () => {
+      const past = `select l.id as lesson, a.student_id as student from lessons l join attendance a on a.lesson_id = l.id
+                    where l.lesson_date < ${today} and l.status = 'held' order by l.lesson_date desc limit 1`;
       const save = async (s: Session) => {
-        const [row] = await s.rows<{ lesson: string; student: string }>(old);
+        const [row] = await s.rows<{ lesson: string; student: string }>(past);
         return s.attempt(`select public.save_attendance($1, $2)`, [row.lesson, marks([row.student, "excused"])]);
       };
-      expect(code(await as("manager", save))).toBe(DENIED);
-      expect((await as("owner", save)).ok).toBe(true);
+      expect(code(await as("manager", save))).toBe("EC007");
+      expect(code(await as("owner", save))).toBe("EC007");
+    });
+
+    it("a student with two enrolments covering the day is marked once, and a mark sent twice is saved once", async () => {
+      await as("manager", async (s) => {
+        const { group, student, lesson } = await lessonToday(s);
+        // Taken out and put back today: two enrolments that both cover today's lesson.
+        await s.rows(`update enrollments set status = 'left', left_on = ${today} where group_id = $1 and student_id = $2 and status = 'active'`, [group, student]);
+        await s.rows(`insert into enrollments (group_id, student_id, joined_on) values ($1, $2, ${today})`, [group, student]);
+        const twice = JSON.stringify([
+          { student_id: student, status: "present" },
+          { student_id: student, status: "late" },
+        ]);
+        expect(code(await s.attempt(`select public.save_attendance($1, $2::jsonb)`, [lesson, twice]))).toMatch(/^allowed/);
+        // The last mark sent wins.
+        expect(await s.rows(`select status from attendance where lesson_id = $1 and student_id = $2`, [lesson, student])).toEqual([{ status: "late" }]);
+      });
     });
 
     it("restoring a cancelled lesson makes it held if it was marked, scheduled if not", async () => {

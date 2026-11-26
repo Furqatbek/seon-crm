@@ -39,7 +39,7 @@ export function AcceptInvite() {
       <p role="alert" className="text-body text-danger">
         {t("inviteInvalid")}
       </p>
-      <Link href="/sign-in" className="text-body font-medium text-purple hover:underline">
+      <Link href="/sign-in" className="text-body font-medium text-brand-ink hover:underline">
         {t("backToSignIn")}
       </Link>
     </div>

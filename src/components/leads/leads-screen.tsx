@@ -17,10 +17,12 @@ import type { GroupOption, LeadDetail, LeadSummary, StaffOption } from "@/lib/le
 import type { LeadsSearch } from "@/lib/validation/leads";
 
 import { FollowUpStrip } from "./follow-up-strip";
+import { InboxStrip } from "./inbox-strip";
 import { LeadBoard } from "./lead-board";
 import { LeadFormSheet } from "./lead-form-sheet";
 import { LeadList } from "./lead-list";
 import { LeadSheet } from "./lead-sheet";
+import { LeadsTabs } from "./leads-tabs";
 import { LeadsToolbar } from "./leads-toolbar";
 import { MoveDialog, type PendingMove } from "./move-dialog";
 import { useLeadsUrl } from "./use-leads-url";
@@ -105,9 +107,11 @@ export function LeadsScreen({
           </Button>
         }
       >
+        <LeadsTabs active="leads" />
         <LeadsToolbar search={search} staff={activeStaff} />
       </PageHeader>
 
+      <InboxStrip staff={activeStaff} isOwner={user.role === "owner"} nowIso={nowIso} onOpen={openLead} />
       <FollowUpStrip leads={followUps} now={now} onOpen={openLead} />
 
       {count === 0 ? (

@@ -8,6 +8,7 @@ export async function appPages(): Promise<Array<{ name: string; path: string }>>
   const student = uid(4, 1);
   return [
     { name: "leads board", path: "/leads" },
+    { name: "lead forms", path: "/leads/forms" },
     { name: "leads list", path: "/leads?view=list" },
     { name: "students", path: "/students" },
     { name: "student overview", path: `/students/${student}` },
@@ -28,9 +29,12 @@ export async function appPages(): Promise<Array<{ name: string; path: string }>>
     { name: "finance adjustments", path: "/finance?tab=adjustments" },
     { name: "reports", path: "/reports?period=6" },
     { name: "settings centre", path: "/settings" },
+    { name: "settings rooms", path: "/settings?tab=rooms" },
     { name: "settings users", path: "/settings?tab=users" },
     { name: "settings notifications", path: "/settings?tab=notifications" },
     { name: "settings templates", path: "/settings?tab=templates" },
+    { name: "settings lead sources", path: "/settings?tab=sources" },
+    { name: "settings integrations", path: "/settings?tab=integrations" },
     { name: "settings profile", path: "/settings?tab=profile" },
     { name: "receipt", path: `/receipts/${paymentId}` },
   ];

@@ -152,10 +152,11 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         expect(await s.count("students")).toBeGreaterThanOrEqual(80);
         const student = await s.attempt(
           `insert into students (full_name, phone) values ('Test Student', '+998900000002')
-           returning id, telegram_link_code`,
+           returning id, parent_link_code, student_link_code`,
         );
         allowed(student);
-        expect(student.ok && student.rows[0].telegram_link_code).toMatch(/^[A-Za-z0-9]{22}$/);
+        expect(student.ok && student.rows[0].parent_link_code).toMatch(/^[A-Za-z0-9]{22}$/);
+        expect(student.ok && student.rows[0].student_link_code).toMatch(/^[A-Za-z0-9]{22}$/);
         const id = idOf(student);
 
         allowed(await s.attempt(`update students set parent_name = 'Test Parent' where id = $1`, [id]));
@@ -188,7 +189,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
           [leadId(1)],
         );
         expect(
-          await s.rows(`select lead_id, language, status, length(telegram_link_code) as code from students where id = $1`, [id]),
+          await s.rows(`select lead_id, language, status, length(parent_link_code) as code from students where id = $1`, [id]),
         ).toEqual([{ lead_id: leadId(1), language: "ru", status: "active", code: 22 }]);
         expect(
           await s.rows(`select status, converted_student_id, next_contact_at from leads where id = $1`, [leadId(1)]),
@@ -256,6 +257,20 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
   });
 
   describe("Groups and lessons — owner: full · manager: create, edit, cancel a lesson, mark attendance", () => {
+    // Attendance is marked on the day of the lesson only, and the seed may hold
+    // no marks for today: the latest marked lesson is brought to today.
+    const markedToday = async (a: Session) => {
+      await a.rows(
+        `update lessons set lesson_date = ${today}
+         where id = (
+           select l.id from lessons l
+           where l.lesson_date < ${today} and exists (select 1 from attendance m where m.lesson_id = l.id)
+             and not exists (select 1 from lessons t where t.group_id = l.group_id and t.lesson_date = ${today})
+           order by l.lesson_date desc limit 1)
+           and not exists (select 1 from attendance m join lessons t on t.id = m.lesson_id where t.lesson_date = ${today})`,
+      );
+    };
+
     it.each(BOTH)("%s creates and edits a group, cancels a lesson and marks attendance", async (who) => {
       await as(who, async (s) => {
         expect(await s.count("groups")).toBeGreaterThanOrEqual(10);
@@ -265,7 +280,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
           [teacherId(1)],
         );
         allowed(group);
-        allowed(await s.attempt(`update groups set room = '7-xona' where id = $1`, [idOf(group)]));
+        allowed(await s.attempt(`update groups set level = 'B2', capacity = 10 where id = $1`, [idOf(group)]));
 
         allowed(
           await s.attempt(
@@ -277,7 +292,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         // A lesson held in the last few days: change one mark, then mark a new student.
         const [recent] = await s.rows<{ lesson_id: string; student_id: string }>(
           `select a.lesson_id, a.student_id from attendance a join lessons l on l.id = a.lesson_id
-           where l.lesson_date >= ${today} - 5 order by l.lesson_date desc limit 1`,
+           where l.lesson_date = ${today} limit 1`,
         );
         allowed(
           await s.attempt(
@@ -288,13 +303,13 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
             [recent.lesson_id, recent.student_id],
           ),
         );
-      });
+      }, markedToday);
     });
 
     const oldMark = `select a.lesson_id, a.student_id from attendance a join lessons l on l.id = a.lesson_id
-                     where l.lesson_date < ${today} - 7 order by l.lesson_date limit 1`;
+                     where l.lesson_date < ${today} order by l.lesson_date desc limit 1`;
 
-    it("manager cannot change or add attendance older than 7 days; owner can", async () => {
+    it("nobody changes or adds attendance for a past day, not even yesterday and not the owner", async () => {
       await as("manager", async (s) => {
         // The row is visible to read but not to update.
         expect((await s.rows(oldMark)).length).toBe(1);
@@ -309,21 +324,22 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         s.attempt(
           `insert into attendance (lesson_id, student_id, status, marked_by)
            select l.id, $1, 'present', auth.uid() from lessons l
-           where l.lesson_date < ${today} - 7 and l.status = 'held' order by l.lesson_date limit 1`,
+           where l.lesson_date < ${today} and l.status = 'held' order by l.lesson_date desc limit 1`,
           [studentId(80)],
         );
       // Student 80 is not in that group, so no mark exists yet.
       const cleared = (a: Session) => a.rows(`delete from attendance where student_id = $1`, [studentId(80)]).then(() => {});
       denied(await as("manager", addOld, cleared));
-      allowed(await as("owner", addOld, cleared));
-      allowed(
-        await as("owner", (s) =>
-          s.attempt(
+      denied(await as("owner", addOld, cleared));
+      await as("owner", async (s) => {
+        expect((await s.rows(oldMark)).length).toBe(1);
+        noEffect(
+          await s.attempt(
             `update attendance set status = 'absent', marked_by = auth.uid()
              where (lesson_id, student_id) in (${oldMark})`,
           ),
-        ),
-      );
+        );
+      });
     });
 
     it("attendance cannot be marked in someone else's name", async () => {
@@ -333,9 +349,10 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
             `update attendance set marked_by = $1
              where (lesson_id, student_id) in (
                select a.lesson_id, a.student_id from attendance a join lessons l on l.id = a.lesson_id
-               where l.lesson_date >= ${today} - 5 limit 1)`,
+               where l.lesson_date = ${today} limit 1)`,
             [OWNER_ID],
           ),
+          markedToday,
         ),
       );
     });
@@ -739,7 +756,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
         for (const table of [
           "leads", "lead_activities", "students", "enrollments", "groups", "lessons", "attendance",
           "teachers", "teacher_pay_rates", "charges", "payments", "expenses", "teacher_payouts",
-          "messages", "message_templates", "profiles", "centre_settings",
+          "messages", "message_templates", "profiles", "centre_settings", "rooms",
         ]) {
           denied(await s.attempt(`delete from ${table}`));
         }
@@ -749,7 +766,7 @@ describe.skipIf(!DB_URL)("Roles and permissions", () => {
 
   describe("Outside the table", () => {
     const tables = [
-      "profiles", "centre_settings", "message_templates", "leads", "lead_activities", "teachers",
+      "profiles", "centre_settings", "message_templates", "rooms", "leads", "lead_activities", "teachers",
       "teacher_pay_rates", "students", "groups", "enrollments", "lessons", "attendance", "charges",
       "payments", "expenses", "teacher_payouts", "messages", "student_balances", "student_overview",
     ];

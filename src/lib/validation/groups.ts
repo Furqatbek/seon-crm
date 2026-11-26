@@ -50,7 +50,8 @@ export const groupFormSchema = z.object({
     .transform((days) => [...new Set(days)].sort((a, b) => a - b)),
   start_time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "timeInvalid"),
   duration_min: wholeNumber("durationInvalid", 15, 480),
-  room: optionalText(60),
+  // "" is "no room".
+  room_id: z.union([z.literal(""), z.uuid("roomInvalid")]).transform((value) => (value === "" ? null : value)),
   capacity: z.union([z.literal(""), wholeNumber("capacityInvalid", 1, 500)]).transform((value) =>
     value === "" ? null : value,
   ),
@@ -206,6 +207,10 @@ export type GroupErrorKey =
   | "timeInvalid"
   | "durationInvalid"
   | "capacityInvalid"
+  | "capacityOverRoom"
+  | "roomInvalid"
+  | "roomClash"
+  | "roomUnavailable"
   | "dateInvalid"
   | "tooLong"
   | "studentRequired"
@@ -231,7 +236,12 @@ export type GroupErrorKey =
 
 export type GroupResult<T = undefined> =
   | (T extends undefined ? { ok: true } : { ok: true; data: T })
-  | { ok: false; error: GroupErrorKey };
+  | {
+      ok: false;
+      error: GroupErrorKey;
+      /** What the message names: the clashing group for roomClash, the room's capacity for capacityOverRoom. */
+      detail?: string;
+    };
 
 // ── URL state ──
 
@@ -244,7 +254,7 @@ export const groupsSearchSchema = z.object({
 });
 export type GroupsSearch = z.output<typeof groupsSearchSchema>;
 
-export const GROUP_TABS = ["students", "attendance", "lessons", "trials"] as const;
+export const GROUP_TABS = ["students", "attendance", "lessons", "leaderboard", "trials"] as const;
 export type GroupTab = (typeof GROUP_TABS)[number];
 
 export const groupSearchSchema = z.object({
@@ -255,4 +265,6 @@ export const groupSearchSchema = z.object({
     .optional()
     .catch(undefined),
   lesson: z.uuid().optional().catch(undefined),
+  // Leaderboard tab: this month (or `month`) or all-time.
+  period: z.enum(["month", "all"]).catch("month"),
 });

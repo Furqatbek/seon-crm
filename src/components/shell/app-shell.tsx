@@ -2,24 +2,31 @@
 
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { useInbox } from "@/components/leads/inbox-provider";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
-import { Link, usePathname } from "@/i18n/navigation";
-import type { CurrentUser } from "@/lib/auth";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import type { SignedInUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
-import { BLOCKS, SETTINGS_BLOCK, type Block } from "./blocks";
+import { BLOCKS, SETTINGS_BLOCK, TEACHER_BLOCKS, type Block } from "./blocks";
 import { UserMenu } from "./user-menu";
 
 function NavLink({
   block,
   active,
+  count,
+  countLabel,
   onNavigate,
 }: {
   block: Block;
   active: boolean;
+  /** A count beside the name: reward requests waiting for staff, or leads waiting in the inbox. */
+  count?: number;
+  /** What the count is, for screen readers. Reward requests when left out. */
+  countLabel?: string;
   onNavigate?: () => void;
 }) {
   const t = useTranslations("nav");
@@ -32,12 +39,18 @@ function NavLink({
       className={cn(
         "flex h-control items-center gap-3 rounded-control px-3 text-body outline-none motion-fast pointer-coarse:h-control-touch focus-visible:ring-3 focus-visible:ring-focus-ring",
         active
-          ? "bg-purple-tint font-medium text-purple"
+          ? "bg-brand-tint font-medium text-brand-ink"
           : "text-text hover:bg-border [&>svg]:text-text-secondary",
       )}
     >
       <Icon aria-hidden />
       <span className="truncate">{t(block.key)}</span>
+      {count ? (
+        <span className="ml-auto rounded-full bg-brand px-1.5 text-caption font-medium text-on-brand numeric" data-nav-count={count}>
+          <span className="sr-only">{countLabel ?? t("openRequests")} </span>
+          {count}
+        </span>
+      ) : null}
     </Link>
   );
 }
@@ -45,19 +58,30 @@ function NavLink({
 function SidebarContent({
   user,
   centreName,
+  openRequests,
   onNavigate,
 }: {
-  user: CurrentUser;
+  user: SignedInUser;
   centreName: string;
+  openRequests: number;
   onNavigate?: () => void;
 }) {
   const t = useTranslations();
   const pathname = usePathname();
+  // Leads waiting in the shared inbox, kept live by the inbox provider.
+  const waiting = useInbox().items.length;
+  const blocks = user.role === "teacher" ? TEACHER_BLOCKS : BLOCKS;
+  const matches = (block: Block) => pathname === block.href || pathname.startsWith(`${block.href}/`);
+  // /my-groups/history is under /my-groups: only the longest match is lit.
   const isActive = (block: Block) =>
-    pathname === block.href || pathname.startsWith(`${block.href}/`);
+    matches(block) && !blocks.some((other) => other.href.length > block.href.length && matches(other));
 
   return (
-    <div className="flex h-full flex-col">
+    // The centre's mark sits in the middle of the panel, behind the menu.
+    <div
+      data-slot="sidebar"
+      className="flex h-full flex-col bg-[url(/brand/seon-topik.png)] bg-[length:11rem_auto] bg-center bg-no-repeat"
+    >
       <div className="flex h-14 shrink-0 items-center px-5">
         <span className="truncate text-headline text-text" data-slot="centre-name">
           {centreName}
@@ -67,11 +91,13 @@ function SidebarContent({
         aria-label={t("nav.label")}
         className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 py-2"
       >
-        {BLOCKS.map((block) => (
+        {blocks.map((block) => (
           <NavLink
             key={block.key}
             block={block}
             active={isActive(block)}
+            count={block.key === "points" ? openRequests : block.key === "leads" ? waiting : undefined}
+            countLabel={block.key === "leads" ? t("nav.waitingLeads") : undefined}
             onNavigate={onNavigate}
           />
         ))}
@@ -90,6 +116,8 @@ function SidebarContent({
   );
 }
 
+const TEACHER_HOME = ["/my-groups", "/settings"];
+
 /**
  * Frosted 240 px sidebar on the left; below 900 px it becomes a slide-over
  * opened from a menu button.
@@ -97,20 +125,33 @@ function SidebarContent({
 export function AppShell({
   user,
   centreName,
+  openRequests = 0,
   children,
 }: {
-  user: CurrentUser;
+  user: SignedInUser;
   /** From Settings → Centre. */
   centreName: string;
+  /** Reward requests waiting for staff; shown beside Points. */
+  openRequests?: number;
   children: React.ReactNode;
 }) {
   const t = useTranslations();
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // A teacher has their groups and their profile. Any other address shows
+  // them nothing (the pages and the database both refuse), so take them home.
+  const lost =
+    user.role === "teacher" && !TEACHER_HOME.some((home) => pathname === home || pathname.startsWith(`${home}/`));
+  useEffect(() => {
+    if (lost) router.replace("/my-groups");
+  }, [lost, router]);
 
   return (
     <div className="min-h-dvh bg-bg">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-sidebar border-r border-border bg-bg-subtle/80 backdrop-blur-frost shell:block">
-        <SidebarContent user={user} centreName={centreName} />
+        <SidebarContent user={user} centreName={centreName} openRequests={openRequests} />
       </aside>
 
       <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-bg-subtle/80 px-2 backdrop-blur-frost shell:hidden">
@@ -134,7 +175,7 @@ export function AppShell({
         >
           <SheetTitle className="sr-only">{t("nav.label")}</SheetTitle>
           <SheetDescription className="sr-only">{centreName}</SheetDescription>
-          <SidebarContent user={user} centreName={centreName} onNavigate={() => setMenuOpen(false)} />
+          <SidebarContent user={user} centreName={centreName} openRequests={openRequests} onNavigate={() => setMenuOpen(false)} />
         </SheetContent>
       </Sheet>
 

@@ -8,10 +8,12 @@ import { GroupAttendanceTab } from "@/components/groups/group-attendance-tab";
 import { GroupLessonsTab } from "@/components/groups/group-lessons-tab";
 import { GroupScreen } from "@/components/groups/group-screen";
 import { GroupStudentsTab } from "@/components/groups/group-students-tab";
+import { BoardPeriodControl, Leaderboard } from "@/components/points/leaderboard";
 import { GroupTrialsTab } from "@/components/groups/group-trials-tab";
 import { RecordSkeleton } from "@/components/ui/skeleton";
 import { routing } from "@/i18n/routing";
 import { getCurrentUser } from "@/lib/auth";
+import { getGroupCoins } from "@/lib/coins/queries";
 import { attendanceLock, attendanceRate } from "@/lib/domain/attendance";
 import { balanceState } from "@/lib/domain/ledger";
 import { shiftMonth, tashkentDate } from "@/lib/domain/time";
@@ -22,10 +24,12 @@ import {
   getGroupTrials,
   getLessonSheet,
   getOpenGroups,
+  getRoomOptions,
   getTeacherOptions,
   type OpenGroup,
   type TeacherOption,
 } from "@/lib/groups/queries";
+import { getLeaderboard } from "@/lib/points/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
 import { getCentreBilling } from "@/lib/students/queries";
 import { groupSearchSchema } from "@/lib/validation/groups";
@@ -44,7 +48,12 @@ async function Students({
   openGroups: OpenGroup[];
   today: string;
 }) {
-  const [students, billing] = await Promise.all([getGroupStudents(group.id), getCentreBilling()]);
+  const [students, billing, coins] = await Promise.all([
+    getGroupStudents(group.id),
+    getCentreBilling(),
+    getGroupCoins(group.id),
+  ]);
+  const coinsOf = new Map(coins.map((row) => [row.studentId, row]));
   return (
     <GroupStudentsTab
       group={group}
@@ -53,6 +62,7 @@ async function Students({
       rows={students.map(({ marks, ...row }) => ({
         ...row,
         rate: attendanceRate(marks),
+        coins: coinsOf.get(row.student.id) ?? { earned: 0, balance: 0, rank: 0 },
         balanceState: balanceState(row.balance, {
           today,
           dueDay: billing.dueDay,
@@ -123,9 +133,10 @@ async function Group({ params, searchParams }: Props) {
   if (!user) return null;
   const search = groupSearchSchema.parse(firstValues(await searchParams));
 
-  const [group, teachers, openGroups, lesson] = await Promise.all([
+  const [group, teachers, rooms, openGroups, lesson] = await Promise.all([
     getGroup(id),
     getTeacherOptions(),
+    getRoomOptions(),
     getOpenGroups(),
     search.lesson ? getLessonSheet(search.lesson) : null,
   ]);
@@ -143,12 +154,13 @@ async function Group({ params, searchParams }: Props) {
       tab={search.tab}
       today={today}
       teachers={teachers}
+      rooms={rooms}
       openGroups={openGroups}
       // A lesson of another group does not open here.
       lesson={lesson?.group.id === group.id ? lesson : null}
       lessonLock={
         lesson
-          ? attendanceLock({ lessonDate: lesson.lesson_date, status: lesson.status, today, role: user.role })
+          ? attendanceLock({ lessonDate: lesson.lesson_date, status: lesson.status, today })
           : null
       }
     >
@@ -167,8 +179,31 @@ async function Group({ params, searchParams }: Props) {
           teachers={teachers}
         />
       ) : null}
+      {search.tab === "leaderboard" ? (
+        <Board groupId={group.id} period={search.period} month={month > currentMonth ? currentMonth : month} currentMonth={currentMonth} />
+      ) : null}
       {search.tab === "trials" ? <Trials groupId={group.id} /> : null}
     </GroupScreen>
+  );
+}
+
+async function Board({
+  groupId,
+  period,
+  month,
+  currentMonth,
+}: {
+  groupId: string;
+  period: "month" | "all";
+  month: string;
+  currentMonth: string;
+}) {
+  const rows = await getLeaderboard({ groupId, period, month });
+  return (
+    <div className="flex flex-col gap-4">
+      <BoardPeriodControl period={period} month={month} currentMonth={currentMonth} />
+      <Leaderboard rows={rows ?? []} staff />
+    </div>
   );
 }
 

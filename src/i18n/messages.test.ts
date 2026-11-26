@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import en from "../../messages/en.json";
+import ko from "../../messages/ko.json";
 import ru from "../../messages/ru.json";
 import uz from "../../messages/uz.json";
 
@@ -15,7 +16,7 @@ function flatten(tree: Tree, prefix = ""): Record<string, string> {
   return out;
 }
 
-const MESSAGES = { en: flatten(en), ru: flatten(ru), uz: flatten(uz) };
+const MESSAGES = { en: flatten(en), ru: flatten(ru), uz: flatten(uz), ko: flatten(ko) };
 
 /** The {arguments} a message takes, without the words inside plural branches. */
 function argumentsOf(message: string): string[] {
@@ -31,10 +32,11 @@ function argumentsOf(message: string): string[] {
 }
 
 describe("messages", () => {
-  it("uz, ru and en have exactly the same keys", () => {
+  it("uz, ru, en and ko have exactly the same keys", () => {
     const keys = Object.keys(MESSAGES.en).sort();
     expect(Object.keys(MESSAGES.ru).sort()).toEqual(keys);
     expect(Object.keys(MESSAGES.uz).sort()).toEqual(keys);
+    expect(Object.keys(MESSAGES.ko).sort()).toEqual(keys);
   });
 
   it("no message is empty", () => {
@@ -44,10 +46,10 @@ describe("messages", () => {
     }
   });
 
-  it("every message takes the same arguments in all three languages", () => {
+  it("every message takes the same arguments in every language", () => {
     const different = Object.keys(MESSAGES.en).filter((key) => {
       const expected = argumentsOf(MESSAGES.en[key]).join();
-      return argumentsOf(MESSAGES.ru[key]).join() !== expected || argumentsOf(MESSAGES.uz[key]).join() !== expected;
+      return (["ru", "uz", "ko"] as const).some((locale) => argumentsOf(MESSAGES[locale][key] ?? "").join() !== expected);
     });
     expect(different).toEqual([]);
   });
@@ -62,5 +64,14 @@ describe("messages", () => {
       .filter(([key]) => key !== "language.ru")
       .map(([key]) => key);
     expect(wrong).toEqual([]);
+  });
+
+  it("Korean is written in Korean: every text has Hangul unless it is a name, a unit or only placeholders", () => {
+    const untranslated = Object.entries(MESSAGES.ko)
+      .filter(([key, value]) => !/[\uAC00-\uD7A3]/.test(value) && value === MESSAGES.en[key] && /[A-Za-z]{4,}/.test(value.replace(/\{[^}]*\}/g, "")))
+      .map(([key]) => key)
+      // Names that are the same everywhere.
+      .filter((key) => !/^(app\.name|language\.|dev\.)|telegram|instagram|facebook|eskiz|\.sms$/i.test(key));
+    expect(untranslated).toEqual([]);
   });
 });

@@ -30,10 +30,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "@/i18n/navigation";
 import type { AttendanceLock } from "@/lib/domain/attendance";
+import { roomLabel } from "@/lib/domain/rooms";
 import { useUrlState } from "@/lib/hooks/use-url-state";
 import type {
   GroupRow,
   LessonSheetData,
+  RoomOption,
   TeacherOption,
   TodayLesson,
 } from "@/lib/groups/queries";
@@ -69,7 +71,7 @@ function Today({ lessons, onOpen }: { lessons: TodayLesson[]; onOpen: (id: strin
             <span className="truncate text-footnote text-text-secondary">
               {[
                 lesson.teacher.full_name,
-                lesson.group.room,
+                lesson.group.room ? roomLabel(lesson.group.room) : null,
                 t("studentCount", { count: lesson.students }),
               ]
                 .filter(Boolean)
@@ -99,6 +101,7 @@ export function GroupsScreen({
   todayLessons,
   groups,
   teachers,
+  rooms,
   lesson,
   lessonLock,
 }: {
@@ -108,6 +111,7 @@ export function GroupsScreen({
   todayLessons: TodayLesson[] | null;
   groups: { rows: GroupRow[]; total: number } | null;
   teachers: TeacherOption[];
+  rooms: RoomOption[];
   lesson: LessonSheetData | null;
   lessonLock: AttendanceLock;
 }) {
@@ -328,6 +332,7 @@ export function GroupsScreen({
         open={formOpen}
         group={null}
         teachers={teachers}
+        rooms={rooms}
         today={today}
         onClose={() => setFormOpen(false)}
         onSaved={(id) => {

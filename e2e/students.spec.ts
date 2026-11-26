@@ -38,9 +38,11 @@ test("a lead is converted into a student, linked both ways", async ({ page }, te
   await expect(sheet(page).getByRole("heading", { name: "Convert to student" })).toBeVisible();
   // The form starts from the lead, and the lead's own number is not a duplicate.
   await expect(sheet(page).getByLabel("Name", { exact: true })).toHaveValue(name);
+  // The country code is fixed in front of the field; the field holds the rest.
   await expect(sheet(page).getByLabel("Phone", { exact: true })).toHaveValue(
-    `+998 94 ${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5)}`,
+    `94 ${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5)}`,
   );
+  await expect(sheet(page).locator('[data-slot="phone-input"]').first()).toContainText("+998");
   await sheet(page).getByLabel("Parent's name").fill("Test Parent");
   await sheet(page).getByLabel("Parent's phone").fill("12345");
   await sheet(page).getByRole("button", { name: "Save" }).click();
@@ -69,11 +71,13 @@ test("a lead is converted into a student, linked both ways", async ({ page }, te
   await expect(page.getByText("Test Parent")).toBeVisible();
   await expect(page.getByText("Русский")).toBeVisible();
 
-  // The Telegram link carries a 22-character code and can be shown as a QR code.
-  const link = page.locator("[data-telegram-link]");
-  await expect(link).toHaveText(/^https:\/\/t\.me\/ziyo_markaz_demo_bot\?start=[A-Za-z0-9]{22}$/);
-  await page.getByRole("button", { name: "Show QR code" }).click();
-  await expect(page.getByRole("img", { name: "QR code with the Telegram link" })).toBeVisible();
+  // Two Telegram links, the student's own (s_) and the parent's (p_), each with a 22-character code and a QR code.
+  await expect(page.locator('[data-telegram-link="student"]')).toHaveText(/^https:\/\/t\.me\/ziyo_markaz_demo_bot\?start=s_[A-Za-z0-9]{22}$/);
+  await expect(page.locator('[data-telegram-link="parent"]')).toHaveText(/^https:\/\/t\.me\/ziyo_markaz_demo_bot\?start=p_[A-Za-z0-9]{22}$/);
+  await expect(page.locator("[data-telegram-role]")).toHaveCount(2);
+  await expect(page.locator('[data-telegram-role="parent"]')).toHaveAttribute("data-linked", "false");
+  await page.locator('[data-telegram-role="parent"]').getByRole("button", { name: /^Show QR code/ }).click();
+  await expect(page.getByRole("img", { name: "QR code with the Telegram link: Parent's link" })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("student.png"), fullPage: true });
 
   // ── Linked both ways: student → lead → student ──
@@ -95,6 +99,13 @@ test("a lead is converted into a student, linked both ways", async ({ page }, te
   await page.goto(studentUrl);
   await menu(page, "Pause");
   await expect(status(page)).toHaveAttribute("data-student-status", "paused");
+  await menu(page, "Mark as active");
+  await expect(status(page)).toHaveAttribute("data-student-status", "active");
+  await menu(page, "Mark as graduated");
+  await expect(dialog(page)).toContainText("finishes every group today");
+  await dialog(page).getByRole("button", { name: "Mark as graduated" }).click();
+  await expect(status(page)).toHaveAttribute("data-student-status", "graduated");
+  await expect(status(page)).toHaveText("Graduated");
   await menu(page, "Mark as active");
   await expect(status(page)).toHaveAttribute("data-student-status", "active");
   await menu(page, "Mark as left");
@@ -121,6 +132,8 @@ test("the student list filters, and the ledger ends on the student's balance", a
   await signIn(page, "manager");
   await page.goto("/en/students");
   const rows = page.locator("[data-student-row]");
+  // Under the title: how many are studying, have left and have graduated.
+  await expect(page.locator("[data-student-counts]")).toHaveText(/^Studying now: \d+ · Left: \d+ · Graduated: \d+$/);
   await expect(rows).toHaveCount(50);
   await expect(page.locator('[data-slot="pagination"]')).toContainText(/1–50 of \d+/);
   await page.waitForLoadState("networkidle");

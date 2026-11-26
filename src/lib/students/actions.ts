@@ -136,6 +136,20 @@ export async function markStudentLeft(id: unknown): Promise<StudentResult> {
   return { ok: true };
 }
 
+/** Mark as graduated: like leaving, every active enrolment ends today. */
+export async function markStudentGraduated(id: unknown): Promise<StudentResult> {
+  const studentId = z.uuid().safeParse(id);
+  if (!studentId.success) return { ok: false, error: "notFound" };
+  const ctx = await session();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { error } = await ctx.supabase.rpc("mark_student_graduated", { p_student_id: studentId.data });
+  if (error) return failure(error);
+
+  refresh();
+  return { ok: true };
+}
+
 /** Owner only: the database refuses anyone else. */
 export async function archiveStudent(id: unknown): Promise<StudentResult> {
   const studentId = z.uuid().safeParse(id);

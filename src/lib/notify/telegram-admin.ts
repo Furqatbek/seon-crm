@@ -71,6 +71,8 @@ export async function connectWebhook(options: {
   token: string | undefined;
   secret: string | undefined;
   appUrl: string;
+  /** The commands Telegram lists in the bot's menu, per language. */
+  commands?: Record<string, Array<{ command: string; description: string }>>;
   fetch?: Fetch;
 }): Promise<{ ok: true; username: string } | { ok: false; error: string }> {
   if (!options.token) return { ok: false, error: "TELEGRAM_BOT_TOKEN is not set" };
@@ -87,9 +89,16 @@ export async function connectWebhook(options: {
   const set = await call<boolean>(fetcher, options.token, "setWebhook", {
     url,
     secret_token: options.secret,
-    // The bot only reads messages: /start <code> and /stop.
-    allowed_updates: ["message"],
+    // Messages (the commands) and the buttons pressed under the bot's replies.
+    allowed_updates: ["message", "callback_query"],
   });
   if (!set.ok) return set;
+  // The command menu: Uzbek for everyone, and Russian and English for people who use Telegram in them.
+  for (const [language, commands] of Object.entries(options.commands ?? {})) {
+    for (const scope of language === "uz" ? [{}, { language_code: "uz" }] : [{ language_code: language }]) {
+      const menu = await call<boolean>(fetcher, options.token, "setMyCommands", { commands, ...scope });
+      if (!menu.ok) return menu;
+    }
+  }
   return { ok: true, username: me.result.username ?? "" };
 }

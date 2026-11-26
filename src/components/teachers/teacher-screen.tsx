@@ -71,7 +71,7 @@ function Overview({ teacher }: { teacher: TeacherDetail }) {
             <Detail label={t("fields.phone")}>
               <a
                 href={`tel:${teacher.phone}`}
-                className="rounded-inner text-purple outline-none numeric hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
+                className="rounded-inner text-brand-ink outline-none numeric hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
               >
                 {formatPhone(teacher.phone)}
               </a>
@@ -152,7 +152,7 @@ function Overview({ teacher }: { teacher: TeacherDetail }) {
                       {lesson.group?.name ?? "—"}
                       {/* This teacher stood in for the group's own teacher. */}
                       {lesson.group && lesson.group.teacher_id !== teacher.id ? (
-                        <Badge tone="purple">{t("lesson.substitute")}</Badge>
+                        <Badge tone="brand">{t("lesson.substitute")}</Badge>
                       ) : null}
                     </span>
                   </TableCell>

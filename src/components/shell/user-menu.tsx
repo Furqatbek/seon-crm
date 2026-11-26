@@ -16,14 +16,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@/i18n/navigation";
-import type { CurrentUser } from "@/lib/auth";
+import type { SignedInUser } from "@/lib/auth";
 import { signOut } from "@/lib/auth-actions";
 
+import { ThemeRadioGroup } from "./theme-switch";
 import { useSwitchLocale } from "./use-switch-locale";
 
-export function UserMenu({ user }: { user: CurrentUser }) {
+export function UserMenu({ user }: { user: SignedInUser }) {
   const t = useTranslations("userMenu");
   const tLanguage = useTranslations("language");
+  const tTheme = useTranslations("theme");
   const { locale, locales, switchLocale } = useSwitchLocale({ remember: true });
   const [, startTransition] = useTransition();
 
@@ -59,6 +61,9 @@ export function UserMenu({ user }: { user: CurrentUser }) {
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel>{tTheme("label")}</DropdownMenuLabel>
+        <ThemeRadioGroup />
         <DropdownMenuSeparator />
         {/* Name, language and password: for everyone, also a manager who has no Settings in the sidebar. */}
         <DropdownMenuItem asChild>

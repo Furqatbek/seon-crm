@@ -1,6 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
+import { lessonToday } from "./support/db";
 import { signIn } from "./support/auth";
 
 // Everything here is done with the keyboard alone: no click reaches the page.
@@ -94,11 +95,23 @@ test("a form in a sheet is filled in and sent with the keyboard", async ({ page 
 });
 
 test("the attendance sheet is marked and saved with the keyboard", async ({ page }) => {
-  await signIn(page, "owner");
-  await page.goto("/en/groups/00000003-0000-4000-8000-000000000001?tab=attendance");
+  const GROUP = "00000003-0000-4000-8000-000000000001";
+  // Attendance is marked on the day of the lesson: the group needs one today.
+  const today = await lessonToday(GROUP);
+  try {
+    await markWithKeyboard(page, GROUP);
+  } finally {
+    await today.restore();
+  }
+});
 
-  // A lesson that is already held: its marks are saved back exactly as they were.
-  const lesson = page.getByRole("button", { name: /^Open the lesson on/ }).first();
+async function markWithKeyboard(page: Page, group: string) {
+  await signIn(page, "owner");
+  await page.goto(`/en/groups/${group}?tab=attendance`);
+
+  // Today's lesson is the last one in this month's grid that can be opened.
+  const day = new Date(Date.now() + 5 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const lesson = page.locator(`[data-grid-lesson="${day}"]`).first();
   await lesson.focus();
   await page.keyboard.press("Enter");
   await expect(sheet(page)).toBeVisible();
@@ -135,4 +148,4 @@ test("the attendance sheet is marked and saved with the keyboard", async ({ page
   await expect(save).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(sheet(page)).toBeHidden();
-});
+}

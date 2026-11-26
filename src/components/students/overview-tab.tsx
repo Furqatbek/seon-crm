@@ -14,7 +14,7 @@ import { StatusPill } from "@/components/ui/status-pill";
 import { Link } from "@/i18n/navigation";
 import { formatDay, formatPhone } from "@/lib/format";
 import type { OpenGroup } from "@/lib/groups/queries";
-import type { StudentDetail } from "@/lib/students/queries";
+import type { StudentDetail, TelegramLink } from "@/lib/students/queries";
 
 import { QrCode } from "./qr-code";
 
@@ -30,54 +30,76 @@ function Detail({ label, children }: { label: string; children: React.ReactNode 
 }
 
 const phoneLink =
-  "rounded-inner text-purple outline-none numeric hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring";
+  "rounded-inner text-brand-ink outline-none numeric hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring";
 
-function TelegramCard({ student, botUsername }: { student: StudentDetail; botUsername: string | null }) {
+/** One Telegram link, the student's own or the parent's, with Copy and a QR code. */
+function TelegramLinkCard({
+  role,
+  link,
+  botUsername,
+}: {
+  role: "student" | "parent";
+  link: TelegramLink;
+  botUsername: string;
+}) {
   const t = useTranslations("students.telegram");
   const [copied, setCopied] = useState(false);
   const [showQr, setShowQr] = useState(false);
-  const link = botUsername
-    ? `https://t.me/${botUsername}?start=${student.telegram_link_code}`
-    : null;
+  // s_ is the student's own link, p_ the parent's.
+  const url = `https://t.me/${botUsername}?start=${role === "student" ? "s" : "p"}_${link.code}`;
 
   async function copy() {
-    if (!link) return;
-    await navigator.clipboard.writeText(link);
+    await navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
 
   return (
-    <section aria-labelledby="telegram-title" className="flex flex-col gap-3">
-      <h2 id="telegram-title" className="flex items-center gap-2 text-headline text-text">
-        {t("title")}
-        <StatusPill tone={student.telegram_chat_id ? "success" : "neutral"} icon={student.telegram_chat_id ? Send : undefined}>
-          {t(student.telegram_chat_id ? "linked" : "notLinked")}
+    <div className="flex flex-col gap-3 rounded-card border border-border p-4" data-telegram-role={role} data-linked={link.linked}>
+      <h3 className="flex flex-wrap items-center gap-2 text-body font-medium text-text">
+        {t(`role.${role}`)}
+        <StatusPill tone={link.linked ? "success" : "neutral"} icon={link.linked ? Send : undefined}>
+          {t(link.linked ? "linked" : "notLinked")}
         </StatusPill>
+      </h3>
+      <p className="text-footnote text-text-secondary">{t(`hint.${role}`)}</p>
+      <a
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        data-telegram-link={role}
+        className="rounded-inner text-body break-all text-brand-ink outline-none hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
+      >
+        {url}
+      </a>
+      <div className="flex flex-wrap gap-2">
+        <Button onClick={copy}>
+          {copied ? <Check aria-hidden /> : <Copy aria-hidden />}
+          {t(copied ? "copied" : "copy")}
+        </Button>
+        <Button onClick={() => setShowQr((shown) => !shown)} aria-expanded={showQr}>
+          <QrIcon aria-hidden />
+          {t(showQr ? "hideQr" : "showQr")}
+          <span className="sr-only">: {t(`role.${role}`)}</span>
+        </Button>
+      </div>
+      {showQr ? <QrCode value={url} label={t("qrLabel", { role: t(`role.${role}`) })} className="size-48 text-text" /> : null}
+    </div>
+  );
+}
+
+/** The two Telegram links of a student: their own and the parent's. */
+function TelegramCard({ student, botUsername }: { student: StudentDetail; botUsername: string | null }) {
+  const t = useTranslations("students.telegram");
+  return (
+    <section aria-labelledby="telegram-title" className="flex flex-col gap-3">
+      <h2 id="telegram-title" className="text-headline text-text">
+        {t("title")}
       </h2>
-      {link ? (
-        <div className="flex flex-col gap-3 rounded-card border border-border p-4">
-          <p className="text-footnote text-text-secondary">{t("hint")}</p>
-          <a
-            href={link}
-            target="_blank"
-            rel="noreferrer"
-            data-telegram-link
-            className="rounded-inner text-body break-all text-purple outline-none hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
-          >
-            {link}
-          </a>
-          <div className="flex flex-wrap gap-2">
-            <Button onClick={copy}>
-              {copied ? <Check aria-hidden /> : <Copy aria-hidden />}
-              {t(copied ? "copied" : "copy")}
-            </Button>
-            <Button onClick={() => setShowQr((shown) => !shown)} aria-expanded={showQr}>
-              <QrIcon aria-hidden />
-              {t(showQr ? "hideQr" : "showQr")}
-            </Button>
-          </div>
-          {showQr ? <QrCode value={link} label={t("qrLabel")} className="size-48 text-text" /> : null}
+      {botUsername ? (
+        <div className="grid items-start gap-3 lg:grid-cols-2">
+          {student.telegram.student.code ? <TelegramLinkCard role="student" link={student.telegram.student} botUsername={botUsername} /> : null}
+          {student.telegram.parent.code ? <TelegramLinkCard role="parent" link={student.telegram.parent} botUsername={botUsername} /> : null}
         </div>
       ) : (
         <p className="rounded-card border border-border p-4 text-body text-text-secondary">{t("noBot")}</p>
@@ -86,7 +108,7 @@ function TelegramCard({ student, botUsername }: { student: StudentDetail; botUse
   );
 }
 
-/** Contacts, groups with fee and discount, and the Telegram link. */
+/** Contacts, groups with fee and discount, and the two Telegram links. */
 export function OverviewTab({
   student,
   botUsername,
@@ -136,7 +158,7 @@ export function OverviewTab({
             <Detail label={t("fields.lead")}>
               <Link
                 href={`/leads?lead=${student.lead_id}`}
-                className="rounded-inner text-purple outline-none hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
+                className="rounded-inner text-brand-ink outline-none hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
               >
                 {t("openLead")}
               </Link>

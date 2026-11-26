@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { UserRole } from "@/lib/auth";
+import { EARNED_SOURCES as POINTS_SOURCES, type EarnedSource as PointsSource } from "@/lib/domain/points";
 import { createClient } from "@/lib/supabase/server";
 
 // Every figure comes from one SQL function per chart (supabase/migrations/
@@ -20,6 +21,19 @@ export type ReportKpis = {
 
 export type MonthMoney = { month: string; collected: number; expenses: number; salaries: number; costs: number };
 export type RevenueRow = { dimension: "group" | "subject"; name: string; collected: number };
+export type FormFunnelRow = {
+  formId: string;
+  name: string;
+  views: number;
+  leads: number;
+  taken: number;
+  won: number;
+  /** Leads ÷ views, in per cent; null with no views. */
+  conversion: number | null;
+  /** Minutes from entering the inbox to Take; null when nothing was taken. */
+  medianTakeMinutes: number | null;
+};
+
 export type FunnelRow = { dimension: "stage" | "source"; key: string; leads: number; won: number };
 export type StudentsRow = { month: string; active: number; joined: number; left: number };
 export type AttendanceRow = {
@@ -36,6 +50,8 @@ export type DebtAgeRow = { bucket: "0_30" | "31_60" | "over_60"; amount: number;
 export type Report = {
   kpis: ReportKpis;
   funnel: FunnelRow[];
+  /** The lead funnel split by form. Empty when the centre has no forms. */
+  forms: FormFunnelRow[];
   students: StudentsRow[];
   attendance: AttendanceRow[];
   /** Owner only: null for a manager, who never asks the database for them. */
@@ -54,9 +70,10 @@ export async function getReport(period: { from: string; to: string }, role: User
   const args = { p_from: `${period.from}-01`, p_to: `${period.to}-01` };
   const owner = role === "owner";
 
-  const [kpis, funnel, students, attendance, months, revenue, debtAge] = await Promise.all([
+  const [kpis, funnel, forms, students, attendance, months, revenue, debtAge] = await Promise.all([
     supabase.rpc("report_kpis", args).single(),
     supabase.rpc("report_lead_funnel", args),
+    supabase.rpc("report_lead_forms", args),
     supabase.rpc("report_students", args),
     supabase.rpc("report_attendance", args),
     owner ? supabase.rpc("report_collected_vs_expenses", args) : null,
@@ -81,6 +98,17 @@ export async function getReport(period: { from: string; to: string }, role: User
       key: row.key,
       leads: row.leads,
       won: row.won,
+    })),
+    // Missing while a deploy is ahead of the forms migrations: no split, not an error.
+    forms: (forms.error ? [] : (forms.data ?? [])).map((row) => ({
+      formId: row.form_id,
+      name: row.form_name,
+      views: Number(row.views),
+      leads: Number(row.leads),
+      taken: Number(row.taken),
+      won: Number(row.won),
+      conversion: row.conversion === null ? null : Number(row.conversion),
+      medianTakeMinutes: row.median_take_minutes === null ? null : Number(row.median_take_minutes),
     })),
     students: rows(students).map((row) => ({
       month: row.month.slice(0, 7),
@@ -113,5 +141,71 @@ export async function getReport(period: { from: string; to: string }, role: User
             })),
           }
         : null,
+  };
+}
+
+// ── Points — supabase/migrations/20261124100000_points_reports.sql ──
+
+
+export type PointsReport = {
+  kpis: {
+    earned: number;
+    deducted: number;
+    /** Spending and balances belong to no group: null in a teacher's report. */
+    spent: number | null;
+    unspent: number | null;
+    rewardsGiven: number | null;
+    studentsWithoutPoints: number;
+  };
+  /** One row per month, with the points earned from each source. */
+  bySource: Array<{ month: string } & Record<PointsSource, number>>;
+  byTeacher: Array<{ name: string; awards: number; deductions: number }>;
+  topStudents: Array<{ name: string; points: number }>;
+  rewards: Array<{ name: string; given: number; points: number }>;
+  byGroup: Array<{ name: string; students: number; points: number; average: number }>;
+};
+
+/**
+ * The points report for a period of months ("YYYY-MM", both included). The
+ * database narrows it to a teacher's own groups; nothing is added up here.
+ */
+export async function getPointsReport(period: { from: string; to: string }): Promise<PointsReport> {
+  const supabase = await createClient();
+  if (!supabase) throw new Error("Supabase is not configured");
+  const args = { p_from: `${period.from}-01`, p_to: `${period.to}-01` };
+
+  const [kpis, sources, teachers, top, rewards, groups] = await Promise.all([
+    supabase.rpc("report_points_kpis", args).single(),
+    supabase.rpc("report_points_by_source", args),
+    supabase.rpc("report_points_by_teacher", args),
+    supabase.rpc("report_points_top_students", args),
+    supabase.rpc("report_rewards_given", args),
+    supabase.rpc("report_points_by_group", args),
+  ]);
+  if (kpis.error) throw new Error(kpis.error.message);
+
+  const months = new Map<string, { month: string } & Record<PointsSource, number>>();
+  for (const row of rows(sources)) {
+    const month = row.month.slice(0, 7);
+    if (!months.has(month)) {
+      months.set(month, { month, attendance: 0, perfect_month: 0, on_time_payment: 0, referral: 0, teacher_award: 0, owner_adjustment: 0 });
+    }
+    if ((POINTS_SOURCES as readonly string[]).includes(row.source)) months.get(month)![row.source as PointsSource] = row.points;
+  }
+
+  return {
+    kpis: {
+      earned: kpis.data.earned,
+      deducted: kpis.data.deducted,
+      spent: kpis.data.spent,
+      unspent: kpis.data.unspent,
+      rewardsGiven: kpis.data.rewards_given,
+      studentsWithoutPoints: kpis.data.students_without_points,
+    },
+    bySource: [...months.values()].sort((a, b) => a.month.localeCompare(b.month)),
+    byTeacher: rows(teachers).map((row) => ({ name: row.teacher_name, awards: row.awards, deductions: row.deductions })),
+    topStudents: rows(top).map((row) => ({ name: row.student_name, points: row.points })),
+    rewards: rows(rewards).map((row) => ({ name: row.reward_name, given: row.given, points: row.points })),
+    byGroup: rows(groups).map((row) => ({ name: row.group_name, students: row.students, points: row.points, average: Number(row.average) })),
   };
 }

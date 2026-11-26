@@ -36,8 +36,10 @@ export function SignInForm() {
     });
   });
 
+  // method="post": if the button is pressed before the page script has loaded,
+  // the browser must not put what was typed into the address bar.
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+    <form method="post" onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
       <Field
         label={t("email")}
         htmlFor="email"
@@ -73,7 +75,7 @@ export function SignInForm() {
       </Button>
       <Link
         href="/forgot-password"
-        className="self-center rounded-inner text-body text-purple outline-none motion-fast hover:text-purple-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
+        className="self-center rounded-inner text-body text-brand-ink outline-none motion-fast hover:text-brand-ink-hover focus-visible:ring-3 focus-visible:ring-focus-ring"
       >
         {t("forgotPassword")}
       </Link>

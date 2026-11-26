@@ -5,6 +5,8 @@ import { refresh } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
 import { canMoveLead, nextContactTimestamp, normalizePhone } from "@/lib/domain/leads";
 import { createClient } from "@/lib/supabase/server";
+
+import { getInbox, type InboxItem } from "./inbox";
 import {
   leadActivitySchema,
   leadFormSchema,
@@ -35,11 +37,13 @@ export async function createLead(input: unknown): Promise<LeadResult<{ id: strin
   const ctx = await session();
   if (!ctx) return { ok: false, error: "notAllowed" };
 
-  const { next_contact, ...fields } = parsed.data;
+  const { next_contact, referred_by_student_id, ...fields } = parsed.data;
   const { data, error } = await ctx.supabase
     .from("leads")
     .insert({
       ...fields,
+      // Left out when empty, so a new lead saves even before the column exists.
+      ...(referred_by_student_id ? { referred_by_student_id } : {}),
       next_contact_at: next_contact ? nextContactTimestamp(next_contact) : null,
       created_by: ctx.user.id,
     })
@@ -59,19 +63,24 @@ export async function updateLead(id: unknown, input: unknown): Promise<LeadResul
   const ctx = await session();
   if (!ctx) return { ok: false, error: "notAllowed" };
 
-  const { next_contact, ...fields } = parsed.data;
+  const { next_contact, referred_by_student_id, ...fields } = parsed.data;
   // A won lead is read-only: the filter leaves it untouched.
-  const { data, error } = await ctx.supabase
-    .from("leads")
-    .update({
-      ...fields,
-      next_contact_at: next_contact ? nextContactTimestamp(next_contact) : null,
-    })
-    .eq("id", leadId.data)
-    .neq("status", "won")
-    .is("archived_at", null)
-    .select("id");
-  if (error) return failure(error);
+  const save = (withReferrer: boolean) =>
+    ctx.supabase
+      .from("leads")
+      .update({
+        ...fields,
+        ...(withReferrer ? { referred_by_student_id } : {}),
+        next_contact_at: next_contact ? nextContactTimestamp(next_contact) : null,
+      })
+      .eq("id", leadId.data)
+      .neq("status", "won")
+      .is("archived_at", null)
+      .select("id");
+  let { data, error } = await save(true);
+  // "Referred by" is missing while a deploy is ahead of its migration: save the rest.
+  if (error?.code === "PGRST204" && !referred_by_student_id) ({ data, error } = await save(false));
+  if (error || !data) return failure(error);
   if (data.length === 0) return { ok: false, error: "notFound" };
 
   refresh();
@@ -191,4 +200,36 @@ export async function findPhoneMatches(
     ...(leadMatches.data ?? []).map((row) => ({ kind: "lead" as const, ...row })),
     ...(studentMatches.data ?? []).map((row) => ({ kind: "student" as const, ...row })),
   ];
+}
+
+// ── The shared inbox — docs/SPEC.md → "Lead forms add-on → Shared inbox and staff alerts" ──
+
+/** The inbox as it is now: asked again whenever Realtime says a lead changed. */
+export async function fetchInbox(): Promise<InboxItem[]> {
+  return (await session()) ? getInbox() : [];
+}
+
+export type TakeOutcome =
+  | { ok: true; taken: true }
+  /** Somebody was faster: `by` is who has it now. */
+  | { ok: true; taken: false; by: string | null }
+  | { ok: false; error: LeadErrorKey };
+
+/**
+ * Take a lead from the inbox for yourself, or (the owner) give it to
+ * `assignTo`. take_lead() decides in one statement, so the first Take wins.
+ */
+export async function takeLead(id: unknown, assignTo?: unknown): Promise<TakeOutcome> {
+  const leadId = z.uuid().safeParse(id);
+  const target = assignTo === undefined ? null : z.uuid().safeParse(assignTo);
+  if (!leadId.success || (target && !target.success)) return { ok: false, error: "notFound" };
+  const ctx = await session();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase.rpc("take_lead", { p_lead_id: leadId.data, p_for: target?.data });
+  if (error) return error.code === "P0002" ? { ok: false, error: "notFound" } : failure(error);
+  const row = data?.[0];
+  if (!row) return { ok: false, error: "generic" };
+  refresh();
+  return row.taken ? { ok: true, taken: true } : { ok: true, taken: false, by: row.assigned_name };
 }

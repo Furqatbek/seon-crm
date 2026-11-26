@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRightLeft, Ellipsis, LogOut } from "lucide-react";
+import { ArrowRightLeft, Coins, Ellipsis, LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
@@ -11,14 +11,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-/** Transfer and Leave group for one enrolment. */
+/** Coins, Transfer and Leave group for one enrolment. */
 export function EnrolmentMenu({
   label,
+  onCoins,
   onTransfer,
   onLeave,
 }: {
   /** Says whose menu this is, for screen readers. */
   label: string;
+  /** Only where the row is a student in a group's list. */
+  onCoins?: () => void;
   onTransfer: () => void;
   onLeave: () => void;
 }) {
@@ -36,6 +39,12 @@ export function EnrolmentMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" onClick={(event) => event.stopPropagation()}>
+        {onCoins ? (
+          <DropdownMenuItem onSelect={onCoins}>
+            <Coins aria-hidden />
+            {t("coins")}
+          </DropdownMenuItem>
+        ) : null}
         <DropdownMenuItem onSelect={onTransfer}>
           <ArrowRightLeft aria-hidden />
           {t("transfer")}

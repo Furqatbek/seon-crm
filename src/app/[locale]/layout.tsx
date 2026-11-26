@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { initLocale, type LocaleParams } from "@/i18n/params";
 import { routing } from "@/i18n/routing";
+import { THEME_SCRIPT } from "@/lib/theme/theme";
 
 import "../globals.css";
 
@@ -35,7 +36,11 @@ export default async function LocaleLayout({
   const locale = await initLocale(params);
 
   return (
-    <html lang={locale} className={inter.variable}>
+    // The theme script sets data-theme on <html> before React takes over.
+    <html lang={locale} className={inter.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-dvh bg-bg text-text">
         <NextIntlClientProvider>
           <TooltipProvider>{children}</TooltipProvider>

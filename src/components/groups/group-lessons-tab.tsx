@@ -140,7 +140,7 @@ export function GroupLessonsTab({
                   <span className="flex items-center gap-2 whitespace-nowrap">
                     {lesson.teacher.full_name}
                     {lesson.teacher.id !== groupTeacherId ? (
-                      <Badge tone="purple">{t("lesson.substitute")}</Badge>
+                      <Badge tone="brand">{t("lesson.substitute")}</Badge>
                     ) : null}
                   </span>
                 </TableCell>

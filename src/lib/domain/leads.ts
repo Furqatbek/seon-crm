@@ -14,6 +14,8 @@ export const LEAD_SOURCES = [
   "walk_in",
   "referral",
   "website",
+  "web_form",
+  "facebook",
   "other",
 ] as const;
 export type LeadSource = (typeof LEAD_SOURCES)[number];

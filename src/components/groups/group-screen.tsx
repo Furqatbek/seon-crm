@@ -28,8 +28,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link, useRouter } from "@/i18n/navigation";
 import type { UserRole } from "@/lib/auth";
 import type { AttendanceLock } from "@/lib/domain/attendance";
+import { roomLabel } from "@/lib/domain/rooms";
 import { archiveGroup } from "@/lib/groups/actions";
-import type { GroupDetail, LessonSheetData, OpenGroup, TeacherOption } from "@/lib/groups/queries";
+import type {
+  GroupDetail,
+  LessonSheetData,
+  OpenGroup,
+  RoomOption,
+  TeacherOption,
+} from "@/lib/groups/queries";
 import { useUrlState } from "@/lib/hooks/use-url-state";
 import { GROUP_TABS, type GroupTab } from "@/lib/validation/groups";
 
@@ -47,6 +54,7 @@ export function GroupScreen({
   tab,
   today,
   teachers,
+  rooms,
   openGroups,
   lesson,
   lessonLock,
@@ -57,6 +65,7 @@ export function GroupScreen({
   tab: GroupTab;
   today: string;
   teachers: TeacherOption[];
+  rooms: RoomOption[];
   openGroups: OpenGroup[];
   lesson: LessonSheetData | null;
   lessonLock: AttendanceLock;
@@ -141,7 +150,7 @@ export function GroupScreen({
                 t("fields.daysAndTime"),
                 `${group.days.map((day) => tDays(String(day) as Weekday)).join(", ")} · ${hhmm(group.start_time)}`,
               ],
-              [t("fields.room"), group.room],
+              [t("fields.room"), group.room ? roomLabel(group.room) : null],
               [
                 t("fields.students"),
                 group.capacity === null ? String(group.students) : `${group.students} / ${group.capacity}`,
@@ -169,7 +178,7 @@ export function GroupScreen({
         onValueChange={(value) =>
           startTabChange(() => {
             showTab(value as GroupTab);
-            setParams({ tab: value === "students" ? null : value, month: null, lesson: null });
+            setParams({ tab: value === "students" ? null : value, month: null, lesson: null, period: null });
           })
         }
         className="gap-6"
@@ -195,6 +204,7 @@ export function GroupScreen({
         open={editing}
         group={group}
         teachers={teachers}
+        rooms={rooms}
         today={today}
         onClose={() => setEditing(false)}
         onSaved={() => setEditing(false)}

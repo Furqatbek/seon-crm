@@ -89,7 +89,7 @@ describe.skipIf(!DB_URL)("Settings and users", () => {
     it("a manager reads them and changes nothing", async () => {
       await as("manager", async (s) => {
         expect(await s.count("centre_settings")).toBe(1);
-        expect(await s.count("message_templates")).toBe(24);
+        expect(await s.count("message_templates")).toBe(36);
         expect(code(await s.attempt(`update centre_settings set centre_name = 'Mine'`))).toBe("allowed (0)");
         expect(code(await s.attempt(`update centre_settings set reminders_enabled = false`))).toBe("allowed (0)");
         expect(code(await s.attempt(`update message_templates set body = 'x'`))).toBe("allowed (0)");

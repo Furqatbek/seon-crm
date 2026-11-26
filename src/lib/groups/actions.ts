@@ -33,6 +33,11 @@ const ERRORS: Record<string, GroupErrorKey> = {
   EC004: "lessonFuture",
   EC005: "notInGroup",
   EC006: "sameGroup",
+  EC007: "attendanceLocked",
+  // EM… are raised by supabase/migrations/20261116100000_rooms.sql.
+  EM001: "roomClash",
+  EM002: "capacityOverRoom",
+  EM005: "roomUnavailable",
 };
 
 async function session() {
@@ -44,9 +49,13 @@ function firstIssue(error: z.ZodError): GroupErrorKey {
   return (error.issues[0]?.message as GroupErrorKey) ?? "generic";
 }
 
-function failure(error: { code?: string } | null, denied: GroupErrorKey = "notAllowed") {
+function failure(error: { code?: string; details?: string | null } | null, denied: GroupErrorKey = "notAllowed") {
   const key = error?.code ? ERRORS[error.code] : undefined;
-  return { ok: false as const, error: key === "notAllowed" ? denied : (key ?? "generic") };
+  const result = { ok: false as const, error: key === "notAllowed" ? denied : (key ?? "generic") };
+  // The database names the clashing group, or the room's capacity, in the error's detail.
+  return (key === "roomClash" || key === "capacityOverRoom") && error?.details
+    ? { ...result, detail: error.details }
+    : result;
 }
 
 // ── Groups ──

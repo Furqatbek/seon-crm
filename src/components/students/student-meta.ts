@@ -7,6 +7,7 @@ export const STUDENT_TONE: Record<Enums<"student_status">, BadgeTone> = {
   active: "success",
   paused: "warning",
   left: "neutral",
+  graduated: "brand",
 };
 
 /** Only a balance below zero gets a pill: Debt or Due. */

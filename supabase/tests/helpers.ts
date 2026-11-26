@@ -11,6 +11,8 @@ export const SEED_PASSWORD = process.env.SEED_PASSWORD ?? "EduCrm-demo-2026";
 export const LOGINS = {
   owner: "owner@demo.educrm.uz",
   manager: "manager@demo.educrm.uz",
+  // Linked to teacher 2, Nodira Saidova: IELTS 6.5 and English Kids.
+  teacher: "teacher@demo.educrm.uz",
 } as const;
 
 /** Fixed ids from supabase/seed.sql: uid(kind, n). */
@@ -19,11 +21,13 @@ export function uid(kind: number, n: number): string {
 }
 export const OWNER_ID = uid(1, 1);
 export const MANAGER_ID = uid(1, 2);
+export const TEACHER_USER_ID = uid(1, 3);
 export const teacherId = (n: number) => uid(2, n);
 export const groupId = (n: number) => uid(3, n);
 export const studentId = (n: number) => uid(4, n);
 export const enrollmentId = (n: number) => uid(5, n);
 export const leadId = (n: number) => uid(6, n);
+export const roomId = (n: number) => uid(7, n);
 
 export type Attempt =
   | { ok: true; rows: Record<string, unknown>[]; rowCount: number }
@@ -138,5 +142,41 @@ export async function admin<T>(fn: (session: Session) => Promise<T>): Promise<T>
     return await fn(makeSession(db));
   } finally {
     await db.query("rollback");
+  }
+}
+
+/**
+ * Attendance is marked on the day of the lesson only, and the seed's groups do
+ * not meet every day. This gives the group a lesson today: if it has none, its
+ * next one is brought forward (committed, so every rolled-back test sees it).
+ * Call `restore` when the file is done.
+ */
+export async function lessonToday(group: string): Promise<{ id: string; restore: () => Promise<void> }> {
+  const db = new pg.Client({ connectionString: DB_URL });
+  await db.connect();
+  try {
+    const today = await db.query(
+      `select id from lessons where group_id = $1 and status <> 'cancelled' and lesson_date = public.tashkent_today() limit 1`,
+      [group],
+    );
+    if (today.rows.length > 0) return { id: today.rows[0].id, restore: async () => {} };
+    const moved = await db.query(
+      `with next as (select id, lesson_date::text as original from lessons
+                     where group_id = $1 and status <> 'cancelled' and lesson_date > public.tashkent_today() order by lesson_date limit 1)
+       update lessons l set lesson_date = public.tashkent_today() from next where l.id = next.id
+       returning l.id, next.original`,
+      [group],
+    );
+    const { id, original } = moved.rows[0] as { id: string; original: string };
+    return {
+      id,
+      restore: async () => {
+        const again = new pg.Client({ connectionString: DB_URL });
+        await again.connect();
+        await again.query(`update lessons set lesson_date = $2 where id = $1`, [id, original]).finally(() => again.end());
+      },
+    };
+  } finally {
+    await db.end();
   }
 }

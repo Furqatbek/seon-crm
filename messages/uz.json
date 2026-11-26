@@ -49,20 +49,34 @@
     "teachers": "Oʻqituvchilar",
     "finance": "Moliya",
     "reports": "Hisobotlar",
-    "settings": "Sozlamalar"
+    "settings": "Sozlamalar",
+    "myGroups": "Guruhlarim",
+    "pointsHistory": "Tarix",
+    "points": "Ballar",
+    "openRequests": "Kutayotgan sovgʻa soʻrovlari:",
+    "pointsReport": "Hisobotlar",
+    "waitingLeads": "Kutayotgan lidlar:"
   },
   "language": {
     "label": "Til",
     "uz": "Oʻzbekcha",
     "ru": "Русский",
-    "en": "English"
+    "en": "English",
+    "ko": "한국어"
+  },
+  "theme": {
+    "label": "Mavzu",
+    "system": "Qurilmadagidek",
+    "light": "Yorugʻ",
+    "dark": "Qorongʻi"
   },
   "userMenu": {
     "label": "Akkaunt menyusi",
     "signOut": "Chiqish",
     "roles": {
       "owner": "Rahbar",
-      "manager": "Menejer"
+      "manager": "Menejer",
+      "teacher": "Oʻqituvchi"
     },
     "profile": "Profil"
   },
@@ -139,7 +153,9 @@
       "walk_in": "Oʻzi keldi",
       "referral": "Tavsiya",
       "website": "Veb-sayt",
-      "other": "Boshqa"
+      "other": "Boshqa",
+      "facebook": "Facebook",
+      "web_form": "Veb-forma"
     },
     "lostReason": {
       "price": "Narx",
@@ -161,12 +177,19 @@
       "created": "Yaratilgan",
       "trial": "Sinov darsi",
       "lostReason": "Rad etish sababi",
-      "unassigned": "Hech kim"
+      "unassigned": "Hech kim",
+      "referredBy": "Kim tavsiya qildi",
+      "referredByHint": "Bu lidni olib kelgan oʻquvchi. Lid yozilib, birinchi toʻlovni qilganda unga ball beriladi."
     },
     "form": {
       "created": "Lid qoʻshildi",
       "saved": "Lid saqlandi",
-      "chooseSource": "Manbani tanlang"
+      "chooseSource": "Manbani tanlang",
+      "title": "Formadan",
+      "language": "Til: {language}",
+      "submitted": "Yuborilgan: {time}",
+      "yes": "Ha",
+      "no": "Yoʻq"
     },
     "actions": {
       "logCall": "Qoʻngʻiroqni yozish",
@@ -191,7 +214,8 @@
       "call": "Qoʻngʻiroq",
       "note": "Izoh",
       "statusChange": "{from} → {to}",
-      "reason": "Sabab: {reason}"
+      "reason": "Sabab: {reason}",
+      "formResubmitted": "“{form}” formasi qayta yuborildi"
     },
     "lost": {
       "title": "{name} rad etdi deb belgilansinmi?",
@@ -233,6 +257,21 @@
       "notFound": "Bu lid endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+    },
+    "inbox": {
+      "title": "Formalardan yangilar — {count} ta kutmoqda",
+      "newToast": "“{form}” formasidan yangi lid: {name}",
+      "newToastPlain": "Yangi lid: {name}",
+      "take": "Olish",
+      "assign": "Biriktirish",
+      "assignTo": "Kimga biriktirish",
+      "taken": "Siz oldingiz: {lead}",
+      "assigned": "{lead} {name}ga biriktirildi",
+      "takenBy": "Bu lidni {name} allaqachon olgan",
+      "notWaiting": "Bu lid endi kutmayapti",
+      "justNow": "hozirgina",
+      "minutes": "{minutes} daq",
+      "hours": "{hours} soat {minutes} daq"
     }
   },
   "students": {
@@ -251,7 +290,8 @@
     "status": {
       "active": "Faol",
       "paused": "Toʻxtatilgan",
-      "left": "Ketgan"
+      "left": "Ketgan",
+      "graduated": "Bitirgan"
     },
     "balance": {
       "debt": "Qarz",
@@ -263,7 +303,8 @@
       "overview": "Umumiy",
       "ledger": "Hisob-kitob",
       "attendance": "Davomat",
-      "messages": "Xabarlar"
+      "messages": "Xabarlar",
+      "points": "Ballar"
     },
     "fields": {
       "name": "Ism",
@@ -305,13 +346,15 @@
       "markLeft": "Ketdi deb belgilash",
       "archive": "Arxivlash",
       "more": "Boshqa amallar",
-      "addCredit": "Qaytarish qoʻshish"
+      "addCredit": "Qaytarish qoʻshish",
+      "markGraduated": "Bitirgan deb belgilash"
     },
     "done": {
       "paused": "Oʻquvchi toʻxtatildi",
       "resumed": "Oʻquvchi yana faol",
       "left": "Oʻquvchi ketdi deb belgilandi",
-      "archived": "Oʻquvchi arxivlandi"
+      "archived": "Oʻquvchi arxivlandi",
+      "graduated": "Oʻquvchi bitirgan deb belgilandi"
     },
     "left": {
       "title": "{name} ketdi deb belgilansinmi?",
@@ -332,13 +375,20 @@
       "linked": "Ulangan",
       "linkedShort": "Ulangan",
       "notLinked": "Ulanmagan",
-      "hint": "Bu havolani oʻquvchi yoki ota-onaga yuboring. Ular botda «Start» tugmasini bosgach, eslatmalar Telegramga keladi.",
+      "hint": {
+        "student": "Oʻquvchining oʻz Telegrami uchun: dars eslatmalari va ballari. Toʻlov eslatmalari kelmaydi.",
+        "parent": "Ota-ona Telegrami uchun: toʻlov eslatmalari va farzandining ballari."
+      },
       "copy": "Havolani nusxalash",
       "copied": "Nusxalandi",
       "showQr": "QR-kodni koʻrsatish",
       "hideQr": "QR-kodni yashirish",
-      "qrLabel": "Telegram havolasi bilan QR-kod",
-      "noBot": "Telegram-bot hali ulanmagan. Rahbar uni sozlamalarda ulaydi."
+      "qrLabel": "Telegram havolasi QR kodi: {role}",
+      "noBot": "Telegram-bot hali ulanmagan. Rahbar uni sozlamalarda ulaydi.",
+      "role": {
+        "student": "Oʻquvchining havolasi",
+        "parent": "Ota-ona havolasi"
+      }
     },
     "ledger": {
       "empty": "Hozircha hisob yoki toʻlovlar yoʻq.",
@@ -386,7 +436,14 @@
         "payment_due": "Toʻlov vaqti",
         "payment_overdue": "Toʻlov kechikdi",
         "lesson_reminder": "Dars eslatmasi",
-        "custom": "Bir martalik xabar"
+        "custom": "Bir martalik xabar",
+        "points_weekly": "Haftalik ballar xulosasi",
+        "points_deduction": "Ball olindi",
+        "points_month_result": "Oy yakunlari",
+        "reward_update": "Sovgʻa holati",
+        "staff_new_lead": "Yangi lid (xodimlarga)",
+        "staff_lead_reminder": "Lid eslatmasi (xodimlarga)",
+        "staff_integration_alert": "Integratsiya xabari (xodimlarga)"
       },
       "channels": {
         "telegram": "Telegram",
@@ -410,7 +467,12 @@
       "notFound": "Bu oʻquvchi endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
       "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
-    }
+    },
+    "graduated": {
+      "title": "{name} bitirgan deb belgilansinmi?",
+      "body": "Oʻquvchi bugun barcha guruhlarni tugatadi va unga boshqa toʻlov hisoblanmaydi. Qarzi boʻlsa, balansida qoladi."
+    },
+    "counts": "Hozir oʻqiyapti: {studying} · Ketgan: {left} · Bitirgan: {graduated}"
   },
   "groups": {
     "newGroup": "Yangi guruh",
@@ -426,7 +488,8 @@
       "students": "Oʻquvchilar",
       "attendance": "Davomat",
       "lessons": "Darslar",
-      "trials": "Sinov darslari"
+      "trials": "Sinov darslari",
+      "leaderboard": "Reyting"
     },
     "status": {
       "forming": "Yigʻilmoqda",
@@ -462,7 +525,9 @@
       "saved": "Guruh saqlandi",
       "chooseTeacher": "Oʻqituvchini tanlang",
       "feeHint": "Yangi narx keyingi oydan amal qiladi va yozilgan hisoblarni oʻzgartirmaydi.",
-      "scheduleHint": "Kunlar, vaqt, oʻqituvchi yoki sanalar oʻzgarsa, davomati belgilanmagan kelgusi darslar qayta yaratiladi."
+      "scheduleHint": "Kunlar, vaqt, oʻqituvchi yoki sanalar oʻzgarsa, davomati belgilanmagan kelgusi darslar qayta yaratiladi.",
+      "noRoom": "Xonasiz",
+      "roomOption": "{room} ({capacity} ta oʻrin)"
     },
     "today": {
       "empty": "Bugun darslar yoʻq.",
@@ -492,7 +557,7 @@
       "locked": {
         "cancelled": "Bu dars bekor qilingan. Davomatni belgilash uchun uni tiklang.",
         "future": "Bu dars hali oʻtmagan.",
-        "tooOld": "Bu darsga 7 kundan koʻp boʻldi. Davomatni faqat rahbar oʻzgartira oladi."
+        "tooOld": "Bu dars boshqa kuni boʻlgan. Davomat dars kuni belgilanadi."
       },
       "mark": {
         "present": "Keldi",
@@ -522,7 +587,8 @@
       "empty": "Bu guruhda hali oʻquvchilar yoʻq.",
       "rowActions": "{name} uchun amallar",
       "transfer": "Boshqa guruhga oʻtkazish",
-      "leave": "Guruhdan chiqarish"
+      "leave": "Guruhdan chiqarish",
+      "coins": "Tangalar"
     },
     "actions": {
       "addStudent": "Oʻquvchi qoʻshish",
@@ -618,10 +684,14 @@
       "lessonFuture": "Bu dars hali oʻtmagan.",
       "notInGroup": "Oʻquvchi bu kuni guruhda emas.",
       "sameGroup": "Oʻquvchi allaqachon bu guruhda.",
-      "attendanceLocked": "Bu darsga 7 kundan koʻp boʻldi. Davomatni faqat rahbar oʻzgartira oladi.",
+      "attendanceLocked": "Davomat dars kuni belgilanadi, bu kun esa oʻtib ketgan.",
       "notFound": "Bu endi mavjud emas.",
       "notAllowed": "Sizda bu amal uchun ruxsat yoʻq.",
-      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "capacityOverRoom": "Xonada {detail} ta oʻrin bor. Guruh bundan katta boʻla olmaydi.",
+      "roomInvalid": "Xonani roʻyxatdan tanlang.",
+      "roomClash": "Bu vaqtda xona «{detail}» guruhi bilan band.",
+      "roomUnavailable": "Bu xona endi mavjud emas. Boshqasini tanlang."
     }
   },
   "finance": {
@@ -634,9 +704,12 @@
       "adjustments": "Tuzatishlar"
     },
     "strip": {
-      "collected": "Yigʻilgan",
-      "billed": "Hisoblangan",
-      "debt": "Bugungi qarz",
+      "billed": "Oy uchun hisoblangan",
+      "paid": "Shundan toʻlangan",
+      "unpaid": "Shundan toʻlanmagan",
+      "rule": "Hisoblangan = toʻlangan + toʻlanmagan. Quyidagi raqamlar alohida: tushum — oy davomida qabul qilingan barcha pul, boshqa oylar uchun ham; qarz — bugungi kundagi jami qarz.",
+      "collected": "Oy davomida tushgan pul",
+      "debt": "Bugungi qarz, barcha oylar",
       "expenses": "Xarajatlar"
     },
     "method": {
@@ -769,11 +842,14 @@
         "marketing": "Marketing",
         "supplies": "Jihozlar",
         "other": "Boshqa"
-      }
+      },
+      "edit": "{what} xarajatini tahrirlash",
+      "editTitle": "Xarajatni tahrirlash",
+      "updated": "Xarajat oʻzgartirildi"
     },
     "salaries": {
       "calculate": "Hisoblash",
-      "hint": "Har oy uning 1-kunida amalda boʻlgan stavka boʻyicha toʻlanadi. Toʻlangan maoshlar oʻzgarmaydi.",
+      "hint": "Har oy uning 1-kunida amalda boʻlgan stavka boʻyicha toʻlanadi. Qoralamalar toʻlovlar va darslarga oʻzi moslashadi: bekor qilingan toʻlov ulushdan darhol chiqariladi. Toʻlangan maoshlar oʻzgarmaydi.",
       "empty": "{month} uchun maoshlar hali yoʻq. Yaratish uchun «Hisoblash»ni bosing.",
       "calculated": "{count, plural, =0 {Hisoblanadigan narsa yoʻq} other {# ta maosh hisoblandi}}",
       "calculatedColumn": "Hisoblangan",
@@ -803,13 +879,36 @@
       "markPaidTitle": "{teacher} maoshi toʻlangan deb belgilansinmi?",
       "markPaidBody": "Toʻlangan maosh qulflanadi: uni tahrirlab yoki qayta hisoblab boʻlmaydi.",
       "markedPaid": "Maosh toʻlangan deb belgilandi",
-      "monthOpenWarning": "{month} hali tugamagan. Bundan keyingi darslar va toʻlovlar toʻlangan maoshga qoʻshilmaydi."
+      "monthOpenWarning": "{month} hali tugamagan. Bundan keyingi darslar va toʻlovlar toʻlangan maoshga qoʻshilmaydi.",
+      "facts": {
+        "students": "{count, plural, other {# ta oʻquvchi oʻqiyapti}}",
+        "paid": "{count, plural, other {# tasi toʻlagan}}",
+        "discounted": "{count, plural, other {# tasi chegirma bilan}}",
+        "discountTotal": "Oy uchun chegirmalar:"
+      }
     },
     "adjustments": {
       "empty": "Bu oyda balansga qaytarish yoki bekor qilingan toʻlov yoʻq.",
       "credit": "Balansga qaytarildi",
       "void": "Bekor qilingan toʻlov",
       "receipt": "Chek {receipt}"
+    },
+    "archive": {
+      "action": "Arxivlash",
+      "payment": "Arxivlash: {what}-chek",
+      "charge": "Arxivlash: {what} uchun hisoblangan summa",
+      "expense": "Arxivlash: {what} xarajati",
+      "payout": "Arxivlash: {what} maoshi",
+      "title": "Yozuv arxivlansinmi?",
+      "body": "Yozuv oʻchirilmaydi, lekin barcha roʻyxatlar, balanslar, jamlar va hisobotlardan chiqadi. Uni ilovadan qaytarib boʻlmaydi.",
+      "bodyPayment": "Toʻlov bekor qilinadi va yashiriladi: oʻquvchi bu summani yana qarz boʻladi.",
+      "bodyCharge": "Oʻquvchi bu summani endi qarz emas. Oylik toʻlovni keyin qayta hisoblash mumkin.",
+      "bodyPayout": "Maosh jami maoshlardan chiqadi. «Hisoblash» shu oy uchun yangi qoralama yaratadi.",
+      "done": "Arxivlandi",
+      "allCharges": "Hammasini arxivlash",
+      "allChargesTitle": "{month} uchun barcha hisoblangan summalar arxivlansinmi?",
+      "allChargesBody": "Shu oyning {count} ta hisoblangan summasi oʻquvchilar balansidan chiqadi. Toʻlovlarga tegilmaydi. Keyin oyni qayta hisoblash mumkin.",
+      "allChargesDone": "{count} ta summa arxivlandi"
     }
   },
   "teachers": {
@@ -1049,14 +1148,133 @@
       "0_30": "0–30 kun",
       "31_60": "31–60 kun",
       "over_60": "60 kundan ortiq"
+    },
+    "tabs": {
+      "overview": "Umumiy",
+      "points": "Ballar"
+    },
+    "points": {
+      "points": "Ball",
+      "kpi": {
+        "earned": "Toʻplangan ball",
+        "deducted": "Olingan ball",
+        "spent": "Sovgʻalarga sarflangan",
+        "unspent": "Sarflanmagan ball",
+        "rewardsGiven": "Berilgan sovgʻalar",
+        "studentsWithoutPoints": "Ball olmagan oʻquvchilar"
+      },
+      "bySource": {
+        "title": "Toʻplangan ballar manbalar boʻyicha"
+      },
+      "byTeacher": {
+        "title": "Oʻqituvchilar boʻyicha ragʻbat va jarimalar",
+        "hint": "Bekor qilinganlari hisobga olinmaydi.",
+        "teacher": "Oʻqituvchi",
+        "awards": "Ragʻbatlar",
+        "deductions": "Jarimalar"
+      },
+      "topStudents": {
+        "title": "Eng yaxshi 10 oʻquvchi",
+        "student": "Oʻquvchi"
+      },
+      "rewards": {
+        "title": "Berilgan sovgʻalar",
+        "reward": "Sovgʻa",
+        "given": "Berildi",
+        "points": "Sarflangan ball"
+      },
+      "byGroup": {
+        "title": "Guruhlar boʻyicha bir oʻquvchiga oʻrtacha ball",
+        "hint": "Guruhning davrdagi ballari hozirgi oʻquvchilar soniga boʻlinadi.",
+        "group": "Guruh",
+        "students": "Oʻquvchilar",
+        "average": "Oʻrtacha"
+      }
+    },
+    "teacherTitle": "Guruhlarimdagi ballar",
+    "forms": {
+      "title": "Formalar boʻyicha lidlar",
+      "hint": "Davr ichidagi koʻrishlar va lidlar, nechtasi olingan va oʻquvchi boʻlgan, lid qanchalik tez olingan.",
+      "form": "Forma",
+      "views": "Koʻrishlar",
+      "leads": "Lidlar",
+      "taken": "Olingan",
+      "won": "Oʻquvchi boʻldi",
+      "conversion": "Koʻrishlar → lidlar",
+      "medianTake": "Olishgacha median vaqt",
+      "minutes": "{minutes} daq"
     }
   },
   "bot": {
-    "linked": "{student} ulandi. {centre} toʻlov va dars eslatmalarini shu yerga yuboradi. Uzish uchun /stop yuboring.",
+    "linked": "{student}: chat ota-ona sifatida ulandi. {centre} toʻlov eslatmalari va ballar haqidagi xabarlarni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",
+    "linkedStudent": "{student}, chat ulandi. {centre} dars eslatmalari va ballaringizni shu yerga yuboradi. Buyruqlar: /points /top /rewards /language /stop",
     "unknownCode": "Bu havola yaroqsiz. {centre}dan yangisini soʻrang.",
-    "stopped": "Uzildi. {centre}dan boshqa xabar kelmaydi.",
+    "stopped": "Uzildi. Bu chatga {centre}dan boshqa xabar kelmaydi.",
     "nothingLinked": "Bu chatga hech narsa ulanmagan.",
-    "help": "Bu bot {centre} eslatmalarini yuboradi. Ulanish uchun markaz bergan shaxsiy havolani oching."
+    "notLinked": "Bu chat hali ulanmagan. {centre} bergan shaxsiy havolani oching.",
+    "help": "Bu bot {centre}dan eslatmalar va ballar haqida xabar yuboradi. Ulanish uchun markaz bergan shaxsiy havolani oching. Buyruqlar: /points /top /rewards /language /stop",
+    "chooseLanguage": "Shu chat tilini tanlang:",
+    "languageSet": "Tayyor. Endi bu chat oʻzbek tilida.",
+    "whichChild": "Qaysi farzand?",
+    "failed": "Xatolik yuz berdi. Bir daqiqadan soʻng urinib koʻring.",
+    "pointsCount": "{points} ball",
+    "goal": "“{reward}” uchun yana {points} ball kerak.",
+    "bonus": "Qoldirilmagan oy uchun bonus: +{points}.",
+    "points": {
+      "title": "{student}",
+      "balance": "Sarflash mumkin: {points}",
+      "month": "Shu oyda toʻplandi: {points}",
+      "centreRank": "Markaz: {rank}-oʻrin",
+      "groupRank": "{group}: {rank}-oʻrin ({points})",
+      "last": "Soʻnggilari:"
+    },
+    "top": {
+      "centre": "Markaz, shu oyning eng yaxshi 10 taligi",
+      "group": "{group}, eng yaxshi 5 talik",
+      "own": "{student}: {rank}-oʻrin ({points})",
+      "empty": "Shu oyda hali ball yoʻq."
+    },
+    "rewards": {
+      "title": "Sovgʻalar. {student}da sarflash uchun {points} ball bor.",
+      "empty": "Hozircha sovgʻalar yoʻq.",
+      "outOfStock": "tugagan",
+      "left": "{count} ta qoldi",
+      "request": "Soʻrash: {reward}"
+    },
+    "request": {
+      "confirm": "{student} uchun “{reward}” {points} ballga soʻralsinmi? Ballar darhol ushlab qolinadi.",
+      "yes": "Ha, soʻrash",
+      "no": "Yoʻq",
+      "done": "Soʻrov qabul qilindi: “{reward}”. {centre} qabulxonasidan oling.",
+      "cancelled": "Hech narsa soʻralmadi.",
+      "notEnough": "Bu sovgʻa uchun ball yetarli emas.",
+      "outOfStock": "Bu sovgʻa tugagan.",
+      "notOnOffer": "Bu sovgʻa endi taklif qilinmaydi.",
+      "failed": "Soʻrov oʻtmadi. Bir daqiqadan soʻng urinib koʻring."
+    },
+    "reward": {
+      "requested": "soʻrov qabul qilindi, {points} ball ushlab qolindi. Qabulxonadan oling.",
+      "given": "topshirildi. Tabriklaymiz!",
+      "rejected": "soʻrov rad etildi ({reason}). {points} ball qaytarildi."
+    },
+    "source": {
+      "attendance": "Davomat",
+      "perfect_month": "Qoldirilmagan oy",
+      "on_time_payment": "Oʻz vaqtida toʻlov",
+      "referral": "Doʻsti yozildi",
+      "teacher_award": "Oʻqituvchidan",
+      "teacher_deduction": "Oʻqituvchi oldi",
+      "owner_adjustment": "Oʻzgartirish",
+      "reward_hold": "Sovgʻa soʻraldi",
+      "reward_return": "Sovgʻa qaytarildi"
+    },
+    "commands": {
+      "points": "Ballarim va oʻrinlarim",
+      "top": "Oyning eng yaxshi oʻquvchilari",
+      "rewards": "Sovgʻalar va soʻrovlar",
+      "language": "Tilni oʻzgartirish",
+      "stop": "Bu chatni uzish"
+    }
   },
   "notify": {
     "send": {
@@ -1096,10 +1314,14 @@
   "settings": {
     "tabs": {
       "centre": "Markaz",
+      "rooms": "Xonalar",
       "users": "Foydalanuvchilar",
       "notifications": "Bildirishnomalar",
       "templates": "Shablonlar",
-      "profile": "Profil"
+      "profile": "Profil",
+      "points": "Ballar",
+      "sources": "Lid manbalari",
+      "integrations": "Integratsiyalar"
     },
     "saved": "Saqlandi",
     "centre": {
@@ -1133,7 +1355,14 @@
       "deactivated": "{name} oʻchirildi",
       "reactivated": "{name} yana kira oladi",
       "roleChanged": "{name}: roli «{role}» boʻldi",
-      "roleFor": "{name}: rol"
+      "roleFor": "{name}: rol",
+      "teacher": "Oʻqituvchi",
+      "teacherHint": "Faqat shu oʻqituvchining guruhlarini koʻradi: oʻquvchilar ismi, davomat va tangalar.",
+      "chooseTeacher": "Oʻqituvchini tanlang",
+      "noFreeTeachers": "Barcha oʻqituvchilarda kirish bor",
+      "linkTitle": "{name} qaysi oʻqituvchi?",
+      "linkBody": "Oʻqituvchi faqat shu oʻqituvchining guruhlarini koʻradi: oʻquvchilar ismi, davomat va tangalar. Ilovada boshqa hech narsa koʻrinmaydi.",
+      "makeTeacher": "Oʻqituvchi qilish"
     },
     "notifications": {
       "enabled": "Avtomatik eslatmalarni yuborish",
@@ -1187,7 +1416,19 @@
         "amount": "Summa",
         "due_date": "Toʻlov muddati",
         "time": "Dars vaqti",
-        "centre": "Markaz nomi"
+        "centre": "Markaz nomi",
+        "week_points": "Haftalik ball",
+        "month_points": "Oylik ball",
+        "points": "Ball",
+        "balance": "Sarflash mumkin boʻlgan ball",
+        "group_rank": "Guruhdagi oʻrin",
+        "centre_rank": "Markazdagi oʻrin",
+        "reason": "Sabab",
+        "reward": "Sovgʻa",
+        "points_needed": "Yana kerak ball",
+        "goal": "Keyingi sovgʻa (gap)",
+        "bonus": "Qoldirilmagan oy bonusi (gap)",
+        "update": "Soʻrov holati (gap)"
       }
     },
     "profile": {
@@ -1218,7 +1459,722 @@
       "notAllowed": "Sizga bu amalga ruxsat yoʻq.",
       "notConfigured": "Bu serverda hali sozlanmagan.",
       "notFound": "Bu endi mavjud emas.",
-      "generic": "Xatolik yuz berdi. Qayta urinib koʻring."
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "numberRequired": "Xona raqamini kiriting.",
+      "numberTaken": "Bu raqam boshqa xonada bor.",
+      "capacityInvalid": "1 dan 500 gacha sigʻim kiriting.",
+      "roomInUse": "Bu xonani hali guruh band qilgan.",
+      "capacityBelowGroup": "Bu xonadagi guruh bundan katta. Avval guruh sigʻimini kamaytiring.",
+      "teacherRequired": "Oʻqituvchini tanlang.",
+      "teacherTaken": "Bu oʻqituvchida kirish allaqachon bor."
+    },
+    "rooms": {
+      "add": "Xona qoʻshish",
+      "addTitle": "Yangi xona",
+      "editTitle": "{room} xonasi",
+      "number": "Raqami",
+      "numberHint": "Eshikda yozilgani: 3, 2A.",
+      "name": "Nomi",
+      "nameHint": "Ixtiyoriy. Raqamdan keyin koʻrsatiladi: 3 · Katta zal.",
+      "capacity": "Sigʻimi",
+      "capacityHint": "Nechta oʻquvchi sigʻadi. Bu xonadagi guruh bundan katta boʻla olmaydi.",
+      "active": "Yangi guruhlar uchun ochiq",
+      "activeHint": "Xonani saqlab qolib, yangi guruhlarga taklif qilmaslik uchun oʻchiring.",
+      "groups": "Guruhlar",
+      "noGroups": "Guruh yoʻq",
+      "status": "Holat",
+      "statusActive": "Faol",
+      "statusInactive": "Taklif qilinmaydi",
+      "edit": "Tahrirlash",
+      "editRoom": "Tahrirlash: {room} xonasi",
+      "archive": "Arxivlash",
+      "archiveRoom": "Arxivlash: {room} xonasi",
+      "archiveTitle": "{room} xonasi arxivlansinmi?",
+      "archiveBody": "Xona bu roʻyxatdan chiqadi va uni tanlab boʻlmaydi. Avval shu xonada oʻqigan guruhlar tarixida u saqlanib qoladi.",
+      "archiveBlocked": "Guruh band qilgan. Avval guruhni koʻchiring yoki yakunlang.",
+      "archived": "{room} xonasi arxivlandi",
+      "created": "{room} xonasi qoʻshildi",
+      "saved": "{room} xonasi saqlandi",
+      "empty": "Hali xonalar yoʻq. Birinchisini qoʻshing."
+    },
+    "alerts": {
+      "title": "Lidlar haqida xabarlar",
+      "about": "Formadan lid kelganda bu yerda va Telegramda xabar olasiz va uni istalgan joydan olishingiz mumkin.",
+      "linked": "Telegramingiz ulangan.",
+      "notLinked": "Telegramingiz hali ulanmagan.",
+      "link": "Telegramni ulash",
+      "linkAgain": "Boshqa Telegramni ulash",
+      "noBot": "Markazning Telegram boti hali ulanmagan (Sozlamalar → Bildirishnomalar).",
+      "unlink": "Uzish",
+      "unlinked": "Telegram uzildi",
+      "telegram": "Telegramdagi xabarlar",
+      "telegramHint": "Har bir yangi lid va 30 daqiqada hech kim olmasa bitta eslatma.",
+      "sound": "Yangi lidlar uchun ovoz",
+      "soundHint": "Lid kelganda shu brauzerda qisqa ovoz."
+    },
+    "sources": {
+      "about": "Sayt yoki lending lidlarni toʻgʻridan-toʻgʻri shu yerga yuborishi mumkin. Har biriga oʻz kalitini bering.",
+      "noHost": "Formalar manzili hali sozlanmagan (FORMS_HOST), shuning uchun qabul manzili nomaʼlum.",
+      "notReady": "Lid manbalari hali sozlanmagan: ular uchun maʼlumotlar bazasi migratsiyasi qoʻllanmagan.",
+      "empty": "Hali manbalar yoʻq. Saytingiz uchun kalit olish uchun manba qoʻshing.",
+      "add": "Manba qoʻshish",
+      "edit": "Tahrirlash",
+      "create": "Kalit yaratish",
+      "formHint": "Bu manbadan kelgan lidlar formadan kelgan lidlar kabi umumiy roʻyxatga tushadi.",
+      "name": "Nomi",
+      "namePlaceholder": "Masalan: Asosiy sayt",
+      "funnel": "Voronka",
+      "noFunnel": "Voronkasiz",
+      "funnelHint": "Ixtiyoriy: lidlari shu forma koʻrsatkichlarida hisoblanadi.",
+      "map": "Maydonlar mosligi",
+      "mapHint": "Odatiy nomlar sozlamasiz taniladi: name, ism, phone, tel, telefon va ularning ruscha yozilishi. Faqat saytingizda boshqacha nomlangan maydon uchun qator qoʻshing. Qolgan maydonlar lid javoblarida saqlanadi.",
+      "mapFrom": "Saytdagi maydon nomi, {n}-qator",
+      "mapFromPlaceholder": "maydon nomi",
+      "mapTo": "Qayerga saqlanadi, {n}-qator",
+      "mapRemove": "{n}-qatorni olib tashlash",
+      "mapAdd": "Maydon qoʻshish",
+      "mapCount": "{count, plural, =0 {Faqat odatiy nomlar} other {# ta oʻz maydoni}}",
+      "targets": {
+        "name": "Ism",
+        "phone": "Telefon",
+        "subject": "Fan",
+        "preferred_time": "Qulay vaqt",
+        "notes": "Izohlar",
+        "language": "Til",
+        "answer": "Javoblar",
+        "ignore": "Saqlanmasin"
+      },
+      "on": "Yoqilgan",
+      "off": "Oʻchirilgan",
+      "lastUsed": "Oxirgi foydalanish",
+      "never": "Hech qachon",
+      "requests": "Soʻrovlar",
+      "keyTitle": "Bu kalitni hozir saqlab oling",
+      "keyHint": "U faqat bir marta koʻrsatiladi. Yoʻqolsa, yangi manba qoʻshib, bunisini oʻchiring.",
+      "key": "Kalit",
+      "example": "Soʻrov namunasi",
+      "copyKey": "Kalitni nusxalash",
+      "copied": "Nusxalandi",
+      "keySaved": "Saqlab oldim",
+      "logTitle": "Soʻrovlar: {name}",
+      "logHint": "Oxirgi 100 ta soʻrov va har birining natijasi.",
+      "logLoading": "Yuklanmoqda…",
+      "logEmpty": "Hali soʻrovlar yoʻq.",
+      "openLead": "Lidni ochish",
+      "outcomes": {
+        "created": "Lid yaratildi",
+        "merged": "Qayta yuborilgan",
+        "test": "Ulanish tekshiruvi",
+        "spam": "Spam (keraksiz)",
+        "rate_limited": "Cheklovdan oshdi",
+        "invalid": "Rad etildi",
+        "error": "Xatolik"
+      }
+    },
+    "meta": {
+      "title": "Facebook va Instagram lid reklamalari",
+      "about": "Markazning Facebook sahifasini ulang — reklama formasidan kelgan har bir lid darhol umumiy roʻyxatga tushadi.",
+      "notReady": "Integratsiyalar hali sozlanmagan: ular uchun maʼlumotlar bazasi migratsiyasi qoʻllanmagan.",
+      "setup": "Sozlash",
+      "notConfigured": "Bu CRM uchun Meta ilovasi hali sozlanmagan. Avval serverga uchta sozlama qoʻshilishi kerak:",
+      "guide": "Qadamlar docs/META_SETUP.md faylida yozilgan.",
+      "connect": "Facebook orqali ulash",
+      "connectAnother": "Yana sahifa ulash",
+      "reconnect": "Qayta ulash",
+      "none": "Hali birorta sahifa ulanmagan.",
+      "pages": "Ulangan sahifalar",
+      "connected": "Ulangan",
+      "needsReconnect": "Qayta ulash kerak",
+      "reconnectHint": "Meta bu sahifaga ruxsatni endi qabul qilmayapti. Yangi lidlar kelmayapti. “Qayta ulash”ni bosing — oxirgi 48 soatdagi lidlar olinadi.",
+      "lastLead": "Oxirgi lid: {time}",
+      "noLeadsYet": "Hali lidlar yoʻq",
+      "refreshForms": "Formalarni yangilash",
+      "formsRefreshed": "Formalar roʻyxati yangilandi",
+      "forms": "Bu sahifaning lid formalari",
+      "noForms": "Bu sahifada hali lid formalari yoʻq. Ads Managerda forma yaratib, “Formalarni yangilash”ni bosing.",
+      "funnelOf": "“{form}” uchun voronka",
+      "choose": "Ulanadigan sahifalarni tanlang",
+      "chooseHint": "Bular Facebook akkauntingiz boshqaradigan sahifalar.",
+      "noPages": "Facebook birorta sahifa qaytarmadi. Qayta ulaning va Facebook oynasida sahifaga ruxsat bering.",
+      "alreadyConnected": "allaqachon ulangan",
+      "connectChosen": "Ulash",
+      "connectedToast": "{count, plural, other {# ta sahifa ulandi}}",
+      "webhookUrl": "Vebhuk manzili (Meta ilovasidagi Callback URL)",
+      "verifyToken": "Tekshiruv tokeni",
+      "verifyTokenSet": "Serverda oʻrnatilgan (META_VERIFY_TOKEN).",
+      "verifyTokenMissing": "Serverda hali oʻrnatilmagan (META_VERIFY_TOKEN): Meta vebhukni tekshira olmaydi.",
+      "redirectUri": "Qaytish manzili (Meta ilovasidagi Valid OAuth Redirect URI)",
+      "recent": "Meta yuborgan oxirgi soʻrovlar",
+      "testLead": "Sinov lidi",
+      "problems": {
+        "cancelled": "Ulash Facebookda bekor qilindi. Hech narsa oʻzgarmadi.",
+        "failed": "Facebook ulanishni yakunlamadi. Qayta urinib koʻring.",
+        "state": "Ulash boshqa oynada boshlangan yoki juda uzoq davom etdi. Qayta urinib koʻring.",
+        "not_configured": "Meta ilovasi serverda hali sozlanmagan."
+      }
     }
+  },
+  "myGroups": {
+    "title": "Guruhlarim",
+    "empty": "Sizda hali guruh yoʻq. Guruhlarni markaz egasi biriktiradi.",
+    "students": "{count} ta oʻquvchi",
+    "lessons": "Darslar",
+    "noLessons": "Oʻtgan hafta va keyingi ikki haftada dars yoʻq.",
+    "today": "Bugun",
+    "mark": "Davomatni belgilash",
+    "editMarks": "Davomatni oʻzgartirish",
+    "ranking": "Oʻquvchilar va tangalar",
+    "attendance": "Davomat",
+    "lessonCancelled": "Bu dars bekor qilingan.",
+    "taught": "Shu oyda {count} ta dars oʻtildi"
+  },
+  "coins": {
+    "column": "Tangalar",
+    "place": "Oʻrin",
+    "placeShort": "{place}-oʻrin",
+    "earned": "Shu guruhda yigʻilgan",
+    "balance": "Sarflash mumkin",
+    "count": "{count} ta tanga",
+    "give": "Tanga berish",
+    "spend": "Tanga sarflash",
+    "kind": "Berish yoki sarflash",
+    "howMany": "Nechta",
+    "reasonOptional": "Nima uchun (ixtiyoriy)",
+    "spentOn": "Nimaga sarflandi",
+    "giveTitle": "{name}ga tanga berish",
+    "giveHint": "Bir martada 10 tagacha. Tangalar guruhdagi oʻrinni belgilaydi, ularni maʼmuriyatda sarflash mumkin.",
+    "title": "{name}: tangalar",
+    "staffHint": "Tanga bering yoki oʻquvchidagi tangalarni sarflang: sovgʻa yoki tuzatish.",
+    "has": "Sarflash mumkin: {count} ta tanga",
+    "given": "{name}ga {count} ta tanga berildi",
+    "spent": "{name}: {count} ta tanga sarflandi",
+    "errors": {
+      "amountInvalid": "Chegaradan oshmaydigan butun son kiriting.",
+      "reasonRequired": "Tangalar nimaga sarflanganini yozing.",
+      "notEnough": "Oʻquvchida buncha tanga yoʻq.",
+      "notInGroup": "Oʻquvchi bu guruhda emas.",
+      "tooLong": "Matn juda uzun.",
+      "notFound": "Bu oʻquvchi endi mavjud emas.",
+      "notAllowed": "Sizga bunga ruxsat yoʻq.",
+      "generic": "Nimadir xato ketdi. Qayta urinib koʻring."
+    }
+  },
+  "points": {
+    "count": "{count} ball",
+    "giveTitle": "{name}ga ball berish",
+    "takeTitle": "{name}dan ball olish",
+    "giveHint": "Sababni tanlang yoki oʻz sababingiz bilan 1 dan {max} gacha ball bering.",
+    "takeHint": "Sababni tanlang yoki oʻz sababingiz bilan 1 dan {max} gacha ball oling. Oʻquvchi va ota-onaga xabar boradi.",
+    "custom": "Boshqa sabab",
+    "howMany": "Nechta",
+    "reason": "Sabab",
+    "give": "Ball berish",
+    "take": "Ball olish",
+    "giveTo": "{name}ga ball berish",
+    "takeFrom": "{name}dan ball olish",
+    "given": "{name}: +{count} ball",
+    "taken": "{name}: −{count} ball",
+    "takenReduced": "{name}da faqat {count} ball bor edi: hammasi olindi",
+    "nothingToTake": "{name}da olinadigan ball yoʻq",
+    "undo": "Bekor qilish",
+    "undone": "Bekor qilindi",
+    "friend": "Doʻsti: {name}",
+    "programmeOff": "Ballar dasturi sozlamalarda oʻchirilgan. Toʻplangan ballar saqlanadi.",
+    "errors": {
+      "programmeOff": "Ballar dasturi oʻchirilgan.",
+      "amountInvalid": "Limit doirasida butun son kiriting.",
+      "reasonRequired": "Sababni yozing.",
+      "dailyLimit": "Bu oʻquvchi uchun kunlik limit tugadi.",
+      "dailyLimitLeft": "Bu oʻquvchi uchun kunlik limit tugadi: bugun {count} ball qoldi.",
+      "notInGroup": "Oʻquvchi bu guruhda emas.",
+      "undoTooLate": "Endi bekor qilib boʻlmaydi.",
+      "notEnough": "Oʻquvchida buncha ball yoʻq.",
+      "valueInvalid": "Butun son kiriting.",
+      "valueRange": "{min} dan {max} gacha butun son kiriting.",
+      "labelRequired": "Nomini uchala tilda yozing.",
+      "tooLong": "Juda uzun.",
+      "notAllowed": "Sizda bunga ruxsat yoʻq.",
+      "notFound": "Topilmadi. Oʻchirilgan boʻlishi mumkin.",
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "nameRequired": "Nomini kiriting.",
+      "costInvalid": "1 dan 100 000 gacha narx kiriting.",
+      "stockInvalid": "Butun son kiriting yoki boʻsh qoldiring.",
+      "outOfStock": "Bu sovgʻa tugagan.",
+      "alreadyHandled": "Bu soʻrov allaqachon koʻrib chiqilgan.",
+      "notOnOffer": "Bu sovgʻa endi taklif qilinmaydi.",
+      "photoInvalid": "2 MB gacha JPG, PNG yoki WebP rasm tanlang."
+    },
+    "history": {
+      "title": "Tarix",
+      "subtitle": "Shu oyda siz bergan yoki olgan barcha ballar.",
+      "empty": "Shu oyda hali ball bermadingiz va olmadingiz.",
+      "undone": "Bekor qilindi"
+    },
+    "totals": {
+      "balance": "Sarflash mumkin",
+      "earnedThisMonth": "Shu oyda toʻplandi",
+      "earnedAllTime": "Jami toʻplandi"
+    },
+    "adjust": {
+      "action": "Ballarni oʻzgartirish",
+      "title": "{name} ballarini oʻzgartirish",
+      "hint": "Hozir sarflash mumkin: {count} ball. Sabab tarixda saqlanadi.",
+      "kind": "Qoʻshish yoki olish",
+      "add": "Qoʻshish",
+      "take": "Olish",
+      "done": "Ballar oʻzgartirildi"
+    },
+    "ledger": {
+      "empty": "Hali ball yoʻq.",
+      "date": "Sana",
+      "what": "Nima uchun",
+      "by": "Kim",
+      "points": "Ball",
+      "automatic": "Avtomatik"
+    },
+    "source": {
+      "attendance": "Davomat",
+      "perfect_month": "Qoldirilmagan oy",
+      "on_time_payment": "Oʻz vaqtida toʻlov",
+      "referral": "Doʻsti yozildi",
+      "teacher_award": "Oʻqituvchidan",
+      "teacher_deduction": "Oʻqituvchi oldi",
+      "owner_adjustment": "Rahbar oʻzgartirdi",
+      "reward_hold": "Sovgʻa soʻraldi",
+      "reward_return": "Sovgʻa qaytarildi"
+    },
+    "settings": {
+      "enabled": "Ballar dasturi",
+      "enabledHint": "Oʻchirilsa, yangi ball berilmaydi. Toʻplangan ballar saqlanadi.",
+      "values": "Nima uchun necha ball",
+      "valuesHint": "Yangi qiymat shu paytdan amal qiladi, berilgan ballar oʻzgarmaydi.",
+      "limits": "Oʻqituvchilar uchun limitlar",
+      "limitsHint": "Oʻqituvchi qancha ball berishi yoki olishi mumkin.",
+      "present": "Darsda qatnashdi",
+      "late": "Darsga kechikdi",
+      "perfect_month": "Qoldirilmagan oy",
+      "perfect_month_min_lessons": "Qoldirilmagan oy uchun darslar soni",
+      "on_time": "Oʻz vaqtida toʻlov",
+      "referral": "Doʻsti yozildi",
+      "max_per_action": "Bir martada eng koʻp ball",
+      "teacher_daily_cap": "Bir oʻquvchiga kuniga eng koʻp ball"
+    },
+    "presets": {
+      "title": "Oʻqituvchilar uchun sabablar",
+      "hint": "Oʻqituvchilar ball berganda yoki olganda shu roʻyxatdan tanlaydi. Bir martalik limitdan qimmat sabablar taklif qilinmaydi.",
+      "kind": "Turi",
+      "kinds": {
+        "award": "Ragʻbatlar",
+        "deduction": "Jarimalar"
+      },
+      "points": "Ball",
+      "label": {
+        "uz": "Oʻzbekcha nomi",
+        "ru": "Ruscha nomi",
+        "en": "Inglizcha nomi"
+      },
+      "active": "Oʻqituvchilarga taklif qilinadi",
+      "off": "Oʻchiq",
+      "edit": "Tahrirlash: {name}",
+      "add": {
+        "award": "Ragʻbat qoʻshish",
+        "deduction": "Jarima qoʻshish"
+      },
+      "editTitle": "Sababni tahrirlash",
+      "newTitle": "Yangi sabab",
+      "saved": "Sabab saqlandi",
+      "removed": "Sabab oʻchirildi",
+      "remove": "Oʻchirish"
+    },
+    "board": {
+      "title": "Reyting",
+      "subtitle": "Toʻplangan ballar. Ballarni sovgʻaga sarflash oʻrinni pasaytirmaydi.",
+      "scope": "Markaz yoki guruh",
+      "centre": "Butun markaz",
+      "period": "Davr",
+      "periods": {
+        "month": "Shu oy",
+        "all": "Butun davr"
+      },
+      "place": "Oʻrin",
+      "hidden": "TVda yashirilgan",
+      "empty": "Bu yerda hali oʻquvchilar yoʻq."
+    },
+    "hide": {
+      "label": "Ochiq reytinglarda yashirish",
+      "hint": "Oʻquvchi TV ekranida va botdagi eng yaxshilar roʻyxatida koʻrinmaydi. Xodimlar uning oʻrnini koʻradi.",
+      "hidden": "TVda yashirildi",
+      "shown": "TVda yana koʻrinadi"
+    },
+    "tv": {
+      "title": "TV ekrani",
+      "hint": "Bu havolani markazdagi televizorda oching. Kirish shart emas, ism va familiyaning bosh harfi koʻrsatiladi. Havolasi bor har kim koʻra oladi.",
+      "language": "TV tili",
+      "languageSaved": "TV tili saqlandi",
+      "link": "TV havolasi",
+      "copy": "Havoladan nusxa olish",
+      "copied": "Havoladan nusxa olindi",
+      "regenerate": "Yangi havola",
+      "regenerateTitle": "Yangi TV havolasi yaratilsinmi?",
+      "regenerateBody": "Eski havola darhol ishlamay qoladi. Yangi havolani har bir televizorda oching.",
+      "regenerated": "Yangi havola yaratildi"
+    },
+    "tabs": {
+      "leaderboard": "Reyting",
+      "rewards": "Sovgʻalar",
+      "requests": "Soʻrovlar"
+    },
+    "rewards": {
+      "add": "Sovgʻa qoʻshish",
+      "edit": "Tahrirlash",
+      "empty": "Hali sovgʻalar yoʻq.",
+      "off": "Oʻchiq",
+      "unlimited": "Cheklanmagan",
+      "outOfStock": "Tugagan",
+      "left": "{count} ta qoldi",
+      "newTitle": "Yangi sovgʻa",
+      "editTitle": "Sovgʻani tahrirlash",
+      "name": "Nomi",
+      "description": "Tavsifi",
+      "cost": "Narxi, ball",
+      "stock": "Mavjud soni",
+      "stockHint": "Cheklanmagan boʻlsa, boʻsh qoldiring.",
+      "photo": "Rasm",
+      "photoHint": "JPG, PNG yoki WebP, 2 MB gacha. Yangi rasm eskisini almashtiradi.",
+      "active": "Taklif qilinadi",
+      "saved": "Sovgʻa saqlandi",
+      "archived": "Sovgʻa arxivlandi",
+      "archive": "Arxivlash"
+    },
+    "requests": {
+      "empty": "Hali sovgʻa soʻrovlari yoʻq.",
+      "date": "Sana",
+      "student": "Oʻquvchi",
+      "reward": "Sovgʻa",
+      "cost": "Ball",
+      "from": "Qayerdan",
+      "status": "Holat",
+      "via": {
+        "bot": "Bot",
+        "desk": "Qabulxona"
+      },
+      "statuses": {
+        "requested": "Kutmoqda",
+        "given": "Berildi",
+        "rejected": "Rad etildi",
+        "cancelled": "Bekor qilindi"
+      },
+      "give": "Berish",
+      "reject": "Rad etish",
+      "given": "{name}: sovgʻa berildi",
+      "rejected": "{name}: soʻrov rad etildi, ballar qaytarildi",
+      "rejectTitle": "{name} soʻrovi rad etilsinmi?",
+      "rejectBody": "Oʻquvchiga {count} ball qaytadi, sovgʻa esa zaxiraga qaytadi."
+    },
+    "redeem": {
+      "open": "Sovgʻa berish",
+      "title": "{name} uchun sovgʻa",
+      "hint": "Sarflash mumkin: {count} ball. Ballar darhol ushlab qolinadi; sovgʻani Ballar → Soʻrovlar boʻlimida bering.",
+      "action": "Almashtirish",
+      "short": "Yana {count} ball kerak",
+      "done": "{reward}: soʻrov yaratildi, ballar ushlab qolindi"
+    }
+  },
+  "tv": {
+    "centreTitle": "Shu oyning eng yaxshi 10 taligi",
+    "groupSubtitle": "Eng yaxshi 5 talik · {month}",
+    "updated": "Yangilandi: {time}",
+    "empty": "Shu oyda hali ball yoʻq"
+  },
+  "publicForm": {
+    "errors": {
+      "required": "Bu maydonni toʻldiring.",
+      "phone": "Telefon raqamini kiriting, masalan +998 90 123 45 67.",
+      "email": "Email manzilini kiriting, masalan name@example.com.",
+      "number": "Son kiriting.",
+      "date": "Sanani tanlang.",
+      "choice": "Variantlardan birini tanlang.",
+      "too_long": "Javob juda uzun."
+    },
+    "summary": "Belgilangan maydonlarni tekshiring.",
+    "expired": "Sahifa juda uzoq ochiq turdi. Formani qayta yuboring.",
+    "rateLimited": "Soʻrovlar juda koʻp. Keyinroq urinib koʻring.",
+    "failed": "Xatolik yuz berdi. Qayta urinib koʻring.",
+    "choose": "Tanlang…",
+    "required": "majburiy",
+    "language": "Til",
+    "leaveEmpty": "Bu maydonni boʻsh qoldiring"
+  },
+  "forms": {
+    "tabs": {
+      "label": "Lidlar boʻlimlari",
+      "leads": "Lidlar",
+      "forms": "Formalar"
+    },
+    "status": {
+      "draft": "Qoralama",
+      "live": "Ishlayapti",
+      "closed": "Yopilgan"
+    },
+    "list": {
+      "new": "Yangi forma",
+      "notReady": "Formalar hali sozlanmagan: formalar uchun maʼlumotlar bazasi migratsiyalari qoʻllanmagan.",
+      "empty": "Hali formalar yoʻq. Birinchisini shablondan yarating.",
+      "period": "Koʻrsatkichlar oxirgi 30 kun uchun.",
+      "unpublished": "Eʼlon qilinmagan oʻzgarishlar",
+      "copy": "Nusxalash",
+      "copied": "Nusxalandi",
+      "actions": "{name} uchun amallar",
+      "edit": "Tahrirlash",
+      "duplicate": "Nusxa yaratish",
+      "archive": "Arxivlash",
+      "duplicated": "“{name}” nusxasi yaratildi",
+      "archived": "“{name}” arxivlandi",
+      "views": "Koʻrishlar",
+      "leads": "Lidlar",
+      "won": "Oʻquvchi boʻldi",
+      "conversion": "Koʻrishlar → lidlar",
+      "editedBy": "Oxirgi tahrir: {name}, {date}",
+      "edited": "Oxirgi tahrir: {date}",
+      "archiveTitle": "“{name}” arxivlansinmi?",
+      "archiveHint": "Forma roʻyxatdan olib tashlanadi va sahifasi ishlamay qoladi. U orqali kelgan lidlar saqlanadi.",
+      "cancel": "Bekor qilish"
+    },
+    "new": {
+      "title": "Yangi forma",
+      "hint": "Shablondan yoki boʻsh formadan boshlang. Eʼlon qilmaguningizcha u qoralama boʻlib turadi.",
+      "blank": {
+        "name": "Boʻsh forma",
+        "about": "Ism, telefon va rozilik."
+      },
+      "course_signup": {
+        "name": "Kursga yozilish",
+        "about": "Daraja, qulay vaqt va izoh."
+      },
+      "free_trial": {
+        "name": "Bepul sinov darsi",
+        "about": "Yosh, kun va qulay vaqt."
+      },
+      "consultation": {
+        "name": "Maslahat qoʻngʻirogʻi",
+        "about": "Nima qiziqtiradi va qachon qoʻngʻiroq qilish."
+      }
+    },
+    "errors": {
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "notAllowed": "Bu amalga ruxsatingiz yoʻq.",
+      "notFound": "Bu forma endi mavjud emas.",
+      "invalid": "Formani shu holatda saqlab boʻlmadi.",
+      "incomplete": "Forma eʼlon qilishga tayyor emas. Har bir tanlovda variantlar, yoʻnaltirishda esa manzil borligini tekshiring.",
+      "consentOwner": "Rozilik belgisisiz formani faqat egasi eʼlon qila oladi.",
+      "slugFormat": "2–60 ta kichik lotin harfi, raqam va chiziqchadan foydalaning.",
+      "slugReserved": "Bu manzil band qilingan. Boshqasini tanlang.",
+      "slugTaken": "Bu manzil boshqa formada band.",
+      "fileInvalid": "5 MB gacha PNG, JPG yoki WebP rasm tanlang.",
+      "saveFailed": "Qoralama saqlanmadi, shuning uchun hech narsa eʼlon qilinmadi."
+    },
+    "editor": {
+      "textLanguage": "Bu matnlar tili",
+      "missingTranslation": "Tarjima yoʻq",
+      "back": "Formalarga qaytish",
+      "rename": "Nomini oʻzgartirish",
+      "untitled": "Nomsiz forma",
+      "save": {
+        "saved": "Saqlandi",
+        "dirty": "Saqlanmoqda…",
+        "saving": "Saqlanmoqda…",
+        "error": "Saqlanmadi"
+      },
+      "undo": "Bekor qilish",
+      "redo": "Qaytarish",
+      "previewLanguage": "Koʻrib chiqish tili",
+      "screenSize": "Ekran oʻlchami",
+      "device": {
+        "phone": "Telefon {width}",
+        "tablet": "Planshet {width}",
+        "desktop": "Kompyuter {width}"
+      },
+      "openLive": "Formani ochish",
+      "noFormsHost": "Formalar manzili hali sozlanmagan.",
+      "notPublished": "Avval formani eʼlon qiling.",
+      "publish": "Eʼlon qilish",
+      "publishChanges": "Oʻzgarishlarni eʼlon qilish",
+      "publishing": "Eʼlon qilinmoqda…",
+      "more": "Yana",
+      "close": "Formani yopish",
+      "reopen": "Formani qayta ochish",
+      "published": "Eʼlon qilindi: {n}-versiya ishlayapti",
+      "closedToast": "Forma yopildi. Tashrif buyuruvchilar yopilganlik xabarini koʻradi.",
+      "reopenedToast": "Forma yana ishlayapti.",
+      "alsoEditing": "{count, plural, one {{names} ham tahrirlayapti} other {{names} ham tahrirlashmoqda}}. Keyingi saqlash ustun keladi.",
+      "panel": "Forma sozlamalari",
+      "tabs": {
+        "fields": "Maydonlar",
+        "design": "Dizayn",
+        "settings": "Sozlamalar"
+      },
+      "openOnComputer": "Kompyuterda oching",
+      "openOnComputerHint": "Forma muharriri uchun kengroq ekran kerak — kamida 1024 px."
+    },
+    "preview": {
+      "title": "Koʻrib chiqish",
+      "size": "{width} px · {percent}%",
+      "showThanks": "Rahmat ekranini koʻrsatish"
+    },
+    "fields": {
+      "list": "Forma maydonlari",
+      "add": "Maydon qoʻshish",
+      "addTitle": "Maydon qoʻshish",
+      "addHint": "Nima soʻrash yoki koʻrsatishni tanlang.",
+      "textsCard": "Sarlavha va tugma",
+      "title": "Sarlavha",
+      "subtitle": "Kichik sarlavha",
+      "button": "Tugma matni",
+      "drag": "{name} joyini oʻzgartirish",
+      "delete": "{name} ni oʻchirish",
+      "locked": "Bu maydon har bir formada bor. Nomini oʻzgartirish mumkin, oʻchirib boʻlmaydi.",
+      "consentOwner": "Rozilik belgisini faqat egasi olib tashlay oladi.",
+      "hiddenName": "Xodimlar uchun nom",
+      "hiddenValue": "Qiymat",
+      "hiddenHint": "Tashrif buyuruvchilarga koʻrinmaydi; har bir lid bilan saqlanadi, masalan kampaniya nomi.",
+      "image": "Rasm",
+      "consentText": "Rozilik matni",
+      "text": "Matn",
+      "label": "Nomi",
+      "placeholder": "Maydon ichidagi koʻrsatma",
+      "help": "Izoh matni",
+      "consentHint": "Havola shunday yoziladi: [matn](https://manzil).",
+      "shownAs": "Koʻrinishi",
+      "asButtons": "Tanlov tugmalari",
+      "asDropdown": "Ochiladigan roʻyxat",
+      "required": "Majburiy",
+      "width": "Kenglik",
+      "widthFull": "Toʻliq",
+      "widthHalf": "Yarim",
+      "mapsTo": "Qayerga saqlanadi",
+      "options": "Variantlar",
+      "optionN": "{n}-variant",
+      "removeOption": "{n}-variantni olib tashlash",
+      "addOption": "Variant qoʻshish"
+    },
+    "types": {
+      "short_text": "Qisqa matn",
+      "long_text": "Uzun matn",
+      "phone": "Telefon",
+      "email": "Elektron pochta",
+      "number": "Son",
+      "date": "Sana",
+      "radio": "Bitta tanlov",
+      "dropdown": "Ochiladigan roʻyxat",
+      "multiple_choice": "Bir nechta tanlov",
+      "consent": "Rozilik",
+      "hidden": "Yashirin qiymat",
+      "heading": "Sarlavha",
+      "paragraph": "Matn qismi",
+      "image": "Rasm"
+    },
+    "mapsTo": {
+      "custom": "Lid javoblari",
+      "subject": "Fan",
+      "preferred_time": "Qulay vaqt",
+      "notes": "Izohlar",
+      "name": "Ism",
+      "phone": "Telefon"
+    },
+    "design": {
+      "pickColour": "Rang tanlash: {name}",
+      "swatches": "Tayyor ranglar: {name}",
+      "lowContrast": "Oʻqish qiyin: kontrast {ratio}:1, kamida 4.5:1 boʻlishi kerak.",
+      "uploading": "Yuklanmoqda…",
+      "replace": "Almashtirish",
+      "upload": "Yuklash",
+      "remove": "Olib tashlash: {name}",
+      "uploadHint": "PNG, JPG yoki WebP, 5 MB gacha.",
+      "logo": "Logotip",
+      "logoFile": "Logotip rasmi",
+      "logoPosition": "Logotip joylashuvi",
+      "positionTop": "Tepada",
+      "positionLeft": "Chapda",
+      "background": "Fon",
+      "backgroundColour": "Fon rangi",
+      "backgroundImage": "Fon rasmi",
+      "overlay": "Rasmni qoraytirish: {percent}%",
+      "colours": "Ranglar",
+      "text": "Sahifa matni",
+      "card": "Karta",
+      "cardText": "Karta matni",
+      "button": "Tugma",
+      "buttonText": "Tugma matni",
+      "font": "Shrift",
+      "fontSample": "Yozilish 123",
+      "shape": "Shakl",
+      "corners": "Burchaklar",
+      "square": "Toʻgʻri",
+      "rounded": "Yumaloq",
+      "pill": "Kapsula",
+      "layout": "Joylashuv",
+      "layoutCard": "Markazdagi karta",
+      "layoutSplit": "Ikki ustun"
+    },
+    "settings": {
+      "general": "Asosiy",
+      "name": "Forma nomi",
+      "address": "Manzil",
+      "saveAddress": "Manzilni saqlash",
+      "addressHint": "Kichik lotin harflari, raqamlar va chiziqchalar.",
+      "addressWarning": "Forma eʼlon qilingan. Manzil oʻzgarsa, ulashilgan havolalar ishlamay qoladi.",
+      "addressSaved": "Manzil saqlandi",
+      "subject": "Fan",
+      "subjectHint": "Bu formadan kelgan har bir lidga avtomatik qoʻyiladi.",
+      "sourceTag": "Manba belgisi",
+      "sourceTagHint": "Masalan: Kuzgi TOPIK reklamasi.",
+      "languages": "Tillar",
+      "languagesHint": "Tashrif buyuruvchilar yoqilgan tillar orasida almashtira oladi.",
+      "defaultLanguage": "Asosiy til",
+      "afterSubmit": "Yuborilgandan keyin",
+      "showMessage": "Rahmat ekrani",
+      "redirect": "Yoʻnaltirish",
+      "redirectUrl": "Qayerga yoʻnaltirish",
+      "redirectInvalid": "https:// bilan boshlanadigan toʻliq manzil kiriting",
+      "thankYouTitle": "Rahmat sarlavhasi",
+      "thankYouText": "Rahmat matni",
+      "closed": "Yopilgan forma",
+      "closedHint": "Forma yopilgach, uning oʻrnida koʻrsatiladi.",
+      "closedText": "Yopilganlik xabari",
+      "share": "Havola koʻrinishi",
+      "shareHint": "Havola ulashilganda Telegram va boshqa ilovalar koʻrsatadigan maʼlumot.",
+      "pageTitle": "Sahifa sarlavhasi",
+      "description": "Tavsif",
+      "shareImage": "Havola rasmi",
+      "embed": "Joylashtirish kodi",
+      "embedHint": "Uni boshqa saytga joylang. Ramka formaga oʻzi moslashadi.",
+      "embedUnavailable": "Formalar manzili sozlangach mavjud boʻladi.",
+      "copyCode": "Kodni nusxalash"
+    },
+    "history": {
+      "title": "Versiyalar tarixi",
+      "hint": "“Tiklash” versiyani qoralamaga yuklaydi. Tashrif buyuruvchilar uni eʼlon qilinganidan keyin koʻradi.",
+      "loading": "Yuklanmoqda…",
+      "empty": "Hali hech narsa eʼlon qilinmagan.",
+      "version": "{n}-versiya",
+      "live": "hozir eʼlon qilingan",
+      "restore": "Tiklash",
+      "restored": "{n}-versiya qoralamaga yuklandi"
+    }
+  },
+  "staffBot": {
+    "newLead": "🆕 Yangi lid",
+    "reminder": "⏰ Hali ham kutmoqda: {minutes} daq",
+    "form": "Forma: {form}",
+    "open": "CRMda ochish",
+    "take": "Olish",
+    "taken": "✅ Lid sizniki: {name}, {phone}",
+    "takenBy": "Bu lidni {name} allaqachon olgan.",
+    "notWaiting": "Bu lid endi kutmayapti.",
+    "gone": "Bu lid endi mavjud emas.",
+    "linked": "{name}, {centre} lidlari haqida xabarlar shu yerga keladi. Profilda yoki /stop buyrugʻi bilan oʻchirish mumkin.",
+    "unknownCode": "Bu havola ishlamaydi. {centre} CRMida Profilni ochib, “Telegramni ulash” tugmasini qayta bosing.",
+    "notLinked": "Lidni faqat {centre} xodimlari olishi mumkin. Avval Profilda Telegramni ulang.",
+    "metaReconnect": "⚠️ Facebookdan lidlar kelmay qoldi: “{page}” sahifasini qayta ulash kerak. CRMda Sozlamalar → Integratsiyalar boʻlimini ochib, “Qayta ulash”ni bosing."
   }
 }

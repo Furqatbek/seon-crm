@@ -8,14 +8,16 @@ import { AttendanceTab, type AttendanceGroup } from "@/components/students/atten
 import { LedgerTab } from "@/components/students/ledger-tab";
 import { MessagesTab } from "@/components/students/messages-tab";
 import { OverviewTab } from "@/components/students/overview-tab";
+import { PointsTab } from "@/components/students/points-tab";
 import { StudentScreen } from "@/components/students/student-screen";
 import { RecordSkeleton } from "@/components/ui/skeleton";
 import { routing } from "@/i18n/routing";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, type UserRole } from "@/lib/auth";
 import { attendanceRate } from "@/lib/domain/attendance";
 import { balanceState, buildLedger } from "@/lib/domain/ledger";
 import { tashkentDate } from "@/lib/domain/time";
 import { getOpenGroups } from "@/lib/groups/queries";
+import { getPointsSettings, getRewards, getStudentPoints } from "@/lib/points/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
 import {
   getCentreBilling,
@@ -65,6 +67,24 @@ async function Attendance({
     .filter((group) => group.lessons.length > 0);
 
   return <AttendanceTab month={month} currentMonth={currentMonth} groups={groups} />;
+}
+
+async function Points({ student, role }: { student: StudentDetail; role: UserRole }) {
+  const [points, settings, rewards] = await Promise.all([
+    getStudentPoints(student.id),
+    getPointsSettings(),
+    getRewards({ activeOnly: true }),
+  ]);
+  return (
+    <PointsTab
+      studentId={student.id}
+      studentName={student.full_name}
+      points={points}
+      rewards={rewards}
+      role={role}
+      enabled={settings.enabled}
+    />
+  );
 }
 
 async function Messages({ id }: { id: string }) {
@@ -122,6 +142,7 @@ async function Student({ params, searchParams }: Props) {
           currentMonth={currentMonth}
         />
       ) : null}
+      {tab === "points" ? <Points student={student} role={user.role} /> : null}
       {tab === "messages" ? <Messages id={student.id} /> : null}
     </StudentScreen>
   );

@@ -40,9 +40,9 @@ test("the owner's report matches Finance, changes with the period and exports CS
   await signIn(page, "owner");
   await expect(page).toHaveURL(/\/en\/reports$/);
 
-  // ── Eight KPIs and six charts ──
+  // ── Eight KPIs, six charts and the leads-by-form table ──
   await expect(page.locator('[data-slot="kpi-row"] [data-slot="kpi-card"]')).toHaveCount(8);
-  await expect(page.locator("[data-chart]")).toHaveCount(6);
+  await expect(page.locator("[data-chart]")).toHaveCount(7);
   for (const title of [
     "Collected vs expenses by month",
     "Revenue",
@@ -175,8 +175,8 @@ test("a manager sees only the lead, attendance and student-count parts", async (
   for (const name of ["collected", "costs", "profit", "total-debt"]) {
     await expect(page.locator(`[data-kpi="${name}"]`)).toHaveCount(0);
   }
-  await expect(page.locator("[data-chart]")).toHaveCount(3);
-  for (const id of ["funnel", "students", "attendance"]) await expect(chart(page, id)).toBeVisible();
+  await expect(page.locator("[data-chart]")).toHaveCount(4);
+  for (const id of ["funnel", "forms", "students", "attendance"]) await expect(chart(page, id)).toBeVisible();
   for (const id of ["money", "revenue", "debt-age"]) await expect(chart(page, id)).toHaveCount(0);
 
   // No money anywhere on the page.

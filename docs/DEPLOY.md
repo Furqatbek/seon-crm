@@ -173,9 +173,16 @@ Check: the Site URL and the redirect URL show your production domain.
 ## 5. Deploy the app on Vercel
 
 1. In Vercel, **Add New → Project** and import the GitHub repository. The
-   framework is detected as Next.js; leave the build settings as they are.
+   framework must show as **Next.js**; leave the build settings as they are.
+   (If the project was imported while the branch held no app, the preset is
+   saved as "Other" and every page answers 404: set **Framework Preset** to
+   Next.js in the project settings and redeploy.)
 2. Before the first deploy, add the **environment variables** for the
    **Production** environment:
+
+   The two `NEXT_PUBLIC_…` values are public by design (the browser needs
+   them): save them as ordinary values, not as secrets, so you can read them
+   back and check them.
 
    | Variable | Value |
    | --- | --- |
@@ -196,7 +203,12 @@ Check: the Site URL and the redirect URL show your production domain.
    If you use Vercel preview deployments, do not give the Preview environment
    the production Supabase keys: point previews at the dev project or leave
    them without keys.
-3. Choose the production branch and press **Deploy**.
+3. Set the **Function Region** (project Settings → Functions) to the region
+   closest to your Supabase project's region. Every page talks to the
+   database from the server; if the app runs on another continent than the
+   database, every page is seconds slower. Vercel's default is the US East
+   Coast.
+4. Choose the production branch and press **Deploy**.
 
 Check: the deployment finishes, and its `*.vercel.app` address shows the
 sign-in page.
@@ -286,9 +298,15 @@ There is no public registration, so the first owner is created by hand.
    day. The name appears on the sign-in page, receipts and messages.
 6. Invite everyone else from **Settings → Users**. Do not create further
    accounts by hand.
+7. Teachers get the role **Teacher**, never Manager: a manager sees every
+   student, phone and payment. A teacher login is linked to one teacher from
+   the Teachers list (add the teacher there first) and shows only that
+   teacher's groups, with attendance and coins. An existing user is changed in
+   the Role column of the same screen.
 
 Check: the owner sees all six sections plus Settings; an invited manager gets
-an email, sets a password and lands on Groups.
+an email, sets a password and lands on Groups; a teacher lands on My groups
+and has nothing else in the sidebar.
 
 ---
 

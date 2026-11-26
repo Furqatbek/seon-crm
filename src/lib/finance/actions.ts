@@ -287,6 +287,29 @@ export async function addExpense(input: unknown): Promise<FinanceResult> {
   return { ok: true };
 }
 
+/** Correct an expense entered by mistake. Owner only. */
+export async function updateExpense(id: unknown, input: unknown): Promise<FinanceResult> {
+  const expenseId = z.uuid().safeParse(id);
+  if (!expenseId.success) return { ok: false, error: "notFound" };
+  const parsed = expenseSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  if (parsed.data.spent_on > tashkentDate(new Date())) return { ok: false, error: "dateInFuture" };
+
+  const { data, error } = await ctx.supabase
+    .from("expenses")
+    .update(parsed.data)
+    .eq("id", expenseId.data)
+    .is("archived_at", null)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+
+  refresh();
+  return { ok: true };
+}
+
 /** Calculate: creates or refreshes the month's draft payouts. Owner only. */
 export async function calculatePayouts(monthInput: unknown): Promise<FinanceResult<{ count: number }>> {
   const month = monthSchema.safeParse(monthInput);
@@ -313,6 +336,7 @@ export async function savePayoutAdjustment(input: unknown): Promise<FinanceResul
     .update({ bonus: parsed.data.bonus, deduction: parsed.data.deduction, note: parsed.data.note || null })
     .eq("id", parsed.data.payout_id)
     .eq("status", "draft")
+    .is("archived_at", null)
     .select("id");
   if (error) return failure(error);
   if (data.length === 0) return { ok: false, error: "alreadyPaid" };
@@ -336,6 +360,7 @@ export async function markPayoutPaid(input: unknown): Promise<FinanceResult> {
     .update({ status: "paid", paid_at: new Date().toISOString(), paid_by: ctx.user.id })
     .eq("id", parsed.data.payout_id)
     .eq("status", "draft")
+    .is("archived_at", null)
     .eq("final_amount", parsed.data.expected)
     .select("id");
   if (error) return failure(error);
@@ -343,4 +368,60 @@ export async function markPayoutPaid(input: unknown): Promise<FinanceResult> {
   // Either way the list shows the payout as it now is.
   refresh();
   return data.length === 0 ? { ok: false, error: "payoutChanged" } : { ok: true };
+}
+
+// ── Archive: the owner removes a record that should not have been entered ──
+
+const ARCHIVE_TABLES = {
+  payment: "payments",
+  charge: "charges",
+  expense: "expenses",
+  payout: "teacher_payouts",
+} as const;
+export type ArchiveKind = keyof typeof ARCHIVE_TABLES;
+
+const archiveSchema = z.object({ kind: z.enum(["payment", "charge", "expense", "payout"]), id: z.uuid() });
+
+/**
+ * Archives one finance record. Nothing is deleted: the row is marked and
+ * drops out of every list, balance, total and report. A payment is voided as
+ * it is archived; an archived monthly fee or payout can be generated again.
+ * Owner only; the database refuses anyone else.
+ */
+export async function archiveFinanceRecord(input: unknown): Promise<FinanceResult> {
+  const parsed = archiveSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "notFound" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from(ARCHIVE_TABLES[parsed.data.kind])
+    .update({ archived_at: new Date().toISOString() })
+    .eq("id", parsed.data.id)
+    .is("archived_at", null)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+
+  refresh();
+  return { ok: true };
+}
+
+/** Archives every charge of a billing month, so the month can be generated again. Owner only. */
+export async function archiveMonthCharges(monthInput: unknown): Promise<FinanceResult<{ count: number }>> {
+  const month = monthSchema.safeParse(monthInput);
+  if (!month.success) return { ok: false, error: "dateInvalid" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("charges")
+    .update({ archived_at: new Date().toISOString() })
+    .eq("billing_month", `${month.data}-01`)
+    .is("archived_at", null)
+    .select("id");
+  if (error) return failure(error);
+
+  refresh();
+  return { ok: true, data: { count: data.length } };
 }

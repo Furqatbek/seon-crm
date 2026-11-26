@@ -4,8 +4,10 @@ import { refresh } from "next/cache";
 import { z } from "zod";
 
 import { appUrl } from "@/lib/app-url";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, getSignedInUser } from "@/lib/auth";
+import { generateKey } from "@/lib/intake/keys";
 import { getProviders } from "@/lib/notify/store";
+import { botCommands } from "@/lib/notify/bot-texts";
 import { connectWebhook } from "@/lib/notify/telegram-admin";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -15,12 +17,14 @@ import {
   notificationsSchema,
   passwordSchema,
   profileSchema,
+  roomSchema,
   templateSchema,
   testSmsSchema,
   userActiveSchema,
   userRoleSchema,
   type SettingsErrorKey,
   type SettingsResult,
+  leadSourceSchema,
 } from "@/lib/validation/settings";
 
 // Everything here is written as the signed-in user, so Row Level Security and
@@ -30,6 +34,10 @@ import {
 const ERRORS: Record<string, SettingsErrorKey> = {
   "42501": "notAllowed",
   EU001: "lastOwner",
+  // Rooms: supabase/migrations/20261116100000_rooms.sql.
+  "23505": "numberTaken",
+  EM003: "roomInUse",
+  EM004: "capacityBelowGroup",
 };
 
 type Failure = { ok: false; error: SettingsErrorKey; detail?: string };
@@ -47,6 +55,16 @@ async function session() {
   return supabase && user ? { supabase, user } : null;
 }
 
+/** Anyone signed in, a teacher included: for their own profile only. */
+async function ownSession() {
+  const [supabase, user] = await Promise.all([createClient(), getSignedInUser()]);
+  return supabase && user ? { supabase, user } : null;
+}
+
+/** One login per teacher: the unique index on profiles.teacher_id. */
+const linkFailure = (error: { code?: string; message?: string }): Failure =>
+  error.code === "23505" ? { ok: false, error: "teacherTaken" } : failure(error);
+
 async function ownerSession() {
   const ctx = await session();
   return ctx && ctx.user.role === "owner" ? ctx : null;
@@ -63,6 +81,61 @@ export async function saveCentre(input: unknown): Promise<SettingsResult> {
   const { data, error } = await ctx.supabase.from("centre_settings").update(parsed.data).eq("singleton", true).select("id");
   if (error) return failure(error);
   if (data.length === 0) return { ok: false, error: "notAllowed" };
+  refresh();
+  return { ok: true };
+}
+
+// ── Rooms ──
+
+/** Add room. Owner only; the database refuses anyone else. */
+export async function createRoom(input: unknown): Promise<SettingsResult> {
+  const parsed = roomSchema.safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { error } = await ctx.supabase.from("rooms").insert(parsed.data);
+  if (error) return failure(error);
+  refresh();
+  return { ok: true };
+}
+
+/** Edit room. A room cannot be made smaller than a group that uses it. */
+export async function updateRoom(id: unknown, input: unknown): Promise<SettingsResult> {
+  const roomId = z.uuid().safeParse(id);
+  const parsed = roomSchema.safeParse(input);
+  if (!roomId.success) return { ok: false, error: "notFound" };
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("rooms")
+    .update(parsed.data)
+    .eq("id", roomId.data)
+    .is("archived_at", null)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+  refresh();
+  return { ok: true };
+}
+
+/** Archive room: only when no active or forming group uses it (the database checks). */
+export async function archiveRoom(id: unknown): Promise<SettingsResult> {
+  const roomId = z.uuid().safeParse(id);
+  if (!roomId.success) return { ok: false, error: "notFound" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("rooms")
+    .update({ archived_at: new Date().toISOString() })
+    .eq("id", roomId.data)
+    .is("archived_at", null)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
   refresh();
   return { ok: true };
 }
@@ -101,7 +174,7 @@ export async function inviteUser(input: unknown): Promise<SettingsResult> {
   if (activated.error || activated.data.length === 0) {
     // Without a usable profile the invitation leads nowhere: take it back.
     await admin.auth.admin.deleteUser(data.user.id);
-    return activated.error ? failure(activated.error) : { ok: false, error: "generic" };
+    return activated.error ? linkFailure(activated.error) : { ok: false, error: "generic" };
   }
   refresh();
   return { ok: true };
@@ -117,10 +190,10 @@ export async function setUserRole(input: unknown): Promise<SettingsResult> {
 
   const { data, error } = await ctx.supabase
     .from("profiles")
-    .update({ role: parsed.data.role })
+    .update({ role: parsed.data.role, teacher_id: parsed.data.teacher_id })
     .eq("id", parsed.data.user_id)
     .select("id");
-  if (error) return failure(error);
+  if (error) return linkFailure(error);
   if (data.length === 0) return { ok: false, error: "notFound" };
   refresh();
   return { ok: true };
@@ -185,6 +258,7 @@ export async function connectTelegramWebhook(): Promise<SettingsResult<{ usernam
     token: process.env.TELEGRAM_BOT_TOKEN,
     secret: process.env.TELEGRAM_WEBHOOK_SECRET,
     appUrl: await appUrl(),
+    commands: botCommands(),
   });
   if (!result.ok) return { ok: false, error: "generic", detail: result.error };
 
@@ -227,12 +301,95 @@ export async function saveTemplate(input: unknown): Promise<SettingsResult> {
   return { ok: true };
 }
 
+// ── Lead sources: keys for websites that post leads. Owner only; the database refuses anyone else. ──
+
+const fieldMapOf = (rows: Array<{ from: string; to: string }>) => Object.fromEntries(rows.map((row) => [row.from, row.to]));
+
+/**
+ * A new source and its key. The key is returned here once and never again:
+ * the database keeps only its hash and a short prefix.
+ */
+export async function createLeadSource(input: unknown): Promise<SettingsResult<{ key: string }>> {
+  const parsed = leadSourceSchema.safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { key, prefix, hash } = generateKey();
+  const { error } = await ctx.supabase.from("intake_sources").insert({
+    name: parsed.data.name,
+    form_id: parsed.data.form_id,
+    field_map: fieldMapOf(parsed.data.fields),
+    key_prefix: prefix,
+    key_hash: hash,
+  });
+  if (error) return error.code === "42501" ? { ok: false, error: "notAllowed" } : { ok: false, error: "generic" };
+  refresh();
+  return { ok: true, data: { key } };
+}
+
+/** Name, funnel and field map of a source. Its key stays as it is. */
+export async function updateLeadSource(id: unknown, input: unknown): Promise<SettingsResult> {
+  const sourceId = z.uuid().safeParse(id);
+  const parsed = leadSourceSchema.safeParse(input);
+  if (!sourceId.success) return { ok: false, error: "notFound" };
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+
+  const { data, error } = await ctx.supabase
+    .from("intake_sources")
+    .update({ name: parsed.data.name, form_id: parsed.data.form_id, field_map: fieldMapOf(parsed.data.fields) })
+    .eq("id", sourceId.data)
+    .select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+  refresh();
+  return { ok: true };
+}
+
+/** Switch a source on or off. Off: its key is refused at once. */
+export async function setLeadSourceActive(id: unknown, active: unknown): Promise<SettingsResult> {
+  const sourceId = z.uuid().safeParse(id);
+  if (!sourceId.success || typeof active !== "boolean") return { ok: false, error: "notFound" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { data, error } = await ctx.supabase.from("intake_sources").update({ is_active: active }).eq("id", sourceId.data).select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notFound" };
+  refresh();
+  return { ok: true };
+}
+
+export type SourceLogRow = { id: string; receivedAt: string; outcome: string; detail: string | null; leadId: string | null; leadName: string | null };
+
+/** The last 100 requests of a source, newest first. */
+export async function getLeadSourceLog(id: unknown): Promise<SettingsResult<SourceLogRow[]>> {
+  const sourceId = z.uuid().safeParse(id);
+  if (!sourceId.success) return { ok: false, error: "notFound" };
+  const ctx = await ownerSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { data, error } = await ctx.supabase.rpc("intake_source_log", { p_source_id: sourceId.data });
+  if (error) return failure(error);
+  return {
+    ok: true,
+    data: (data ?? []).map((row) => ({
+      id: row.id,
+      receivedAt: row.received_at,
+      outcome: row.outcome,
+      detail: row.detail,
+      leadId: row.lead_id,
+      leadName: row.lead_name,
+    })),
+  };
+}
+
 // ── Profile: everyone, for themselves ──
 
 export async function saveProfile(input: unknown): Promise<SettingsResult> {
   const parsed = profileSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
-  const ctx = await session();
+  const ctx = await ownSession();
   if (!ctx) return { ok: false, error: "notAllowed" };
 
   const { data, error } = await ctx.supabase.from("profiles").update(parsed.data).eq("id", ctx.user.id).select("id");
@@ -242,10 +399,33 @@ export async function saveProfile(input: unknown): Promise<SettingsResult> {
   return { ok: true };
 }
 
+/** Lead alerts on Telegram on or off, and the sound in the browser. */
+export async function saveAlertSettings(input: unknown): Promise<SettingsResult> {
+  const parsed = z.object({ alerts_on: z.boolean().optional(), alert_sound: z.boolean().optional() }).safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const ctx = await ownSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { data, error } = await ctx.supabase.from("profiles").update(parsed.data).eq("id", ctx.user.id).select("id");
+  if (error) return failure(error);
+  if (data.length === 0) return { ok: false, error: "notAllowed" };
+  refresh();
+  return { ok: true };
+}
+
+/** Takes the person's Telegram off their profile: no more lead alerts there. */
+export async function unlinkTelegram(): Promise<SettingsResult> {
+  const ctx = await ownSession();
+  if (!ctx) return { ok: false, error: "notAllowed" };
+  const { error } = await ctx.supabase.rpc("unlink_my_telegram");
+  if (error) return failure(error);
+  refresh();
+  return { ok: true };
+}
+
 /** The language switch in the account menu: remembered on the profile for next sign-in. */
 export async function saveLanguage(languageInput: unknown): Promise<void> {
   const language = profileSchema.shape.language.safeParse(languageInput);
-  const ctx = await session();
+  const ctx = await ownSession();
   if (!language.success || !ctx) return;
   await ctx.supabase.from("profiles").update({ language: language.data }).eq("id", ctx.user.id);
 }
@@ -253,7 +433,7 @@ export async function saveLanguage(languageInput: unknown): Promise<void> {
 export async function changePassword(input: unknown): Promise<SettingsResult> {
   const parsed = passwordSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
-  const ctx = await session();
+  const ctx = await ownSession();
   if (!ctx) return { ok: false, error: "notAllowed" };
 
   const { error } = await ctx.supabase.auth.updateUser({ password: parsed.data.password });

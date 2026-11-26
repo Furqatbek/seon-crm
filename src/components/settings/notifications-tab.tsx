@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { StatusPill } from "@/components/ui/status-pill";
 import { Switch } from "@/components/ui/switch";
 import { formatPhone } from "@/lib/format";
@@ -85,7 +86,7 @@ function TelegramCard({ integrations }: { integrations: Integrations }) {
 function EskizCard({ integrations }: { integrations: Integrations }) {
   const t = useTranslations("settings.notifications");
   const tErrors = useTranslations("settings.errors");
-  const [phone, setPhone] = useState("+998");
+  const [phone, setPhone] = useState("");
   const [failure, setFailure] = useState<Failure | null>(null);
   const [busy, startTransition] = useTransition();
   const { configured, sender } = integrations.eskiz;
@@ -120,7 +121,7 @@ function EskizCard({ integrations }: { integrations: Integrations }) {
             htmlFor="test-sms-phone"
             error={failure?.error === "phoneInvalid" ? tErrors("phoneInvalid") : null}
           >
-            <Input id="test-sms-phone" type="tel" inputMode="tel" autoComplete="off" className="numeric sm:max-w-xs" value={phone} onChange={(event) => setPhone(event.target.value)} />
+            <PhoneInput id="test-sms-phone" className="sm:max-w-xs" value={phone} onChange={setPhone} />
           </Field>
           <p className="text-footnote text-text-secondary">{t("testHint")}</p>
           {failure && failure.error !== "phoneInvalid" ? <Problem failure={failure} /> : null}

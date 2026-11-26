@@ -12,7 +12,7 @@ const optionalText = (max: number) =>
     .max(max, "tooLong")
     .transform((value) => (value === "" ? null : value));
 
-export const STUDENT_STATUSES = ["active", "paused", "left"] as const;
+export const STUDENT_STATUSES = ["active", "paused", "left", "graduated"] as const;
 export type StudentStatus = (typeof STUDENT_STATUSES)[number];
 export const LANGUAGES = ["uz", "ru", "en"] as const;
 
@@ -70,7 +70,7 @@ export const studentsSearchSchema = z.object({
 });
 export type StudentsSearch = z.output<typeof studentsSearchSchema>;
 
-export const STUDENT_TABS = ["overview", "ledger", "attendance", "messages"] as const;
+export const STUDENT_TABS = ["overview", "ledger", "attendance", "points", "messages"] as const;
 export type StudentTab = (typeof STUDENT_TABS)[number];
 
 /** URL state of /students/[id]. */

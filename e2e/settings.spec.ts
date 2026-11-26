@@ -157,6 +157,8 @@ test("the owner invites a manager, who signs in and sees only manager screens; d
   // ── Their next request is blocked: signed out, and the database returns nothing ──
   await manager.goto("/ru/students");
   await expect(manager).toHaveURL(/\/ru\/sign-in$/);
+  // The form is ready once the page script has loaded.
+  await manager.waitForLoadState("networkidle");
   await manager.locator("#email").fill(email);
   await manager.locator("#password").fill(newPassword);
   await manager.locator("button[type=submit]").click();
@@ -185,7 +187,7 @@ test("the owner invites a manager, who signs in and sees only manager screens; d
 test("the owner's settings: centre, notifications and templates", async ({ page }, testInfo) => {
   await signIn(page, "owner");
   await page.goto("/en/settings");
-  await expect(page.getByRole("tab")).toHaveText(["Centre", "Users", "Notifications", "Templates", "Profile"]);
+  await expect(page.getByRole("tab")).toHaveText(["Centre", "Rooms", "Users", "Notifications", "Templates", "Points", "Lead sources", "Integrations", "Profile"]);
 
   // ── Centre: the due day cannot be before the billing day ──
   await expect(page.getByLabel("Centre name")).not.toHaveValue("");

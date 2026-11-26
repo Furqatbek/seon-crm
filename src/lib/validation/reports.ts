@@ -8,8 +8,12 @@ const month = z
   .optional()
   .catch(undefined);
 
+export const REPORT_TABS = ["overview", "points"] as const;
+export type ReportTab = (typeof REPORT_TABS)[number];
+
 /** URL state of /reports. */
 export const reportsSearchSchema = z.object({
+  tab: z.enum(REPORT_TABS).catch("overview"),
   period: z.enum(REPORT_PERIODS).catch("this"),
   from: month,
   to: month,
