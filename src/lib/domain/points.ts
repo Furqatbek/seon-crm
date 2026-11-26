@@ -15,6 +15,11 @@ export type PointsSettings = {
   referral: number;
   max_per_action: number;
   teacher_daily_cap: number;
+  /** The 1v1 game: coins for a win, rewarded wins a day, rewarded games a day between the same two, and the active questions a bank needs. */
+  game_win_coins: number;
+  game_daily_rewarded_wins: number;
+  game_pair_daily_cap: number;
+  game_min_questions: number;
 };
 
 export const DEFAULT_POINTS_SETTINGS: PointsSettings = {
@@ -27,6 +32,10 @@ export const DEFAULT_POINTS_SETTINGS: PointsSettings = {
   referral: 50,
   max_per_action: 5,
   teacher_daily_cap: 10,
+  game_win_coins: 5,
+  game_daily_rewarded_wins: 5,
+  game_pair_daily_cap: 2,
+  game_min_questions: 30,
 };
 
 /** The sources points are earned from, in the order the report stacks them. */

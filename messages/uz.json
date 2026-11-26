@@ -56,7 +56,8 @@
     "openRequests": "Kutayotgan sovgʻa soʻrovlari:",
     "pointsReport": "Hisobotlar",
     "waitingLeads": "Kutayotgan lidlar:",
-    "checkin": "Kelish-ketish"
+    "checkin": "Kelish-ketish",
+    "questions": "Savollar"
   },
   "language": {
     "label": "Til",
@@ -1840,7 +1841,13 @@
       "on_time": "Oʻz vaqtida toʻlov",
       "referral": "Doʻsti yozildi",
       "max_per_action": "Bir martada eng koʻp tanga",
-      "teacher_daily_cap": "Bir oʻquvchiga kuniga eng koʻp tanga"
+      "teacher_daily_cap": "Bir oʻquvchiga kuniga eng koʻp tanga",
+      "game": "1 ga 1 oʻyin",
+      "gameHint": "Oʻquvchilar ilovasidagi oʻyin. Tangalar faqat ikkala oʻyinchi ham markaz oʻquvchisi boʻlganda beriladi.",
+      "game_win_coins": "Gʻalaba uchun tanga",
+      "game_daily_rewarded_wins": "Kuniga mukofotli gʻalabalar",
+      "game_pair_daily_cap": "Bir raqib bilan kuniga mukofotli oʻyinlar",
+      "game_min_questions": "Tasodifiy oʻyin uchun eng kam faol savol"
     },
     "presets": {
       "title": "Oʻqituvchilar uchun sabablar",
@@ -1905,7 +1912,8 @@
     "tabs": {
       "leaderboard": "Reyting",
       "rewards": "Sovgʻalar",
-      "requests": "Soʻrovlar"
+      "requests": "Soʻrovlar",
+      "questions": "Savollar"
     },
     "rewards": {
       "add": "Sovgʻa qoʻshish",
@@ -2310,6 +2318,119 @@
       "unknown": "Oʻquvchi topilmadi. Ism boʻyicha qidiring.",
       "notAllowed": "Bu login bilan belgilab boʻlmaydi.",
       "offline": "Aloqa yoʻq. Qayta urinib koʻring."
+    }
+  },
+  "questions": {
+    "searchPlaceholder": "Savol matni boʻyicha qidirish",
+    "bank": "Fan va daraja",
+    "allBanks": "Barcha fanlar",
+    "state": {
+      "label": "Holati",
+      "all": "Hammasi",
+      "on": "Yoqilgan",
+      "off": "Oʻchirilgan"
+    },
+    "flag": {
+      "label": "Belgilar",
+      "any": "Barcha savollar",
+      "tooHard": "Juda qiyin",
+      "tooEasy": "Juda oson"
+    },
+    "add": "Savol qoʻshish",
+    "edit": "Tahrirlash",
+    "archive": "Arxivlash",
+    "archived": "Savol arxivlandi",
+    "saved": "Savol saqlandi",
+    "newTitle": "Yangi savol",
+    "editTitle": "Savolni tahrirlash",
+    "bankOpen": "Bu bankda {count} ta faol savol bor: tasodifiy oʻyinlar ochiq.",
+    "bankClosed": "Bu bankda {count} ta faol savol bor. Tasodifiy oʻyinlar {min} ta savoldan ochiladi.",
+    "flaggedNote": "{count} ta savol belgilangan: 15% dan kam yoki 95% dan koʻp toʻgʻri javob. Ularni koʻrib chiqing.",
+    "noMatches": "Bunday savol topilmadi",
+    "emptyStaff": "Hali savol yoʻq. Fayldan import qiling yoki oʻqituvchilar yozsin.",
+    "emptyTeacher": "Hali savol yoʻq. Birinchi savolni qoʻshing.",
+    "columns": {
+      "question": "Savol",
+      "bank": "Fan va daraja",
+      "right": "Toʻgʻri javoblar",
+      "on": "Yoqilgan",
+      "actions": "Amallar"
+    },
+    "rate": "{percent}% · {used} marta",
+    "notUsed": "Hali ishlatilmagan",
+    "fewAnswers": "Belgi uchun javoblar kam",
+    "difficulty": "Qiyinlik: {level}",
+    "difficultyLabel": "Qiyinlik (1–3)",
+    "language": "Savol tili",
+    "languages": {
+      "uz": "Oʻzbekcha",
+      "ru": "Ruscha",
+      "en": "Inglizcha",
+      "ko": "Koreyscha"
+    },
+    "text": "Savol matni",
+    "choices": "Javob variantlari",
+    "choicesHint": "2 tadan 4 tagacha. Toʻgʻri javobni belgilang.",
+    "choice": "{letter} varianti",
+    "rightChoice": "{letter} toʻgʻri javob",
+    "addChoice": "Variant qoʻshish",
+    "removeChoice": "{letter} variantini olib tashlash",
+    "explanation": "Izoh (oʻyindan keyin koʻrsatiladi)",
+    "image": "Rasm",
+    "imageHint": "JPG, PNG yoki WebP, 2 MB gacha. Ixtiyoriy.",
+    "preview": {
+      "open": "Koʻrib chiqish",
+      "title": "Oʻquvchi koʻradigan savol",
+      "right": "Toʻgʻri javob",
+      "explanation": "Izoh"
+    },
+    "import": {
+      "open": "Fayldan import",
+      "title": "Savollarni import qilish",
+      "hint": "Excel (.xlsx) yoki CSV fayl. Avval hisobot koʻrsatiladi: Saqlash bosilmaguncha hech narsa saqlanmaydi.",
+      "templateXlsx": "Excel namunasi",
+      "templateCsv": "CSV namunasi",
+      "file": "Fayl",
+      "reading": "Fayl oʻqilmoqda…",
+      "summary": "Faylda {rows} ta qator: {ready} tasi tayyor, {left} tasi qoldiriladi.",
+      "row": "Qator",
+      "problem": "Sabab",
+      "save": "{count} ta savolni saqlash",
+      "saved": "{count} ta savol qoʻshildi",
+      "rowErrors": {
+        "subjectRequired": "Fan yozilmagan.",
+        "bankUnknown": "Bunday fan va daraja yoʻq.",
+        "languageInvalid": "Til uz, ru, en yoki ko boʻlishi kerak.",
+        "textRequired": "Savol matni yoʻq.",
+        "textTooLong": "Savol 500 belgidan uzun.",
+        "optionsTooFew": "Kamida A va B variantlari kerak.",
+        "optionsGap": "Variantlar orasida boʻsh joy bor.",
+        "optionTooLong": "Variant 200 belgidan uzun.",
+        "optionsRepeat": "Ikki variant bir xil.",
+        "correctInvalid": "Toʻgʻri javob A–D dan biri va boʻsh boʻlmagan variant boʻlishi kerak.",
+        "explanationTooLong": "Izoh 500 belgidan uzun.",
+        "difficultyInvalid": "Qiyinlik 1, 2 yoki 3 boʻlishi kerak.",
+        "duplicateInFile": "Bu savol faylda ikki marta bor.",
+        "duplicateInBank": "Bu savol bankda allaqachon bor."
+      }
+    },
+    "errors": {
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "notAllowed": "Bunga ruxsat yoʻq.",
+      "notFound": "Savol topilmadi.",
+      "subjectRequired": "Fan va darajani tanlang.",
+      "textRequired": "Savol matnini kiriting.",
+      "optionsTooFew": "Kamida ikkita variant kerak.",
+      "optionRequired": "Har bir variantni toʻldiring yoki olib tashlang.",
+      "optionsRepeat": "Ikki variant bir xil.",
+      "correctInvalid": "Toʻgʻri javobni belgilang.",
+      "tooLong": "Matn juda uzun.",
+      "imageInvalid": "Rasm JPG, PNG yoki WebP, 2 MB gacha boʻlishi kerak.",
+      "fileInvalid": "Faylni oʻqib boʻlmadi. Excel (.xlsx) yoki CSV fayl tanlang.",
+      "fileTooLarge": "Fayl 2 MB dan katta.",
+      "empty": "Faylda savollar yoʻq.",
+      "headerInvalid": "Birinchi qatorda ustun nomlari yoʻq yoki yetishmaydi. Namunadan foydalaning.",
+      "tooManyRows": "Bitta faylda koʻpi bilan 1000 ta qator boʻlishi mumkin."
     }
   }
 }

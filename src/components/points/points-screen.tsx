@@ -15,7 +15,7 @@ import { BoardPeriodControl, Leaderboard } from "./leaderboard";
 
 const CENTRE = "centre";
 
-/** Staff: Leaderboard, Rewards and Requests. The open tab is rendered on the server. */
+/** Staff: Leaderboard, Rewards, Requests and the game's Questions. The open tab is rendered on the server. */
 export function PointsScreen({
   tab,
   openRequests,
@@ -40,7 +40,7 @@ export function PointsScreen({
         onValueChange={(value) =>
           startTabChange(() => {
             showTab(value as PointsTab);
-            setParams({ tab: value === "leaderboard" ? null : value, group: null, period: null, month: null });
+            setParams({ tab: value === "leaderboard" ? null : value, group: null, period: null, month: null, q: null, bank: null, state: null, flag: null, page: null });
           })
         }
         className="gap-6"

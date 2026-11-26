@@ -47,6 +47,13 @@ const LIMITS = [
   ["max_per_action", 1, 100],
   ["teacher_daily_cap", 1, 1000],
 ] as const;
+/** The 1v1 game in the student app. */
+const GAME = [
+  ["game_win_coins", 0, 1000],
+  ["game_daily_rewarded_wins", 0, 1000],
+  ["game_pair_daily_cap", 0, 1000],
+  ["game_min_questions", 10, 10000],
+] as const;
 
 function SettingsForm({ settings }: { settings: PointsSettings }) {
   const t = useTranslations("points");
@@ -73,7 +80,7 @@ function SettingsForm({ settings }: { settings: PointsSettings }) {
     });
   });
 
-  const number = ([name, min, max]: (typeof VALUES)[number] | (typeof LIMITS)[number]) => (
+  const number = ([name, min, max]: (typeof VALUES)[number] | (typeof LIMITS)[number] | (typeof GAME)[number]) => (
     <Field
       key={name}
       label={t(`settings.${name}`)}
@@ -115,6 +122,11 @@ function SettingsForm({ settings }: { settings: PointsSettings }) {
       <Section title={t("settings.limits")}>
         <p className="text-footnote text-text-secondary">{t("settings.limitsHint")}</p>
         <div className="grid gap-4 sm:grid-cols-2">{LIMITS.map(number)}</div>
+      </Section>
+
+      <Section title={t("settings.game")}>
+        <p className="text-footnote text-text-secondary">{t("settings.gameHint")}</p>
+        <div className="grid gap-4 sm:grid-cols-2">{GAME.map(number)}</div>
       </Section>
 
       {error ? (

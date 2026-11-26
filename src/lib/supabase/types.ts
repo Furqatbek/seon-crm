@@ -1049,6 +1049,34 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"questions": {
+                  Row: {
+                    "id": string,"subject": string,"level": string,"language": string,"text": string,"image_path": string | null,"options": Json,"correct_option_id": string,"explanation": string | null,"difficulty": number,"is_active": boolean,"times_used": number,"times_correct": number,"created_by": string | null,"archived_at": string | null,"created_at": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"subject": string,"level"?: string,"language"?: string,"text": string,"image_path"?: string | null,"options": Json,"correct_option_id": string,"explanation"?: string | null,"difficulty"?: number,"is_active"?: boolean,"times_used"?: number,"times_correct"?: number,"created_by"?: string | null,"archived_at"?: string | null,"created_at"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "id"?: string,"subject"?: string,"level"?: string,"language"?: string,"text"?: string,"image_path"?: string | null,"options"?: Json,"correct_option_id"?: string,"explanation"?: string | null,"difficulty"?: number,"is_active"?: boolean,"times_used"?: number,"times_correct"?: number,"created_by"?: string | null,"archived_at"?: string | null,"created_at"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"question_imports": {
+                  Row: {
+                    "id": string,"file_name": string,"rows": number,"created": number,"errors": Json,"imported_by": string | null,"created_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"file_name": string,"rows": number,"created": number,"errors"?: Json,"imported_by"?: string | null,"created_at"?: string
+                  }
+                  Update: {
+                    "id"?: string,"file_name"?: string,"rows"?: number,"created"?: number,"errors"?: Json,"imported_by"?: string | null,"created_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"rewards": {
                   Row: {
                     "archived_at": string | null,"cost": number,"created_at": string,"description": string | null,"id": string,"is_active": boolean,"name": string,"photo_path": string | null,"stock": number | null,"updated_at": string
@@ -1581,6 +1609,9 @@ isOneToOne: false
                            },
 "checkin_search":
 { Args: { "p_query": string }; Returns: { "student_id": string,"full_name": string,"groups": string | null }[]
+                           },
+"game_banks":
+{ Args: Record<PropertyKey, never>; Returns: { "subject": string,"level": string,"active_questions": number }[]
                            },
 "request_reward":
 { Args: { "p_request_key"?: string,"p_requested_by"?: string,"p_reward_id": string,"p_student_id": string,"p_via"?: string,"p_variant_id"?: string }; Returns: string

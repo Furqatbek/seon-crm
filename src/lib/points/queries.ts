@@ -15,7 +15,7 @@ async function db() {
 }
 
 const SETTINGS =
-  "enabled, present, late, perfect_month, perfect_month_min_lessons, on_time, referral, max_per_action, teacher_daily_cap";
+  "enabled, present, late, perfect_month, perfect_month_min_lessons, on_time, referral, max_per_action, teacher_daily_cap, game_win_coins, game_daily_rewarded_wins, game_pair_daily_cap, game_min_questions";
 
 export async function getPointsSettings(): Promise<PointsSettings> {
   const supabase = await db();

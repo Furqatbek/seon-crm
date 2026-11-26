@@ -65,7 +65,7 @@ export const boardSearchSchema = z.object({
 
 export const TV_LANGUAGES = ["uz", "ru", "en"] as const;
 
-export const POINTS_TABS = ["leaderboard", "rewards", "requests"] as const;
+export const POINTS_TABS = ["leaderboard", "rewards", "requests", "questions"] as const;
 export type PointsTab = (typeof POINTS_TABS)[number];
 
 /** URL state of /points: the tab, plus the leaderboard's own filters. */
@@ -171,6 +171,10 @@ export const pointsSettingsSchema = z.object({
   referral: whole(0, 1000),
   max_per_action: whole(1, 100),
   teacher_daily_cap: whole(1, 1000),
+  game_win_coins: whole(0, 1000),
+  game_daily_rewarded_wins: whole(0, 1000),
+  game_pair_daily_cap: whole(0, 1000),
+  game_min_questions: whole(10, 10000),
 });
 export type PointsSettingsInput = z.input<typeof pointsSettingsSchema>;
 export type PointsSettingsValues = z.output<typeof pointsSettingsSchema>;

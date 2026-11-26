@@ -56,7 +56,8 @@
     "openRequests": "Reward requests waiting:",
     "pointsReport": "Reports",
     "waitingLeads": "Leads waiting:",
-    "checkin": "Check-in"
+    "checkin": "Check-in",
+    "questions": "Questions"
   },
   "language": {
     "label": "Language",
@@ -1840,7 +1841,13 @@
       "on_time": "Fee paid on time",
       "referral": "Friend enrols",
       "max_per_action": "Most coins per award or deduction",
-      "teacher_daily_cap": "Most coins per student per day"
+      "teacher_daily_cap": "Most coins per student per day",
+      "game": "1v1 game",
+      "gameHint": "The game in the student app. Coins are given only when both players are the centre's students.",
+      "game_win_coins": "Coins for a win",
+      "game_daily_rewarded_wins": "Rewarded wins a day",
+      "game_pair_daily_cap": "Rewarded games a day against the same opponent",
+      "game_min_questions": "Active questions needed before random matches open"
     },
     "presets": {
       "title": "Reasons for teachers",
@@ -1905,7 +1912,8 @@
     "tabs": {
       "leaderboard": "Leaderboard",
       "rewards": "Rewards",
-      "requests": "Requests"
+      "requests": "Requests",
+      "questions": "Questions"
     },
     "rewards": {
       "add": "Add reward",
@@ -2310,6 +2318,119 @@
       "unknown": "Student not found. Search by name.",
       "notAllowed": "This login cannot check students in.",
       "offline": "No connection. Try again."
+    }
+  },
+  "questions": {
+    "searchPlaceholder": "Search the question text",
+    "bank": "Subject and level",
+    "allBanks": "All subjects",
+    "state": {
+      "label": "State",
+      "all": "All",
+      "on": "On",
+      "off": "Off"
+    },
+    "flag": {
+      "label": "Flags",
+      "any": "All questions",
+      "tooHard": "Too hard",
+      "tooEasy": "Too easy"
+    },
+    "add": "Add question",
+    "edit": "Edit",
+    "archive": "Archive",
+    "archived": "Question archived",
+    "saved": "Question saved",
+    "newTitle": "New question",
+    "editTitle": "Edit question",
+    "bankOpen": "This bank has {count} active questions: random matches are open.",
+    "bankClosed": "This bank has {count} active questions. Random matches open at {min}.",
+    "flaggedNote": "{count} questions are flagged: under 15% or over 95% answered right. Have a look at them.",
+    "noMatches": "No questions match",
+    "emptyStaff": "No questions yet. Import a file, or have teachers write them.",
+    "emptyTeacher": "No questions yet. Add the first one.",
+    "columns": {
+      "question": "Question",
+      "bank": "Subject and level",
+      "right": "Answered right",
+      "on": "On",
+      "actions": "Actions"
+    },
+    "rate": "{percent}% · shown {used} times",
+    "notUsed": "Not used yet",
+    "fewAnswers": "Too few answers to flag",
+    "difficulty": "Difficulty {level}",
+    "difficultyLabel": "Difficulty (1–3)",
+    "language": "Question language",
+    "languages": {
+      "uz": "Uzbek",
+      "ru": "Russian",
+      "en": "English",
+      "ko": "Korean"
+    },
+    "text": "Question text",
+    "choices": "Choices",
+    "choicesHint": "Two to four. Mark the right one.",
+    "choice": "Choice {letter}",
+    "rightChoice": "{letter} is the right answer",
+    "addChoice": "Add choice",
+    "removeChoice": "Remove choice {letter}",
+    "explanation": "Explanation (shown after the match)",
+    "image": "Picture",
+    "imageHint": "JPG, PNG or WebP, up to 2 MB. Optional.",
+    "preview": {
+      "open": "Preview",
+      "title": "The question as a player sees it",
+      "right": "Right answer",
+      "explanation": "Explanation"
+    },
+    "import": {
+      "open": "Import a file",
+      "title": "Import questions",
+      "hint": "An Excel (.xlsx) or CSV file. A report is shown first: nothing is saved until you press Save.",
+      "templateXlsx": "Excel template",
+      "templateCsv": "CSV template",
+      "file": "File",
+      "reading": "Reading the file…",
+      "summary": "{rows} rows in the file: {ready} ready, {left} left out.",
+      "row": "Row",
+      "problem": "Why it is left out",
+      "save": "Save {count} questions",
+      "saved": "{count} questions added",
+      "rowErrors": {
+        "subjectRequired": "The subject is missing.",
+        "bankUnknown": "There is no such subject and level.",
+        "languageInvalid": "The language must be uz, ru, en or ko.",
+        "textRequired": "The question text is missing.",
+        "textTooLong": "The question is longer than 500 characters.",
+        "optionsTooFew": "Choices A and B are needed at least.",
+        "optionsGap": "There is an empty choice between two others.",
+        "optionTooLong": "A choice is longer than 200 characters.",
+        "optionsRepeat": "Two choices are the same.",
+        "correctInvalid": "The right answer must be one of A–D, and that choice must not be empty.",
+        "explanationTooLong": "The explanation is longer than 500 characters.",
+        "difficultyInvalid": "The difficulty must be 1, 2 or 3.",
+        "duplicateInFile": "This question is in the file twice.",
+        "duplicateInBank": "The bank already has this question."
+      }
+    },
+    "errors": {
+      "generic": "Something went wrong. Try again.",
+      "notAllowed": "You are not allowed to do this.",
+      "notFound": "The question was not found.",
+      "subjectRequired": "Choose the subject and level.",
+      "textRequired": "Enter the question text.",
+      "optionsTooFew": "At least two choices are needed.",
+      "optionRequired": "Fill in each choice or remove it.",
+      "optionsRepeat": "Two choices are the same.",
+      "correctInvalid": "Mark the right answer.",
+      "tooLong": "The text is too long.",
+      "imageInvalid": "The picture must be a JPG, PNG or WebP of up to 2 MB.",
+      "fileInvalid": "The file could not be read. Choose an Excel (.xlsx) or CSV file.",
+      "fileTooLarge": "The file is larger than 2 MB.",
+      "empty": "The file has no questions.",
+      "headerInvalid": "The first row does not have the column names, or some are missing. Use the template.",
+      "tooManyRows": "One file can have 1,000 rows at most."
     }
   }
 }
