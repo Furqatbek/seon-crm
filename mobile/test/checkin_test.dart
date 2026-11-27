@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:student/data/checkin.dart';
 import 'package:student/data/home.dart';
-import 'package:student/features/more/simple_pages.dart';
+import 'package:student/features/offers/offers.dart';
 import 'package:student/features/qr/qr_tab.dart';
 import 'package:student/ui/widgets.dart';
 

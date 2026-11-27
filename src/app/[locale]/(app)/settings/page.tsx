@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { AboutTab } from "@/components/settings/about-tab";
 import { CentreTab } from "@/components/settings/centre-tab";
 import { PointsTab } from "@/components/settings/points-tab";
+import { VouchersTab } from "@/components/settings/vouchers-tab";
 import { NotificationsTab } from "@/components/settings/notifications-tab";
 import { IntegrationsTab } from "@/components/settings/integrations-tab";
 import { ProfileTab } from "@/components/settings/profile-tab";
@@ -19,6 +20,7 @@ import { initLocale, type LocaleParams } from "@/i18n/params";
 import type { Locale } from "@/i18n/routing";
 import { appUrl } from "@/lib/app-url";
 import { getSignedInUser } from "@/lib/auth";
+import { getVoucherSettings } from "@/lib/offers/queries";
 import { getPointPresets, getPointsSettings, getTvSettings } from "@/lib/points/queries";
 import { tashkentDate } from "@/lib/domain/time";
 import {
@@ -66,6 +68,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
       {tab === "points" && owner ? (
         <Points />
       ) : null}
+      {tab === "vouchers" && owner ? <Vouchers /> : null}
       {tab === "about" && owner ? <AboutTab texts={await getAppTexts()} language={locale} /> : null}
       {tab === "sources" && owner ? (
         <SourcesTab
@@ -81,6 +84,12 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
       ) : null}
     </SettingsScreen>
   );
+}
+
+async function Vouchers() {
+  const settings = await getVoucherSettings();
+  // The vouchers' migration is not applied yet: nothing to set.
+  return settings ? <VouchersTab settings={settings} /> : null;
 }
 
 async function Points() {

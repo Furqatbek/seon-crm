@@ -11,6 +11,7 @@ import 'package:student/features/exams/exam_screen.dart';
 import 'package:student/l10n/app_localizations.dart';
 
 import '../support/fake_exams.dart';
+import '../support/fake_offers.dart';
 import '../support/fakes.dart';
 import '../support/game_play.dart';
 import '../support/harness.dart';
@@ -159,6 +160,8 @@ Future<void> show(WidgetTester tester, ({bool student, Steps steps}) scene, Stri
     ..coins = 51
     ..coinsLocked = !scene.student;
   app.exams.addFinished(profile.id, 'exam-1', correctListening: 19, correctReading: 25).submittedAt = last.submittedAt!.subtract(const Duration(days: 7));
+  // The App user's first finished exam brought their voucher.
+  if (!scene.student) app.offers.voucherValue = sampleVoucher();
   await app.pump(tester);
   await openGame(tester, l.tabGame);
   await settle(tester);

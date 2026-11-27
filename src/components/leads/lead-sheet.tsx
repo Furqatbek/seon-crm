@@ -56,6 +56,7 @@ import {
   isLostReasonCode,
   type LeadStatus,
 } from "@/lib/domain/leads";
+import { LeadOfferSection } from "./lead-offer";
 import { formatDateTime, formatDay, formatPhone } from "@/lib/format";
 import { addLeadActivity, archiveLead } from "@/lib/leads/actions";
 import type { GroupOption, LeadActivity, LeadDetail, StaffOption } from "@/lib/leads/queries";
@@ -63,6 +64,10 @@ import type { LeadErrorKey } from "@/lib/validation/leads";
 
 import { STATUS_TONE } from "./lead-meta";
 import { NextContact } from "./next-contact";
+
+/** Timeline entries the student app writes: the voucher and the open lesson. */
+const OFFER_KINDS = ["voucher_issued", "voucher_redeemed", "open_lesson_booked", "open_lesson_cancelled", "open_lesson_came", "open_lesson_no_show"] as const;
+const isOfferKind = (kind: string): kind is (typeof OFFER_KINDS)[number] => (OFFER_KINDS as readonly string[]).includes(kind);
 
 function Detail({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -150,7 +155,9 @@ function TimelineItem({ activity, author }: { activity: LeadActivity; author: st
               ? t("timeline.formResubmitted", { form: activity.body ?? "" })
               : activity.kind === "app_signup"
                 ? t("timeline.appSignup")
-                : t(`timeline.${activity.kind === "call" ? "call" : "note"}`)}
+                : isOfferKind(activity.kind)
+                  ? t(`timeline.${activity.kind}`)
+                  : t(`timeline.${activity.kind === "call" ? "call" : "note"}`)}
         </p>
         {reason ? (
           <p className="text-body break-words text-text-secondary">
@@ -366,7 +373,9 @@ export function LeadSheet({
                   ) : null}
                   {lead.status === "trial" && lead.trial_date ? (
                     <Detail label={t("fields.trial")}>
-                      {groups.find((group) => group.id === lead.trial_group_id)?.name ?? "—"}
+                      {groups.find((group) => group.id === lead.trial_group_id)?.name ??
+                        // A free open lesson booked in the student app has no trial group.
+                        (lead.trial_open_lesson_slot_id ? (lead.offer.bookings.find((booking) => booking.session_date === lead.trial_date)?.title ?? t("fields.openLesson")) : "—")}
                       {" · "}
                       {formatDay(lead.trial_date, locale, { month: "long" })}
                     </Detail>
@@ -384,6 +393,8 @@ export function LeadSheet({
                     </Detail>
                   ) : null}
                 </dl>
+
+                <LeadOfferSection offer={lead.offer} locale={locale} />
 
                 <section aria-labelledby="lead-timeline" className="flex flex-col gap-3">
                   <h3 id="lead-timeline" className="text-headline text-text">

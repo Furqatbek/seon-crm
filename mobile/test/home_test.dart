@@ -13,7 +13,7 @@ import 'package:student/features/home/student_home.dart';
 import 'package:student/features/notifications/notifications_screen.dart';
 import 'package:student/features/more/leaderboard.dart';
 import 'package:student/features/more/money_pages.dart';
-import 'package:student/features/more/simple_pages.dart';
+import 'package:student/features/offers/offers.dart';
 import 'package:student/features/shop/orders_page.dart';
 import 'package:student/features/game/game_tab.dart';
 import 'package:student/features/tabs/tabs.dart';
@@ -385,13 +385,14 @@ void main() {
         tester,
         home: AppUserHome(
           lockedCoins: 34,
-          voucher: HomeVoucher(kind: 'percent', value: 20, expiresAt: DateTime.utc(2026, 12, 7, 10)),
+          voucher: HomeVoucher(kind: 'percent', value: 20, expiresAt: DateTime.utc(2026, 12, 7, 10), code: 'KOR-7F3K9'),
         ),
       );
       final card = find.byType(VoucherCard);
       expect(find.descendant(of: card, matching: find.text(l.voucherTitle)), findsOneWidget);
       expect(find.descendant(of: card, matching: find.text('Birinchi oyga 20% chegirma')), findsOneWidget);
-      expect(find.descendant(of: card, matching: find.text('7-dekabrgacha')), findsOneWidget);
+      // The code, and the day it runs out.
+      expect(find.descendant(of: card, matching: find.text('KOR-7F3K9 · ${keepTogether('7-dekabrgacha')}')), findsOneWidget);
     });
 
     test('each kind of voucher is put in words', () {
@@ -399,6 +400,7 @@ void main() {
       expect(voucherOffer(HomeVoucher(kind: 'percent', value: 20, expiresAt: until), l), 'Birinchi oyga 20% chegirma');
       expect(voucherOffer(HomeVoucher(kind: 'fixed', value: 100000, expiresAt: until), l), 'Birinchi oyga 100 000 soʻm chegirma');
       expect(voucherOffer(HomeVoucher(kind: 'trial_week', value: 7, expiresAt: until), l), l.voucherTrialWeek);
+      expect(voucherOffer(HomeVoucher(kind: 'trial_week', value: 10, expiresAt: until), l), l.voucherTrialDays(10));
     });
 
     testWidgets('no locked coins yet shows zero, and offline shows the banner', (tester) async {

@@ -268,7 +268,6 @@
   "lockedCoins": "Qulflangan tangalar",
   "lockedCoinsHint": "Markazga qoʻshilganingizda ochiladi",
   "openLessonTitle": "Bepul ochiq dars",
-  "openLessonSoon": "Ochiq darslarga yozilish tez orada shu yerda ochiladi.",
   "bookOpenLesson": "Bepul ochiq darsga yozilish",
   "voucherTitle": "Sizga sovgʻa!",
   "voucherPercent": "Birinchi oyga {percent}% chegirma",
@@ -864,5 +863,55 @@
   "examTranscript": "Audio matni",
   "examGone": "Imtihon topilmadi",
   "examBackToList": "Imtihonlarga qaytish",
-  "examHeroAllDone": "Darajangizdagi barcha imtihonlar topshirilgan"
+  "examHeroAllDone": "Darajangizdagi barcha imtihonlar topshirilgan",
+  "voucherLabel": "Vaucher",
+  "voucherTrialDays": "{days} kun bepul sinov",
+  "@voucherTrialDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "voucherTellCode": "Qabulxonada ushbu kodni ayting",
+  "voucherOnePerPerson": "Bitta odamga bitta vaucher",
+  "voucherCopy": "Kodni nusxalash",
+  "voucherCopied": "Kod nusxalandi",
+  "voucherExpired": "Muddati oʻtgan",
+  "voucherUsed": "Ishlatilgan",
+  "openLessonsTitle": "Bepul ochiq darslar",
+  "openLessonsEmpty": "Keyingi 4 haftada ochiq dars yoʻq",
+  "openLessonSeatsLeft": "{count, plural, other{{count} ta joy qoldi}}",
+  "@openLessonSeatsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "openLessonFull": "Joy qolmagan",
+  "openLessonBook": "Joy band qilish",
+  "openLessonBooked": "Joy band qilindi",
+  "openLessonCancelHint": "Bekor qilish 2 soat oldingacha mumkin",
+  "openLessonCancel": "Yozilishni bekor qilish",
+  "openLessonCancelled": "Yozilish bekor qilindi",
+  "openLessonCancelClosed": "Bekor qilish muddati oʻtdi: dars 2 soatdan kam vaqtda boshlanadi",
+  "openLessonYours": "Sizning yozilishingiz",
+  "openLessonOneBooking": "Bir vaqtda bitta yozilish mumkin",
+  "openLessonNext": "Keyingi dars",
+  "openLessonEveryLevel": "Barcha darajalar",
+  "openLessonErrorFull": "Bu darsda joy qolmadi",
+  "openLessonErrorGone": "Bu dars endi mavjud emas",
+  "openLessonErrorHasBooking": "Sizda allaqachon yozilish bor",
+  "weekdayAndDate": "{weekday}, {date}",
+  "@weekdayAndDate": {
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

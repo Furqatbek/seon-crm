@@ -58,7 +58,8 @@
     "waitingLeads": "Kutayotgan lidlar:",
     "checkin": "Kelish-ketish",
     "questions": "Savollar",
-    "exams": "Sinov imtihonlari"
+    "exams": "Sinov imtihonlari",
+    "openLessons": "Ochiq darslar"
   },
   "language": {
     "label": "Til",
@@ -185,7 +186,8 @@
       "unassigned": "Hech kim",
       "referredBy": "Kim tavsiya qildi",
       "referredByHint": "Bu lidni olib kelgan oʻquvchi. Lid yozilib, birinchi toʻlovni qilganda unga tanga beriladi.",
-      "koreanLevel": "Koreys tili darajasi"
+      "koreanLevel": "Koreys tili darajasi",
+      "openLesson": "Ochiq dars"
     },
     "form": {
       "created": "Lid qoʻshildi",
@@ -222,7 +224,13 @@
       "statusChange": "{from} → {to}",
       "reason": "Sabab: {reason}",
       "formResubmitted": "“{form}” formasi qayta yuborildi",
-      "appSignup": "Mobil ilovada roʻyxatdan oʻtdi"
+      "appSignup": "Mobil ilovada roʻyxatdan oʻtdi",
+      "voucher_issued": "Ilovada vaucher berildi",
+      "voucher_redeemed": "Vaucher ishlatildi",
+      "open_lesson_booked": "Ochiq darsga yozildi",
+      "open_lesson_cancelled": "Ochiq darsni bekor qildi",
+      "open_lesson_came": "Ochiq darsga keldi",
+      "open_lesson_no_show": "Ochiq darsga kelmadi"
     },
     "lost": {
       "title": "{name} rad etdi deb belgilansinmi?",
@@ -710,7 +718,16 @@
       "save": "Yozish",
       "saveTransfer": "Oʻtkazish",
       "done": "Oʻquvchi guruhga yozildi",
-      "transferDone": "Oʻquvchi oʻtkazildi"
+      "transferDone": "Oʻquvchi oʻtkazildi",
+      "voucher": "Vaucher kodi",
+      "voucherHint": "Mobil ilovadagi vaucher. Har bir kod bir marta ishlaydi.",
+      "voucherPercent": "Vaucher: {percent}% chegirma",
+      "voucherFixed": "Vaucher: summa chegirma",
+      "voucherTrial": "Vaucher: {days} kun bepul",
+      "voucherPaidFrom": "Toʻlov {date} dan hisoblanadi",
+      "voucherCharge": "Vaucher bilan birinchi hisob",
+      "voucherNext": "{month} uchun hisob",
+      "voucherNextLater": "oylik hisob-kitobda"
     },
     "leave": {
       "title": "{student} {group} guruhidan chiqadi",
@@ -755,7 +772,11 @@
       "roomInvalid": "Xonani roʻyxatdan tanlang.",
       "roomClash": "Bu vaqtda xona «{detail}» guruhi bilan band.",
       "roomUnavailable": "Bu xona endi mavjud emas. Boshqasini tanlang.",
-      "examTitleRequired": "Imtihon nomini kiriting."
+      "examTitleRequired": "Imtihon nomini kiriting.",
+      "voucherUnknown": "Bunday vaucher kodi yoʻq.",
+      "voucherUsed": "Bu vaucher allaqachon ishlatilgan.",
+      "voucherExpired": "Bu vaucherning muddati oʻtgan.",
+      "voucherCustom": "Vaucher boshqa summa bilan birga ishlamaydi. Taklif qilingan yoki toʻliq oy hisobini tanlang."
     }
   },
   "finance": {
@@ -1215,7 +1236,8 @@
     },
     "tabs": {
       "overview": "Umumiy",
-      "points": "Tangalar"
+      "points": "Tangalar",
+      "vouchers": "Vaucherlar"
     },
     "points": {
       "points": "Tanga",
@@ -1388,7 +1410,8 @@
       "points": "Tangalar",
       "sources": "Lid manbalari",
       "integrations": "Integratsiyalar",
-      "about": "Markaz haqida va maxfiylik"
+      "about": "Markaz haqida va maxfiylik",
+      "vouchers": "Vaucherlar"
     },
     "saved": "Saqlandi",
     "centre": {
@@ -2015,7 +2038,8 @@
     "tabs": {
       "label": "Lidlar boʻlimlari",
       "leads": "Lidlar",
-      "forms": "Formalar"
+      "forms": "Formalar",
+      "openLessons": "Ochiq darslar"
     },
     "status": {
       "draft": "Qoralama",
@@ -2291,6 +2315,15 @@
     "inviteSms": "{centre}: dars jadvali, tangalar va toʻlovlar ilovada. Yuklab oling: {links}",
     "game_invite": {
       "body": "{name} sizni 1 ga 1 oʻyinga chaqirdi. 60 soniya ichida javob bering."
+    },
+    "voucher_expiring": {
+      "title": "Vaucheringiz muddati tugayapti",
+      "body": "{code} vaucheri {date} gacha amal qiladi. Markazga kelib, undan foydalaning."
+    },
+    "open_lesson": {
+      "title": "Bepul ochiq dars",
+      "evening": "Ertaga soat {time} da: {title}. Sizni kutamiz!",
+      "soon": "Bugun soat {time} da: {title}. Sizni kutamiz!"
     }
   },
   "checkin": {
@@ -2596,5 +2629,120 @@
       "questionAnswered": "Bu savolga javob berilgan, uni olib tashlab boʻlmaydi."
     },
     "removePicture": "Rasmni olib tashlash"
+  },
+  "offers": {
+    "types": {
+      "percent": "Foiz chegirma",
+      "fixed": "Summa chegirma",
+      "trial_week": "Bepul sinov haftasi"
+    },
+    "worth": {
+      "percent": "Birinchi oyga {value}% chegirma",
+      "fixed": "Birinchi oyga <amount></amount> chegirma",
+      "trial_week": "{value} kun bepul"
+    },
+    "voucherStatus": {
+      "issued": "Amalda",
+      "redeemed": "Ishlatilgan",
+      "expired": "Muddati oʻtgan"
+    },
+    "bookingStatus": {
+      "booked": "Yozilgan",
+      "came": "Keldi",
+      "no_show": "Kelmadi",
+      "cancelled": "Bekor qilingan"
+    },
+    "lead": {
+      "title": "Mobil ilovadan",
+      "bookings": "Ochiq darslar",
+      "validUntil": "{date} gacha amal qiladi",
+      "expiredOn": "{date} da muddati tugagan",
+      "redeemedOn": "{date} da ishlatilgan"
+    },
+    "settings": {
+      "hint": "Ilova foydalanuvchisi birinchi sinov imtihonini tugatganda unga bitta vaucher beriladi. Turi quyidagi vaznlar boʻyicha tasodifiy tanlanadi.",
+      "types": {
+        "percent": "Foiz chegirma",
+        "fixed": "Summa chegirma",
+        "trial": "Bepul sinov haftasi"
+      },
+      "enabled": "{type}: yoqilgan",
+      "weight": "Vazn",
+      "value": {
+        "percent": "Chegirma, %",
+        "fixed": "Chegirma, soʻm",
+        "trial": "Bepul kunlar"
+      },
+      "validity": "Amal qilish muddati",
+      "weightHint": "Vazn qancha katta boʻlsa, shu tur shuncha koʻp chiqadi: 1, 1 va 1 — teng imkoniyat. Oʻchirilgan yoki vazni 0 boʻlgan tur berilmaydi.",
+      "validDays": "Vaucher necha kun amal qiladi"
+    },
+    "errors": {
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "notAllowed": "Bunga ruxsat yoʻq.",
+      "notFound": "Topilmadi.",
+      "valueRange": "Sonlarni tekshiring.",
+      "valueRangeOf": "{min} dan {max} gacha butun son",
+      "noType": "Kamida bitta tur yoqilgan va vazni 0 dan katta boʻlishi kerak.",
+      "titleRequired": "Nomini kiriting.",
+      "tooLong": "Matn juda uzun.",
+      "timeInvalid": "Vaqtni kiriting.",
+      "seatsInvalid": "Oʻrinlar soni 1 dan 200 gacha.",
+      "durationInvalid": "Davomiyligi 15 dan 240 daqiqagacha."
+    },
+    "slots": {
+      "heading": "Haftalik darslar",
+      "add": "Dars qoʻshish",
+      "editTitle": "Darsni tahrirlash",
+      "edit": "{title}: tahrirlash",
+      "empty": "Hali ochiq dars yoʻq. Birinchisini qoʻshing: ilova uni keyingi 4 hafta uchun koʻrsatadi.",
+      "emptyTeacher": "Sizga biriktirilgan ochiq dars yoʻq.",
+      "title": "Nomi",
+      "when": "Vaqti",
+      "level": "Daraja",
+      "teacher": "Oʻqituvchi",
+      "room": "Xona",
+      "seats": "Oʻrinlar",
+      "state": "Holati",
+      "on": "Yoqilgan",
+      "off": "Oʻchirilgan",
+      "minutes": "{minutes} daqiqa",
+      "levels": {
+        "any": "Barcha darajalar",
+        "beginner": "Boshlovchi",
+        "topik1": "TOPIK I",
+        "topik2": "TOPIK II"
+      },
+      "weekday": "Hafta kuni",
+      "startTime": "Boshlanish vaqti",
+      "duration": "Davomiyligi, daqiqa",
+      "noTeacher": "Belgilanmagan",
+      "active": "Ilovada koʻrinadi",
+      "activeHint": "Oʻchirilsa, yangi yozilishlar qabul qilinmaydi; mavjud yozilishlar qoladi.",
+      "archive": "Arxivlash",
+      "saved": "Saqlandi",
+      "archived": "Dars arxivlandi"
+    },
+    "sessions": {
+      "heading": "Darslar va yozilganlar",
+      "upcoming": "Kelgusi",
+      "past": "Oʻtgan",
+      "emptyUpcoming": "Keyingi 4 haftada dars yoʻq.",
+      "emptyPast": "Oxirgi 2 haftada yozilish boʻlmagan.",
+      "booked": "{booked} / {seats} oʻrin band",
+      "mark": "Belgilash",
+      "notMarked": "Belgilanmagan",
+      "markFailed": "Belgilab boʻlmadi. Qayta urinib koʻring.",
+      "someone": "Ilova foydalanuvchisi"
+    },
+    "report": {
+      "issued": "Berilgan",
+      "redeemed": "Ishlatilgan",
+      "conversion": "Konversiya",
+      "expired": "Muddati oʻtgan",
+      "byType": "Turlar boʻyicha",
+      "type": "Turi",
+      "hint": "Tanlangan davrda berilgan vaucherlar. Konversiya — ulardan nechtasi oʻquvchini guruhga yozishda ishlatilgani."
+    }
   }
 }

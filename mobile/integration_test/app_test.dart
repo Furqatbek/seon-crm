@@ -28,6 +28,7 @@ import 'package:student/core/exam_state.dart';
 import 'package:student/core/game_state.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
+import 'package:student/core/offer_state.dart';
 import 'package:student/core/shop_state.dart';
 import 'package:student/core/state.dart';
 import 'package:student/data/auth_repository.dart';
@@ -39,6 +40,7 @@ import 'package:student/data/home.dart';
 import 'package:student/data/models.dart';
 import 'package:student/data/more.dart';
 import 'package:student/data/notifications.dart';
+import 'package:student/data/offers.dart';
 import 'package:student/data/shop.dart';
 import 'package:student/env.dart';
 import 'package:student/features/auth/sign_in_screens.dart';
@@ -50,6 +52,7 @@ import 'package:student/features/game/match_screen.dart';
 import 'package:student/features/home/student_home.dart';
 import 'package:student/features/more/more_tab.dart';
 import 'package:student/features/more/sub_page.dart';
+import 'package:student/features/offers/offers.dart';
 import 'package:student/features/shop/orders_page.dart';
 import 'package:student/features/shop/product_page.dart';
 import 'package:student/l10n/app_localizations.dart';
@@ -58,6 +61,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../test/support/fake_exams.dart';
 import '../test/support/fake_game.dart';
+import '../test/support/fake_offers.dart';
 import '../test/support/fakes.dart';
 
 const testPhone = String.fromEnvironment('TEST_PHONE');
@@ -79,6 +83,7 @@ Future<FakeAuthRepository> pumpInMemory(
   FakeShopRepository? shop,
   GameRepository? game,
   ExamRepository? exams,
+  OfferRepository? offers,
   Profile profile = studentProfile,
   DateTime Function()? clock,
 }) async {
@@ -105,6 +110,7 @@ Future<FakeAuthRepository> pumpInMemory(
         ),
         examRepositoryProvider.overrideWithValue(exams ?? FakeExamRepository(FakeExamServer(now: DateTime.now), profile.id)),
         examAudioProvider.overrideWithValue(FakeExamAudio.new),
+        offerRepositoryProvider.overrideWithValue(offers ?? FakeOfferRepository(now: clock ?? () => testNow)),
         qrSecretStoreProvider.overrideWithValue(FakeQrSecretStore()),
         screenLightProvider.overrideWithValue(FakeScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
@@ -137,6 +143,7 @@ Future<void> pumpOnDevProject(WidgetTester tester) async {
         gameRepositoryProvider.overrideWithValue(SupabaseGameRepository(client)),
         examRepositoryProvider.overrideWithValue(SupabaseExamRepository(client)),
         examAudioProvider.overrideWithValue(FakeExamAudio.new),
+        offerRepositoryProvider.overrideWithValue(SupabaseOfferRepository(client)),
         qrSecretStoreProvider.overrideWithValue(const SecureQrSecretStore()),
         screenLightProvider.overrideWithValue(const DeviceScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
@@ -530,4 +537,91 @@ void main() {
       expect(find.textContaining(uz.examRightAnswer), findsWidgets);
     });
   }
+
+  // The offer, from the app's side: an App user finishes their first exam,
+  // sees the voucher it brought on the result, and books a free open lesson.
+  // (What staff then do with the code, and the account linking itself, is in
+  // supabase/tests/vouchers.test.ts and e2e/vouchers.spec.ts.)
+  testWidgets('an App user finishes an exam, gets a voucher and books an open lesson', (tester) async {
+    final offers = FakeOfferRepository(now: () => testNow);
+    final server = FakeExamServer(now: DateTime.now)
+      ..exams.add(sampleExam(id: 'short', title: 'TOPIK I — Qisqa', listening: 2, reading: 1))
+      // The first finished exam brings the voucher, as issue_voucher() does.
+      ..onFinished = (_) => offers.voucherValue ??= sampleVoucher();
+    await pumpInMemory(tester, signedIn: true, profile: appUserProfile, exams: FakeExamRepository(server, appUserProfile.id), offers: offers);
+
+    Future<void> pause() => tester.pump(const Duration(milliseconds: 700));
+    Future<void> until(Finder finder) async {
+      final deadline = DateTime.now().add(const Duration(seconds: 20));
+      while (finder.evaluate().isEmpty && DateTime.now().isBefore(deadline)) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(finder, findsWidgets);
+    }
+
+    // No voucher yet: Home has no gift card.
+    expect(find.text(uz.voucherTitle), findsNothing);
+    // Home's hero card leads straight into the exam.
+    await tester.tap(find.text('TOPIK I — Qisqa'));
+    await until(find.byType(ExamIntroScreen));
+    await pause();
+    await tester.tap(find.byType(PrimaryButton));
+    await until(find.byType(ExamPlayView));
+    await pause();
+    var taps = 0;
+    while (find.byType(ExamResultView).evaluate().isEmpty && taps++ < 20) {
+      await tester.tap(find.descendant(of: find.byType(ExamChoices), matching: find.byType(GestureDetector)).first, warnIfMissed: false);
+      await pause();
+      if (find.widgetWithText(PrimaryButton, uz.examNext).evaluate().isNotEmpty) {
+        await tester.tap(find.widgetWithText(PrimaryButton, uz.examNext));
+        await pause();
+        continue;
+      }
+      await tester.tap(find.widgetWithText(PrimaryButton, uz.examSubmitSection));
+      await until(find.byType(QuestionGridSheet));
+      await pause();
+      await tester.tap(find.widgetWithText(PrimaryButton, uz.examSubmitSection).last);
+      for (var i = 0; i < 30 && find.byType(QuestionGridSheet).evaluate().isNotEmpty; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      await pause();
+    }
+
+    // The result: the voucher with its code, and the way to a free lesson.
+    await until(find.byType(ExamResultView));
+    await until(find.text('KOR-7F3K9'));
+    expect(find.text(uz.voucherTitle), findsOneWidget);
+    expect(find.text('Birinchi oyga 20% chegirma'), findsOneWidget);
+    await tester.tap(find.widgetWithText(PrimaryButton, uz.bookOpenLesson));
+    await until(find.byType(OpenLessonsPage));
+    await pause();
+
+    // The first Saturday has seats: Book, and the sheet confirms it.
+    await tester.tap(find.widgetWithText(PrimaryButton, uz.openLessonBook));
+    await until(find.byType(BookedSheet));
+    await pause();
+    expect(find.text(uz.openLessonBooked), findsOneWidget);
+    await tester.tap(find.widgetWithText(PrimaryButton, uz.done));
+    await pause();
+    await pause();
+    expect(offers.booking?.date, '2026-11-28');
+    expect(find.byType(BookingCard), findsOneWidget);
+    // One active booking: nothing else can be booked meanwhile.
+    expect(find.text(uz.openLessonBook), findsNothing);
+    await expectLater(offers.book('slot-sat', '2026-12-05'), throwsA(isA<OfferException>()));
+
+    // Home now shows the booking; My voucher shows the ticket.
+    await tester.tap(find.bySemanticsLabel(uz.tabHome).last);
+    await pause();
+    await pause();
+    expect(find.text(uz.openLessonYours), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel(uz.tabMore).last);
+    await pause();
+    await pause();
+    await tester.tap(find.bySemanticsLabel(uz.back).last);
+    await pause();
+    await openRow(tester, uz.myVoucher);
+    await until(find.byType(VoucherTicket));
+    expect(find.text('KOR-7F3K9'), findsOneWidget);
+  });
 }

@@ -187,6 +187,9 @@ class FakeExamServer {
   /// Profiles that are linked students: their coins go to their balance.
   final students = <String>{};
 
+  /// Told when an attempt is over, with whose it was: where a first exam's voucher is issued.
+  void Function(String profileId)? onFinished;
+
   /// Exam coins given, by profile: to the balance, and locked.
   final earned = <String, int>{};
   final locked = <String, int>{};
@@ -228,6 +231,7 @@ class FakeExamServer {
       ..current = null
       ..expired = expired
       ..submittedAt = now();
+    onFinished?.call(attempt.profileId);
   }
 
   /// A finished attempt from before, for lists that show past results.

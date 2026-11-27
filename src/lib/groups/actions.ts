@@ -39,6 +39,11 @@ const ERRORS: Record<string, GroupErrorKey> = {
   EM001: "roomClash",
   EM002: "capacityOverRoom",
   EM005: "roomUnavailable",
+  // EV… are raised by supabase/migrations/20261213100000_vouchers_open_lessons.sql.
+  EV001: "voucherUnknown",
+  EV002: "voucherUsed",
+  EV003: "voucherExpired",
+  EV004: "voucherCustom",
 };
 
 async function session() {
@@ -282,6 +287,7 @@ export async function enrolStudent(input: unknown): Promise<GroupResult> {
     p_discount_value: discount.value ?? undefined,
     p_note: parsed.data.note || undefined,
     ...chargeArgs(parsed.data),
+    p_voucher_code: parsed.data.voucher_code || undefined,
   });
   if (error) return failure(error);
 

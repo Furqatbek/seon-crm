@@ -11,6 +11,7 @@ import 'package:student/core/game_state.dart';
 import 'package:student/core/localization.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
+import 'package:student/core/offer_state.dart';
 import 'package:student/core/shop_state.dart';
 import 'package:student/core/state.dart';
 import 'package:student/data/exams.dart';
@@ -20,6 +21,7 @@ import 'package:student/ui/theme.dart';
 
 import 'fake_exams.dart';
 import 'fake_game.dart';
+import 'fake_offers.dart';
 import 'fakes.dart';
 
 /// The whole app on fakes: what a test needs to drive it and to look at what it did.
@@ -73,6 +75,10 @@ class TestApp {
   late final examRepository = FakeExamRepository(exams, auth.profile?.id ?? 'nobody');
   final audio = FakeExamAudio();
 
+  /// The voucher and the open lessons. An App user's first finished exam
+  /// brings the voucher, as on the server.
+  late final offers = FakeOfferRepository(now: () => clock?.call() ?? now);
+
   /// A clock that moves, for screens that count seconds: tests pass the test binding's.
   DateTime Function()? clock;
 
@@ -114,6 +120,9 @@ class TestApp {
       ..setBalance = ((coins) => home.home = {...home.home, 'coins': coins})
       ..allowed = auth.profile?.role == AccountRole.student
       ..clock = () => now;
+    exams.onFinished = (profileId) {
+      if (auth.profile?.role == AccountRole.appUser && profileId == auth.profile?.id) offers.voucherValue ??= sampleVoucher();
+    };
     SharedPreferences.setMockInitialValues(preferences);
     saved = await SharedPreferences.getInstance();
     return ProviderScope(
@@ -130,6 +139,7 @@ class TestApp {
         gameFeedbackProvider.overrideWithValue(feedback),
         examRepositoryProvider.overrideWithValue(examRepository),
         examAudioProvider.overrideWithValue(() => audio),
+        offerRepositoryProvider.overrideWithValue(offers),
         qrSecretStoreProvider.overrideWithValue(secrets),
         screenLightProvider.overrideWithValue(light),
         photoPickerProvider.overrideWithValue((_) async => photo),

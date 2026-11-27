@@ -5,6 +5,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 
 import type { AppAccount, AppEventData, AppLanguage, AppNotifyStore } from "./app-notify";
+import type { OfferEventData } from "./offer-notify";
 import type { BotStore, RequestOutcome } from "./bot";
 import type { MessageLog } from "./deliver";
 import { EskizProvider } from "./eskiz";
@@ -455,6 +456,56 @@ export function appEventData(admin: Db): AppEventData {
         .order("linked_at");
       if (error) throw new Error(error.message);
       return data.map((row) => ({ account: toAccount(row), linkedAt: row.linked_at as string }));
+    },
+  };
+}
+
+/** What the voucher and open-lesson reminders read, with the service role. */
+export function offerEventData(admin: Db): OfferEventData {
+  /** The app accounts of these profiles that are still active, by profile id. */
+  const accountsOf = async (profileIds: string[]) => {
+    if (profileIds.length === 0) return new Map<string, AppAccount>();
+    const { data, error } = await admin.from("profiles").select(ACCOUNT_COLUMNS).in("id", profileIds).eq("is_active", true);
+    if (error) throw new Error(error.message);
+    return new Map(data.map((row) => [row.id, toAccount(row)]));
+  };
+  return {
+    async quietHours() {
+      const { data, error } = await admin.from("centre_settings").select("quiet_from, quiet_to").single();
+      if (error) throw new Error(error.message);
+      return { from: data.quiet_from.slice(0, 5), to: data.quiet_to.slice(0, 5) };
+    },
+    async expiringVouchers(now, until) {
+      const { data, error } = await admin
+        .from("vouchers")
+        .select("id, code, expires_at, profile_id")
+        .eq("status", "issued")
+        .not("profile_id", "is", null)
+        .gt("expires_at", now.toISOString())
+        .lte("expires_at", until.toISOString())
+        .limit(500);
+      if (error) throw new Error(error.message);
+      const accounts = await accountsOf(data.flatMap((row) => (row.profile_id ? [row.profile_id] : [])));
+      return data.flatMap((row) => {
+        const account = row.profile_id ? accounts.get(row.profile_id) : undefined;
+        return account ? [{ id: row.id, code: row.code, expiresAt: row.expires_at, account }] : [];
+      });
+    },
+    async bookedLessons(days) {
+      const { data, error } = await admin.from("open_lesson_bookings").select("id, slot_id, session_date, profile_id").eq("status", "booked").in("session_date", days).limit(1000);
+      if (error) throw new Error(error.message);
+      if (data.length === 0) return [];
+      const [slots, accounts] = await Promise.all([
+        admin.from("open_lesson_slots").select("id, title, start_time").in("id", [...new Set(data.map((row) => row.slot_id))]),
+        accountsOf([...new Set(data.map((row) => row.profile_id))]),
+      ]);
+      if (slots.error) throw new Error(slots.error.message);
+      const slotOf = new Map(slots.data.map((slot) => [slot.id, slot]));
+      return data.flatMap((row) => {
+        const slot = slotOf.get(row.slot_id);
+        const account = accounts.get(row.profile_id);
+        return slot && account ? [{ bookingId: row.id, title: slot.title, sessionDate: row.session_date, startTime: slot.start_time.slice(0, 5), account }] : [];
+      });
     },
   };
 }

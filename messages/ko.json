@@ -58,7 +58,8 @@
     "waitingLeads": "대기 중인 리드:",
     "checkin": "출입 체크",
     "questions": "문제",
-    "exams": "모의고사"
+    "exams": "모의고사",
+    "openLessons": "공개 수업"
   },
   "language": {
     "label": "언어",
@@ -185,7 +186,8 @@
       "unassigned": "담당자 없음",
       "referredBy": "추천인",
       "referredByHint": "이 리드를 소개한 학생입니다. 리드가 등록하고 첫 결제를 하면 추천인이 코인을 받습니다.",
-      "koreanLevel": "한국어 수준"
+      "koreanLevel": "한국어 수준",
+      "openLesson": "공개 수업"
     },
     "form": {
       "created": "리드가 추가되었습니다",
@@ -222,7 +224,13 @@
       "statusChange": "{from} → {to}",
       "reason": "사유: {reason}",
       "formResubmitted": "“{form}” 양식을 다시 제출함",
-      "appSignup": "모바일 앱에서 가입함"
+      "appSignup": "모바일 앱에서 가입함",
+      "voucher_issued": "앱에서 바우처 발급",
+      "voucher_redeemed": "바우처 사용",
+      "open_lesson_booked": "공개 수업 예약",
+      "open_lesson_cancelled": "공개 수업 예약 취소",
+      "open_lesson_came": "공개 수업 출석",
+      "open_lesson_no_show": "공개 수업 불참"
     },
     "lost": {
       "title": "{name} 님을 미등록 처리할까요?",
@@ -710,7 +718,16 @@
       "save": "등록",
       "saveTransfer": "이동",
       "done": "학생이 등록되었습니다",
-      "transferDone": "학생이 이동되었습니다"
+      "transferDone": "학생이 이동되었습니다",
+      "voucher": "바우처 코드",
+      "voucherHint": "모바일 앱의 바우처입니다. 코드는 한 번만 사용할 수 있습니다.",
+      "voucherPercent": "바우처: {percent}% 할인",
+      "voucherFixed": "바우처: 금액 할인",
+      "voucherTrial": "바우처: {days}일 무료",
+      "voucherPaidFrom": "{date}부터 수강료 적용",
+      "voucherCharge": "바우처 적용 첫 청구액",
+      "voucherNext": "{month} 청구액",
+      "voucherNextLater": "월 정기 청구 시"
     },
     "leave": {
       "title": "{student} 님을 {group} 그룹에서 제외",
@@ -755,7 +772,11 @@
       "roomInvalid": "목록에서 강의실을 선택하세요.",
       "roomClash": "해당 시간에 강의실을 {detail}에서 사용 중입니다.",
       "roomUnavailable": "이 강의실은 더 이상 사용할 수 없습니다. 다른 강의실을 선택하세요.",
-      "examTitleRequired": "시험 이름을 입력하세요."
+      "examTitleRequired": "시험 이름을 입력하세요.",
+      "voucherUnknown": "이 코드의 바우처가 없습니다.",
+      "voucherUsed": "이미 사용된 바우처입니다.",
+      "voucherExpired": "만료된 바우처입니다.",
+      "voucherCustom": "바우처는 직접 입력한 금액과 함께 쓸 수 없습니다. 제안된 청구액이나 한 달 전체를 선택하세요."
     }
   },
   "finance": {
@@ -1215,7 +1236,8 @@
     },
     "tabs": {
       "overview": "개요",
-      "points": "코인"
+      "points": "코인",
+      "vouchers": "바우처"
     },
     "points": {
       "points": "코인",
@@ -1388,7 +1410,8 @@
       "points": "코인",
       "sources": "리드 소스",
       "integrations": "연동",
-      "about": "센터 소개 및 개인정보"
+      "about": "센터 소개 및 개인정보",
+      "vouchers": "바우처"
     },
     "saved": "저장되었습니다",
     "centre": {
@@ -2015,7 +2038,8 @@
     "tabs": {
       "label": "리드 섹션",
       "leads": "리드",
-      "forms": "양식"
+      "forms": "양식",
+      "openLessons": "공개 수업"
     },
     "status": {
       "draft": "초안",
@@ -2291,6 +2315,15 @@
     "inviteSms": "{centre}: 시간표, 코인, 결제 내역을 앱에서 확인하세요. 다운로드: {links}",
     "game_invite": {
       "body": "{name} 님이 1대1 게임을 신청했습니다. 60초 안에 응답하세요."
+    },
+    "voucher_expiring": {
+      "title": "바우처가 곧 만료됩니다",
+      "body": "바우처 {code}는 {date}까지 유효합니다. 센터에 방문해 사용하세요."
+    },
+    "open_lesson": {
+      "title": "무료 공개 수업",
+      "evening": "내일 {time}: {title}. 기다리겠습니다!",
+      "soon": "오늘 {time}: {title}. 기다리겠습니다!"
     }
   },
   "checkin": {
@@ -2596,5 +2629,120 @@
       "questionAnswered": "이미 응시자가 답한 문제라 삭제할 수 없습니다."
     },
     "removePicture": "그림 삭제"
+  },
+  "offers": {
+    "types": {
+      "percent": "퍼센트 할인",
+      "fixed": "금액 할인",
+      "trial_week": "무료 체험 주간"
+    },
+    "worth": {
+      "percent": "첫 달 {value}% 할인",
+      "fixed": "첫 달 <amount></amount> 할인",
+      "trial_week": "{value}일 무료"
+    },
+    "voucherStatus": {
+      "issued": "사용 가능",
+      "redeemed": "사용됨",
+      "expired": "만료됨"
+    },
+    "bookingStatus": {
+      "booked": "예약됨",
+      "came": "출석",
+      "no_show": "불참",
+      "cancelled": "취소됨"
+    },
+    "lead": {
+      "title": "모바일 앱에서",
+      "bookings": "공개 수업",
+      "validUntil": "{date}까지 유효",
+      "expiredOn": "{date}에 만료",
+      "redeemedOn": "{date}에 사용"
+    },
+    "settings": {
+      "hint": "앱 사용자는 첫 모의고사를 마치면 바우처 하나를 받습니다. 종류는 아래 가중치에 따라 무작위로 정해집니다.",
+      "types": {
+        "percent": "첫 달 퍼센트 할인",
+        "fixed": "첫 달 금액 할인",
+        "trial": "무료 체험 주간"
+      },
+      "enabled": "{type}: 사용",
+      "weight": "가중치",
+      "value": {
+        "percent": "할인율, %",
+        "fixed": "할인 금액, 숨",
+        "trial": "무료 일수"
+      },
+      "validity": "유효 기간",
+      "weightHint": "가중치가 클수록 그 종류가 더 자주 나옵니다. 1, 1, 1이면 확률이 같습니다. 꺼져 있거나 가중치가 0인 종류는 지급되지 않습니다.",
+      "validDays": "바우처 유효 일수"
+    },
+    "errors": {
+      "generic": "문제가 발생했습니다. 다시 시도하세요.",
+      "notAllowed": "권한이 없습니다.",
+      "notFound": "찾을 수 없습니다.",
+      "valueRange": "숫자를 확인하세요.",
+      "valueRangeOf": "{min}~{max} 사이의 정수",
+      "noType": "적어도 한 종류는 켜져 있고 가중치가 0보다 커야 합니다.",
+      "titleRequired": "제목을 입력하세요.",
+      "tooLong": "내용이 너무 깁니다.",
+      "timeInvalid": "시간을 입력하세요.",
+      "seatsInvalid": "좌석 수는 1~200입니다.",
+      "durationInvalid": "수업 길이는 15~240분입니다."
+    },
+    "slots": {
+      "heading": "주간 수업",
+      "add": "수업 추가",
+      "editTitle": "수업 수정",
+      "edit": "{title} 수정",
+      "empty": "아직 공개 수업이 없습니다. 첫 수업을 추가하면 앱에 앞으로 4주간 표시됩니다.",
+      "emptyTeacher": "담당하는 공개 수업이 없습니다.",
+      "title": "제목",
+      "when": "시간",
+      "level": "레벨",
+      "teacher": "교사",
+      "room": "교실",
+      "seats": "좌석",
+      "state": "상태",
+      "on": "사용 중",
+      "off": "꺼짐",
+      "minutes": "{minutes}분",
+      "levels": {
+        "any": "모든 레벨",
+        "beginner": "입문",
+        "topik1": "TOPIK I",
+        "topik2": "TOPIK II"
+      },
+      "weekday": "요일",
+      "startTime": "시작 시간",
+      "duration": "수업 길이(분)",
+      "noTeacher": "미지정",
+      "active": "앱에 표시",
+      "activeHint": "끄면 새 예약을 받지 않으며 기존 예약은 유지됩니다.",
+      "archive": "보관",
+      "saved": "저장했습니다",
+      "archived": "수업을 보관했습니다"
+    },
+    "sessions": {
+      "heading": "수업과 예약자",
+      "upcoming": "예정",
+      "past": "지난 수업",
+      "emptyUpcoming": "앞으로 4주간 수업이 없습니다.",
+      "emptyPast": "지난 2주간 예약이 없었습니다.",
+      "booked": "{seats}석 중 {booked}석 예약",
+      "mark": "표시",
+      "notMarked": "미표시",
+      "markFailed": "표시하지 못했습니다. 다시 시도하세요.",
+      "someone": "앱 사용자"
+    },
+    "report": {
+      "issued": "발급",
+      "redeemed": "등록에 사용",
+      "conversion": "전환율",
+      "expired": "만료",
+      "byType": "종류별",
+      "type": "종류",
+      "hint": "선택한 기간에 발급된 바우처입니다. 전환율은 그중 수강 등록에 사용된 비율입니다."
+    }
   }
 }

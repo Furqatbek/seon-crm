@@ -387,9 +387,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get openLessonTitle => 'Bepul ochiq dars';
 
   @override
-  String get openLessonSoon => 'Ochiq darslarga yozilish tez orada shu yerda ochiladi.';
-
-  @override
   String get bookOpenLesson => 'Bepul ochiq darsga yozilish';
 
   @override
@@ -1255,4 +1252,89 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get examHeroAllDone => 'Darajangizdagi barcha imtihonlar topshirilgan';
+
+  @override
+  String get voucherLabel => 'Vaucher';
+
+  @override
+  String voucherTrialDays(int days) {
+    return '$days kun bepul sinov';
+  }
+
+  @override
+  String get voucherTellCode => 'Qabulxonada ushbu kodni ayting';
+
+  @override
+  String get voucherOnePerPerson => 'Bitta odamga bitta vaucher';
+
+  @override
+  String get voucherCopy => 'Kodni nusxalash';
+
+  @override
+  String get voucherCopied => 'Kod nusxalandi';
+
+  @override
+  String get voucherExpired => 'Muddati oʻtgan';
+
+  @override
+  String get voucherUsed => 'Ishlatilgan';
+
+  @override
+  String get openLessonsTitle => 'Bepul ochiq darslar';
+
+  @override
+  String get openLessonsEmpty => 'Keyingi 4 haftada ochiq dars yoʻq';
+
+  @override
+  String openLessonSeatsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count ta joy qoldi');
+    return '$_temp0';
+  }
+
+  @override
+  String get openLessonFull => 'Joy qolmagan';
+
+  @override
+  String get openLessonBook => 'Joy band qilish';
+
+  @override
+  String get openLessonBooked => 'Joy band qilindi';
+
+  @override
+  String get openLessonCancelHint => 'Bekor qilish 2 soat oldingacha mumkin';
+
+  @override
+  String get openLessonCancel => 'Yozilishni bekor qilish';
+
+  @override
+  String get openLessonCancelled => 'Yozilish bekor qilindi';
+
+  @override
+  String get openLessonCancelClosed => 'Bekor qilish muddati oʻtdi: dars 2 soatdan kam vaqtda boshlanadi';
+
+  @override
+  String get openLessonYours => 'Sizning yozilishingiz';
+
+  @override
+  String get openLessonOneBooking => 'Bir vaqtda bitta yozilish mumkin';
+
+  @override
+  String get openLessonNext => 'Keyingi dars';
+
+  @override
+  String get openLessonEveryLevel => 'Barcha darajalar';
+
+  @override
+  String get openLessonErrorFull => 'Bu darsda joy qolmadi';
+
+  @override
+  String get openLessonErrorGone => 'Bu dars endi mavjud emas';
+
+  @override
+  String get openLessonErrorHasBooking => 'Sizda allaqachon yozilish bor';
+
+  @override
+  String weekdayAndDate(String weekday, String date) {
+    return '$weekday, $date';
+  }
 }

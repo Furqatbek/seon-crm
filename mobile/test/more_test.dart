@@ -18,6 +18,7 @@ import 'package:student/features/more/money_pages.dart';
 import 'package:student/features/more/more_tab.dart';
 import 'package:student/features/more/schedule.dart';
 import 'package:student/features/more/simple_pages.dart';
+import 'package:student/features/offers/offers.dart';
 import 'package:student/features/more/sub_page.dart';
 import 'package:student/ui/tokens.dart';
 import 'package:student/ui/widgets.dart';
@@ -135,7 +136,7 @@ void main() {
       }
     });
 
-    testWidgets('App user: My voucher and Open lessons open, as placeholders for now', (tester) async {
+    testWidgets('App user: My voucher and Open lessons open', (tester) async {
       await openMore(tester, auth: appUser());
       await openRow(tester, l.myVoucher);
       expect(find.text(l.voucherEmpty), findsOneWidget);

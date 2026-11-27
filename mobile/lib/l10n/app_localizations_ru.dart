@@ -413,9 +413,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get openLessonTitle => 'Бесплатный открытый урок';
 
   @override
-  String get openLessonSoon => 'Запись на открытые уроки скоро появится здесь.';
-
-  @override
   String get bookOpenLesson => 'Записаться на бесплатный урок';
 
   @override
@@ -1299,4 +1296,89 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get examHeroAllDone => 'Все экзамены вашего уровня пройдены';
+
+  @override
+  String get voucherLabel => 'Ваучер';
+
+  @override
+  String voucherTrialDays(int days) {
+    return '$days дн. бесплатных занятий';
+  }
+
+  @override
+  String get voucherTellCode => 'Назовите этот код на ресепшене';
+
+  @override
+  String get voucherOnePerPerson => 'Один ваучер на человека';
+
+  @override
+  String get voucherCopy => 'Скопировать код';
+
+  @override
+  String get voucherCopied => 'Код скопирован';
+
+  @override
+  String get voucherExpired => 'Срок истёк';
+
+  @override
+  String get voucherUsed => 'Использован';
+
+  @override
+  String get openLessonsTitle => 'Бесплатные открытые уроки';
+
+  @override
+  String get openLessonsEmpty => 'В ближайшие 4 недели открытых уроков нет';
+
+  @override
+  String openLessonSeatsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: 'Осталось $count мест', few: 'Осталось $count места', one: 'Осталось $count место');
+    return '$_temp0';
+  }
+
+  @override
+  String get openLessonFull => 'Мест нет';
+
+  @override
+  String get openLessonBook => 'Забронировать место';
+
+  @override
+  String get openLessonBooked => 'Место забронировано';
+
+  @override
+  String get openLessonCancelHint => 'Отменить можно не позднее чем за 2 часа';
+
+  @override
+  String get openLessonCancel => 'Отменить запись';
+
+  @override
+  String get openLessonCancelled => 'Запись отменена';
+
+  @override
+  String get openLessonCancelClosed => 'Отменить уже нельзя: до урока меньше 2 часов';
+
+  @override
+  String get openLessonYours => 'Ваша запись';
+
+  @override
+  String get openLessonOneBooking => 'Одновременно возможна одна запись';
+
+  @override
+  String get openLessonNext => 'Ближайший урок';
+
+  @override
+  String get openLessonEveryLevel => 'Все уровни';
+
+  @override
+  String get openLessonErrorFull => 'На этом уроке не осталось мест';
+
+  @override
+  String get openLessonErrorGone => 'Этот урок больше недоступен';
+
+  @override
+  String get openLessonErrorHasBooking => 'У вас уже есть запись';
+
+  @override
+  String weekdayAndDate(String weekday, String date) {
+    return '$weekday, $date';
+  }
 }

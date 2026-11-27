@@ -748,12 +748,6 @@ abstract class AppLocalizations {
   /// **'Bepul ochiq dars'**
   String get openLessonTitle;
 
-  /// No description provided for @openLessonSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Ochiq darslarga yozilish tez orada shu yerda ochiladi.'**
-  String get openLessonSoon;
-
   /// No description provided for @bookOpenLesson.
   ///
   /// In uz, this message translates to:
@@ -2313,6 +2307,162 @@ abstract class AppLocalizations {
   /// In uz, this message translates to:
   /// **'Darajangizdagi barcha imtihonlar topshirilgan'**
   String get examHeroAllDone;
+
+  /// No description provided for @voucherLabel.
+  ///
+  /// In uz, this message translates to:
+  /// **'Vaucher'**
+  String get voucherLabel;
+
+  /// No description provided for @voucherTrialDays.
+  ///
+  /// In uz, this message translates to:
+  /// **'{days} kun bepul sinov'**
+  String voucherTrialDays(int days);
+
+  /// No description provided for @voucherTellCode.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qabulxonada ushbu kodni ayting'**
+  String get voucherTellCode;
+
+  /// No description provided for @voucherOnePerPerson.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bitta odamga bitta vaucher'**
+  String get voucherOnePerPerson;
+
+  /// No description provided for @voucherCopy.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kodni nusxalash'**
+  String get voucherCopy;
+
+  /// No description provided for @voucherCopied.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kod nusxalandi'**
+  String get voucherCopied;
+
+  /// No description provided for @voucherExpired.
+  ///
+  /// In uz, this message translates to:
+  /// **'Muddati oʻtgan'**
+  String get voucherExpired;
+
+  /// No description provided for @voucherUsed.
+  ///
+  /// In uz, this message translates to:
+  /// **'Ishlatilgan'**
+  String get voucherUsed;
+
+  /// No description provided for @openLessonsTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bepul ochiq darslar'**
+  String get openLessonsTitle;
+
+  /// No description provided for @openLessonsEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Keyingi 4 haftada ochiq dars yoʻq'**
+  String get openLessonsEmpty;
+
+  /// No description provided for @openLessonSeatsLeft.
+  ///
+  /// In uz, this message translates to:
+  /// **'{count, plural, other{{count} ta joy qoldi}}'**
+  String openLessonSeatsLeft(int count);
+
+  /// No description provided for @openLessonFull.
+  ///
+  /// In uz, this message translates to:
+  /// **'Joy qolmagan'**
+  String get openLessonFull;
+
+  /// No description provided for @openLessonBook.
+  ///
+  /// In uz, this message translates to:
+  /// **'Joy band qilish'**
+  String get openLessonBook;
+
+  /// No description provided for @openLessonBooked.
+  ///
+  /// In uz, this message translates to:
+  /// **'Joy band qilindi'**
+  String get openLessonBooked;
+
+  /// No description provided for @openLessonCancelHint.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bekor qilish 2 soat oldingacha mumkin'**
+  String get openLessonCancelHint;
+
+  /// No description provided for @openLessonCancel.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yozilishni bekor qilish'**
+  String get openLessonCancel;
+
+  /// No description provided for @openLessonCancelled.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yozilish bekor qilindi'**
+  String get openLessonCancelled;
+
+  /// No description provided for @openLessonCancelClosed.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bekor qilish muddati oʻtdi: dars 2 soatdan kam vaqtda boshlanadi'**
+  String get openLessonCancelClosed;
+
+  /// No description provided for @openLessonYours.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sizning yozilishingiz'**
+  String get openLessonYours;
+
+  /// No description provided for @openLessonOneBooking.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bir vaqtda bitta yozilish mumkin'**
+  String get openLessonOneBooking;
+
+  /// No description provided for @openLessonNext.
+  ///
+  /// In uz, this message translates to:
+  /// **'Keyingi dars'**
+  String get openLessonNext;
+
+  /// No description provided for @openLessonEveryLevel.
+  ///
+  /// In uz, this message translates to:
+  /// **'Barcha darajalar'**
+  String get openLessonEveryLevel;
+
+  /// No description provided for @openLessonErrorFull.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu darsda joy qolmadi'**
+  String get openLessonErrorFull;
+
+  /// No description provided for @openLessonErrorGone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu dars endi mavjud emas'**
+  String get openLessonErrorGone;
+
+  /// No description provided for @openLessonErrorHasBooking.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sizda allaqachon yozilish bor'**
+  String get openLessonErrorHasBooking;
+
+  /// No description provided for @weekdayAndDate.
+  ///
+  /// In uz, this message translates to:
+  /// **'{weekday}, {date}'**
+  String weekdayAndDate(String weekday, String date);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

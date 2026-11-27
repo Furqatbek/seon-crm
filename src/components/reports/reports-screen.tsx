@@ -31,6 +31,7 @@ import type { Locale } from "@/i18n/routing";
 import { REPORT_PERIODS, type ReportPeriod } from "@/lib/domain/report-period";
 import { formatMoney, formatMoneyAxis, formatMonth, formatMonthShort, formatPercent } from "@/lib/format";
 import { useUrlState } from "@/lib/hooks/use-url-state";
+import type { VoucherReportRow } from "@/lib/offers/queries";
 import type { PointsReport as PointsReportData, Report } from "@/lib/reports/queries";
 import { REPORT_TABS, type ReportTab } from "@/lib/validation/reports";
 
@@ -48,6 +49,7 @@ import {
   shorten,
 } from "./chart-parts";
 import { PointsReport } from "./points-report";
+import { VouchersReport } from "./vouchers-report";
 
 const ROW = 34;
 const rowsHeight = (count: number) => count * ROW + 12;
@@ -135,6 +137,7 @@ export function ReportsScreen({
   tab,
   report,
   points,
+  vouchers,
   range,
   monthOptions,
 }: {
@@ -143,6 +146,8 @@ export function ReportsScreen({
   report: Report | null;
   /** The Points tab's figures; only asked for when that tab is open. */
   points: PointsReportData | null;
+  /** The Vouchers tab's counts; only asked for when that tab is open. */
+  vouchers: VoucherReportRow[] | null;
   range: Range;
   /** The months a custom range can start or end on, newest first. */
   monthOptions: string[];
@@ -184,7 +189,7 @@ export function ReportsScreen({
         <PageHeader title={tNav("reports")}>
           <PeriodPicker range={range} monthOptions={monthOptions} />
         </PageHeader>
-        {withTabs(points ? <PointsReport report={points} range={range} locale={locale} /> : null)}
+        {withTabs(points ? <PointsReport report={points} range={range} locale={locale} /> : vouchers ? <VouchersReport rows={vouchers} locale={locale} /> : null)}
       </>
     );
   }

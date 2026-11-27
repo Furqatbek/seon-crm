@@ -58,7 +58,8 @@
     "waitingLeads": "Leads waiting:",
     "checkin": "Check-in",
     "questions": "Questions",
-    "exams": "Mock exams"
+    "exams": "Mock exams",
+    "openLessons": "Open lessons"
   },
   "language": {
     "label": "Language",
@@ -185,7 +186,8 @@
       "unassigned": "Nobody",
       "referredBy": "Referred by",
       "referredByHint": "The student who sent this lead. They get coins when the lead enrols and makes a first payment.",
-      "koreanLevel": "Korean level"
+      "koreanLevel": "Korean level",
+      "openLesson": "Open lesson"
     },
     "form": {
       "created": "Lead added",
@@ -222,7 +224,13 @@
       "statusChange": "{from} → {to}",
       "reason": "Reason: {reason}",
       "formResubmitted": "Submitted “{form}” again",
-      "appSignup": "Signed up in the mobile app"
+      "appSignup": "Signed up in the mobile app",
+      "voucher_issued": "A voucher was issued in the app",
+      "voucher_redeemed": "The voucher was used",
+      "open_lesson_booked": "Booked an open lesson",
+      "open_lesson_cancelled": "Cancelled the open lesson",
+      "open_lesson_came": "Came to the open lesson",
+      "open_lesson_no_show": "Did not come to the open lesson"
     },
     "lost": {
       "title": "Mark {name} as lost?",
@@ -710,7 +718,16 @@
       "save": "Enrol",
       "saveTransfer": "Transfer",
       "done": "Student enrolled",
-      "transferDone": "Student transferred"
+      "transferDone": "Student transferred",
+      "voucher": "Voucher code",
+      "voucherHint": "A voucher from the mobile app. Each code works once.",
+      "voucherPercent": "Voucher: {percent}% off",
+      "voucherFixed": "Voucher: amount off",
+      "voucherTrial": "Voucher: {days} free days",
+      "voucherPaidFrom": "Paid from {date}",
+      "voucherCharge": "First charge with the voucher",
+      "voucherNext": "Charge for {month}",
+      "voucherNextLater": "with the monthly run"
     },
     "leave": {
       "title": "{student} leaves {group}",
@@ -755,7 +772,11 @@
       "roomInvalid": "Choose a room from the list.",
       "roomClash": "The room is taken at that time by {detail}.",
       "roomUnavailable": "This room is no longer available. Choose another.",
-      "examTitleRequired": "Enter the exam's title."
+      "examTitleRequired": "Enter the exam's title.",
+      "voucherUnknown": "There is no voucher with this code.",
+      "voucherUsed": "This voucher has already been used.",
+      "voucherExpired": "This voucher has expired.",
+      "voucherCustom": "A voucher does not go with a custom amount. Choose the proposed charge or the full month."
     }
   },
   "finance": {
@@ -1215,7 +1236,8 @@
     },
     "tabs": {
       "overview": "Overview",
-      "points": "Coins"
+      "points": "Coins",
+      "vouchers": "Vouchers"
     },
     "points": {
       "points": "Coins",
@@ -1388,7 +1410,8 @@
       "points": "Coins",
       "sources": "Lead sources",
       "integrations": "Integrations",
-      "about": "About and Privacy"
+      "about": "About and Privacy",
+      "vouchers": "Vouchers"
     },
     "saved": "Saved",
     "centre": {
@@ -2015,7 +2038,8 @@
     "tabs": {
       "label": "Leads sections",
       "leads": "Leads",
-      "forms": "Forms"
+      "forms": "Forms",
+      "openLessons": "Open lessons"
     },
     "status": {
       "draft": "Draft",
@@ -2291,6 +2315,15 @@
     "inviteSms": "{centre}: your schedule, coins and payments are in the app. Download: {links}",
     "game_invite": {
       "body": "{name} challenged you to a 1v1 game. Answer within 60 seconds."
+    },
+    "voucher_expiring": {
+      "title": "Your voucher is about to expire",
+      "body": "Voucher {code} is valid until {date}. Come to the centre and use it."
+    },
+    "open_lesson": {
+      "title": "Free open lesson",
+      "evening": "Tomorrow at {time}: {title}. See you there!",
+      "soon": "Today at {time}: {title}. See you there!"
     }
   },
   "checkin": {
@@ -2596,5 +2629,120 @@
       "questionAnswered": "This question has been answered, so it cannot be removed."
     },
     "removePicture": "Remove picture"
+  },
+  "offers": {
+    "types": {
+      "percent": "Percent off",
+      "fixed": "Amount off",
+      "trial_week": "Free trial week"
+    },
+    "worth": {
+      "percent": "{value}% off the first month",
+      "fixed": "<amount></amount> off the first month",
+      "trial_week": "{value} free days"
+    },
+    "voucherStatus": {
+      "issued": "Valid",
+      "redeemed": "Used",
+      "expired": "Expired"
+    },
+    "bookingStatus": {
+      "booked": "Booked",
+      "came": "Came",
+      "no_show": "No-show",
+      "cancelled": "Cancelled"
+    },
+    "lead": {
+      "title": "From the mobile app",
+      "bookings": "Open lessons",
+      "validUntil": "Valid until {date}",
+      "expiredOn": "Expired on {date}",
+      "redeemedOn": "Used on {date}"
+    },
+    "settings": {
+      "hint": "An app user gets one voucher after their first finished mock exam. Its type is drawn at random by the weights below.",
+      "types": {
+        "percent": "Percent off the first month",
+        "fixed": "Amount off the first month",
+        "trial": "Free trial week"
+      },
+      "enabled": "{type}: on",
+      "weight": "Weight",
+      "value": {
+        "percent": "Discount, %",
+        "fixed": "Discount, soʻm",
+        "trial": "Free days"
+      },
+      "validity": "Validity",
+      "weightHint": "The larger a weight, the more often that type is drawn: 1, 1 and 1 are equal chances. A type that is off, or has weight 0, is never given.",
+      "validDays": "Days a voucher is valid"
+    },
+    "errors": {
+      "generic": "Something went wrong. Try again.",
+      "notAllowed": "You are not allowed to do this.",
+      "notFound": "Not found.",
+      "valueRange": "Check the numbers.",
+      "valueRangeOf": "A whole number from {min} to {max}",
+      "noType": "At least one type must be on with a weight above 0.",
+      "titleRequired": "Enter a title.",
+      "tooLong": "The text is too long.",
+      "timeInvalid": "Enter the time.",
+      "seatsInvalid": "Seats: from 1 to 200.",
+      "durationInvalid": "Length: from 15 to 240 minutes."
+    },
+    "slots": {
+      "heading": "Weekly slots",
+      "add": "Add slot",
+      "editTitle": "Edit slot",
+      "edit": "Edit {title}",
+      "empty": "No open lessons yet. Add the first one: the app shows it for the next 4 weeks.",
+      "emptyTeacher": "You have no open lessons.",
+      "title": "Title",
+      "when": "When",
+      "level": "Level",
+      "teacher": "Teacher",
+      "room": "Room",
+      "seats": "Seats",
+      "state": "Status",
+      "on": "On",
+      "off": "Off",
+      "minutes": "{minutes} min",
+      "levels": {
+        "any": "Every level",
+        "beginner": "Beginner",
+        "topik1": "TOPIK I",
+        "topik2": "TOPIK II"
+      },
+      "weekday": "Weekday",
+      "startTime": "Start time",
+      "duration": "Length, minutes",
+      "noTeacher": "Not set",
+      "active": "Shown in the app",
+      "activeHint": "Switched off, it takes no new bookings; the ones already made stay.",
+      "archive": "Archive",
+      "saved": "Saved",
+      "archived": "The slot is archived"
+    },
+    "sessions": {
+      "heading": "Sessions and bookings",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "emptyUpcoming": "No sessions in the next 4 weeks.",
+      "emptyPast": "Nobody had booked in the last 2 weeks.",
+      "booked": "{booked} of {seats} seats booked",
+      "mark": "Mark",
+      "notMarked": "Not marked",
+      "markFailed": "The mark was not saved. Try again.",
+      "someone": "An app user"
+    },
+    "report": {
+      "issued": "Issued",
+      "redeemed": "Used to enrol",
+      "conversion": "Conversion",
+      "expired": "Expired",
+      "byType": "By type",
+      "type": "Type",
+      "hint": "Vouchers issued in the chosen period. Conversion is the share of them used to enrol a student."
+    }
   }
 }

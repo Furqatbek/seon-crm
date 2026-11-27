@@ -1,5 +1,6 @@
 import { runAppNotifications, studentPush } from "@/lib/notify/app-notify";
 import { studentAppTexts, botTexts, staffBotTexts } from "@/lib/notify/bot-texts";
+import { runOfferNotifications } from "@/lib/notify/offer-notify";
 import { runPointsMessages } from "@/lib/notify/points-messages";
 import { runReminders } from "@/lib/notify/reminders";
 import { secretMatches } from "@/lib/notify/secret";
@@ -10,6 +11,7 @@ import {
   getProviders,
   getPushSender,
   messageLog,
+  offerEventData,
   pointsMessageData,
   reminderData,
   removeDeletedAvatars,
@@ -46,6 +48,11 @@ export async function POST(request: Request) {
   const points = await runPointsMessages(now, { data: pointsMessageData(admin), log, providers: getProviders(), texts: botTexts, app });
   // "Your account is linked to the centre", for accounts linked since the last runs.
   const appNotifications = await runAppNotifications(now, { ...appDeps, data: events, texts: studentAppTexts });
+  // The voucher that is about to expire, and tomorrow's or today's booked open lesson.
+  const offers = await runOfferNotifications(now, { ...appDeps, data: offerEventData(admin), texts: studentAppTexts }).catch((error) => {
+    console.error("offer notifications", error);
+    return null;
+  });
   // Leads waiting in the shared inbox: alerts that were held back at night, and the 30-minute reminder.
   const staff = await runStaffAlerts(now, {
     data: staffAlertData(admin),
@@ -59,5 +66,5 @@ export async function POST(request: Request) {
     console.error("deleted avatars", error);
     return 0;
   });
-  return Response.json({ ...summary, points, staff, app: appNotifications, photosRemoved });
+  return Response.json({ ...summary, points, staff, app: appNotifications, offers, photosRemoved });
 }

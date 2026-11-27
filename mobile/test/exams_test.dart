@@ -480,6 +480,8 @@ void main() {
       expect(app.exams.locked, isEmpty);
       // No offer for the centre's own student.
       expect(find.text(l.examOfferTitle), findsNothing);
+      expect(find.text(l.voucherTitle), findsNothing);
+      expect(app.offers.voucherValue, isNull);
       expect(find.text(l.bookOpenLesson), findsNothing);
     });
 
@@ -493,7 +495,10 @@ void main() {
       expect(find.text('+3 tanga'), findsNothing);
       expect(app.exams.locked[appUserProfile.id], 3);
       expect(app.exams.earned, isEmpty);
-      expect(find.text(l.examOfferTitle), findsOneWidget);
+      // Their first finished exam brought the voucher: the offer card shows it with its code.
+      expect(find.text(l.voucherTitle), findsOneWidget);
+      expect(find.text('Birinchi oyga 20% chegirma'), findsOneWidget);
+      expect(find.text('KOR-7F3K9'), findsOneWidget);
       expect(find.widgetWithText(PrimaryButton, l.bookOpenLesson), findsOneWidget);
       expect(find.text(l.later), findsOneWidget);
     });

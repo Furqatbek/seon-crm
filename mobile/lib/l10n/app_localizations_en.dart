@@ -395,9 +395,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openLessonTitle => 'Free open lesson';
 
   @override
-  String get openLessonSoon => 'Booking a free open lesson will be here soon.';
-
-  @override
   String get bookOpenLesson => 'Book a free open lesson';
 
   @override
@@ -1263,4 +1260,89 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get examHeroAllDone => 'You have completed every exam of your level';
+
+  @override
+  String get voucherLabel => 'Voucher';
+
+  @override
+  String voucherTrialDays(int days) {
+    return '$days free trial days';
+  }
+
+  @override
+  String get voucherTellCode => 'Tell this code at reception';
+
+  @override
+  String get voucherOnePerPerson => 'One voucher per person';
+
+  @override
+  String get voucherCopy => 'Copy the code';
+
+  @override
+  String get voucherCopied => 'Code copied';
+
+  @override
+  String get voucherExpired => 'Expired';
+
+  @override
+  String get voucherUsed => 'Used';
+
+  @override
+  String get openLessonsTitle => 'Free open lessons';
+
+  @override
+  String get openLessonsEmpty => 'No open lessons in the next 4 weeks';
+
+  @override
+  String openLessonSeatsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count seats left', one: '$count seat left');
+    return '$_temp0';
+  }
+
+  @override
+  String get openLessonFull => 'No seats left';
+
+  @override
+  String get openLessonBook => 'Book a seat';
+
+  @override
+  String get openLessonBooked => 'Seat booked';
+
+  @override
+  String get openLessonCancelHint => 'You can cancel up to 2 hours before';
+
+  @override
+  String get openLessonCancel => 'Cancel the booking';
+
+  @override
+  String get openLessonCancelled => 'Booking cancelled';
+
+  @override
+  String get openLessonCancelClosed => 'Too late to cancel: the lesson starts in under 2 hours';
+
+  @override
+  String get openLessonYours => 'Your booking';
+
+  @override
+  String get openLessonOneBooking => 'One booking at a time';
+
+  @override
+  String get openLessonNext => 'Next lesson';
+
+  @override
+  String get openLessonEveryLevel => 'Every level';
+
+  @override
+  String get openLessonErrorFull => 'This lesson has no seats left';
+
+  @override
+  String get openLessonErrorGone => 'This lesson is no longer available';
+
+  @override
+  String get openLessonErrorHasBooking => 'You already have a booking';
+
+  @override
+  String weekdayAndDate(String weekday, String date) {
+    return '$weekday, $date';
+  }
 }

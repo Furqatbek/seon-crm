@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'offers.dart' show voucherFromRow;
+
 // What the Home tab shows. The Student Home comes from one call to
 // student_home(group_id); the server decides every number in it.
 
@@ -158,14 +160,22 @@ class StudentHome {
 
 /// The voucher an app user got after their first finished exam.
 class HomeVoucher {
-  const HomeVoucher({required this.kind, required this.value, required this.expiresAt});
+  const HomeVoucher({required this.kind, required this.value, required this.expiresAt, this.code = '', this.status = 'issued'});
 
   /// percent, fixed or trial_week.
   final String kind;
 
-  /// Percent, or soʻm.
+  /// Percent, soʻm, or free days.
   final int value;
   final DateTime expiresAt;
+
+  /// "KOR-7F3K9": what the person tells reception.
+  final String code;
+
+  /// issued, redeemed or expired.
+  final String status;
+
+  bool get usable => status == 'issued';
 }
 
 class AppUserHome {
@@ -174,7 +184,7 @@ class AppUserHome {
   /// Exam coins waiting until the person joins the centre.
   final int lockedCoins;
 
-  /// Null until they have one. Vouchers arrive with a later phase.
+  /// Their voucher while it can still be used; null otherwise.
   final HomeVoucher? voucher;
 }
 
@@ -230,6 +240,8 @@ class SupabaseHomeRepository implements HomeRepository {
     for (final row in rows) {
       locked += (row['amount'] as num).toInt();
     }
-    return AppUserHome(lockedCoins: locked);
+    final row = await _client.from('vouchers').select('code, type, value, expires_at, status').order('issued_at', ascending: false).limit(1).maybeSingle();
+    final voucher = row == null ? null : voucherFromRow(row, DateTime.now().toUtc());
+    return AppUserHome(lockedCoins: locked, voucher: voucher != null && voucher.usable ? voucher : null);
   });
 }

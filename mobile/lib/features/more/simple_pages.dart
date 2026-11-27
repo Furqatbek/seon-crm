@@ -1,16 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../core/home_state.dart';
 import '../../core/more_state.dart';
 import '../../core/state.dart';
 import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../ui/tokens.dart';
-import '../../ui/widgets.dart';
 import '../auth/linked_screen.dart' show privacyPolicyProvider;
 import '../auth/welcome_screen.dart' show languageName;
-import '../home/app_user_home.dart';
 import 'more_tab.dart' show themeName;
 import 'sub_page.dart';
 
@@ -104,37 +101,6 @@ class CentreTextPage extends ConsumerWidget {
           child: Text(value, style: AppType.body.copyWith(color: c.text)),
         ),
       ),
-    );
-  }
-}
-
-/// My voucher. Vouchers arrive with a later phase; the page shows one when Home has it.
-class VoucherPage extends ConsumerWidget {
-  const VoucherPage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = AppLocalizations.of(context);
-    final voucher = ref.watch(appUserHomeProvider).value?.voucher;
-    return SubPage(
-      title: l.myVoucher,
-      child: voucher == null
-          ? EmptyState(icon: Icons.card_giftcard_outlined, title: l.myVoucher, message: l.voucherEmpty)
-          : ListView(children: [VoucherCard(voucher: voucher)]),
-    );
-  }
-}
-
-/// Open lessons. Booking arrives with a later phase.
-class OpenLessonsPage extends StatelessWidget {
-  const OpenLessonsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    return SubPage(
-      title: l.openLessons,
-      child: EmptyState(icon: Icons.event_available_outlined, title: l.soonTitle, message: l.openLessonSoon),
     );
   }
 }

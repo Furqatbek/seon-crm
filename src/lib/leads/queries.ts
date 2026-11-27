@@ -1,5 +1,7 @@
 import "server-only";
 
+import { getLeadOffer, type LeadOffer } from "@/lib/offers/queries";
+
 import {
   CLOSED_DAYS_ON_BOARD,
   OPEN_STATUSES,
@@ -39,6 +41,8 @@ export type LeadDetail = Tables<"leads"> & {
   form: { name: string } | null;
   /** The Korean level they chose when signing up in the student app, if they did. */
   koreanLevel: "beginner" | "topik1" | "topik2" | null;
+  /** Their voucher and open-lesson bookings from the student app. */
+  offer: LeadOffer;
 };
 
 export type StaffOption = { id: string; full_name: string };
@@ -128,7 +132,7 @@ export async function getFollowUps(now: Date): Promise<LeadSummary[]> {
 
 export async function getLead(id: string): Promise<LeadDetail | null> {
   const supabase = await db();
-  const [lead, activities, account] = await Promise.all([
+  const [lead, activities, account, offer] = await Promise.all([
     supabase
       .from("leads")
       .select("*, referrer:students!leads_referred_by_student_id_fkey(id, full_name, phone), form:lead_forms(name)")
@@ -143,6 +147,7 @@ export async function getLead(id: string): Promise<LeadDetail | null> {
       .order("id", { ascending: false }),
     // The person's account in the student app, when they signed up there.
     supabase.from("profiles").select("korean_level").eq("lead_id", id).limit(1).maybeSingle(),
+    getLeadOffer(id),
   ]);
   if (activities.error) throw new Error(activities.error.message);
   const koreanLevel = account.data?.korean_level ?? null;
@@ -150,9 +155,9 @@ export async function getLead(id: string): Promise<LeadDetail | null> {
     // "Referred by" or the forms are missing while a deploy is ahead of its migration: read the lead without them.
     const plain = await supabase.from("leads").select("*").eq("id", id).is("archived_at", null).maybeSingle();
     if (plain.error) throw new Error(lead.error.message);
-    return plain.data ? { ...plain.data, referrer: null, form: null, koreanLevel, activities: activities.data } : null;
+    return plain.data ? { ...plain.data, referrer: null, form: null, koreanLevel, offer, activities: activities.data } : null;
   }
-  return lead.data ? { ...lead.data, koreanLevel, activities: activities.data } : null;
+  return lead.data ? { ...lead.data, koreanLevel, offer, activities: activities.data } : null;
 }
 
 /** Everyone a lead can be assigned to, and every author shown in a timeline. */

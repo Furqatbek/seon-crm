@@ -5,12 +5,13 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
-/** Leads → the board and list, or the forms that bring leads in. */
-export function LeadsTabs({ active }: { active: "leads" | "forms" }) {
+/** Leads → the board and list, the forms that bring leads in, or the free open lessons. */
+export function LeadsTabs({ active }: { active: "leads" | "forms" | "openLessons" }) {
   const t = useTranslations("forms");
   const tabs = [
     { key: "leads", href: "/leads", label: t("tabs.leads") },
     { key: "forms", href: "/leads/forms", label: t("tabs.forms") },
+    { key: "openLessons", href: "/leads/open-lessons", label: t("tabs.openLessons") },
   ] as const;
   return (
     <nav aria-label={t("tabs.label")} className="flex w-full gap-6 border-b border-border" data-leads-tabs>

@@ -8,7 +8,7 @@ const month = z
   .optional()
   .catch(undefined);
 
-export const REPORT_TABS = ["overview", "points"] as const;
+export const REPORT_TABS = ["overview", "points", "vouchers"] as const;
 export type ReportTab = (typeof REPORT_TABS)[number];
 
 /** URL state of /reports. */

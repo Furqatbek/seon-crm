@@ -2,6 +2,7 @@ import {
   ChartColumn,
   GraduationCap,
   CircleHelp,
+  CalendarHeart,
   ClipboardList,
   History,
   Presentation,
@@ -29,7 +30,8 @@ export type BlockKey =
   | "pointsHistory"
   | "pointsReport"
   | "questions"
-  | "exams";
+  | "exams"
+  | "openLessons";
 
 export type Block = { key: BlockKey; href: `/${string}`; icon: LucideIcon };
 
@@ -58,4 +60,5 @@ export const TEACHER_BLOCKS: Block[] = [
   { key: "pointsReport", href: "/my-groups/reports", icon: ChartColumn },
   { key: "questions", href: "/my-groups/questions", icon: CircleHelp },
   { key: "exams", href: "/my-groups/exams", icon: ClipboardList },
+  { key: "openLessons", href: "/my-groups/open-lessons", icon: CalendarHeart },
 ];

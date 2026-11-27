@@ -382,9 +382,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get openLessonTitle => '무료 공개 수업';
 
   @override
-  String get openLessonSoon => '공개 수업 예약이 곧 여기에 준비됩니다.';
-
-  @override
   String get bookOpenLesson => '무료 공개 수업 예약';
 
   @override
@@ -1250,4 +1247,89 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get examHeroAllDone => '내 레벨의 시험을 모두 응시했습니다';
+
+  @override
+  String get voucherLabel => '바우처';
+
+  @override
+  String voucherTrialDays(int days) {
+    return '$days일 무료 체험';
+  }
+
+  @override
+  String get voucherTellCode => '접수처에서 이 코드를 말씀하세요';
+
+  @override
+  String get voucherOnePerPerson => '1인당 바우처 1개';
+
+  @override
+  String get voucherCopy => '코드 복사';
+
+  @override
+  String get voucherCopied => '코드를 복사했습니다';
+
+  @override
+  String get voucherExpired => '만료됨';
+
+  @override
+  String get voucherUsed => '사용됨';
+
+  @override
+  String get openLessonsTitle => '무료 공개 수업';
+
+  @override
+  String get openLessonsEmpty => '앞으로 4주간 공개 수업이 없습니다';
+
+  @override
+  String openLessonSeatsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count자리 남음');
+    return '$_temp0';
+  }
+
+  @override
+  String get openLessonFull => '자리 없음';
+
+  @override
+  String get openLessonBook => '자리 예약';
+
+  @override
+  String get openLessonBooked => '자리를 예약했습니다';
+
+  @override
+  String get openLessonCancelHint => '시작 2시간 전까지 취소할 수 있습니다';
+
+  @override
+  String get openLessonCancel => '예약 취소';
+
+  @override
+  String get openLessonCancelled => '예약을 취소했습니다';
+
+  @override
+  String get openLessonCancelClosed => '취소할 수 없습니다. 수업 시작까지 2시간이 남지 않았습니다';
+
+  @override
+  String get openLessonYours => '내 예약';
+
+  @override
+  String get openLessonOneBooking => '예약은 한 번에 하나만 가능합니다';
+
+  @override
+  String get openLessonNext => '다음 수업';
+
+  @override
+  String get openLessonEveryLevel => '모든 레벨';
+
+  @override
+  String get openLessonErrorFull => '이 수업은 자리가 없습니다';
+
+  @override
+  String get openLessonErrorGone => '이 수업은 더 이상 예약할 수 없습니다';
+
+  @override
+  String get openLessonErrorHasBooking => '이미 예약이 있습니다';
+
+  @override
+  String weekdayAndDate(String weekday, String date) {
+    return '$date $weekday';
+  }
 }

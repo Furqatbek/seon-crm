@@ -5,17 +5,20 @@ import 'package:material_ui/material_ui.dart';
 import '../../core/exam_state.dart';
 import '../../core/format.dart';
 import '../../core/home_state.dart';
+import '../../core/offer_state.dart';
 import '../../core/state.dart';
 import '../../core/time.dart';
 import '../../data/exams.dart';
 import '../../data/home.dart';
 import '../../data/models.dart';
+import '../../data/offers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../push/notification_routes.dart';
 import '../../ui/tokens.dart';
 import '../../ui/widgets.dart';
 import '../auth/sign_up_screen.dart' show levelName;
 import '../exams/exams_side.dart';
+import '../offers/offers.dart';
 import 'home_widgets.dart';
 
 /// 02d: the App user Home: the next mock exam, locked coins, the free open
@@ -46,6 +49,7 @@ class AppUserHomeView extends ConsumerWidget {
               backgroundColor: c.elevated,
               onRefresh: () {
                 ref.invalidate(examListProvider);
+                ref.invalidate(openLessonsProvider);
                 return ref.refresh(appUserHomeProvider.future).then((_) {}, onError: (_) {});
               },
               child: ListView(
@@ -69,9 +73,12 @@ class AppUserHomeView extends ConsumerWidget {
                   ),
                   const SizedBox(height: AppSpacing.x3),
                   if (data == null && !home.hasError) const Skeleton.card() else LockedCoinsCard(coins: data?.lockedCoins ?? 0),
-                  if (data?.voucher != null) ...[const SizedBox(height: AppSpacing.x3), VoucherCard(voucher: data!.voucher!)],
+                  if (data?.voucher != null) ...[
+                    const SizedBox(height: AppSpacing.x3),
+                    VoucherCard(voucher: data!.voucher!, onTap: () => context.go(Routes.voucher)),
+                  ],
                   const SizedBox(height: AppSpacing.x3),
-                  OpenLessonCard(onBook: () => context.go(Routes.openLessons)),
+                  OpenLessonCard(lessons: ref.watch(openLessonsProvider).value, now: ref.watch(clockProvider)(), onOpen: () => context.go(Routes.openLessons)),
                 ],
               ),
             ),
@@ -203,57 +210,85 @@ class LockedCoinsCard extends StatelessWidget {
   }
 }
 
-/// What a voucher gives, in words.
-String voucherOffer(HomeVoucher voucher, AppLocalizations l) => switch (voucher.kind) {
-  'percent' => l.voucherPercent(voucher.value),
-  'fixed' => l.voucherFixed(formatMoney(voucher.value, l)),
-  _ => l.voucherTrialWeek,
-};
-
-/// "A gift for you!": the voucher and the day it runs out.
+/// "A gift for you!": the voucher, its code and the day it runs out. Opens My voucher.
 class VoucherCard extends StatelessWidget {
-  const VoucherCard({super.key, required this.voucher});
+  const VoucherCard({super.key, required this.voucher, this.onTap});
 
   final HomeVoucher voucher;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = AppColors.of(context);
     final l = AppLocalizations.of(context);
     return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      onTap: onTap,
+      child: Row(
         children: [
-          Text(l.voucherTitle, style: AppType.headline.copyWith(color: c.text)),
-          const SizedBox(height: AppSpacing.x1),
-          Text(voucherOffer(voucher, l), style: AppType.body.copyWith(color: c.text)),
-          const SizedBox(height: AppSpacing.x1),
-          Text(l.validUntil(dayMonth(tashkentDay(voucher.expiresAt), l)), style: AppType.footnote.copyWith(color: c.textSecondary)),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l.voucherTitle, style: AppType.headline.copyWith(color: c.text)),
+                const SizedBox(height: AppSpacing.x1),
+                Text(voucherOffer(voucher, l), style: AppType.body.copyWith(color: c.text)),
+                const SizedBox(height: AppSpacing.x1),
+                Text(
+                  [if (voucher.code.isNotEmpty) voucher.code, keepTogether(l.validUntil(dayMonth(tashkentDay(voucher.expiresAt), l)))].join(' · '),
+                  style: AppType.tabular(AppType.footnote.copyWith(color: c.textSecondary)),
+                ),
+              ],
+            ),
+          ),
+          if (onTap != null)
+            ExcludeSemantics(
+              child: Icon(Icons.chevron_right, color: c.primary, size: AppSizes.icon),
+            ),
         ],
       ),
     );
   }
 }
 
-/// The free open lesson. Booking arrives with a later phase.
+/// The free open lesson: the person's booking, or the next lesson with Book.
 class OpenLessonCard extends StatelessWidget {
-  const OpenLessonCard({super.key, required this.onBook});
+  const OpenLessonCard({super.key, required this.lessons, required this.now, required this.onOpen});
 
-  final VoidCallback onBook;
+  /// Null while the lessons are being read or when they could not be.
+  final OpenLessons? lessons;
+  final DateTime now;
+  final VoidCallback onOpen;
 
   @override
   Widget build(BuildContext context) {
     final c = AppColors.of(context);
     final l = AppLocalizations.of(context);
+    final booking = lessons?.booking;
+    if (booking != null) {
+      return Semantics(
+        button: true,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onOpen,
+          child: BookingCard(booking: booking, now: now),
+        ),
+      );
+    }
+    final next = lessons?.sessions.where((session) => session.seatsLeft > 0).firstOrNull;
+    final place = next == null ? '' : lessonPlace(l, level: next.level, room: next.room, teacher: next.teacher);
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(l.openLessonTitle, style: AppType.headline.copyWith(color: c.text)),
           const SizedBox(height: AppSpacing.x1),
-          Text(l.openLessonSoon, style: AppType.body.copyWith(color: c.textSecondary)),
+          if (next != null) ...[
+            Text('${lessonDay(next.startsAt, l)} · ${lessonHours(next.startsAt, next.endsAt)}', style: AppType.tabular(AppType.body.copyWith(color: c.text))),
+            if (place.isNotEmpty) Text(place, style: AppType.footnote.copyWith(color: c.textSecondary)),
+          ] else if (lessons != null)
+            Text(l.openLessonsEmpty, style: AppType.body.copyWith(color: c.textSecondary)),
           const SizedBox(height: AppSpacing.x4),
-          PrimaryButton(label: l.bookOpenLesson, onPressed: onBook),
+          PrimaryButton(label: l.bookOpenLesson, onPressed: onOpen),
         ],
       ),
     );

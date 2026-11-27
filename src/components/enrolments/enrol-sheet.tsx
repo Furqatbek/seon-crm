@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TriangleAlert } from "lucide-react";
 import { RadioGroup } from "radix-ui";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -35,7 +35,10 @@ import {
   type FirstChargeProposal,
   type StudentOption,
 } from "@/lib/groups/actions";
+import { formatDay, formatMonth } from "@/lib/format";
 import type { OpenGroup } from "@/lib/groups/queries";
+import type { Locale } from "@/i18n/routing";
+import { proposeVoucherCharge, type VoucherOffer } from "@/lib/offers/actions";
 import {
   enrolFormSchema,
   type EnrolFormInput,
@@ -93,6 +96,8 @@ function EnrolForm({
   const [formError, setFormError] = useState<GroupErrorKey | null>(null);
   const [student, setStudent] = useState<StudentOption | null>(target.student ?? null);
   const [proposal, setProposal] = useState<FirstChargeProposal | null>(null);
+  const [offer, setOffer] = useState<VoucherOffer | null>(null);
+  const locale = useLocale() as Locale;
 
   const {
     register,
@@ -117,13 +122,31 @@ function EnrolForm({
       charge_mode: "prorated",
       custom_amount: "",
       charge_note: "",
+      voucher_code: "",
     },
   });
 
-  const [groupId, joinedOn, discountKind, discountValue, chargeMode] = useWatch({
+  const [groupId, joinedOn, discountKind, discountValue, chargeMode, voucherCode] = useWatch({
     control,
-    name: ["group_id", "joined_on", "discount_kind", "discount_value", "charge_mode"],
+    name: ["group_id", "joined_on", "discount_kind", "discount_value", "charge_mode", "voucher_code"],
   });
+  const code = (voucherCode ?? "").trim();
+
+  // What the voucher would do to the first charge: from the database, the same function enrolment uses.
+  useEffect(() => {
+    let current = true;
+    const timer = setTimeout(async () => {
+      const next =
+        code && groupId && chargeMode !== "custom"
+          ? await proposeVoucherCharge({ group_id: groupId, joined_on: joinedOn, discount_kind: discountKind, discount_value: discountValue, charge_mode: chargeMode, code })
+          : null;
+      if (current) setOffer(next);
+    }, PROPOSAL_DELAY_MS);
+    return () => {
+      current = false;
+      clearTimeout(timer);
+    };
+  }, [code, groupId, joinedOn, discountKind, discountValue, chargeMode]);
 
   // The proposal comes from the database, the same function enrolment uses.
   useEffect(() => {
@@ -312,6 +335,60 @@ function EnrolForm({
         {transfer ? null : (
           <Field label={t("enrol.note")} htmlFor="enrol-note" error={message(errors.note?.message)}>
             <Input id="enrol-note" autoComplete="off" {...register("note")} />
+          </Field>
+        )}
+
+        {transfer ? null : (
+          <Field label={t("enrol.voucher")} htmlFor="enrol-voucher" error={message(errors.voucher_code?.message)}>
+            <Input
+              id="enrol-voucher"
+              autoComplete="off"
+              autoCapitalize="characters"
+              placeholder="KOR-7F3K9"
+              className="uppercase placeholder:normal-case"
+              aria-invalid={errors.voucher_code || offer?.problem ? true : undefined}
+              aria-describedby="enrol-voucher-result"
+              {...register("voucher_code")}
+            />
+            <div id="enrol-voucher-result" aria-live="polite" data-slot="voucher-result">
+              {!code ? (
+                <p className="text-footnote text-text-secondary">{t("enrol.voucherHint")}</p>
+              ) : chargeMode === "custom" ? (
+                <p className="text-footnote text-danger">{t("errors.voucherCustom")}</p>
+              ) : !offer ? (
+                <p className="text-footnote text-text-secondary">{t("enrol.calculating")}</p>
+              ) : offer.problem ? (
+                <p className="text-footnote text-danger" data-voucher-problem={offer.problem}>
+                  {t(`errors.${offer.problem === "unknown" ? "voucherUnknown" : offer.problem === "redeemed" ? "voucherUsed" : "voucherExpired"}`)}
+                </p>
+              ) : (
+                <div className="flex flex-col gap-1 rounded-control bg-success-tint px-3 py-2 text-footnote text-text" data-voucher-type={offer.type}>
+                  <p className="font-medium text-success">
+                    {offer.type === "percent"
+                      ? t("enrol.voucherPercent", { percent: offer.value ?? 0 })
+                      : offer.type === "fixed"
+                        ? t("enrol.voucherFixed")
+                        : t("enrol.voucherTrial", { days: offer.value ?? 0 })}
+                  </p>
+                  {offer.type === "trial_week" && offer.paidFrom ? <p>{t("enrol.voucherPaidFrom", { date: formatDay(offer.paidFrom, locale, { month: "long" }) })}</p> : null}
+                  <p className="flex items-baseline justify-between gap-3">
+                    <span>{t("enrol.voucherCharge")}</span>
+                    <span className="flex items-baseline gap-2">
+                      {offer.beforeVoucher !== offer.amount ? <MoneyText amount={offer.beforeVoucher} className="text-text-secondary line-through" /> : null}
+                      <span data-voucher-amount>
+                        <MoneyText amount={offer.amount} className="font-medium" />
+                      </span>
+                    </span>
+                  </p>
+                  {offer.nextMonth ? (
+                    <p className="flex items-baseline justify-between gap-3">
+                      <span>{t("enrol.voucherNext", { month: formatMonth(offer.nextMonth, locale) })}</span>
+                      {offer.nextAmount === null ? <span className="text-text-secondary">{t("enrol.voucherNextLater")}</span> : <MoneyText amount={offer.nextAmount} className="font-medium" />}
+                    </p>
+                  ) : null}
+                </div>
+              )}
+            </div>
           </Field>
         )}
 

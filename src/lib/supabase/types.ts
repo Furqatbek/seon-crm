@@ -583,14 +583,14 @@ isOneToOne: false
                   ]
                 },"leads": {
                   Row: {
-                    "answers": Json | null,"archived_at": string | null,"assigned_to": string | null,"converted_student_id": string | null,"created_at": string,"created_by": string | null,"external_id": string | null,"form_id": string | null,"full_name": string,"id": string,"inbox_since": string | null,"lost_reason": string | null,"next_contact_at": string | null,"notes": string | null,"phone": string,"preferred_time": string | null,"referred_by_student_id": string | null,"source": Database["public"]['Enums']["lead_source"],"status": Database["public"]['Enums']["lead_status"],"subject_interest": string | null,"submitted_language": Database["public"]['Enums']["app_language"] | null,"tags": (string)[],"taken_at": string | null,"trial_date": string | null,"trial_group_id": string | null,"updated_at": string
+                    "answers": Json | null,"archived_at": string | null,"assigned_to": string | null,"converted_student_id": string | null,"created_at": string,"created_by": string | null,"external_id": string | null,"form_id": string | null,"full_name": string,"id": string,"inbox_since": string | null,"lost_reason": string | null,"next_contact_at": string | null,"notes": string | null,"phone": string,"preferred_time": string | null,"referred_by_student_id": string | null,"source": Database["public"]['Enums']["lead_source"],"status": Database["public"]['Enums']["lead_status"],"subject_interest": string | null,"submitted_language": Database["public"]['Enums']["app_language"] | null,"tags": (string)[],"taken_at": string | null,"trial_date": string | null,"trial_group_id": string | null,"trial_open_lesson_slot_id": string | null,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "answers"?: Json | null,"archived_at"?: string | null,"assigned_to"?: string | null,"converted_student_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"external_id"?: string | null,"form_id"?: string | null,"full_name": string,"id"?: string,"inbox_since"?: string | null,"lost_reason"?: string | null,"next_contact_at"?: string | null,"notes"?: string | null,"phone": string,"preferred_time"?: string | null,"referred_by_student_id"?: string | null,"source": Database["public"]['Enums']["lead_source"],"status"?: Database["public"]['Enums']["lead_status"],"subject_interest"?: string | null,"submitted_language"?: Database["public"]['Enums']["app_language"] | null,"tags"?: (string)[],"taken_at"?: string | null,"trial_date"?: string | null,"trial_group_id"?: string | null,"updated_at"?: string
+                    "answers"?: Json | null,"archived_at"?: string | null,"assigned_to"?: string | null,"converted_student_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"external_id"?: string | null,"form_id"?: string | null,"full_name": string,"id"?: string,"inbox_since"?: string | null,"lost_reason"?: string | null,"next_contact_at"?: string | null,"notes"?: string | null,"phone": string,"preferred_time"?: string | null,"referred_by_student_id"?: string | null,"source": Database["public"]['Enums']["lead_source"],"status"?: Database["public"]['Enums']["lead_status"],"subject_interest"?: string | null,"submitted_language"?: Database["public"]['Enums']["app_language"] | null,"tags"?: (string)[],"taken_at"?: string | null,"trial_date"?: string | null,"trial_group_id"?: string | null,"trial_open_lesson_slot_id"?: string | null,"updated_at"?: string
                   }
                   Update: {
-                    "answers"?: Json | null,"archived_at"?: string | null,"assigned_to"?: string | null,"converted_student_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"external_id"?: string | null,"form_id"?: string | null,"full_name"?: string,"id"?: string,"inbox_since"?: string | null,"lost_reason"?: string | null,"next_contact_at"?: string | null,"notes"?: string | null,"phone"?: string,"preferred_time"?: string | null,"referred_by_student_id"?: string | null,"source"?: Database["public"]['Enums']["lead_source"],"status"?: Database["public"]['Enums']["lead_status"],"subject_interest"?: string | null,"submitted_language"?: Database["public"]['Enums']["app_language"] | null,"tags"?: (string)[],"taken_at"?: string | null,"trial_date"?: string | null,"trial_group_id"?: string | null,"updated_at"?: string
+                    "answers"?: Json | null,"archived_at"?: string | null,"assigned_to"?: string | null,"converted_student_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"external_id"?: string | null,"form_id"?: string | null,"full_name"?: string,"id"?: string,"inbox_since"?: string | null,"lost_reason"?: string | null,"next_contact_at"?: string | null,"notes"?: string | null,"phone"?: string,"preferred_time"?: string | null,"referred_by_student_id"?: string | null,"source"?: Database["public"]['Enums']["lead_source"],"status"?: Database["public"]['Enums']["lead_status"],"subject_interest"?: string | null,"submitted_language"?: Database["public"]['Enums']["app_language"] | null,"tags"?: (string)[],"taken_at"?: string | null,"trial_date"?: string | null,"trial_group_id"?: string | null,"trial_open_lesson_slot_id"?: string | null,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -1105,6 +1105,62 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"voucher_settings": {
+                  Row: {
+                    "id": boolean,"percent_enabled": boolean,"percent_weight": number,"percent_value": number,"fixed_enabled": boolean,"fixed_weight": number,"fixed_value": number,"trial_enabled": boolean,"trial_weight": number,"trial_value": number,"valid_days": number,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: boolean,"percent_enabled"?: boolean,"percent_weight"?: number,"percent_value"?: number,"fixed_enabled"?: boolean,"fixed_weight"?: number,"fixed_value"?: number,"trial_enabled"?: boolean,"trial_weight"?: number,"trial_value"?: number,"valid_days"?: number,"updated_at"?: string
+                  }
+                  Update: {
+                    "id"?: boolean,"percent_enabled"?: boolean,"percent_weight"?: number,"percent_value"?: number,"fixed_enabled"?: boolean,"fixed_weight"?: number,"fixed_value"?: number,"trial_enabled"?: boolean,"trial_weight"?: number,"trial_value"?: number,"valid_days"?: number,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"vouchers": {
+                  Row: {
+                    "id": string,"code": string,"profile_id": string | null,"lead_id": string | null,"type": "percent" | "fixed" | "trial_week","value": number,"issued_at": string,"expires_at": string,"status": "issued" | "redeemed" | "expired","redeemed_at": string | null,"redeemed_by": string | null,"enrollment_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"code": string,"profile_id"?: string | null,"lead_id"?: string | null,"type": "percent" | "fixed" | "trial_week","value": number,"issued_at"?: string,"expires_at": string,"status"?: "issued" | "redeemed" | "expired","redeemed_at"?: string | null,"redeemed_by"?: string | null,"enrollment_id"?: string | null
+                  }
+                  Update: {
+                    "id"?: string,"code"?: string,"profile_id"?: string | null,"lead_id"?: string | null,"type"?: "percent" | "fixed" | "trial_week","value"?: number,"issued_at"?: string,"expires_at"?: string,"status"?: "issued" | "redeemed" | "expired","redeemed_at"?: string | null,"redeemed_by"?: string | null,"enrollment_id"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"open_lesson_slots": {
+                  Row: {
+                    "id": string,"title": string,"korean_level": Database["public"]['Enums']["korean_level"] | null,"weekday": number,"start_time": string,"duration_min": number,"room": string | null,"teacher_id": string | null,"seats": number,"is_active": boolean,"archived_at": string | null,"created_by": string | null,"created_at": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"title": string,"korean_level"?: Database["public"]['Enums']["korean_level"] | null,"weekday": number,"start_time": string,"duration_min"?: number,"room"?: string | null,"teacher_id"?: string | null,"seats": number,"is_active"?: boolean,"archived_at"?: string | null,"created_by"?: string | null,"created_at"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "id"?: string,"title"?: string,"korean_level"?: Database["public"]['Enums']["korean_level"] | null,"weekday"?: number,"start_time"?: string,"duration_min"?: number,"room"?: string | null,"teacher_id"?: string | null,"seats"?: number,"is_active"?: boolean,"archived_at"?: string | null,"created_by"?: string | null,"created_at"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"open_lesson_bookings": {
+                  Row: {
+                    "id": string,"slot_id": string,"session_date": string,"profile_id": string,"lead_id": string | null,"status": "booked" | "cancelled" | "came" | "no_show","booked_at": string,"marked_by": string | null,"marked_at": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"slot_id": string,"session_date": string,"profile_id": string,"lead_id"?: string | null,"status"?: "booked" | "cancelled" | "came" | "no_show","booked_at"?: string,"marked_by"?: string | null,"marked_at"?: string | null
+                  }
+                  Update: {
+                    "id"?: string,"slot_id"?: string,"session_date"?: string,"profile_id"?: string,"lead_id"?: string | null,"status"?: "booked" | "cancelled" | "came" | "no_show","booked_at"?: string,"marked_by"?: string | null,"marked_at"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"exam_sections": {
                   Row: {
                     "id": string,"exam_id": string,"kind": "listening" | "reading","position": number,"time_limit_sec": number,"question_count": number
@@ -1371,7 +1427,7 @@ isOneToOne: false
 { Args: { "p_fee": number,"p_kind": string,"p_value": number }; Returns: number
                            },
 "enrol_student":
-{ Args: { "p_charge_mode"?: string,"p_charge_note"?: string,"p_custom_amount"?: number,"p_discount_kind"?: string,"p_discount_value"?: number,"p_group_id": string,"p_joined_on": string,"p_note"?: string,"p_student_id": string }; Returns: string
+{ Args: { "p_charge_mode"?: string,"p_charge_note"?: string,"p_custom_amount"?: number,"p_discount_kind"?: string,"p_discount_value"?: number,"p_group_id": string,"p_joined_on": string,"p_note"?: string,"p_student_id": string,"p_voucher_code"?: string }; Returns: string
                            },
 "finance_month_summary":
 { Args: { "p_month": string }; Returns: {
@@ -1555,6 +1611,17 @@ isOneToOne: false
 { Args: { "p_month": string }; Returns: {
               "charges": number,"total": number
             }[]
+                           },
+"propose_voucher_charge":
+{ Args: { "p_group_id": string,"p_joined_on": string,"p_discount_kind"?: string,"p_discount_value"?: number,"p_code": string,"p_charge_mode"?: string }; Returns: {
+              "code": string | null,"type": "percent" | "fixed" | "trial_week" | null,"value": number | null,"problem": string | null,"before_voucher": number,"voucher_discount": number,"amount": number,"is_prorated": boolean,"lessons_counted": number,"paid_from": string | null,"next_month": string | null,"next_amount": number | null,"next_lessons_counted": number | null,"next_lessons_in_month": number | null
+            }[]
+                           },
+"mark_open_lesson":
+{ Args: { "p_booking_id": string,"p_status": "booked" | "cancelled" | "came" | "no_show" }; Returns: undefined
+                           },
+"voucher_report":
+{ Args: { "p_from": string,"p_to": string }; Returns: { "type": "percent" | "fixed" | "trial_week","issued": number,"redeemed": number,"expired": number }[]
                            },
 "propose_first_charge":
 { Args: { "p_discount_kind"?: string,"p_discount_value"?: number,"p_group_id": string,"p_joined_on": string }; Returns: {

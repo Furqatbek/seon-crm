@@ -66,7 +66,7 @@ final scenes = <String, Scene>{
     student: false,
     appUser: AppUserHome(
       lockedCoins: 34,
-      voucher: HomeVoucher(kind: 'percent', value: 20, expiresAt: DateTime.utc(2026, 12, 7, 10)),
+      voucher: HomeVoucher(kind: 'percent', value: 20, expiresAt: DateTime.utc(2026, 12, 7, 10), code: 'KOR-7F3K9'),
     ),
   ),
   '03_notifications': const Scene(notifications: true),

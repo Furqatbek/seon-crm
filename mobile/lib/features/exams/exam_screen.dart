@@ -8,7 +8,9 @@ import 'package:material_ui/material_ui.dart';
 import '../../core/exam_state.dart';
 import '../../core/format.dart';
 import '../../core/home_state.dart';
+import '../../core/offer_state.dart';
 import '../../core/state.dart';
+import '../../core/time.dart';
 import '../../data/exams.dart';
 import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
@@ -18,6 +20,7 @@ import '../../ui/widgets.dart';
 import '../game/game_widgets.dart';
 import '../home/home_widgets.dart';
 import '../more/sub_page.dart';
+import '../offers/offers.dart';
 
 String sectionName(AppLocalizations l, ExamSectionKind kind) => kind == ExamSectionKind.listening ? l.examListening : l.examReading;
 
@@ -56,7 +59,11 @@ class _ExamScreenState extends ConsumerState<ExamScreen> with WidgetsBindingObse
 
   void _changed() {
     if (!mounted) return;
-    if (_session.state?.inProgress == false) _ticker?.cancel();
+    if (_session.state?.inProgress == false && _ticker?.isActive == true) {
+      _ticker?.cancel();
+      // The first finished exam brings an App user their voucher: read it now.
+      ref.invalidate(voucherProvider);
+    }
     setState(() {});
   }
 
@@ -973,23 +980,7 @@ class ExamResultView extends StatelessWidget {
                 const SizedBox(height: AppSpacing.x4),
               ],
               Center(child: _CoinsLine(result: result)),
-              if (!student) ...[
-                const SizedBox(height: AppSpacing.x4),
-                // Until vouchers arrive, the offer is the way in: a free open lesson.
-                GradientOutline(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.x5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(l.examOfferTitle, style: AppType.headline.copyWith(color: c.text)),
-                        const SizedBox(height: AppSpacing.x1),
-                        Text(l.examOfferText, style: AppType.body.copyWith(color: c.textSecondary)),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+              if (!student) ...[const SizedBox(height: AppSpacing.x4), const ExamOfferCard()],
             ],
           ),
         ),
@@ -1020,6 +1011,39 @@ class ExamResultView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// 23b: the offer an App user sees with their result: the voucher their first
+/// finished exam brought, with its code; without one, the way to the coins.
+class ExamOfferCard extends ConsumerWidget {
+  const ExamOfferCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = AppColors.of(context);
+    final l = AppLocalizations.of(context);
+    final voucher = ref.watch(voucherProvider).value;
+    final gift = voucher != null && voucher.usable;
+    return GradientOutline(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.x5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(gift ? l.voucherTitle : l.examOfferTitle, style: AppType.headline.copyWith(color: c.text)),
+            const SizedBox(height: AppSpacing.x1),
+            Text(gift ? voucherOffer(voucher, l) : l.examOfferText, style: AppType.body.copyWith(color: gift ? c.text : c.textSecondary)),
+            if (gift) ...[
+              const SizedBox(height: AppSpacing.x3),
+              CodeBox(code: voucher.code),
+              const SizedBox(height: AppSpacing.x2),
+              Text(keepTogether(l.validUntil(dayMonth(tashkentDay(voucher.expiresAt), l))), style: AppType.footnote.copyWith(color: c.textSecondary)),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }

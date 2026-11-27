@@ -115,18 +115,26 @@ function refineCredit(input: { credit_amount: string; credit_note: string }, ctx
   }
 }
 
+/** A voucher sets the first charge itself: it does not go with a typed amount. */
+function refineVoucher(input: { voucher_code?: string; charge_mode: string }, ctx: z.RefinementCtx) {
+  if (input.voucher_code && input.charge_mode === "custom") ctx.addIssue({ code: "custom", path: ["voucher_code"], message: "voucherCustom" });
+}
+
 export const enrolSchema = z
   .object({
     student_id: z.uuid("studentRequired"),
     group_id: z.uuid("groupRequired"),
     joined_on: day,
     note: z.string().trim().max(500, "tooLong"),
+    /** A voucher from the student app; empty for none. */
+    voucher_code: z.string().trim().max(20, "tooLong").default(""),
     ...discountFields,
     ...chargeFields,
   })
   .superRefine((input, ctx) => {
     refineDiscount(input, ctx);
     refineCharge(input, ctx);
+    refineVoucher(input, ctx);
   });
 export type EnrolInput = z.input<typeof enrolSchema>;
 
@@ -166,6 +174,7 @@ export const enrolFormSchema = z
     note: z.string().trim().max(500, "tooLong"),
     credit_amount: z.string(),
     credit_note: z.string().trim().max(500, "tooLong"),
+    voucher_code: z.string().trim().max(20, "tooLong"),
     ...discountFields,
     ...chargeFields,
   })
@@ -173,6 +182,7 @@ export const enrolFormSchema = z
     refineCredit(input, ctx);
     refineDiscount(input, ctx);
     refineCharge(input, ctx);
+    refineVoucher(input, ctx);
   });
 export type EnrolFormInput = z.input<typeof enrolFormSchema>;
 
@@ -229,6 +239,10 @@ export type GroupErrorKey =
   | "examTitleRequired"
   | "noStudents"
   | "alreadyEnrolled"
+  | "voucherUnknown"
+  | "voucherUsed"
+  | "voucherExpired"
+  | "voucherCustom"
   | "groupClosed"
   | "dateOutOfRange"
   | "lessonCancelled"
