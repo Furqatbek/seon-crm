@@ -29,6 +29,7 @@ dependencies:
   flutter_secure_storage: ^11.2.0
   crypto: ^3.0.8
   screen_brightness: ^2.1.12
+  just_audio: ^0.10.6
 
 dev_dependencies:
   flutter_test:

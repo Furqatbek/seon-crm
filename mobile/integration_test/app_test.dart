@@ -24,6 +24,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/app.dart';
 import 'package:student/core/checkin_state.dart';
+import 'package:student/core/exam_state.dart';
 import 'package:student/core/game_state.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
@@ -32,14 +33,18 @@ import 'package:student/core/state.dart';
 import 'package:student/data/auth_repository.dart';
 import 'package:student/data/checkin.dart';
 import 'package:student/data/device_tokens.dart';
+import 'package:student/data/exams.dart';
 import 'package:student/data/game.dart';
 import 'package:student/data/home.dart';
+import 'package:student/data/models.dart';
 import 'package:student/data/more.dart';
 import 'package:student/data/notifications.dart';
 import 'package:student/data/shop.dart';
 import 'package:student/env.dart';
 import 'package:student/features/auth/sign_in_screens.dart';
 import 'package:student/features/auth/welcome_screen.dart';
+import 'package:student/features/exams/exam_screen.dart';
+import 'package:student/features/exams/exams_side.dart';
 import 'package:student/features/game/finding.dart';
 import 'package:student/features/game/match_screen.dart';
 import 'package:student/features/home/student_home.dart';
@@ -51,6 +56,7 @@ import 'package:student/l10n/app_localizations.dart';
 import 'package:student/ui/widgets.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../test/support/fake_exams.dart';
 import '../test/support/fake_game.dart';
 import '../test/support/fakes.dart';
 
@@ -58,6 +64,7 @@ const testPhone = String.fromEnvironment('TEST_PHONE');
 const testPassword = String.fromEnvironment('TEST_PASSWORD');
 const testPhone2 = String.fromEnvironment('TEST_PHONE_2');
 const testPassword2 = String.fromEnvironment('TEST_PASSWORD_2');
+const testExam = String.fromEnvironment('TEST_EXAM');
 
 /// Against the dev project when it and a throwaway account are given; otherwise in memory.
 bool get onDevProject => isConfigured && testPhone.isNotEmpty && testPassword.isNotEmpty;
@@ -71,6 +78,8 @@ Future<FakeAuthRepository> pumpInMemory(
   required bool signedIn,
   FakeShopRepository? shop,
   GameRepository? game,
+  ExamRepository? exams,
+  Profile profile = studentProfile,
   DateTime Function()? clock,
 }) async {
   SharedPreferences.setMockInitialValues({});
@@ -80,7 +89,7 @@ Future<FakeAuthRepository> pumpInMemory(
   shop
     ..balance = (() => (home.home['coins'] as num).toInt())
     ..setBalance = ((coins) => home.home = {...home.home, 'coins': coins});
-  final auth = FakeAuthRepository(signedIn: signedIn, profile: studentProfile);
+  final auth = FakeAuthRepository(signedIn: signedIn, profile: profile);
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
@@ -94,6 +103,8 @@ Future<FakeAuthRepository> pumpInMemory(
         gameRepositoryProvider.overrideWithValue(
           game ?? FakeGameRepository((FakeGameServer(now: DateTime.now)..add(FakePlayer(studentProfile.id, 'Aziza K.'))), studentProfile.id),
         ),
+        examRepositoryProvider.overrideWithValue(exams ?? FakeExamRepository(FakeExamServer(now: DateTime.now), profile.id)),
+        examAudioProvider.overrideWithValue(FakeExamAudio.new),
         qrSecretStoreProvider.overrideWithValue(FakeQrSecretStore()),
         screenLightProvider.overrideWithValue(FakeScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
@@ -124,6 +135,8 @@ Future<void> pumpOnDevProject(WidgetTester tester) async {
         shopRepositoryProvider.overrideWithValue(SupabaseShopRepository(client)),
         checkinRepositoryProvider.overrideWithValue(SupabaseCheckinRepository(client)),
         gameRepositoryProvider.overrideWithValue(SupabaseGameRepository(client)),
+        examRepositoryProvider.overrideWithValue(SupabaseExamRepository(client)),
+        examAudioProvider.overrideWithValue(FakeExamAudio.new),
         qrSecretStoreProvider.overrideWithValue(const SecureQrSecretStore()),
         screenLightProvider.overrideWithValue(const DeviceScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
@@ -376,4 +389,145 @@ void main() {
     await until(find.byType(MatchReviewScreen));
     expect(find.textContaining(uz.gameRightAnswer, findRichText: true), findsWidgets);
   });
+
+  // A short mock exam from the list to its result, once as a student and once
+  // as an App user. With the dev project and the accounts given (the first a
+  // linked student, the second an App user), a published exam is named with
+  //     --dart-define=TEST_EXAM="TOPIK I — Qisqa"
+  // and the server is the real one; without it, the in-memory stand-in with
+  // the same rules. Keep the exam short: every question is answered in real time.
+  for (final student in [true, false]) {
+    testWidgets('a short mock exam as ${student ? 'a student: the coins are earned' : 'an App user: the coins are locked'}', (tester) async {
+      final phone = student ? testPhone : testPhone2;
+      final password = student ? testPassword : testPassword2;
+      final live = isConfigured && testExam.isNotEmpty && phone.isNotEmpty && password.isNotEmpty;
+      final title = live ? testExam : 'TOPIK I — Qisqa';
+      final profile = student ? studentProfile : appUserProfile;
+      final server = FakeExamServer(now: DateTime.now)
+        ..exams.add(sampleExam(id: 'short', title: title, listening: 3, reading: 2, audioMaxPlays: 1, thresholds: const {1: 2, 2: 4}))
+        ..students.addAll([if (student) profile.id]);
+      late final ExamRepository exams;
+      late final HomeRepository home;
+      if (live) {
+        await pumpOnDevProject(tester);
+        await signIn(tester, phone, password);
+        exams = SupabaseExamRepository(Supabase.instance.client);
+        home = SupabaseHomeRepository(Supabase.instance.client);
+      } else {
+        exams = FakeExamRepository(server, profile.id);
+        await pumpInMemory(tester, signedIn: true, profile: profile, exams: exams, clock: DateTime.now);
+      }
+
+      Future<void> until(Finder finder, {Duration within = const Duration(seconds: 25)}) async {
+        final deadline = DateTime.now().add(within);
+        while (finder.evaluate().isEmpty && DateTime.now().isBefore(deadline)) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+        expect(finder, findsWidgets);
+      }
+
+      Future<void> pause() => tester.pump(const Duration(milliseconds: 700));
+
+      // What the server says before: whether this will be the first completed attempt, and the coins so far.
+      final before = (await exams.exams()).firstWhere((exam) => exam.title == title);
+      final first = before.attempts == 0;
+      final coinsBefore = !live ? 0 : (student ? ((await home.studentHome(null))['coins'] as num).toInt() : (await home.appUserHome()).lockedCoins);
+
+      await tester.tap(find.bySemanticsLabel(uz.tabGame).last);
+      await until(find.text(uz.gameExams));
+      await tester.tap(find.text(uz.gameExams));
+      await until(find.byType(ExamsSide));
+      await tester.tap(find.text(before.level == ExamLevel.topik2 ? uz.levelTopik2 : uz.levelTopik1));
+      await until(find.text(title));
+      // A new exam opens its intro; one in progress goes straight back in.
+      await tester.tap(
+        find.text(before.attempts > 0 && before.openAttemptId == null ? (before.coinsPerCorrect > 0 ? uz.examRetake : uz.examRetakePlain) : title),
+      );
+      await pause();
+      if (find.byType(ExamIntroScreen).evaluate().isNotEmpty) {
+        await tester.tap(find.byType(PrimaryButton));
+      }
+      await until(find.byType(ExamPlayView));
+      await pause();
+      // During the attempt nothing says which choice is right.
+      expect(find.text(uz.examRightAnswer), findsNothing);
+
+      // Listening, then reading: the first choice of every question, Next, and Submit section at the end.
+      var taps = 0;
+      while (find.byType(ExamResultView).evaluate().isEmpty && taps < 400) {
+        taps++;
+        final choice = find.descendant(of: find.byType(ExamChoices), matching: find.byType(GestureDetector)).first;
+        await tester.ensureVisible(choice);
+        await tester.tap(choice, warnIfMissed: false);
+        await pause();
+        if (find.widgetWithText(PrimaryButton, uz.examNext).evaluate().isNotEmpty) {
+          await tester.tap(find.widgetWithText(PrimaryButton, uz.examNext));
+          await pause();
+          continue;
+        }
+        await tester.tap(find.widgetWithText(PrimaryButton, uz.examSubmitSection));
+        await until(find.byType(QuestionGridSheet));
+        await pause();
+        await tester.tap(find.widgetWithText(PrimaryButton, uz.examSubmitSection).last);
+        // The sheet slides away, and the server answers with the next section or the result.
+        for (var i = 0; i < 30 && find.byType(QuestionGridSheet).evaluate().isNotEmpty; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+        await until(find.byType(Scaffold));
+        await pause();
+      }
+
+      await until(find.byType(ExamResultView), within: const Duration(seconds: 40));
+      await pause();
+      final after = (await exams.exams()).firstWhere((exam) => exam.title == title);
+      expect(after.attempts, before.attempts + 1);
+      expect(after.openAttemptId, isNull);
+      final result = (await exams.state(after.last!.attemptId)).result!;
+      expect(result.correct, after.last!.correct);
+      expect(find.bySemanticsLabel('${uz.examTotal}: ${result.correct}/${result.questions}'), findsOneWidget);
+      expect(result.firstAttempt, first);
+      expect(result.coins, first ? result.correct * before.coinsPerCorrect : 0);
+      expect(result.coinsLocked, !student && result.coins > 0);
+
+      if (result.coins > 0) {
+        // A student's coins are theirs at once; an App user's are locked until they join.
+        final coins = uz.coinsCount(result.coins, '${result.coins}');
+        expect(find.text(student ? '+$coins' : uz.examCoinsLocked(coins)), findsOneWidget);
+        expect(find.text(student ? uz.examCoinsLocked(coins) : '+$coins'), findsNothing);
+      } else if (!first) {
+        expect(find.text(uz.examNoCoinsRetake), findsOneWidget);
+      }
+      // The offer is for App users only.
+      expect(find.text(uz.examOfferTitle), student ? findsNothing : findsOneWidget);
+      expect(find.widgetWithText(PrimaryButton, uz.bookOpenLesson), student ? findsNothing : findsOneWidget);
+
+      if (live) {
+        final coinsAfter = student ? ((await home.studentHome(null))['coins'] as num).toInt() : (await home.appUserHome()).lockedCoins;
+        expect(coinsAfter - coinsBefore, result.coins);
+      } else {
+        // Every first choice: none right while listening (the second is), none while reading (the third is).
+        expect(result.correct, 0);
+        expect(server.earned, isEmpty);
+        expect(server.locked, isEmpty);
+        // The same person answering right is paid: to the balance, or locked.
+        final again = FakeExamServer(now: DateTime.now)
+          ..exams.add(sampleExam(id: 'short', title: title, listening: 3, reading: 2))
+          ..students.addAll([if (student) profile.id]);
+        final attempt = again.start(profile.id, 'short');
+        again
+          ..answer(profile.id, attempt, 'short-l1', 'b', false)
+          ..submitSection(profile.id, attempt)
+          ..answer(profile.id, attempt, 'short-r1', 'c', false)
+          ..submitSection(profile.id, attempt);
+        expect(student ? again.earned : again.locked, {profile.id: 2});
+        expect(student ? again.locked : again.earned, isEmpty);
+      }
+
+      // The review, with the right answers now shown.
+      await tester.tap(find.text(uz.examReview));
+      await until(find.byType(ExamReviewScreen));
+      await pause();
+      expect(find.textContaining(uz.examRightAnswer), findsWidgets);
+    });
+  }
 }

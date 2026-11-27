@@ -6,16 +6,19 @@ import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/app.dart';
 import 'package:student/core/checkin_state.dart';
+import 'package:student/core/exam_state.dart';
 import 'package:student/core/game_state.dart';
 import 'package:student/core/localization.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
 import 'package:student/core/shop_state.dart';
 import 'package:student/core/state.dart';
+import 'package:student/data/exams.dart';
 import 'package:student/data/models.dart';
 import 'package:student/l10n/app_localizations.dart';
 import 'package:student/ui/theme.dart';
 
+import 'fake_exams.dart';
 import 'fake_game.dart';
 import 'fakes.dart';
 
@@ -58,6 +61,17 @@ class TestApp {
     ..add(FakePlayer('p-otabek', 'Otabek S.'))
     ..add(FakePlayer('p-guest', 'Sardor M.', student: false, groupId: null));
   late final gameRepository = FakeGameRepository(game, auth.profile?.id ?? 'nobody');
+
+  /// The exam server: a TOPIK I exam as in the designs and a TOPIK II one,
+  /// with the signed-in person a student or an App user as their profile says.
+  late final exams = FakeExamServer(now: () => clock?.call() ?? now)
+    ..exams.addAll([
+      sampleExam(),
+      sampleExam(id: 'exam-ii-1', title: 'TOPIK II — Mock 1', level: ExamLevel.topik2, listening: 50, reading: 50, thresholds: const {}),
+    ])
+    ..students.addAll([if (auth.profile?.role == AccountRole.student) auth.profile!.id]);
+  late final examRepository = FakeExamRepository(exams, auth.profile?.id ?? 'nobody');
+  final audio = FakeExamAudio();
 
   /// A clock that moves, for screens that count seconds: tests pass the test binding's.
   DateTime Function()? clock;
@@ -114,6 +128,8 @@ class TestApp {
         checkinRepositoryProvider.overrideWithValue(checkin),
         gameRepositoryProvider.overrideWithValue(gameRepository),
         gameFeedbackProvider.overrideWithValue(feedback),
+        examRepositoryProvider.overrideWithValue(examRepository),
+        examAudioProvider.overrideWithValue(() => audio),
         qrSecretStoreProvider.overrideWithValue(secrets),
         screenLightProvider.overrideWithValue(light),
         photoPickerProvider.overrideWithValue((_) async => photo),

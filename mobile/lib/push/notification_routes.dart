@@ -19,6 +19,12 @@ abstract final class Routes {
   static String gameClassmates(String groupId) => '/game/classmates?group=$groupId';
   static String match(String id, {String? groupId}) => groupId == null ? '/game/match/$id' : '/game/match/$id?group=$groupId';
   static String matchReview(String id) => '/game/match/$id/review';
+
+  /// The Game tab with the mock exams showing.
+  static const gameExams = '/game?side=exams';
+  static String examIntro(String examId) => '/game/exam/$examId';
+  static String examAttempt(String attemptId) => '/game/attempt/$attemptId';
+  static String examReview(String attemptId) => '/game/attempt/$attemptId/review';
   static const orders = '/shop/orders';
   static String product(String id) => '/shop/product/$id';
   static const more = '/more';

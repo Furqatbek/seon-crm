@@ -227,11 +227,11 @@ void main() {
       expect(app.gameRepository.calls, isNot(contains('joinQueue')));
     });
 
-    testWidgets('the other side of the tab is mock exams, which are not here yet', (tester) async {
+    testWidgets('the other side of the tab is the mock exams', (tester) async {
       await open(tester);
       await tester.tap(find.text(l.gameExams));
       await settle(tester);
-      expect(find.text(l.gameExamsSoon), findsOneWidget);
+      expect(find.text('TOPIK II — Mock 1'), findsOneWidget);
       expect(find.text(l.gamePlayNow), findsNothing);
       await tester.tap(find.text(l.gameDuel));
       await settle(tester);

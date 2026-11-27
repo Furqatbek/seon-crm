@@ -373,9 +373,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mockExamTitle => '모의고사';
 
   @override
-  String get mockExamSoon => 'TOPIK 형식의 연습 시험이 곧 여기에 준비됩니다.';
-
-  @override
   String get lockedCoins => '잠긴 코인';
 
   @override
@@ -861,9 +858,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get gameExams => '모의고사';
 
   @override
-  String get gameExamsSoon => '모의고사가 곧 여기에 열립니다.';
-
-  @override
   String gamePitch(String coins) {
     return '1대1 대결. 승자에게 $coins 지급.';
   }
@@ -1059,4 +1053,201 @@ class AppLocalizationsKo extends AppLocalizations {
   String gameSecondsLeft(int seconds) {
     return '$seconds초 남음';
   }
+
+  @override
+  String get examsEmpty => '이 레벨의 모의고사가 아직 없습니다';
+
+  @override
+  String examMeta(int listening, int reading, int minutes) {
+    return '듣기 $listening · 읽기 $reading · $minutes분';
+  }
+
+  @override
+  String examUpToCoins(String coins) {
+    return '최대 $coins';
+  }
+
+  @override
+  String examDone(int correct, int of) {
+    return '응시 완료 · $correct/$of';
+  }
+
+  @override
+  String get examRetake => '다시 응시 (코인 없음)';
+
+  @override
+  String get examRetakePlain => '다시 응시';
+
+  @override
+  String get examContinue => '이어서 하기';
+
+  @override
+  String get examListening => '듣기';
+
+  @override
+  String get examReading => '읽기';
+
+  @override
+  String examSectionMeta(int questions, int minutes) {
+    return '$questions문항 · $minutes분';
+  }
+
+  @override
+  String get examPractice => 'TOPIK 형식 연습 시험';
+
+  @override
+  String get examRules => '규칙';
+
+  @override
+  String examRulePlays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '오디오는 각 $count번 들을 수 있습니다');
+    return '$_temp0';
+  }
+
+  @override
+  String get examRuleClock => '시간은 멈추지 않습니다';
+
+  @override
+  String examRuleCoins(String coins) {
+    return '정답 하나 = $coins (첫 응시만)';
+  }
+
+  @override
+  String get examRuleLocked => '코인은 센터에 등록하면 풀립니다';
+
+  @override
+  String get examRuleNoCoins => '다시 응시하면 코인이 없습니다';
+
+  @override
+  String get examHeadphones => '이어폰을 착용하세요';
+
+  @override
+  String get examStart => '시작';
+
+  @override
+  String get examNotOpen => '지금은 응시할 수 없는 시험입니다';
+
+  @override
+  String examPlaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count번 더 들을 수 있습니다');
+    return '$_temp0';
+  }
+
+  @override
+  String get examNoPlaysLeft => '더 들을 수 없습니다';
+
+  @override
+  String get examPlay => '오디오 듣기';
+
+  @override
+  String get examPlaying => '재생 중…';
+
+  @override
+  String get examAudioFailed => '오디오를 재생할 수 없습니다. 다시 시도하세요';
+
+  @override
+  String get examFlag => '표시';
+
+  @override
+  String get examUnflag => '표시 해제';
+
+  @override
+  String get examNext => '다음';
+
+  @override
+  String get examSubmitSection => '영역 제출';
+
+  @override
+  String get examQuestions => '문제';
+
+  @override
+  String get examAnswered => '답함';
+
+  @override
+  String get examFlagged => '표시함';
+
+  @override
+  String get examUnanswered => '답 안 함';
+
+  @override
+  String examQuestionNumber(int number) {
+    return '$number번 문제';
+  }
+
+  @override
+  String get examOpenGrid => '문제 목록';
+
+  @override
+  String examTimeLeft(String time) {
+    return '남은 시간: $time';
+  }
+
+  @override
+  String examUnansweredCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '답하지 않은 문제 $count개');
+    return '$_temp0';
+  }
+
+  @override
+  String examChoice(int number) {
+    return '$number번 선택지';
+  }
+
+  @override
+  String get examResult => '결과';
+
+  @override
+  String get examTotal => '합계';
+
+  @override
+  String get examEstimateLabel => '예상 등급:';
+
+  @override
+  String examLevelN(int level) {
+    return '$level급';
+  }
+
+  @override
+  String get examEstimateNote => '연습용 예상이며 공식 TOPIK 결과가 아닙니다';
+
+  @override
+  String examCoinsLocked(String coins) {
+    return '$coins 잠김';
+  }
+
+  @override
+  String get examNoCoinsRetake => '다시 응시: 코인 없음';
+
+  @override
+  String get examReview => '답안 보기';
+
+  @override
+  String get examOfferTitle => '코인을 풀어 보세요';
+
+  @override
+  String get examOfferText => '센터에 등록하면 잠긴 코인이 내 잔액으로 옮겨집니다. 무료 공개 수업으로 시작하세요.';
+
+  @override
+  String get later => '나중에';
+
+  @override
+  String get examYourAnswer => '내 답';
+
+  @override
+  String get examRightAnswer => '정답';
+
+  @override
+  String get examNotAnswered => '답 안 함';
+
+  @override
+  String get examTranscript => '오디오 대본';
+
+  @override
+  String get examGone => '시험을 찾을 수 없습니다';
+
+  @override
+  String get examBackToList => '시험 목록으로';
+
+  @override
+  String get examHeroAllDone => '내 레벨의 시험을 모두 응시했습니다';
 }

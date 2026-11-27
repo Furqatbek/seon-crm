@@ -386,9 +386,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mockExamTitle => 'Mock exam';
 
   @override
-  String get mockExamSoon => 'TOPIK-style practice exams will be here soon.';
-
-  @override
   String get lockedCoins => 'Locked coins';
 
   @override
@@ -874,9 +871,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameExams => 'Mock exams';
 
   @override
-  String get gameExamsSoon => 'Mock exams will be here soon.';
-
-  @override
   String gamePitch(String coins) {
     return 'A 1v1 duel. The winner gets $coins.';
   }
@@ -1072,4 +1066,201 @@ class AppLocalizationsEn extends AppLocalizations {
   String gameSecondsLeft(int seconds) {
     return '$seconds seconds left';
   }
+
+  @override
+  String get examsEmpty => 'No practice exams for this level yet';
+
+  @override
+  String examMeta(int listening, int reading, int minutes) {
+    return 'Listening $listening · Reading $reading · $minutes min';
+  }
+
+  @override
+  String examUpToCoins(String coins) {
+    return 'up to $coins';
+  }
+
+  @override
+  String examDone(int correct, int of) {
+    return 'Completed · $correct/$of';
+  }
+
+  @override
+  String get examRetake => 'Retake (no coins)';
+
+  @override
+  String get examRetakePlain => 'Retake';
+
+  @override
+  String get examContinue => 'Continue';
+
+  @override
+  String get examListening => 'Listening';
+
+  @override
+  String get examReading => 'Reading';
+
+  @override
+  String examSectionMeta(int questions, int minutes) {
+    return '$questions questions · $minutes min';
+  }
+
+  @override
+  String get examPractice => 'TOPIK-style practice exam';
+
+  @override
+  String get examRules => 'Rules';
+
+  @override
+  String examRulePlays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: 'Each audio plays $count times', one: 'Each audio plays once');
+    return '$_temp0';
+  }
+
+  @override
+  String get examRuleClock => 'The clock does not stop';
+
+  @override
+  String examRuleCoins(String coins) {
+    return 'Each right answer = $coins (first attempt only)';
+  }
+
+  @override
+  String get examRuleLocked => 'The coins unlock when you join the centre';
+
+  @override
+  String get examRuleNoCoins => 'A retake gives no coins';
+
+  @override
+  String get examHeadphones => 'Put on headphones';
+
+  @override
+  String get examStart => 'Start';
+
+  @override
+  String get examNotOpen => 'This exam is not open now';
+
+  @override
+  String examPlaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count plays left', one: '$count play left');
+    return '$_temp0';
+  }
+
+  @override
+  String get examNoPlaysLeft => 'No plays left';
+
+  @override
+  String get examPlay => 'Play the audio';
+
+  @override
+  String get examPlaying => 'Playing…';
+
+  @override
+  String get examAudioFailed => 'The audio could not be played. Try again';
+
+  @override
+  String get examFlag => 'Flag';
+
+  @override
+  String get examUnflag => 'Unflag';
+
+  @override
+  String get examNext => 'Next';
+
+  @override
+  String get examSubmitSection => 'Submit section';
+
+  @override
+  String get examQuestions => 'Questions';
+
+  @override
+  String get examAnswered => 'Answered';
+
+  @override
+  String get examFlagged => 'Flagged';
+
+  @override
+  String get examUnanswered => 'Unanswered';
+
+  @override
+  String examQuestionNumber(int number) {
+    return 'Question $number';
+  }
+
+  @override
+  String get examOpenGrid => 'Question list';
+
+  @override
+  String examTimeLeft(String time) {
+    return 'Time left: $time';
+  }
+
+  @override
+  String examUnansweredCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count questions unanswered', one: '$count question unanswered');
+    return '$_temp0';
+  }
+
+  @override
+  String examChoice(int number) {
+    return 'Choice $number';
+  }
+
+  @override
+  String get examResult => 'Result';
+
+  @override
+  String get examTotal => 'Total';
+
+  @override
+  String get examEstimateLabel => 'Estimated level:';
+
+  @override
+  String examLevelN(int level) {
+    return 'Level $level';
+  }
+
+  @override
+  String get examEstimateNote => 'Practice estimate, not an official TOPIK result';
+
+  @override
+  String examCoinsLocked(String coins) {
+    return '$coins locked';
+  }
+
+  @override
+  String get examNoCoinsRetake => 'A retake: no coins given';
+
+  @override
+  String get examReview => 'Review answers';
+
+  @override
+  String get examOfferTitle => 'Unlock your coins';
+
+  @override
+  String get examOfferText => 'Join the centre and your locked coins move to your balance. Start with a free open lesson.';
+
+  @override
+  String get later => 'Later';
+
+  @override
+  String get examYourAnswer => 'Your answer';
+
+  @override
+  String get examRightAnswer => 'Right answer';
+
+  @override
+  String get examNotAnswered => 'Not answered';
+
+  @override
+  String get examTranscript => 'What the audio says';
+
+  @override
+  String get examGone => 'The exam was not found';
+
+  @override
+  String get examBackToList => 'Back to the exams';
+
+  @override
+  String get examHeroAllDone => 'You have completed every exam of your level';
 }

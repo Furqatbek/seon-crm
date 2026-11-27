@@ -182,13 +182,16 @@ class RopeBar extends StatelessWidget {
 
 /// A ring that empties as time runs out, with what is left written inside.
 class TimerRing extends StatelessWidget {
-  const TimerRing({super.key, required this.fraction, required this.label, this.size = AppSizes.avatar, this.semanticLabel});
+  const TimerRing({super.key, required this.fraction, required this.label, this.size = AppSizes.avatar, this.semanticLabel, this.child});
 
   /// How much of the ring is drawn, from 0 to 1.
   final double fraction;
   final String label;
   final double size;
   final String? semanticLabel;
+
+  /// Shown inside the ring instead of [label].
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -202,11 +205,13 @@ class TimerRing extends StatelessWidget {
           child: CustomPaint(
             painter: _RingPainter(fraction: fraction.clamp(0.0, 1.0), track: c.surface, from: c.primaryFill, to: c.accent),
             child: Center(
-              child: Text(
-                label,
-                textScaler: TextScaler.noScaling,
-                style: AppType.tabular(AppType.title.copyWith(color: c.text)),
-              ),
+              child:
+                  child ??
+                  Text(
+                    label,
+                    textScaler: TextScaler.noScaling,
+                    style: AppType.tabular(AppType.title.copyWith(color: c.text)),
+                  ),
             ),
           ),
         ),

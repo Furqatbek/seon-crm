@@ -378,9 +378,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mockExamTitle => 'Sinov imtihoni';
 
   @override
-  String get mockExamSoon => 'TOPIK uslubidagi mashq imtihonlari tez orada shu yerda boʻladi.';
-
-  @override
   String get lockedCoins => 'Qulflangan tangalar';
 
   @override
@@ -866,9 +863,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get gameExams => 'Sinov imtihonlari';
 
   @override
-  String get gameExamsSoon => 'Sinov imtihonlari tez orada shu yerda boʻladi.';
-
-  @override
   String gamePitch(String coins) {
     return '1 ga 1 bellashuv. Gʻolib $coins oladi.';
   }
@@ -1064,4 +1058,201 @@ class AppLocalizationsUz extends AppLocalizations {
   String gameSecondsLeft(int seconds) {
     return '$seconds soniya qoldi';
   }
+
+  @override
+  String get examsEmpty => 'Bu daraja uchun hozircha mashq imtihoni yoʻq';
+
+  @override
+  String examMeta(int listening, int reading, int minutes) {
+    return 'Tinglash $listening · Oʻqish $reading · $minutes daqiqa';
+  }
+
+  @override
+  String examUpToCoins(String coins) {
+    return '${coins}gacha';
+  }
+
+  @override
+  String examDone(int correct, int of) {
+    return 'Topshirilgan · $correct/$of';
+  }
+
+  @override
+  String get examRetake => 'Qayta topshirish (tangasiz)';
+
+  @override
+  String get examRetakePlain => 'Qayta topshirish';
+
+  @override
+  String get examContinue => 'Davom ettirish';
+
+  @override
+  String get examListening => 'Tinglash';
+
+  @override
+  String get examReading => 'Oʻqish';
+
+  @override
+  String examSectionMeta(int questions, int minutes) {
+    return '$questions savol · $minutes daqiqa';
+  }
+
+  @override
+  String get examPractice => 'TOPIK uslubidagi mashq imtihoni';
+
+  @override
+  String get examRules => 'Qoidalar';
+
+  @override
+  String examRulePlays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: 'Har bir audio $count marta eshitiladi');
+    return '$_temp0';
+  }
+
+  @override
+  String get examRuleClock => 'Vaqt toʻxtamaydi';
+
+  @override
+  String examRuleCoins(String coins) {
+    return 'Har bir toʻgʻri javob = $coins (faqat birinchi urinish)';
+  }
+
+  @override
+  String get examRuleLocked => 'Tangalar markazga qoʻshilganingizda ochiladi';
+
+  @override
+  String get examRuleNoCoins => 'Qayta topshirish tanga bermaydi';
+
+  @override
+  String get examHeadphones => 'Quloqchin taqing';
+
+  @override
+  String get examStart => 'Boshlash';
+
+  @override
+  String get examNotOpen => 'Bu imtihon hozir yopiq';
+
+  @override
+  String examPlaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count marta eshitish qoldi');
+    return '$_temp0';
+  }
+
+  @override
+  String get examNoPlaysLeft => 'Eshitish qolmadi';
+
+  @override
+  String get examPlay => 'Audioni eshitish';
+
+  @override
+  String get examPlaying => 'Ijro etilmoqda…';
+
+  @override
+  String get examAudioFailed => 'Audio ochilmadi. Qayta urinib koʻring';
+
+  @override
+  String get examFlag => 'Belgilash';
+
+  @override
+  String get examUnflag => 'Belgini olish';
+
+  @override
+  String get examNext => 'Keyingi';
+
+  @override
+  String get examSubmitSection => 'Boʻlimni topshirish';
+
+  @override
+  String get examQuestions => 'Savollar';
+
+  @override
+  String get examAnswered => 'Javob berilgan';
+
+  @override
+  String get examFlagged => 'Belgilangan';
+
+  @override
+  String get examUnanswered => 'Javobsiz';
+
+  @override
+  String examQuestionNumber(int number) {
+    return '$number-savol';
+  }
+
+  @override
+  String get examOpenGrid => 'Savollar roʻyxati';
+
+  @override
+  String examTimeLeft(String time) {
+    return 'Qolgan vaqt: $time';
+  }
+
+  @override
+  String examUnansweredCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count ta savol javobsiz');
+    return '$_temp0';
+  }
+
+  @override
+  String examChoice(int number) {
+    return '$number-variant';
+  }
+
+  @override
+  String get examResult => 'Natija';
+
+  @override
+  String get examTotal => 'Jami';
+
+  @override
+  String get examEstimateLabel => 'Taxminiy daraja:';
+
+  @override
+  String examLevelN(int level) {
+    return '$level-daraja';
+  }
+
+  @override
+  String get examEstimateNote => 'Mashq uchun taxmin, rasmiy TOPIK natijasi emas';
+
+  @override
+  String examCoinsLocked(String coins) {
+    return '$coins qulflandi';
+  }
+
+  @override
+  String get examNoCoinsRetake => 'Qayta topshirish: tanga berilmadi';
+
+  @override
+  String get examReview => 'Javoblarni koʻrish';
+
+  @override
+  String get examOfferTitle => 'Tangalaringizni oching';
+
+  @override
+  String get examOfferText => 'Markazga qoʻshiling: qulflangan tangalar hisobingizga oʻtadi. Bepul ochiq darsdan boshlang.';
+
+  @override
+  String get later => 'Keyinroq';
+
+  @override
+  String get examYourAnswer => 'Sizning javobingiz';
+
+  @override
+  String get examRightAnswer => 'Toʻgʻri javob';
+
+  @override
+  String get examNotAnswered => 'Javob berilmagan';
+
+  @override
+  String get examTranscript => 'Audio matni';
+
+  @override
+  String get examGone => 'Imtihon topilmadi';
+
+  @override
+  String get examBackToList => 'Imtihonlarga qaytish';
+
+  @override
+  String get examHeroAllDone => 'Darajangizdagi barcha imtihonlar topshirilgan';
 }

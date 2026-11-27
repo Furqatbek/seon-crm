@@ -2,10 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../core/exam_state.dart';
 import '../../core/format.dart';
 import '../../core/home_state.dart';
 import '../../core/state.dart';
 import '../../core/time.dart';
+import '../../data/exams.dart';
 import '../../data/home.dart';
 import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
@@ -13,6 +15,7 @@ import '../../push/notification_routes.dart';
 import '../../ui/tokens.dart';
 import '../../ui/widgets.dart';
 import '../auth/sign_up_screen.dart' show levelName;
+import '../exams/exams_side.dart';
 import 'home_widgets.dart';
 
 /// 02d: the App user Home: the next mock exam, locked coins, the free open
@@ -28,6 +31,8 @@ class AppUserHomeView extends ConsumerWidget {
     final home = ref.watch(appUserHomeProvider);
     final offline = home.hasError && home.error is OfflineException;
     final data = home.value;
+    final exams = ref.watch(examListProvider).value;
+    final next = exams == null ? null : nextUnfinishedExam(exams, examLevelOf(profile?.koreanLevel));
 
     return SafeArea(
       bottom: false,
@@ -39,7 +44,10 @@ class AppUserHomeView extends ConsumerWidget {
             child: RefreshIndicator(
               color: c.primary,
               backgroundColor: c.elevated,
-              onRefresh: () => ref.refresh(appUserHomeProvider.future).then((_) {}, onError: (_) {}),
+              onRefresh: () {
+                ref.invalidate(examListProvider);
+                return ref.refresh(appUserHomeProvider.future).then((_) {}, onError: (_) {});
+              },
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(AppSpacing.page, AppSpacing.x4, AppSpacing.page, AppSpacing.x8),
@@ -53,7 +61,12 @@ class AppUserHomeView extends ConsumerWidget {
                     ),
                   ],
                   const SizedBox(height: AppSpacing.x4),
-                  MockExamHeroCard(level: profile?.koreanLevel, onTap: () => context.go(Routes.game)),
+                  MockExamHeroCard(
+                    level: profile?.koreanLevel,
+                    exams: exams,
+                    // Straight into the next exam; with none left, to the list.
+                    onTap: () => next == null ? context.go(Routes.gameExams) : openExamRoute(context, ref, examRouteOf(next)),
+                  ),
                   const SizedBox(height: AppSpacing.x3),
                   if (data == null && !home.hasError) const Skeleton.card() else LockedCoinsCard(coins: data?.lockedCoins ?? 0),
                   if (data?.voucher != null) ...[const SizedBox(height: AppSpacing.x3), VoucherCard(voucher: data!.voucher!)],
@@ -69,18 +82,31 @@ class AppUserHomeView extends ConsumerWidget {
   }
 }
 
-/// The hero card: the next unfinished mock exam for the person's level. The
-/// exams arrive with a later phase; until then it says so and leads to the Game tab.
+/// The hero card: the next unfinished mock exam for the person's level, with
+/// Start (or Continue when one is in progress). With nothing left to take it
+/// says so and leads to the list.
 class MockExamHeroCard extends StatelessWidget {
-  const MockExamHeroCard({super.key, required this.level, this.onTap});
+  const MockExamHeroCard({super.key, required this.level, required this.exams, this.onTap});
 
   final KoreanLevel? level;
+
+  /// The published exams; null while they are being read or when they could not be.
+  final List<ExamSummary>? exams;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = AppColors.of(context);
     final l = AppLocalizations.of(context);
+    final examLevel = examLevelOf(level);
+    final next = exams == null ? null : nextUnfinishedExam(exams!, examLevel);
+    final String? note = next != null
+        ? l.examMeta(
+            next.section(ExamSectionKind.listening)?.questionCount ?? 0,
+            next.section(ExamSectionKind.reading)?.questionCount ?? 0,
+            next.time.inMinutes,
+          )
+        : (exams == null ? null : (exams!.any((exam) => exam.level == examLevel) ? l.examHeroAllDone : l.examsEmpty));
     return Semantics(
       button: onTap != null,
       container: true,
@@ -90,30 +116,44 @@ class MockExamHeroCard extends StatelessWidget {
         child: GradientOutline(
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.x5),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ExcludeSemantics(
-                  child: Container(
-                    width: AppSizes.roundButton,
-                    height: AppSizes.roundButton,
-                    decoration: BoxDecoration(color: c.primaryTint, shape: BoxShape.circle),
-                    child: Icon(Icons.menu_book_outlined, color: c.primary, size: AppSizes.icon),
-                  ),
+                Row(
+                  children: [
+                    ExcludeSemantics(
+                      child: Container(
+                        width: AppSizes.roundButton,
+                        height: AppSizes.roundButton,
+                        decoration: BoxDecoration(color: c.primaryTint, shape: BoxShape.circle),
+                        child: Icon(Icons.menu_book_outlined, color: c.primary, size: AppSizes.icon),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.x4),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(l.mockExamTitle, style: AppType.footnote.copyWith(color: c.textSecondary)),
+                          const SizedBox(height: AppSpacing.x1),
+                          // Beginners practise with the TOPIK I exams.
+                          Text(next?.title ?? (examLevel == ExamLevel.topik2 ? l.levelTopik2 : l.levelTopik1), style: AppType.title.copyWith(color: c.text)),
+                          if (note != null) ...[const SizedBox(height: AppSpacing.x1), Text(note, style: AppType.footnote.copyWith(color: c.textSecondary))],
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: AppSpacing.x4),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(l.mockExamTitle, style: AppType.footnote.copyWith(color: c.textSecondary)),
-                      const SizedBox(height: AppSpacing.x1),
-                      // Beginners practise with the TOPIK I exams.
-                      Text(level == KoreanLevel.topik2 ? l.levelTopik2 : l.levelTopik1, style: AppType.title.copyWith(color: c.text)),
-                      const SizedBox(height: AppSpacing.x1),
-                      Text(l.mockExamSoon, style: AppType.footnote.copyWith(color: c.textSecondary)),
-                    ],
+                if (next != null) ...[
+                  const SizedBox(height: AppSpacing.x4),
+                  // The whole card is the button; this is how it looks.
+                  ExcludeSemantics(
+                    child: IgnorePointer(
+                      child: PrimaryButton(label: next.openAttemptId != null ? l.examContinue : l.examStart, onPressed: () {}),
+                    ),
                   ),
-                ),
+                  Semantics(label: next.openAttemptId != null ? l.examContinue : l.examStart, child: const SizedBox.shrink()),
+                ],
               ],
             ),
           ),

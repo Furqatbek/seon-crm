@@ -404,9 +404,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mockExamTitle => 'Пробный экзамен';
 
   @override
-  String get mockExamSoon => 'Скоро здесь появятся тренировочные экзамены в формате TOPIK.';
-
-  @override
   String get lockedCoins => 'Заблокированные монеты';
 
   @override
@@ -892,9 +889,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get gameExams => 'Пробные экзамены';
 
   @override
-  String get gameExamsSoon => 'Пробные экзамены скоро появятся здесь.';
-
-  @override
   String gamePitch(String coins) {
     return 'Дуэль 1 на 1. Победитель получает $coins.';
   }
@@ -1090,4 +1084,219 @@ class AppLocalizationsRu extends AppLocalizations {
   String gameSecondsLeft(int seconds) {
     return 'Осталось секунд: $seconds';
   }
+
+  @override
+  String get examsEmpty => 'Для этого уровня пока нет пробных экзаменов';
+
+  @override
+  String examMeta(int listening, int reading, int minutes) {
+    return 'Аудирование $listening · Чтение $reading · $minutes мин';
+  }
+
+  @override
+  String examUpToCoins(String coins) {
+    return 'до $coins';
+  }
+
+  @override
+  String examDone(int correct, int of) {
+    return 'Сдан · $correct/$of';
+  }
+
+  @override
+  String get examRetake => 'Пройти ещё раз (без монет)';
+
+  @override
+  String get examRetakePlain => 'Пройти ещё раз';
+
+  @override
+  String get examContinue => 'Продолжить';
+
+  @override
+  String get examListening => 'Аудирование';
+
+  @override
+  String get examReading => 'Чтение';
+
+  @override
+  String examSectionMeta(int questions, int minutes) {
+    return 'Вопросов: $questions · $minutes мин';
+  }
+
+  @override
+  String get examPractice => 'Тренировочный экзамен в формате TOPIK';
+
+  @override
+  String get examRules => 'Правила';
+
+  @override
+  String examRulePlays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Каждое аудио звучит $count раз',
+      few: 'Каждое аудио звучит $count раза',
+      one: 'Каждое аудио звучит $count раз',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get examRuleClock => 'Время не останавливается';
+
+  @override
+  String examRuleCoins(String coins) {
+    return 'Каждый верный ответ = $coins (только первая попытка)';
+  }
+
+  @override
+  String get examRuleLocked => 'Монеты откроются, когда вы присоединитесь к центру';
+
+  @override
+  String get examRuleNoCoins => 'За повторную попытку монеты не даются';
+
+  @override
+  String get examHeadphones => 'Наденьте наушники';
+
+  @override
+  String get examStart => 'Начать';
+
+  @override
+  String get examNotOpen => 'Этот экзамен сейчас закрыт';
+
+  @override
+  String examPlaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Можно прослушать ещё $count раз',
+      few: 'Можно прослушать ещё $count раза',
+      one: 'Можно прослушать ещё $count раз',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get examNoPlaysLeft => 'Прослушиваний не осталось';
+
+  @override
+  String get examPlay => 'Прослушать аудио';
+
+  @override
+  String get examPlaying => 'Идёт воспроизведение…';
+
+  @override
+  String get examAudioFailed => 'Аудио не открылось. Попробуйте ещё раз';
+
+  @override
+  String get examFlag => 'Отметить';
+
+  @override
+  String get examUnflag => 'Снять отметку';
+
+  @override
+  String get examNext => 'Далее';
+
+  @override
+  String get examSubmitSection => 'Сдать раздел';
+
+  @override
+  String get examQuestions => 'Вопросы';
+
+  @override
+  String get examAnswered => 'С ответом';
+
+  @override
+  String get examFlagged => 'Отмечен';
+
+  @override
+  String get examUnanswered => 'Без ответа';
+
+  @override
+  String examQuestionNumber(int number) {
+    return 'Вопрос $number';
+  }
+
+  @override
+  String get examOpenGrid => 'Список вопросов';
+
+  @override
+  String examTimeLeft(String time) {
+    return 'Осталось: $time';
+  }
+
+  @override
+  String examUnansweredCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count вопросов без ответа',
+      few: '$count вопроса без ответа',
+      one: '$count вопрос без ответа',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String examChoice(int number) {
+    return 'Вариант $number';
+  }
+
+  @override
+  String get examResult => 'Результат';
+
+  @override
+  String get examTotal => 'Всего';
+
+  @override
+  String get examEstimateLabel => 'Примерный уровень:';
+
+  @override
+  String examLevelN(int level) {
+    return '$level-й уровень';
+  }
+
+  @override
+  String get examEstimateNote => 'Тренировочная оценка, не официальный результат TOPIK';
+
+  @override
+  String examCoinsLocked(String coins) {
+    return '$coins заблокировано';
+  }
+
+  @override
+  String get examNoCoinsRetake => 'Повторная попытка: монеты не начислены';
+
+  @override
+  String get examReview => 'Посмотреть ответы';
+
+  @override
+  String get examOfferTitle => 'Откройте свои монеты';
+
+  @override
+  String get examOfferText => 'Присоединяйтесь к центру: заблокированные монеты перейдут на ваш счёт. Начните с бесплатного открытого урока.';
+
+  @override
+  String get later => 'Позже';
+
+  @override
+  String get examYourAnswer => 'Ваш ответ';
+
+  @override
+  String get examRightAnswer => 'Верный ответ';
+
+  @override
+  String get examNotAnswered => 'Нет ответа';
+
+  @override
+  String get examTranscript => 'Текст аудио';
+
+  @override
+  String get examGone => 'Экзамен не найден';
+
+  @override
+  String get examBackToList => 'К экзаменам';
+
+  @override
+  String get examHeroAllDone => 'Все экзамены вашего уровня пройдены';
 }

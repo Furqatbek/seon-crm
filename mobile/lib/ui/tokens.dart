@@ -125,6 +125,12 @@ class AppColors extends ThemeExtension<AppColors> {
   /// A faint wash of the primary colour: icon circles, the unread dot's halo.
   Color get primaryTint => primary.withValues(alpha: 0.14);
 
+  /// Behind a right answer in a review.
+  Color get successTint => success.withValues(alpha: 0.14);
+
+  /// Behind a wrong answer in a review.
+  Color get dangerTint => danger.withValues(alpha: 0.14);
+
   /// Behind a warning, such as the offline banner.
   Color get warningTint => warning.withValues(alpha: 0.14);
 

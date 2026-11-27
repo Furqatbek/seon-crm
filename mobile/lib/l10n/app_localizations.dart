@@ -730,12 +730,6 @@ abstract class AppLocalizations {
   /// **'Sinov imtihoni'**
   String get mockExamTitle;
 
-  /// No description provided for @mockExamSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'TOPIK uslubidagi mashq imtihonlari tez orada shu yerda boʻladi.'**
-  String get mockExamSoon;
-
   /// No description provided for @lockedCoins.
   ///
   /// In uz, this message translates to:
@@ -1630,12 +1624,6 @@ abstract class AppLocalizations {
   /// **'Sinov imtihonlari'**
   String get gameExams;
 
-  /// No description provided for @gameExamsSoon.
-  ///
-  /// In uz, this message translates to:
-  /// **'Sinov imtihonlari tez orada shu yerda boʻladi.'**
-  String get gameExamsSoon;
-
   /// No description provided for @gamePitch.
   ///
   /// In uz, this message translates to:
@@ -1989,6 +1977,342 @@ abstract class AppLocalizations {
   /// In uz, this message translates to:
   /// **'{seconds} soniya qoldi'**
   String gameSecondsLeft(int seconds);
+
+  /// No description provided for @examsEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu daraja uchun hozircha mashq imtihoni yoʻq'**
+  String get examsEmpty;
+
+  /// No description provided for @examMeta.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tinglash {listening} · Oʻqish {reading} · {minutes} daqiqa'**
+  String examMeta(int listening, int reading, int minutes);
+
+  /// No description provided for @examUpToCoins.
+  ///
+  /// In uz, this message translates to:
+  /// **'{coins}gacha'**
+  String examUpToCoins(String coins);
+
+  /// No description provided for @examDone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Topshirilgan · {correct}/{of}'**
+  String examDone(int correct, int of);
+
+  /// No description provided for @examRetake.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qayta topshirish (tangasiz)'**
+  String get examRetake;
+
+  /// No description provided for @examRetakePlain.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qayta topshirish'**
+  String get examRetakePlain;
+
+  /// No description provided for @examContinue.
+  ///
+  /// In uz, this message translates to:
+  /// **'Davom ettirish'**
+  String get examContinue;
+
+  /// No description provided for @examListening.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tinglash'**
+  String get examListening;
+
+  /// No description provided for @examReading.
+  ///
+  /// In uz, this message translates to:
+  /// **'Oʻqish'**
+  String get examReading;
+
+  /// No description provided for @examSectionMeta.
+  ///
+  /// In uz, this message translates to:
+  /// **'{questions} savol · {minutes} daqiqa'**
+  String examSectionMeta(int questions, int minutes);
+
+  /// No description provided for @examPractice.
+  ///
+  /// In uz, this message translates to:
+  /// **'TOPIK uslubidagi mashq imtihoni'**
+  String get examPractice;
+
+  /// No description provided for @examRules.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qoidalar'**
+  String get examRules;
+
+  /// No description provided for @examRulePlays.
+  ///
+  /// In uz, this message translates to:
+  /// **'{count, plural, other{Har bir audio {count} marta eshitiladi}}'**
+  String examRulePlays(int count);
+
+  /// No description provided for @examRuleClock.
+  ///
+  /// In uz, this message translates to:
+  /// **'Vaqt toʻxtamaydi'**
+  String get examRuleClock;
+
+  /// No description provided for @examRuleCoins.
+  ///
+  /// In uz, this message translates to:
+  /// **'Har bir toʻgʻri javob = {coins} (faqat birinchi urinish)'**
+  String examRuleCoins(String coins);
+
+  /// No description provided for @examRuleLocked.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tangalar markazga qoʻshilganingizda ochiladi'**
+  String get examRuleLocked;
+
+  /// No description provided for @examRuleNoCoins.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qayta topshirish tanga bermaydi'**
+  String get examRuleNoCoins;
+
+  /// No description provided for @examHeadphones.
+  ///
+  /// In uz, this message translates to:
+  /// **'Quloqchin taqing'**
+  String get examHeadphones;
+
+  /// No description provided for @examStart.
+  ///
+  /// In uz, this message translates to:
+  /// **'Boshlash'**
+  String get examStart;
+
+  /// No description provided for @examNotOpen.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bu imtihon hozir yopiq'**
+  String get examNotOpen;
+
+  /// No description provided for @examPlaysLeft.
+  ///
+  /// In uz, this message translates to:
+  /// **'{count, plural, other{{count} marta eshitish qoldi}}'**
+  String examPlaysLeft(int count);
+
+  /// No description provided for @examNoPlaysLeft.
+  ///
+  /// In uz, this message translates to:
+  /// **'Eshitish qolmadi'**
+  String get examNoPlaysLeft;
+
+  /// No description provided for @examPlay.
+  ///
+  /// In uz, this message translates to:
+  /// **'Audioni eshitish'**
+  String get examPlay;
+
+  /// No description provided for @examPlaying.
+  ///
+  /// In uz, this message translates to:
+  /// **'Ijro etilmoqda…'**
+  String get examPlaying;
+
+  /// No description provided for @examAudioFailed.
+  ///
+  /// In uz, this message translates to:
+  /// **'Audio ochilmadi. Qayta urinib koʻring'**
+  String get examAudioFailed;
+
+  /// No description provided for @examFlag.
+  ///
+  /// In uz, this message translates to:
+  /// **'Belgilash'**
+  String get examFlag;
+
+  /// No description provided for @examUnflag.
+  ///
+  /// In uz, this message translates to:
+  /// **'Belgini olish'**
+  String get examUnflag;
+
+  /// No description provided for @examNext.
+  ///
+  /// In uz, this message translates to:
+  /// **'Keyingi'**
+  String get examNext;
+
+  /// No description provided for @examSubmitSection.
+  ///
+  /// In uz, this message translates to:
+  /// **'Boʻlimni topshirish'**
+  String get examSubmitSection;
+
+  /// No description provided for @examQuestions.
+  ///
+  /// In uz, this message translates to:
+  /// **'Savollar'**
+  String get examQuestions;
+
+  /// No description provided for @examAnswered.
+  ///
+  /// In uz, this message translates to:
+  /// **'Javob berilgan'**
+  String get examAnswered;
+
+  /// No description provided for @examFlagged.
+  ///
+  /// In uz, this message translates to:
+  /// **'Belgilangan'**
+  String get examFlagged;
+
+  /// No description provided for @examUnanswered.
+  ///
+  /// In uz, this message translates to:
+  /// **'Javobsiz'**
+  String get examUnanswered;
+
+  /// No description provided for @examQuestionNumber.
+  ///
+  /// In uz, this message translates to:
+  /// **'{number}-savol'**
+  String examQuestionNumber(int number);
+
+  /// No description provided for @examOpenGrid.
+  ///
+  /// In uz, this message translates to:
+  /// **'Savollar roʻyxati'**
+  String get examOpenGrid;
+
+  /// No description provided for @examTimeLeft.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qolgan vaqt: {time}'**
+  String examTimeLeft(String time);
+
+  /// No description provided for @examUnansweredCount.
+  ///
+  /// In uz, this message translates to:
+  /// **'{count, plural, other{{count} ta savol javobsiz}}'**
+  String examUnansweredCount(int count);
+
+  /// No description provided for @examChoice.
+  ///
+  /// In uz, this message translates to:
+  /// **'{number}-variant'**
+  String examChoice(int number);
+
+  /// No description provided for @examResult.
+  ///
+  /// In uz, this message translates to:
+  /// **'Natija'**
+  String get examResult;
+
+  /// No description provided for @examTotal.
+  ///
+  /// In uz, this message translates to:
+  /// **'Jami'**
+  String get examTotal;
+
+  /// No description provided for @examEstimateLabel.
+  ///
+  /// In uz, this message translates to:
+  /// **'Taxminiy daraja:'**
+  String get examEstimateLabel;
+
+  /// No description provided for @examLevelN.
+  ///
+  /// In uz, this message translates to:
+  /// **'{level}-daraja'**
+  String examLevelN(int level);
+
+  /// No description provided for @examEstimateNote.
+  ///
+  /// In uz, this message translates to:
+  /// **'Mashq uchun taxmin, rasmiy TOPIK natijasi emas'**
+  String get examEstimateNote;
+
+  /// No description provided for @examCoinsLocked.
+  ///
+  /// In uz, this message translates to:
+  /// **'{coins} qulflandi'**
+  String examCoinsLocked(String coins);
+
+  /// No description provided for @examNoCoinsRetake.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qayta topshirish: tanga berilmadi'**
+  String get examNoCoinsRetake;
+
+  /// No description provided for @examReview.
+  ///
+  /// In uz, this message translates to:
+  /// **'Javoblarni koʻrish'**
+  String get examReview;
+
+  /// No description provided for @examOfferTitle.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tangalaringizni oching'**
+  String get examOfferTitle;
+
+  /// No description provided for @examOfferText.
+  ///
+  /// In uz, this message translates to:
+  /// **'Markazga qoʻshiling: qulflangan tangalar hisobingizga oʻtadi. Bepul ochiq darsdan boshlang.'**
+  String get examOfferText;
+
+  /// No description provided for @later.
+  ///
+  /// In uz, this message translates to:
+  /// **'Keyinroq'**
+  String get later;
+
+  /// No description provided for @examYourAnswer.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sizning javobingiz'**
+  String get examYourAnswer;
+
+  /// No description provided for @examRightAnswer.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻgʻri javob'**
+  String get examRightAnswer;
+
+  /// No description provided for @examNotAnswered.
+  ///
+  /// In uz, this message translates to:
+  /// **'Javob berilmagan'**
+  String get examNotAnswered;
+
+  /// No description provided for @examTranscript.
+  ///
+  /// In uz, this message translates to:
+  /// **'Audio matni'**
+  String get examTranscript;
+
+  /// No description provided for @examGone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Imtihon topilmadi'**
+  String get examGone;
+
+  /// No description provided for @examBackToList.
+  ///
+  /// In uz, this message translates to:
+  /// **'Imtihonlarga qaytish'**
+  String get examBackToList;
+
+  /// No description provided for @examHeroAllDone.
+  ///
+  /// In uz, this message translates to:
+  /// **'Darajangizdagi barcha imtihonlar topshirilgan'**
+  String get examHeroAllDone;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

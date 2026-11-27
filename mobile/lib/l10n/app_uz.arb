@@ -265,7 +265,6 @@
     }
   },
   "mockExamTitle": "Sinov imtihoni",
-  "mockExamSoon": "TOPIK uslubidagi mashq imtihonlari tez orada shu yerda boʻladi.",
   "lockedCoins": "Qulflangan tangalar",
   "lockedCoinsHint": "Markazga qoʻshilganingizda ochiladi",
   "openLessonTitle": "Bepul ochiq dars",
@@ -569,7 +568,6 @@
   "gameZone": "Oʻyin zonasi",
   "gameDuel": "1 ga 1",
   "gameExams": "Sinov imtihonlari",
-  "gameExamsSoon": "Sinov imtihonlari tez orada shu yerda boʻladi.",
   "gamePitch": "1 ga 1 bellashuv. Gʻolib {coins} oladi.",
   "@gamePitch": {
     "placeholders": {
@@ -707,5 +705,164 @@
         "type": "int"
       }
     }
-  }
+  },
+  "examsEmpty": "Bu daraja uchun hozircha mashq imtihoni yoʻq",
+  "examMeta": "Tinglash {listening} · Oʻqish {reading} · {minutes} daqiqa",
+  "@examMeta": {
+    "placeholders": {
+      "listening": {
+        "type": "int"
+      },
+      "reading": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "examUpToCoins": "{coins}gacha",
+  "@examUpToCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "String"
+      }
+    }
+  },
+  "examDone": "Topshirilgan · {correct}/{of}",
+  "@examDone": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "of": {
+        "type": "int"
+      }
+    }
+  },
+  "examRetake": "Qayta topshirish (tangasiz)",
+  "examRetakePlain": "Qayta topshirish",
+  "examContinue": "Davom ettirish",
+  "examListening": "Tinglash",
+  "examReading": "Oʻqish",
+  "examSectionMeta": "{questions} savol · {minutes} daqiqa",
+  "@examSectionMeta": {
+    "placeholders": {
+      "questions": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "examPractice": "TOPIK uslubidagi mashq imtihoni",
+  "examRules": "Qoidalar",
+  "examRulePlays": "{count, plural, other{Har bir audio {count} marta eshitiladi}}",
+  "@examRulePlays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "examRuleClock": "Vaqt toʻxtamaydi",
+  "examRuleCoins": "Har bir toʻgʻri javob = {coins} (faqat birinchi urinish)",
+  "@examRuleCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "String"
+      }
+    }
+  },
+  "examRuleLocked": "Tangalar markazga qoʻshilganingizda ochiladi",
+  "examRuleNoCoins": "Qayta topshirish tanga bermaydi",
+  "examHeadphones": "Quloqchin taqing",
+  "examStart": "Boshlash",
+  "examNotOpen": "Bu imtihon hozir yopiq",
+  "examPlaysLeft": "{count, plural, other{{count} marta eshitish qoldi}}",
+  "@examPlaysLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "examNoPlaysLeft": "Eshitish qolmadi",
+  "examPlay": "Audioni eshitish",
+  "examPlaying": "Ijro etilmoqda…",
+  "examAudioFailed": "Audio ochilmadi. Qayta urinib koʻring",
+  "examFlag": "Belgilash",
+  "examUnflag": "Belgini olish",
+  "examNext": "Keyingi",
+  "examSubmitSection": "Boʻlimni topshirish",
+  "examQuestions": "Savollar",
+  "examAnswered": "Javob berilgan",
+  "examFlagged": "Belgilangan",
+  "examUnanswered": "Javobsiz",
+  "examQuestionNumber": "{number}-savol",
+  "@examQuestionNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "examOpenGrid": "Savollar roʻyxati",
+  "examTimeLeft": "Qolgan vaqt: {time}",
+  "@examTimeLeft": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "examUnansweredCount": "{count, plural, other{{count} ta savol javobsiz}}",
+  "@examUnansweredCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "examChoice": "{number}-variant",
+  "@examChoice": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "examResult": "Natija",
+  "examTotal": "Jami",
+  "examEstimateLabel": "Taxminiy daraja:",
+  "examLevelN": "{level}-daraja",
+  "@examLevelN": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "examEstimateNote": "Mashq uchun taxmin, rasmiy TOPIK natijasi emas",
+  "examCoinsLocked": "{coins} qulflandi",
+  "@examCoinsLocked": {
+    "placeholders": {
+      "coins": {
+        "type": "String"
+      }
+    }
+  },
+  "examNoCoinsRetake": "Qayta topshirish: tanga berilmadi",
+  "examReview": "Javoblarni koʻrish",
+  "examOfferTitle": "Tangalaringizni oching",
+  "examOfferText": "Markazga qoʻshiling: qulflangan tangalar hisobingizga oʻtadi. Bepul ochiq darsdan boshlang.",
+  "later": "Keyinroq",
+  "examYourAnswer": "Sizning javobingiz",
+  "examRightAnswer": "Toʻgʻri javob",
+  "examNotAnswered": "Javob berilmagan",
+  "examTranscript": "Audio matni",
+  "examGone": "Imtihon topilmadi",
+  "examBackToList": "Imtihonlarga qaytish",
+  "examHeroAllDone": "Darajangizdagi barcha imtihonlar topshirilgan"
 }

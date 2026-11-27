@@ -14,21 +14,32 @@ import '../../l10n/app_localizations.dart';
 import '../../push/notification_routes.dart';
 import '../../ui/tokens.dart';
 import '../../ui/widgets.dart';
+import '../exams/exams_side.dart';
 import 'game_widgets.dart';
 
 enum _Side { duel, exams }
 
 /// The Game tab: 1v1 on one side, mock exams on the other.
 class GameTab extends ConsumerStatefulWidget {
-  const GameTab({super.key});
+  const GameTab({super.key, this.exams = false});
+
+  /// Opened on the mock exams side.
+  final bool exams;
 
   @override
   ConsumerState<GameTab> createState() => _GameTabState();
 }
 
 class _GameTabState extends ConsumerState<GameTab> {
-  _Side _side = _Side.duel;
+  late _Side _side = widget.exams ? _Side.exams : _Side.duel;
   String? _groupId;
+
+  @override
+  void didUpdateWidget(GameTab old) {
+    super.didUpdateWidget(old);
+    // Sent here for the exams, from Home or from a result.
+    if (widget.exams && !old.exams) _side = _Side.exams;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +53,7 @@ class _GameTabState extends ConsumerState<GameTab> {
 
     final Widget body;
     if (_side == _Side.exams) {
-      // Mock exams arrive with a later phase.
-      body = EmptyState(icon: Icons.assignment_outlined, title: l.soonTitle, message: l.gameExamsSoon);
+      body = const ExamsSide();
     } else if (!auth.profileLoaded || (student && home?.home == null && home?.problem == HomeProblem.none)) {
       body = const Padding(padding: EdgeInsets.all(AppSpacing.page), child: Skeleton.card());
     } else if (student && groupId == null) {

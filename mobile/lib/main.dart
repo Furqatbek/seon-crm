@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app.dart';
 import 'core/home_state.dart';
 import 'core/checkin_state.dart';
+import 'core/exam_state.dart';
 import 'core/game_state.dart';
 import 'core/more_state.dart';
 import 'core/shop_state.dart';
@@ -14,6 +15,7 @@ import 'core/state.dart';
 import 'data/auth_repository.dart';
 import 'data/checkin.dart';
 import 'data/device_tokens.dart';
+import 'data/exams.dart';
 import 'data/game.dart';
 import 'data/home.dart';
 import 'data/more.dart';
@@ -44,6 +46,7 @@ Future<void> main() async {
         moreRepositoryProvider.overrideWithValue(SupabaseMoreRepository(client)),
         shopRepositoryProvider.overrideWithValue(SupabaseShopRepository(client)),
         gameRepositoryProvider.overrideWithValue(SupabaseGameRepository(client)),
+        examRepositoryProvider.overrideWithValue(SupabaseExamRepository(client)),
         checkinRepositoryProvider.overrideWithValue(SupabaseCheckinRepository(client)),
         qrSecretStoreProvider.overrideWithValue(const SecureQrSecretStore()),
         screenLightProvider.overrideWithValue(const DeviceScreenLight()),

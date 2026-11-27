@@ -7,6 +7,8 @@ import '../features/auth/linked_screen.dart';
 import '../features/auth/sign_in_screens.dart';
 import '../features/auth/sign_up_screen.dart';
 import '../features/auth/welcome_screen.dart';
+import '../features/exams/exam_screen.dart';
+import '../features/exams/exams_side.dart';
 import '../features/game/finding.dart';
 import '../features/game/game_tab.dart';
 import '../features/game/match_screen.dart';
@@ -79,7 +81,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: Routes.game,
-                builder: (_, _) => const GameTab(),
+                builder: (_, state) => GameTab(exams: state.uri.queryParameters['side'] == 'exams'),
                 // Looking for an opponent and the match itself cover the tab bar.
                 routes: [
                   GoRoute(
@@ -92,6 +94,24 @@ final routerProvider = Provider<GoRouter>((ref) {
                     parentNavigatorKey: root,
                     redirect: (_, state) => state.uri.queryParameters['group'] == null ? Routes.game : null,
                     builder: (_, state) => ClassmatesScreen(groupId: state.uri.queryParameters['group']!),
+                  ),
+                  // A mock exam: its intro, the attempt with its result, and the review.
+                  GoRoute(
+                    path: 'exam/:id',
+                    parentNavigatorKey: root,
+                    builder: (_, state) => ExamIntroScreen(examId: state.pathParameters['id']!),
+                  ),
+                  GoRoute(
+                    path: 'attempt/:id',
+                    parentNavigatorKey: root,
+                    builder: (_, state) => ExamScreen(key: ValueKey(state.pathParameters['id']), attemptId: state.pathParameters['id']!),
+                    routes: [
+                      GoRoute(
+                        path: 'review',
+                        parentNavigatorKey: root,
+                        builder: (_, state) => ExamReviewScreen(attemptId: state.pathParameters['id']!),
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: 'match/:id',
