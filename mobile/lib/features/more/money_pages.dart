@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../core/format.dart';
@@ -8,6 +9,7 @@ import '../../core/time.dart';
 import '../../data/home.dart';
 import '../../data/more.dart';
 import '../../l10n/app_localizations.dart';
+import '../../push/notification_routes.dart';
 import '../../ui/tokens.dart';
 import '../../ui/widgets.dart';
 import 'sub_page.dart';
@@ -50,16 +52,11 @@ class PaymentsPage extends ConsumerWidget {
             children: [
               if (home != null) BalanceCard(home: home),
               const SizedBox(height: AppSpacing.x3),
-              // Card payments and receipts arrive with a later phase.
-              Semantics(
-                button: true,
-                enabled: false,
-                child: Opacity(
-                  opacity: AppSizes.disabledOpacity,
-                  child: PrimaryButton(label: l.payByCard, onPressed: null),
-                ),
+              // Transfer to the centre's card and send the receipt; what was sent, and the answers.
+              PrimaryButton(label: l.payByCard, onPressed: () => context.go(Routes.payByCard)),
+              Center(
+                child: LinkButton(label: l.myReceipts, onPressed: () => context.go(Routes.myReceipts)),
               ),
-              Center(child: LinkButton(label: '${l.myReceipts} · ${l.comingSoon}', onPressed: null)),
               if (entries.isEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: AppSpacing.x6),

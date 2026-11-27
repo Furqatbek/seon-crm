@@ -154,6 +154,8 @@ class AppTextField extends StatelessWidget {
     this.onChanged,
     this.onSubmitted,
     this.textCapitalization = TextCapitalization.none,
+    this.hint,
+    this.maxLength,
   });
 
   final TextEditingController controller;
@@ -171,6 +173,10 @@ class AppTextField extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final TextCapitalization textCapitalization;
 
+  /// Shown inside the field while it is empty.
+  final String? hint;
+  final int? maxLength;
+
   @override
   Widget build(BuildContext context) {
     final c = AppColors.of(context);
@@ -186,8 +192,12 @@ class AppTextField extends StatelessWidget {
         onChanged: onChanged,
         onSubmitted: onSubmitted,
         textCapitalization: textCapitalization,
+        maxLength: maxLength,
         style: AppType.body.copyWith(color: c.text),
         decoration: InputDecoration(
+          hintText: hint,
+          // The limit is kept without a counter under the field.
+          counterText: '',
           // The red outline of the designs; the words are shown under the field.
           errorText: hasError ? '' : null,
           suffixIcon: suffix,

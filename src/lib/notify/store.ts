@@ -6,6 +6,7 @@ import type { Database } from "@/lib/supabase/types";
 
 import type { AppAccount, AppEventData, AppLanguage, AppNotifyStore } from "./app-notify";
 import type { OfferEventData } from "./offer-notify";
+import type { ReceiptAlertData, ReceiptDecisionData } from "./receipt-notify";
 import type { BotStore, RequestOutcome } from "./bot";
 import type { MessageLog } from "./deliver";
 import { EskizProvider } from "./eskiz";
@@ -456,6 +457,52 @@ export function appEventData(admin: Db): AppEventData {
         .order("linked_at");
       if (error) throw new Error(error.message);
       return data.map((row) => ({ account: toAccount(row), linkedAt: row.linked_at as string }));
+    },
+  };
+}
+
+/** What the receipt messages read, with the service role. */
+export function receiptAlertData(admin: Db): ReceiptAlertData {
+  const staff = staffAlertData(admin);
+  return {
+    quietHours: staff.quietHours,
+    recipients: staff.recipients,
+    async pendingReceipts(since) {
+      const { data, error } = await admin.from("payment_receipts").select("id, student_id, group_id, amount, created_at").eq("status", "pending").gte("created_at", since.toISOString()).order("created_at").limit(200);
+      if (error) throw new Error(error.message);
+      if (data.length === 0) return [];
+      const [students, groups] = await Promise.all([
+        admin.from("students").select("id, full_name").in("id", [...new Set(data.map((row) => row.student_id))]),
+        admin.from("groups").select("id, name").in("id", [...new Set(data.map((row) => row.group_id))]),
+      ]);
+      const studentOf = new Map((students.data ?? []).map((row) => [row.id, row.full_name]));
+      const groupOf = new Map((groups.data ?? []).map((row) => [row.id, row.name]));
+      return data.map((row) => ({ id: row.id, studentName: studentOf.get(row.student_id) ?? "", groupName: groupOf.get(row.group_id) ?? "", amount: row.amount, createdAt: row.created_at }));
+    },
+  };
+}
+
+export function receiptDecisionData(admin: Db): ReceiptDecisionData {
+  return {
+    async reviewedSince(since) {
+      const { data, error } = await admin
+        .from("payment_receipts")
+        .select("id, status, amount, reject_reason, profile_id")
+        .in("status", ["approved", "rejected"])
+        .not("profile_id", "is", null)
+        .gte("reviewed_at", since.toISOString())
+        .order("reviewed_at")
+        .limit(500);
+      if (error) throw new Error(error.message);
+      const ids = [...new Set(data.flatMap((row) => (row.profile_id ? [row.profile_id] : [])))];
+      if (ids.length === 0) return [];
+      const accounts = await admin.from("profiles").select(ACCOUNT_COLUMNS).in("id", ids).eq("is_active", true);
+      if (accounts.error) throw new Error(accounts.error.message);
+      const accountOf = new Map(accounts.data.map((row) => [row.id, toAccount(row)]));
+      return data.flatMap((row) => {
+        const account = row.profile_id ? accountOf.get(row.profile_id) : undefined;
+        return account && row.status !== "pending" ? [{ id: row.id, status: row.status, amount: row.amount, rejectReason: row.reject_reason, account }] : [];
+      });
     },
   };
 }

@@ -1337,4 +1337,103 @@ class AppLocalizationsUz extends AppLocalizations {
   String weekdayAndDate(String weekday, String date) {
     return '$weekday, $date';
   }
+
+  @override
+  String get amountDue => 'Toʻlanadigan summa';
+
+  @override
+  String get nothingDue => 'Qarzdorlik yoʻq';
+
+  @override
+  String get cardCopy => 'Nusxa olish';
+
+  @override
+  String get cardCopied => 'Karta raqami nusxalandi';
+
+  @override
+  String get payStep1 => 'Bank ilovangizdan shu kartaga oʻtkazing.';
+
+  @override
+  String get payStep2 => 'Chekni yuklang.';
+
+  @override
+  String get receiptAmount => 'Summa';
+
+  @override
+  String get receiptDate => 'Sana';
+
+  @override
+  String get receiptGroup => 'Guruh';
+
+  @override
+  String get receiptUpload => 'Chek yuklash';
+
+  @override
+  String get receiptUploadHint => 'PNG, JPG yoki PDF, 5 MB gacha';
+
+  @override
+  String get receiptRemoveFile => 'Faylni olib tashlash';
+
+  @override
+  String get receiptComment => 'Izoh (ixtiyoriy)';
+
+  @override
+  String get receiptSend => 'Yuborish';
+
+  @override
+  String get receiptSent => 'Chek yuborildi. Tekshirilgach xabar beramiz.';
+
+  @override
+  String get receiptFromCamera => 'Kamera';
+
+  @override
+  String get receiptFromGallery => 'Galereya';
+
+  @override
+  String get receiptFromFile => 'PDF fayl';
+
+  @override
+  String get receiptPending => 'Tekshirilmoqda';
+
+  @override
+  String get receiptApproved => 'Tasdiqlandi';
+
+  @override
+  String receiptRejected(String reason) {
+    return 'Rad etildi: $reason';
+  }
+
+  @override
+  String get receiptsEmpty => 'Hali chek yubormagansiz';
+
+  @override
+  String get receiptErrorType => 'Fayl PNG, JPG yoki PDF boʻlishi kerak';
+
+  @override
+  String get receiptErrorTooLarge => 'Fayl 5 MB dan katta';
+
+  @override
+  String get receiptErrorAmount => 'Summani kiriting';
+
+  @override
+  String get receiptErrorDate => 'Sanani tekshiring';
+
+  @override
+  String get receiptErrorGroup => 'Guruhni tanlang';
+
+  @override
+  String get payByCardOff => 'Karta orqali toʻlash hozircha mavjud emas. Qabulxonada toʻlashingiz mumkin.';
+
+  @override
+  String fileSizeMb(String size) {
+    return '$size MB';
+  }
+
+  @override
+  String fileSizeKb(String size) {
+    return '$size KB';
+  }
+
+  @override
+  String get moneyUnit => 'soʻm';
 }

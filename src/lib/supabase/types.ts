@@ -1161,6 +1161,20 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"payment_receipts": {
+                  Row: {
+                    "id": string,"student_id": string,"profile_id": string | null,"group_id": string,"amount": number,"paid_on": string,"file_path": string,"file_type": string,"file_hash": string,"comment": string | null,"status": "pending" | "approved" | "rejected","reject_reason": string | null,"payment_id": string | null,"reviewed_by": string | null,"reviewed_at": string | null,"created_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"student_id": string,"profile_id"?: string | null,"group_id": string,"amount": number,"paid_on": string,"file_path": string,"file_type": string,"file_hash": string,"comment"?: string | null,"status"?: "pending" | "approved" | "rejected","reject_reason"?: string | null,"payment_id"?: string | null,"reviewed_by"?: string | null,"reviewed_at"?: string | null,"created_at"?: string
+                  }
+                  Update: {
+                    "id"?: string,"student_id"?: string,"profile_id"?: string | null,"group_id"?: string,"amount"?: number,"paid_on"?: string,"file_path"?: string,"file_type"?: string,"file_hash"?: string,"comment"?: string | null,"status"?: "pending" | "approved" | "rejected","reject_reason"?: string | null,"payment_id"?: string | null,"reviewed_by"?: string | null,"reviewed_at"?: string | null,"created_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"exam_sections": {
                   Row: {
                     "id": string,"exam_id": string,"kind": "listening" | "reading","position": number,"time_limit_sec": number,"question_count": number
@@ -1622,6 +1636,17 @@ isOneToOne: false
                            },
 "voucher_report":
 { Args: { "p_from": string,"p_to": string }; Returns: { "type": "percent" | "fixed" | "trial_week","issued": number,"redeemed": number,"expired": number }[]
+                           },
+"submit_receipt":
+{ Args: { "p_profile_id": string,"p_group_id": string | null,"p_amount": number,"p_paid_on": string,"p_file_path": string,"p_file_type": string,"p_file_hash": string,"p_comment"?: string | null }; Returns: string
+                           },
+"receipts_for_review":
+{ Args: { "p_status"?: "pending" | "approved" | "rejected","p_limit"?: number }; Returns: {
+              "id": string,"student_id": string,"student_name": string,"group_id": string,"group_name": string,"amount": number,"paid_on": string,"file_path": string,"file_type": string,"comment": string | null,"status": "pending" | "approved" | "rejected","reject_reason": string | null,"payment_id": string | null,"receipt_no": number | null,"created_at": string,"reviewed_at": string | null,"reviewed_by_name": string | null,"same_file": boolean,"same_amount_date": boolean
+            }[]
+                           },
+"review_receipt":
+{ Args: { "p_id": string,"p_action": string,"p_reason"?: string,"p_group_id"?: string,"p_amount"?: number,"p_paid_at"?: string,"p_note"?: string }; Returns: string | null
                            },
 "propose_first_charge":
 { Args: { "p_discount_kind"?: string,"p_discount_value"?: number,"p_group_id": string,"p_joined_on": string }; Returns: {

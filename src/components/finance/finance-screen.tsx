@@ -15,7 +15,8 @@ import type { MonthSummary } from "@/lib/finance/queries";
 import { useUrlState } from "@/lib/hooks/use-url-state";
 import type { FinanceTab } from "@/lib/validation/finance";
 
-import { TakePaymentContext, TakePaymentSheet } from "./take-payment-sheet";
+import { usePendingReceipts } from "./receipts-provider";
+import { TakePaymentContext, TakePaymentSheet, type ReceiptToApprove } from "./take-payment-sheet";
 
 // On a phone six stacked cards would push the tabs off the screen: there each
 // figure is one row, label on the left and amount on the right.
@@ -50,10 +51,12 @@ export function FinanceScreen({
   const t = useTranslations("finance");
   const tNav = useTranslations("nav");
   const { setParams } = useUrlState();
-  const [payment, setPayment] = useState<{ studentId?: string } | null>(null);
+  const [payment, setPayment] = useState<{ studentId?: string; receipt?: ReceiptToApprove } | null>(null);
   const [shownTab, showTab] = useOptimistic(tab);
   const [, startTabChange] = useTransition();
   const tabList = useRef<HTMLDivElement>(null);
+  // Receipts waiting for review, kept live by the receipts provider.
+  const waitingReceipts = usePendingReceipts();
 
   // The owner's six tabs do not fit a phone: keep the open one in view.
   useEffect(() => {
@@ -69,7 +72,7 @@ export function FinanceScreen({
   }, [shownTab]);
 
   return (
-    <TakePaymentContext value={(studentId) => setPayment({ studentId })}>
+    <TakePaymentContext value={(studentId, receipt) => setPayment({ studentId, receipt })}>
       <PageHeader
         title={tNav("finance")}
         action={
@@ -131,7 +134,7 @@ export function FinanceScreen({
         onValueChange={(value) =>
           startTabChange(() => {
             showTab(value as FinanceTab);
-            setParams({ tab: value === "payments" ? null : value, page: null, method: null, category: null });
+            setParams({ tab: value === "payments" ? null : value, page: null, method: null, category: null, receipts: null });
           })
         }
         className="gap-6"
@@ -140,6 +143,11 @@ export function FinanceScreen({
           {tabs.map((name) => (
             <TabsTrigger key={name} value={name}>
               {t(`tabs.${name}`)}
+              {name === "receipts" && waitingReceipts > 0 ? (
+                <span className="ml-1.5 rounded-full bg-brand px-1.5 text-caption font-medium text-on-brand numeric" data-slot="receipts-count">
+                  {waitingReceipts}
+                </span>
+              ) : null}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -149,6 +157,7 @@ export function FinanceScreen({
       <TakePaymentSheet
         open={payment !== null}
         studentId={payment?.studentId}
+        receipt={payment?.receipt}
         today={today}
         onClose={() => setPayment(null)}
       />

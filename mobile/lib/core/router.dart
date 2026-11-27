@@ -20,6 +20,7 @@ import '../features/more/schedule.dart';
 import '../features/more/simple_pages.dart';
 import '../features/notifications/notifications_screen.dart';
 import '../features/offers/offers.dart';
+import '../features/payments/receipts.dart';
 import '../features/qr/qr_tab.dart';
 import '../features/shell/app_shell.dart';
 import '../features/shop/orders_page.dart';
@@ -169,7 +170,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(path: 'leaderboard', builder: (_, _) => const LeaderboardPage()),
                   GoRoute(path: 'schedule', builder: (_, _) => const SchedulePage()),
-                  GoRoute(path: 'payments', builder: (_, _) => const PaymentsPage()),
+                  GoRoute(
+                    path: 'payments',
+                    builder: (_, _) => const PaymentsPage(),
+                    routes: [
+                      GoRoute(path: 'card', builder: (_, _) => const PayByCardPage()),
+                      GoRoute(path: 'receipts', builder: (_, _) => const MyReceiptsPage()),
+                    ],
+                  ),
                   GoRoute(path: 'coins', builder: (_, _) => const CoinHistoryPage()),
                   GoRoute(path: 'voucher', builder: (_, _) => const VoucherPage()),
                   GoRoute(path: 'open-lessons', builder: (_, _) => const OpenLessonsPage()),

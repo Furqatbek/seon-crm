@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+import { ReceiptsProvider } from "@/components/finance/receipts-provider";
 import { InboxProvider } from "@/components/leads/inbox-provider";
 import { AppShell } from "@/components/shell/app-shell";
 import { initLocale, type LocaleParams } from "@/i18n/params";
@@ -10,18 +11,20 @@ import { getCheckinUser, getSignedInUser } from "@/lib/auth";
 import { getCentreName } from "@/lib/centre";
 import { getAlertSound, getInbox } from "@/lib/leads/inbox";
 import { getOpenRequestCount } from "@/lib/points/queries";
+import { getPendingReceipts } from "@/lib/receipts/queries";
 
 // The proxy already turns away visitors without a session. This is the
 // second check: the user must also have an active profile. Anyone else is
 // signed out.
 async function SignedIn({ locale, children }: { locale: Locale; children: React.ReactNode }) {
   // Asked for together: one trip to the database, not two.
-  const [user, name, openRequests, inbox, sound] = await Promise.all([
+  const [user, name, openRequests, inbox, sound, receipts] = await Promise.all([
     getSignedInUser(),
     getCentreName(),
     getOpenRequestCount(),
     getInbox(),
     getAlertSound(),
+    getPendingReceipts(),
   ]);
   if (!user) {
     // A kiosk account has one page: the reception scanner.
@@ -33,9 +36,12 @@ async function SignedIn({ locale, children }: { locale: Locale; children: React.
     // The shared inbox is live on every page: the count in the sidebar and the
     // tab title, and a toast when a lead arrives. Teachers have no inbox.
     <InboxProvider initial={inbox} sound={sound} enabled={user.role !== "teacher"}>
-      <AppShell user={user} centreName={centreName} openRequests={openRequests}>
-        {children}
-      </AppShell>
+      {/* Receipts sent from the student app are live the same way: a count on Finance and a toast. */}
+      <ReceiptsProvider initial={receipts} enabled={user.role !== "teacher"}>
+        <AppShell user={user} centreName={centreName} openRequests={openRequests}>
+          {children}
+        </AppShell>
+      </ReceiptsProvider>
     </InboxProvider>
   );
 }

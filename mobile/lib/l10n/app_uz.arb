@@ -913,5 +913,57 @@
         "type": "String"
       }
     }
-  }
+  },
+  "amountDue": "Toʻlanadigan summa",
+  "nothingDue": "Qarzdorlik yoʻq",
+  "cardCopy": "Nusxa olish",
+  "cardCopied": "Karta raqami nusxalandi",
+  "payStep1": "Bank ilovangizdan shu kartaga oʻtkazing.",
+  "payStep2": "Chekni yuklang.",
+  "receiptAmount": "Summa",
+  "receiptDate": "Sana",
+  "receiptGroup": "Guruh",
+  "receiptUpload": "Chek yuklash",
+  "receiptUploadHint": "PNG, JPG yoki PDF, 5 MB gacha",
+  "receiptRemoveFile": "Faylni olib tashlash",
+  "receiptComment": "Izoh (ixtiyoriy)",
+  "receiptSend": "Yuborish",
+  "receiptSent": "Chek yuborildi. Tekshirilgach xabar beramiz.",
+  "receiptFromCamera": "Kamera",
+  "receiptFromGallery": "Galereya",
+  "receiptFromFile": "PDF fayl",
+  "receiptPending": "Tekshirilmoqda",
+  "receiptApproved": "Tasdiqlandi",
+  "receiptRejected": "Rad etildi: {reason}",
+  "@receiptRejected": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "receiptsEmpty": "Hali chek yubormagansiz",
+  "receiptErrorType": "Fayl PNG, JPG yoki PDF boʻlishi kerak",
+  "receiptErrorTooLarge": "Fayl 5 MB dan katta",
+  "receiptErrorAmount": "Summani kiriting",
+  "receiptErrorDate": "Sanani tekshiring",
+  "receiptErrorGroup": "Guruhni tanlang",
+  "payByCardOff": "Karta orqali toʻlash hozircha mavjud emas. Qabulxonada toʻlashingiz mumkin.",
+  "fileSizeMb": "{size} MB",
+  "@fileSizeMb": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "fileSizeKb": "{size} KB",
+  "@fileSizeKb": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "moneyUnit": "soʻm"
 }

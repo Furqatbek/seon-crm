@@ -59,7 +59,8 @@
     "checkin": "Kelish-ketish",
     "questions": "Savollar",
     "exams": "Sinov imtihonlari",
-    "openLessons": "Ochiq darslar"
+    "openLessons": "Ochiq darslar",
+    "waitingReceipts": "Tekshirilishi kerak cheklar:"
   },
   "language": {
     "label": "Til",
@@ -786,7 +787,8 @@
       "charges": "Hisoblar",
       "expenses": "Xarajatlar",
       "salaries": "Maoshlar",
-      "adjustments": "Tuzatishlar"
+      "adjustments": "Tuzatishlar",
+      "receipts": "Cheklar"
     },
     "strip": {
       "billed": "Oy uchun hisoblangan",
@@ -837,7 +839,8 @@
       "print": "Chekni chop etish",
       "done": "Tayyor",
       "loading": "Yuklanmoqda…",
-      "noGroups": "Bu oʻquvchi hali hech bir guruhda boʻlmagan, toʻlanadigan narsa yoʻq."
+      "noGroups": "Bu oʻquvchi hali hech bir guruhda boʻlmagan, toʻlanadigan narsa yoʻq.",
+      "fromReceipt": "Oʻquvchi ilovadan yuborgan chek boʻyicha, oʻtkazma orqali. Saqlansa, toʻlov chekka bogʻlanadi."
     },
     "payments": {
       "empty": "Bu oyda toʻlovlar yoʻq.",
@@ -912,7 +915,8 @@
       "adjustmentNoteRequired": "Mukofot yoki ushlanma nima uchunligini yozing.",
       "deductionTooLarge": "Ushlanma toʻlov summasidan katta.",
       "alreadyPaid": "Bu toʻlov allaqachon toʻlangan.",
-      "payoutChanged": "Maosh oʻzgargan yoki allaqachon toʻlangan. Summani tekshirib, qayta urinib koʻring."
+      "payoutChanged": "Maosh oʻzgargan yoki allaqachon toʻlangan. Summani tekshirib, qayta urinib koʻring.",
+      "receiptReviewed": "Bu chek allaqachon koʻrib chiqilgan."
     },
     "expenses": {
       "add": "Xarajat qoʻshish",
@@ -1411,7 +1415,8 @@
       "sources": "Lid manbalari",
       "integrations": "Integratsiyalar",
       "about": "Markaz haqida va maxfiylik",
-      "vouchers": "Vaucherlar"
+      "vouchers": "Vaucherlar",
+      "payments": "Toʻlovlar"
     },
     "saved": "Saqlandi",
     "centre": {
@@ -2305,7 +2310,8 @@
     "linked": "{name}, {centre} lidlari haqida xabarlar shu yerga keladi. Profilda yoki /stop buyrugʻi bilan oʻchirish mumkin.",
     "unknownCode": "Bu havola ishlamaydi. {centre} CRMida Profilni ochib, “Telegramni ulash” tugmasini qayta bosing.",
     "notLinked": "Lidni faqat {centre} xodimlari olishi mumkin. Avval Profilda Telegramni ulang.",
-    "metaReconnect": "⚠️ Facebookdan lidlar kelmay qoldi: “{page}” sahifasini qayta ulash kerak. CRMda Sozlamalar → Integratsiyalar boʻlimini ochib, “Qayta ulash”ni bosing."
+    "metaReconnect": "⚠️ Facebookdan lidlar kelmay qoldi: “{page}” sahifasini qayta ulash kerak. CRMda Sozlamalar → Integratsiyalar boʻlimini ochib, “Qayta ulash”ni bosing.",
+    "newReceipt": "🧾 Yangi chek"
   },
   "studentApp": {
     "account_linked": {
@@ -2324,6 +2330,16 @@
       "title": "Bepul ochiq dars",
       "evening": "Ertaga soat {time} da: {title}. Sizni kutamiz!",
       "soon": "Bugun soat {time} da: {title}. Sizni kutamiz!"
+    },
+    "receipt": {
+      "approved": {
+        "title": "Chekingiz tasdiqlandi",
+        "body": "{amount} toʻlovingiz qabul qilindi."
+      },
+      "rejected": {
+        "title": "Chekingiz rad etildi",
+        "body": "{amount}: {reason}"
+      }
     }
   },
   "checkin": {
@@ -2743,6 +2759,62 @@
       "byType": "Turlar boʻyicha",
       "type": "Turi",
       "hint": "Tanlangan davrda berilgan vaucherlar. Konversiya — ulardan nechtasi oʻquvchini guruhga yozishda ishlatilgani."
+    }
+  },
+  "receipts": {
+    "newToast": "{name}dan yangi chek",
+    "show": "Koʻrsatish",
+    "status": {
+      "pending": "Kutilmoqda",
+      "approved": "Tasdiqlangan",
+      "rejected": "Rad etilgan"
+    },
+    "emptyPending": "Tekshirilishi kerak chek yoʻq.",
+    "empty": "Bu yerda hali chek yoʻq.",
+    "openFile": "{name}: chekni ochish",
+    "noFile": "Fayl ochilmadi",
+    "paidOn": "toʻlangan: {date}",
+    "sentAt": "yuborilgan: {date}",
+    "duplicate": {
+      "sameFile": "Xuddi shu fayl boshqa chekda ham bor.",
+      "sameAmountDate": "Shu oʻquvchi shu sana uchun shu summani allaqachon yuborgan."
+    },
+    "approve": "Tasdiqlash",
+    "reject": {
+      "open": "Rad etish",
+      "title": "Chekni rad etish",
+      "hint": "{name} sababni ilovada koʻradi.",
+      "reason": "Sabab",
+      "confirm": "Rad etish"
+    },
+    "rejected": "Chek rad etildi",
+    "payment": "Toʻlov №{number}",
+    "errors": {
+      "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+      "notAllowed": "Bunga ruxsat yoʻq.",
+      "notFound": "Chek topilmadi.",
+      "reasonRequired": "Sababni yozing.",
+      "tooLong": "Matn juda uzun.",
+      "alreadyReviewed": "Bu chek allaqachon koʻrib chiqilgan."
+    },
+    "settings": {
+      "hint": "Oʻquvchilar ilovada shu kartaga pul oʻtkazib, chekni yuboradi. Karta raqami boʻlmasa, ilovada “Karta orqali toʻlash” oʻchadi.",
+      "card": "Karta",
+      "number": "Karta raqami",
+      "holder": "Karta egasi",
+      "bank": "Bank",
+      "cardHint": "Raqam 16 xonali boʻlishi kerak.",
+      "instructions": "Koʻrsatmalar",
+      "instructionsHint": "Karta ostida koʻrsatiladi. Boʻsh qoldirilsa, ilova oddiy ikki qadamni koʻrsatadi: kartaga oʻtkazing, chekni yuklang.",
+      "language": "Til",
+      "instructionsFor": "Koʻrsatma: {language}",
+      "errors": {
+        "generic": "Xatolik yuz berdi. Qayta urinib koʻring.",
+        "notAllowed": "Bunga ruxsat yoʻq.",
+        "cardInvalid": "Karta raqami 16 ta raqamdan iborat boʻlishi kerak.",
+        "holderRequired": "Karta egasini kiriting.",
+        "tooLong": "Matn juda uzun."
+      }
     }
   }
 }

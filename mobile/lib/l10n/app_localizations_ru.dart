@@ -1381,4 +1381,103 @@ class AppLocalizationsRu extends AppLocalizations {
   String weekdayAndDate(String weekday, String date) {
     return '$weekday, $date';
   }
+
+  @override
+  String get amountDue => 'Сумма к оплате';
+
+  @override
+  String get nothingDue => 'Задолженности нет';
+
+  @override
+  String get cardCopy => 'Скопировать';
+
+  @override
+  String get cardCopied => 'Номер карты скопирован';
+
+  @override
+  String get payStep1 => 'Переведите на эту карту из приложения вашего банка.';
+
+  @override
+  String get payStep2 => 'Загрузите чек.';
+
+  @override
+  String get receiptAmount => 'Сумма';
+
+  @override
+  String get receiptDate => 'Дата';
+
+  @override
+  String get receiptGroup => 'Группа';
+
+  @override
+  String get receiptUpload => 'Загрузить чек';
+
+  @override
+  String get receiptUploadHint => 'PNG, JPG или PDF до 5 МБ';
+
+  @override
+  String get receiptRemoveFile => 'Убрать файл';
+
+  @override
+  String get receiptComment => 'Комментарий (необязательно)';
+
+  @override
+  String get receiptSend => 'Отправить';
+
+  @override
+  String get receiptSent => 'Чек отправлен. Сообщим, когда его проверят.';
+
+  @override
+  String get receiptFromCamera => 'Камера';
+
+  @override
+  String get receiptFromGallery => 'Галерея';
+
+  @override
+  String get receiptFromFile => 'Файл PDF';
+
+  @override
+  String get receiptPending => 'На проверке';
+
+  @override
+  String get receiptApproved => 'Одобрен';
+
+  @override
+  String receiptRejected(String reason) {
+    return 'Отклонён: $reason';
+  }
+
+  @override
+  String get receiptsEmpty => 'Вы ещё не отправляли чеки';
+
+  @override
+  String get receiptErrorType => 'Файл должен быть PNG, JPG или PDF';
+
+  @override
+  String get receiptErrorTooLarge => 'Файл больше 5 МБ';
+
+  @override
+  String get receiptErrorAmount => 'Укажите сумму';
+
+  @override
+  String get receiptErrorDate => 'Проверьте дату';
+
+  @override
+  String get receiptErrorGroup => 'Выберите группу';
+
+  @override
+  String get payByCardOff => 'Оплата картой пока недоступна. Можно оплатить на ресепшене.';
+
+  @override
+  String fileSizeMb(String size) {
+    return '$size МБ';
+  }
+
+  @override
+  String fileSizeKb(String size) {
+    return '$size КБ';
+  }
+
+  @override
+  String get moneyUnit => 'сум';
 }

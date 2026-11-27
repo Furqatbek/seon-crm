@@ -126,6 +126,7 @@ export type FinanceErrorKey =
   | "alreadyPaid"
   | "payoutChanged"
   | "alreadyVoided"
+  | "receiptReviewed"
   | "notFound"
   | "notAllowed"
   | "generic";
@@ -134,9 +135,9 @@ export type FinanceResult<T = undefined> =
   | (T extends undefined ? { ok: true } : { ok: true; data: T })
   | { ok: false; error: FinanceErrorKey };
 
-export const FINANCE_TABS = ["payments", "debtors", "charges", "expenses", "salaries", "adjustments"] as const;
+export const FINANCE_TABS = ["payments", "receipts", "debtors", "charges", "expenses", "salaries", "adjustments"] as const;
 /** The tabs a manager has; the rest are the owner's. */
-export const MANAGER_FINANCE_TABS = ["payments", "debtors"] as const satisfies readonly (typeof FINANCE_TABS)[number][];
+export const MANAGER_FINANCE_TABS = ["payments", "receipts", "debtors"] as const satisfies readonly (typeof FINANCE_TABS)[number][];
 export type FinanceTab = (typeof FINANCE_TABS)[number];
 
 /** URL state of /finance. */
@@ -146,5 +147,7 @@ export const financeSearchSchema = z.object({
   method: z.enum(PAYMENT_METHODS).optional().catch(undefined),
   category: z.enum(EXPENSE_CATEGORIES).optional().catch(undefined),
   page: z.coerce.number().int().min(1).catch(1),
+  /** Finance → Receipts: which receipts are listed. */
+  receipts: z.enum(["pending", "approved", "rejected"]).catch("pending"),
 });
 export type FinanceSearch = z.output<typeof financeSearchSchema>;

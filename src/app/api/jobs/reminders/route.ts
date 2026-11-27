@@ -2,6 +2,7 @@ import { runAppNotifications, studentPush } from "@/lib/notify/app-notify";
 import { studentAppTexts, botTexts, staffBotTexts } from "@/lib/notify/bot-texts";
 import { runOfferNotifications } from "@/lib/notify/offer-notify";
 import { runPointsMessages } from "@/lib/notify/points-messages";
+import { runReceiptAlerts, runReceiptDecisions } from "@/lib/notify/receipt-notify";
 import { runReminders } from "@/lib/notify/reminders";
 import { secretMatches } from "@/lib/notify/secret";
 import { runStaffAlerts } from "@/lib/notify/staff-alerts";
@@ -12,6 +13,8 @@ import {
   getPushSender,
   messageLog,
   offerEventData,
+  receiptAlertData,
+  receiptDecisionData,
   pointsMessageData,
   reminderData,
   removeDeletedAvatars,
@@ -61,10 +64,18 @@ export async function POST(request: Request) {
     texts: staffBotTexts,
     appUrl: process.env.APP_URL?.replace(/\/$/, "") ?? null,
   });
+  // Receipts: staff are told of the ones still waiting (those sent at night, now), students of each decision.
+  const receipts = await (async () => ({
+    alerts: await runReceiptAlerts(now, { data: receiptAlertData(admin), log, telegram: getProviders().telegram, texts: staffBotTexts, appUrl: process.env.APP_URL?.replace(/\/$/, "") ?? null }),
+    decisions: await runReceiptDecisions(now, { ...appDeps, data: receiptDecisionData(admin), texts: studentAppTexts }),
+  }))().catch((error) => {
+    console.error("receipt messages", error);
+    return null;
+  });
   // Profile photos of accounts deleted in the app since the last runs.
   const photosRemoved = await removeDeletedAvatars(admin).catch((error) => {
     console.error("deleted avatars", error);
     return 0;
   });
-  return Response.json({ ...summary, points, staff, app: appNotifications, offers, photosRemoved });
+  return Response.json({ ...summary, points, staff, app: appNotifications, offers, receipts, photosRemoved });
 }

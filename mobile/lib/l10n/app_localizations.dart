@@ -2463,6 +2463,192 @@ abstract class AppLocalizations {
   /// In uz, this message translates to:
   /// **'{weekday}, {date}'**
   String weekdayAndDate(String weekday, String date);
+
+  /// No description provided for @amountDue.
+  ///
+  /// In uz, this message translates to:
+  /// **'Toʻlanadigan summa'**
+  String get amountDue;
+
+  /// No description provided for @nothingDue.
+  ///
+  /// In uz, this message translates to:
+  /// **'Qarzdorlik yoʻq'**
+  String get nothingDue;
+
+  /// No description provided for @cardCopy.
+  ///
+  /// In uz, this message translates to:
+  /// **'Nusxa olish'**
+  String get cardCopy;
+
+  /// No description provided for @cardCopied.
+  ///
+  /// In uz, this message translates to:
+  /// **'Karta raqami nusxalandi'**
+  String get cardCopied;
+
+  /// No description provided for @payStep1.
+  ///
+  /// In uz, this message translates to:
+  /// **'Bank ilovangizdan shu kartaga oʻtkazing.'**
+  String get payStep1;
+
+  /// No description provided for @payStep2.
+  ///
+  /// In uz, this message translates to:
+  /// **'Chekni yuklang.'**
+  String get payStep2;
+
+  /// No description provided for @receiptAmount.
+  ///
+  /// In uz, this message translates to:
+  /// **'Summa'**
+  String get receiptAmount;
+
+  /// No description provided for @receiptDate.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sana'**
+  String get receiptDate;
+
+  /// No description provided for @receiptGroup.
+  ///
+  /// In uz, this message translates to:
+  /// **'Guruh'**
+  String get receiptGroup;
+
+  /// No description provided for @receiptUpload.
+  ///
+  /// In uz, this message translates to:
+  /// **'Chek yuklash'**
+  String get receiptUpload;
+
+  /// No description provided for @receiptUploadHint.
+  ///
+  /// In uz, this message translates to:
+  /// **'PNG, JPG yoki PDF, 5 MB gacha'**
+  String get receiptUploadHint;
+
+  /// No description provided for @receiptRemoveFile.
+  ///
+  /// In uz, this message translates to:
+  /// **'Faylni olib tashlash'**
+  String get receiptRemoveFile;
+
+  /// No description provided for @receiptComment.
+  ///
+  /// In uz, this message translates to:
+  /// **'Izoh (ixtiyoriy)'**
+  String get receiptComment;
+
+  /// No description provided for @receiptSend.
+  ///
+  /// In uz, this message translates to:
+  /// **'Yuborish'**
+  String get receiptSend;
+
+  /// No description provided for @receiptSent.
+  ///
+  /// In uz, this message translates to:
+  /// **'Chek yuborildi. Tekshirilgach xabar beramiz.'**
+  String get receiptSent;
+
+  /// No description provided for @receiptFromCamera.
+  ///
+  /// In uz, this message translates to:
+  /// **'Kamera'**
+  String get receiptFromCamera;
+
+  /// No description provided for @receiptFromGallery.
+  ///
+  /// In uz, this message translates to:
+  /// **'Galereya'**
+  String get receiptFromGallery;
+
+  /// No description provided for @receiptFromFile.
+  ///
+  /// In uz, this message translates to:
+  /// **'PDF fayl'**
+  String get receiptFromFile;
+
+  /// No description provided for @receiptPending.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tekshirilmoqda'**
+  String get receiptPending;
+
+  /// No description provided for @receiptApproved.
+  ///
+  /// In uz, this message translates to:
+  /// **'Tasdiqlandi'**
+  String get receiptApproved;
+
+  /// No description provided for @receiptRejected.
+  ///
+  /// In uz, this message translates to:
+  /// **'Rad etildi: {reason}'**
+  String receiptRejected(String reason);
+
+  /// No description provided for @receiptsEmpty.
+  ///
+  /// In uz, this message translates to:
+  /// **'Hali chek yubormagansiz'**
+  String get receiptsEmpty;
+
+  /// No description provided for @receiptErrorType.
+  ///
+  /// In uz, this message translates to:
+  /// **'Fayl PNG, JPG yoki PDF boʻlishi kerak'**
+  String get receiptErrorType;
+
+  /// No description provided for @receiptErrorTooLarge.
+  ///
+  /// In uz, this message translates to:
+  /// **'Fayl 5 MB dan katta'**
+  String get receiptErrorTooLarge;
+
+  /// No description provided for @receiptErrorAmount.
+  ///
+  /// In uz, this message translates to:
+  /// **'Summani kiriting'**
+  String get receiptErrorAmount;
+
+  /// No description provided for @receiptErrorDate.
+  ///
+  /// In uz, this message translates to:
+  /// **'Sanani tekshiring'**
+  String get receiptErrorDate;
+
+  /// No description provided for @receiptErrorGroup.
+  ///
+  /// In uz, this message translates to:
+  /// **'Guruhni tanlang'**
+  String get receiptErrorGroup;
+
+  /// No description provided for @payByCardOff.
+  ///
+  /// In uz, this message translates to:
+  /// **'Karta orqali toʻlash hozircha mavjud emas. Qabulxonada toʻlashingiz mumkin.'**
+  String get payByCardOff;
+
+  /// No description provided for @fileSizeMb.
+  ///
+  /// In uz, this message translates to:
+  /// **'{size} MB'**
+  String fileSizeMb(String size);
+
+  /// No description provided for @fileSizeKb.
+  ///
+  /// In uz, this message translates to:
+  /// **'{size} KB'**
+  String fileSizeKb(String size);
+
+  /// No description provided for @moneyUnit.
+  ///
+  /// In uz, this message translates to:
+  /// **'soʻm'**
+  String get moneyUnit;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { AdjustmentsTab } from "@/components/finance/adjustments-tab";
 import { ChargesTab } from "@/components/finance/charges-tab";
 import { DebtorsTab } from "@/components/finance/debtors-tab";
+import { ReceiptsTab } from "@/components/finance/receipts-tab";
 import { ExpensesTab } from "@/components/finance/expenses-tab";
 import { FinanceScreen } from "@/components/finance/finance-screen";
 import { PaymentsTab } from "@/components/finance/payments-tab";
@@ -22,6 +23,7 @@ import {
   getPayouts,
   type MonthSummary,
 } from "@/lib/finance/queries";
+import { getReceipts } from "@/lib/receipts/queries";
 import { firstValues, type SearchParams } from "@/lib/search-params";
 import {
   FINANCE_TABS,
@@ -100,6 +102,7 @@ async function Finance({ searchParams, locale }: { searchParams: SearchParams; l
       summary={summary}
     >
       {tab === "payments" ? <Payments search={search} month={month} role={user.role} /> : null}
+      {tab === "receipts" ? <ReceiptsTab receipts={await getReceipts(search.receipts)} status={search.receipts} /> : null}
       {tab === "debtors" ? <Debtors page={search.page} /> : null}
       {tab === "charges" && summary ? <Charges month={month} page={search.page} summary={summary} canGenerate={month === currentMonth} /> : null}
       {tab === "expenses" && isOwner ? <Expenses search={search} month={month} today={today} /> : null}

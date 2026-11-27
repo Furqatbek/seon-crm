@@ -174,7 +174,7 @@ export type SettingsResult<T = undefined> =
       detail?: string;
     };
 
-export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "points", "vouchers", "about", "sources", "integrations", "profile"] as const;
+export const SETTINGS_TABS = ["centre", "rooms", "users", "notifications", "templates", "points", "vouchers", "payments", "about", "sources", "integrations", "profile"] as const;
 export type SettingsTab = (typeof SETTINGS_TABS)[number];
 
 /** URL state of /settings. */

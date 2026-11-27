@@ -59,7 +59,8 @@
     "checkin": "출입 체크",
     "questions": "문제",
     "exams": "모의고사",
-    "openLessons": "공개 수업"
+    "openLessons": "공개 수업",
+    "waitingReceipts": "검토 대기 영수증:"
   },
   "language": {
     "label": "언어",
@@ -786,7 +787,8 @@
       "charges": "청구",
       "expenses": "지출",
       "salaries": "급여",
-      "adjustments": "조정"
+      "adjustments": "조정",
+      "receipts": "영수증"
     },
     "strip": {
       "billed": "이번 달 청구액",
@@ -837,7 +839,8 @@
       "print": "영수증 인쇄",
       "done": "완료",
       "loading": "불러오는 중…",
-      "noGroups": "이 학생은 그룹에 속한 적이 없어 아직 결제할 항목이 없습니다."
+      "noGroups": "이 학생은 그룹에 속한 적이 없어 아직 결제할 항목이 없습니다.",
+      "fromReceipt": "학생이 앱에서 보낸 영수증에 따른 계좌 이체입니다. 저장하면 결제가 영수증에 연결됩니다."
     },
     "payments": {
       "empty": "이번 달에는 결제가 없습니다.",
@@ -912,7 +915,8 @@
       "adjustmentNoteRequired": "보너스 또는 공제 사유를 입력하세요.",
       "deductionTooLarge": "공제액이 급여보다 큽니다.",
       "alreadyPaid": "이미 지급된 급여입니다.",
-      "payoutChanged": "이 급여가 변경되었거나 이미 지급되었습니다. 금액을 확인한 후 다시 시도해 주세요."
+      "payoutChanged": "이 급여가 변경되었거나 이미 지급되었습니다. 금액을 확인한 후 다시 시도해 주세요.",
+      "receiptReviewed": "이미 검토된 영수증입니다."
     },
     "expenses": {
       "add": "지출 추가",
@@ -1411,7 +1415,8 @@
       "sources": "리드 소스",
       "integrations": "연동",
       "about": "센터 소개 및 개인정보",
-      "vouchers": "바우처"
+      "vouchers": "바우처",
+      "payments": "결제"
     },
     "saved": "저장되었습니다",
     "centre": {
@@ -2305,7 +2310,8 @@
     "linked": "{name} 님, {centre}의 리드 알림을 여기서 받게 됩니다. 프로필에서 끄거나 /stop 을 보내세요.",
     "unknownCode": "이 링크는 작동하지 않습니다. {centre} CRM의 프로필에서 Telegram 연결을 다시 누르세요.",
     "notLinked": "{centre} 직원만 리드를 가져갈 수 있습니다. 먼저 프로필에서 Telegram을 연결하세요.",
-    "metaReconnect": "⚠️ Facebook 리드가 중단되었습니다. “{page}” 페이지를 다시 연결해야 합니다. CRM의 설정 → 연동에서 다시 연결을 누르세요."
+    "metaReconnect": "⚠️ Facebook 리드가 중단되었습니다. “{page}” 페이지를 다시 연결해야 합니다. CRM의 설정 → 연동에서 다시 연결을 누르세요.",
+    "newReceipt": "🧾 새 영수증"
   },
   "studentApp": {
     "account_linked": {
@@ -2324,6 +2330,16 @@
       "title": "무료 공개 수업",
       "evening": "내일 {time}: {title}. 기다리겠습니다!",
       "soon": "오늘 {time}: {title}. 기다리겠습니다!"
+    },
+    "receipt": {
+      "approved": {
+        "title": "영수증이 승인되었습니다",
+        "body": "{amount} 결제가 처리되었습니다."
+      },
+      "rejected": {
+        "title": "영수증이 거절되었습니다",
+        "body": "{amount}: {reason}"
+      }
     }
   },
   "checkin": {
@@ -2743,6 +2759,62 @@
       "byType": "종류별",
       "type": "종류",
       "hint": "선택한 기간에 발급된 바우처입니다. 전환율은 그중 수강 등록에 사용된 비율입니다."
+    }
+  },
+  "receipts": {
+    "newToast": "{name} 님의 새 영수증",
+    "show": "표시",
+    "status": {
+      "pending": "대기 중",
+      "approved": "승인됨",
+      "rejected": "거절됨"
+    },
+    "emptyPending": "검토할 영수증이 없습니다.",
+    "empty": "아직 영수증이 없습니다.",
+    "openFile": "{name} 님의 영수증 열기",
+    "noFile": "파일을 열 수 없습니다",
+    "paidOn": "결제일 {date}",
+    "sentAt": "전송 {date}",
+    "duplicate": {
+      "sameFile": "같은 파일이 다른 영수증에도 있습니다.",
+      "sameAmountDate": "이 학생이 같은 날짜에 같은 금액을 이미 보냈습니다."
+    },
+    "approve": "승인",
+    "reject": {
+      "open": "거절",
+      "title": "영수증 거절",
+      "hint": "{name} 님이 앱에서 사유를 확인합니다.",
+      "reason": "사유",
+      "confirm": "거절"
+    },
+    "rejected": "영수증을 거절했습니다",
+    "payment": "결제 {number}번",
+    "errors": {
+      "generic": "문제가 발생했습니다. 다시 시도하세요.",
+      "notAllowed": "권한이 없습니다.",
+      "notFound": "영수증을 찾을 수 없습니다.",
+      "reasonRequired": "사유를 입력하세요.",
+      "tooLong": "내용이 너무 깁니다.",
+      "alreadyReviewed": "이미 검토된 영수증입니다."
+    },
+    "settings": {
+      "hint": "학생들이 이 카드로 송금하고 앱에서 영수증을 보냅니다. 카드 번호가 없으면 앱의 ‘카드로 결제’가 꺼집니다.",
+      "card": "카드",
+      "number": "카드 번호",
+      "holder": "카드 소유자",
+      "bank": "은행",
+      "cardHint": "번호는 16자리입니다.",
+      "instructions": "안내문",
+      "instructionsHint": "카드 아래에 표시됩니다. 비워 두면 앱은 기본 두 단계(카드로 송금, 영수증 업로드)를 보여 줍니다.",
+      "language": "언어",
+      "instructionsFor": "안내문: {language}",
+      "errors": {
+        "generic": "문제가 발생했습니다. 다시 시도하세요.",
+        "notAllowed": "권한이 없습니다.",
+        "cardInvalid": "카드 번호는 16자리 숫자입니다.",
+        "holderRequired": "카드 소유자를 입력하세요.",
+        "tooLong": "내용이 너무 깁니다."
+      }
     }
   }
 }

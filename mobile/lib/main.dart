@@ -11,6 +11,7 @@ import 'core/exam_state.dart';
 import 'core/game_state.dart';
 import 'core/more_state.dart';
 import 'core/offer_state.dart';
+import 'core/receipt_state.dart';
 import 'core/shop_state.dart';
 import 'core/state.dart';
 import 'data/auth_repository.dart';
@@ -22,6 +23,8 @@ import 'data/home.dart';
 import 'data/more.dart';
 import 'data/offers.dart';
 import 'data/photo_picker.dart';
+import 'data/receipt_picker.dart';
+import 'data/receipts.dart';
 import 'data/shop.dart';
 import 'data/notifications.dart';
 import 'env.dart';
@@ -50,6 +53,8 @@ Future<void> main() async {
         gameRepositoryProvider.overrideWithValue(SupabaseGameRepository(client)),
         examRepositoryProvider.overrideWithValue(SupabaseExamRepository(client)),
         offerRepositoryProvider.overrideWithValue(SupabaseOfferRepository(client)),
+        receiptRepositoryProvider.overrideWithValue(SupabaseReceiptRepository(client)),
+        receiptPickerProvider.overrideWithValue(pickReceipt),
         checkinRepositoryProvider.overrideWithValue(SupabaseCheckinRepository(client)),
         qrSecretStoreProvider.overrideWithValue(const SecureQrSecretStore()),
         screenLightProvider.overrideWithValue(const DeviceScreenLight()),

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { AboutTab } from "@/components/settings/about-tab";
 import { CentreTab } from "@/components/settings/centre-tab";
 import { PointsTab } from "@/components/settings/points-tab";
+import { PaymentsTab } from "@/components/settings/payments-tab";
 import { VouchersTab } from "@/components/settings/vouchers-tab";
 import { NotificationsTab } from "@/components/settings/notifications-tab";
 import { IntegrationsTab } from "@/components/settings/integrations-tab";
@@ -21,6 +22,7 @@ import type { Locale } from "@/i18n/routing";
 import { appUrl } from "@/lib/app-url";
 import { getSignedInUser } from "@/lib/auth";
 import { getVoucherSettings } from "@/lib/offers/queries";
+import { getPaymentSettings } from "@/lib/receipts/queries";
 import { getPointPresets, getPointsSettings, getTvSettings } from "@/lib/points/queries";
 import { tashkentDate } from "@/lib/domain/time";
 import {
@@ -69,6 +71,7 @@ async function Settings({ searchParams, locale }: { searchParams: SearchParams; 
         <Points />
       ) : null}
       {tab === "vouchers" && owner ? <Vouchers /> : null}
+      {tab === "payments" && owner ? <PaymentsTab settings={await getPaymentSettings()} language={locale} /> : null}
       {tab === "about" && owner ? <AboutTab texts={await getAppTexts()} language={locale} /> : null}
       {tab === "sources" && owner ? (
         <SourcesTab

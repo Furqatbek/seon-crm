@@ -12,16 +12,19 @@ import 'package:student/core/localization.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
 import 'package:student/core/offer_state.dart';
+import 'package:student/core/receipt_state.dart';
 import 'package:student/core/shop_state.dart';
 import 'package:student/core/state.dart';
 import 'package:student/data/exams.dart';
 import 'package:student/data/models.dart';
+import 'package:student/data/receipts.dart';
 import 'package:student/l10n/app_localizations.dart';
 import 'package:student/ui/theme.dart';
 
 import 'fake_exams.dart';
 import 'fake_game.dart';
 import 'fake_offers.dart';
+import 'fake_receipts.dart';
 import 'fakes.dart';
 
 /// The whole app on fakes: what a test needs to drive it and to look at what it did.
@@ -78,6 +81,23 @@ class TestApp {
   /// The voucher and the open lessons. An App user's first finished exam
   /// brings the voucher, as on the server.
   late final offers = FakeOfferRepository(now: () => clock?.call() ?? now);
+
+  /// Receipts: an approved one is a payment, so the balance Home shows goes up by its amount.
+  late final receipts = FakeReceiptRepository(now: () => clock?.call() ?? now)
+    ..onApproved = (amount) {
+      final balance = Map<String, dynamic>.from(home.home['balance'] as Map);
+      final next = (balance['amount'] as num).toInt() + amount;
+      home.home = {
+        ...home.home,
+        'balance': {...balance, 'amount': next, if (next >= 0) 'oldest_unpaid_month': null},
+      };
+    };
+
+  /// The file the receipt picker hands back; null as if the person backed out.
+  PickedReceipt? receiptFile;
+
+  /// Where the last receipt file was asked from.
+  ReceiptSource? receiptSource;
 
   /// A clock that moves, for screens that count seconds: tests pass the test binding's.
   DateTime Function()? clock;
@@ -140,6 +160,11 @@ class TestApp {
         examRepositoryProvider.overrideWithValue(examRepository),
         examAudioProvider.overrideWithValue(() => audio),
         offerRepositoryProvider.overrideWithValue(offers),
+        receiptRepositoryProvider.overrideWithValue(receipts),
+        receiptPickerProvider.overrideWithValue((source) async {
+          receiptSource = source;
+          return receiptFile;
+        }),
         qrSecretStoreProvider.overrideWithValue(secrets),
         screenLightProvider.overrideWithValue(light),
         photoPickerProvider.overrideWithValue((_) async => photo),

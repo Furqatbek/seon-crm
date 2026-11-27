@@ -1345,4 +1345,103 @@ class AppLocalizationsEn extends AppLocalizations {
   String weekdayAndDate(String weekday, String date) {
     return '$weekday, $date';
   }
+
+  @override
+  String get amountDue => 'Amount due';
+
+  @override
+  String get nothingDue => 'Nothing is due';
+
+  @override
+  String get cardCopy => 'Copy';
+
+  @override
+  String get cardCopied => 'Card number copied';
+
+  @override
+  String get payStep1 => 'Transfer to this card from your bank\'s app.';
+
+  @override
+  String get payStep2 => 'Upload the receipt.';
+
+  @override
+  String get receiptAmount => 'Amount';
+
+  @override
+  String get receiptDate => 'Date';
+
+  @override
+  String get receiptGroup => 'Group';
+
+  @override
+  String get receiptUpload => 'Upload receipt';
+
+  @override
+  String get receiptUploadHint => 'PNG, JPG or PDF, up to 5 MB';
+
+  @override
+  String get receiptRemoveFile => 'Remove the file';
+
+  @override
+  String get receiptComment => 'Comment (optional)';
+
+  @override
+  String get receiptSend => 'Send';
+
+  @override
+  String get receiptSent => 'Receipt sent. We will tell you once it is checked.';
+
+  @override
+  String get receiptFromCamera => 'Camera';
+
+  @override
+  String get receiptFromGallery => 'Gallery';
+
+  @override
+  String get receiptFromFile => 'PDF file';
+
+  @override
+  String get receiptPending => 'Being checked';
+
+  @override
+  String get receiptApproved => 'Approved';
+
+  @override
+  String receiptRejected(String reason) {
+    return 'Rejected: $reason';
+  }
+
+  @override
+  String get receiptsEmpty => 'You have not sent any receipts yet';
+
+  @override
+  String get receiptErrorType => 'The file must be a PNG, a JPG or a PDF';
+
+  @override
+  String get receiptErrorTooLarge => 'The file is larger than 5 MB';
+
+  @override
+  String get receiptErrorAmount => 'Enter the amount';
+
+  @override
+  String get receiptErrorDate => 'Check the date';
+
+  @override
+  String get receiptErrorGroup => 'Choose the group';
+
+  @override
+  String get payByCardOff => 'Pay by card is not available yet. You can pay at reception.';
+
+  @override
+  String fileSizeMb(String size) {
+    return '$size MB';
+  }
+
+  @override
+  String fileSizeKb(String size) {
+    return '$size KB';
+  }
+
+  @override
+  String get moneyUnit => 'soʻm';
 }

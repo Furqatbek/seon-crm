@@ -59,7 +59,8 @@
     "checkin": "Check-in",
     "questions": "Questions",
     "exams": "Mock exams",
-    "openLessons": "Open lessons"
+    "openLessons": "Open lessons",
+    "waitingReceipts": "Receipts waiting for review:"
   },
   "language": {
     "label": "Language",
@@ -786,7 +787,8 @@
       "charges": "Charges",
       "expenses": "Expenses",
       "salaries": "Salaries",
-      "adjustments": "Adjustments"
+      "adjustments": "Adjustments",
+      "receipts": "Receipts"
     },
     "strip": {
       "billed": "Billed for the month",
@@ -837,7 +839,8 @@
       "print": "Print receipt",
       "done": "Done",
       "loading": "Loading…",
-      "noGroups": "This student has never been in a group, so there is nothing to pay for yet."
+      "noGroups": "This student has never been in a group, so there is nothing to pay for yet.",
+      "fromReceipt": "By transfer, from the receipt the student sent in the app. Saving links the payment to the receipt."
     },
     "payments": {
       "empty": "No payments this month.",
@@ -912,7 +915,8 @@
       "adjustmentNoteRequired": "Say what the bonus or deduction is for.",
       "deductionTooLarge": "The deduction is larger than the payout.",
       "alreadyPaid": "This payout is already paid.",
-      "payoutChanged": "This payout has changed or is already paid. Check the amount and try again."
+      "payoutChanged": "This payout has changed or is already paid. Check the amount and try again.",
+      "receiptReviewed": "This receipt has already been reviewed."
     },
     "expenses": {
       "add": "Add expense",
@@ -1411,7 +1415,8 @@
       "sources": "Lead sources",
       "integrations": "Integrations",
       "about": "About and Privacy",
-      "vouchers": "Vouchers"
+      "vouchers": "Vouchers",
+      "payments": "Payments"
     },
     "saved": "Saved",
     "centre": {
@@ -2305,7 +2310,8 @@
     "linked": "{name}, you will get lead alerts from {centre} here. Turn them off in Profile, or send /stop.",
     "unknownCode": "This link does not work. Open Profile in {centre}'s CRM and press Link Telegram again.",
     "notLinked": "Only {centre}'s staff can take a lead. Link your Telegram in Profile first.",
-    "metaReconnect": "⚠️ Facebook leads have stopped: the Page “{page}” must be connected again. Open Settings → Integrations in the CRM and press Reconnect."
+    "metaReconnect": "⚠️ Facebook leads have stopped: the Page “{page}” must be connected again. Open Settings → Integrations in the CRM and press Reconnect.",
+    "newReceipt": "🧾 New receipt"
   },
   "studentApp": {
     "account_linked": {
@@ -2324,6 +2330,16 @@
       "title": "Free open lesson",
       "evening": "Tomorrow at {time}: {title}. See you there!",
       "soon": "Today at {time}: {title}. See you there!"
+    },
+    "receipt": {
+      "approved": {
+        "title": "Your receipt is approved",
+        "body": "Your payment of {amount} has been recorded."
+      },
+      "rejected": {
+        "title": "Your receipt was rejected",
+        "body": "{amount}: {reason}"
+      }
     }
   },
   "checkin": {
@@ -2743,6 +2759,62 @@
       "byType": "By type",
       "type": "Type",
       "hint": "Vouchers issued in the chosen period. Conversion is the share of them used to enrol a student."
+    }
+  },
+  "receipts": {
+    "newToast": "New receipt from {name}",
+    "show": "Show",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "emptyPending": "No receipts are waiting for review.",
+    "empty": "No receipts here yet.",
+    "openFile": "Open the receipt from {name}",
+    "noFile": "The file could not be opened",
+    "paidOn": "paid on {date}",
+    "sentAt": "sent {date}",
+    "duplicate": {
+      "sameFile": "Another receipt has this same file.",
+      "sameAmountDate": "This student already sent the same amount for the same day."
+    },
+    "approve": "Approve",
+    "reject": {
+      "open": "Reject",
+      "title": "Reject the receipt",
+      "hint": "{name} will see the reason in the app.",
+      "reason": "Reason",
+      "confirm": "Reject"
+    },
+    "rejected": "The receipt is rejected",
+    "payment": "Payment no. {number}",
+    "errors": {
+      "generic": "Something went wrong. Try again.",
+      "notAllowed": "You are not allowed to do this.",
+      "notFound": "The receipt was not found.",
+      "reasonRequired": "Give a reason.",
+      "tooLong": "The text is too long.",
+      "alreadyReviewed": "This receipt has already been reviewed."
+    },
+    "settings": {
+      "hint": "Students transfer to this card and send the receipt in the app. Without a card number, Pay by card is off in the app.",
+      "card": "Card",
+      "number": "Card number",
+      "holder": "Card holder",
+      "bank": "Bank",
+      "cardHint": "The number has 16 digits.",
+      "instructions": "Instructions",
+      "instructionsHint": "Shown under the card. Left empty, the app shows two plain steps: transfer to the card, upload the receipt.",
+      "language": "Language",
+      "instructionsFor": "Instructions: {language}",
+      "errors": {
+        "generic": "Something went wrong. Try again.",
+        "notAllowed": "You are not allowed to do this.",
+        "cardInvalid": "A card number has 16 digits.",
+        "holderRequired": "Enter the card holder.",
+        "tooLong": "The text is too long."
+      }
     }
   }
 }

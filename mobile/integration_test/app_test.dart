@@ -29,6 +29,7 @@ import 'package:student/core/game_state.dart';
 import 'package:student/core/home_state.dart';
 import 'package:student/core/more_state.dart';
 import 'package:student/core/offer_state.dart';
+import 'package:student/core/receipt_state.dart';
 import 'package:student/core/shop_state.dart';
 import 'package:student/core/state.dart';
 import 'package:student/data/auth_repository.dart';
@@ -41,6 +42,7 @@ import 'package:student/data/models.dart';
 import 'package:student/data/more.dart';
 import 'package:student/data/notifications.dart';
 import 'package:student/data/offers.dart';
+import 'package:student/data/receipts.dart';
 import 'package:student/data/shop.dart';
 import 'package:student/env.dart';
 import 'package:student/features/auth/sign_in_screens.dart';
@@ -52,7 +54,9 @@ import 'package:student/features/game/match_screen.dart';
 import 'package:student/features/home/student_home.dart';
 import 'package:student/features/more/more_tab.dart';
 import 'package:student/features/more/sub_page.dart';
+import 'package:student/features/more/money_pages.dart';
 import 'package:student/features/offers/offers.dart';
+import 'package:student/features/payments/receipts.dart';
 import 'package:student/features/shop/orders_page.dart';
 import 'package:student/features/shop/product_page.dart';
 import 'package:student/l10n/app_localizations.dart';
@@ -62,6 +66,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../test/support/fake_exams.dart';
 import '../test/support/fake_game.dart';
 import '../test/support/fake_offers.dart';
+import '../test/support/fake_receipts.dart';
 import '../test/support/fakes.dart';
 
 const testPhone = String.fromEnvironment('TEST_PHONE');
@@ -84,23 +89,26 @@ Future<FakeAuthRepository> pumpInMemory(
   GameRepository? game,
   ExamRepository? exams,
   OfferRepository? offers,
+  ReceiptRepository? receipts,
+  ReceiptPicker? receiptPicker,
+  FakeHomeRepository? home,
   Profile profile = studentProfile,
   DateTime Function()? clock,
 }) async {
   SharedPreferences.setMockInitialValues({});
   // The shop spends and returns the coins Home shows, as the server does.
-  final home = FakeHomeRepository();
+  final homeData = home ?? FakeHomeRepository();
   shop ??= FakeShopRepository();
   shop
-    ..balance = (() => (home.home['coins'] as num).toInt())
-    ..setBalance = ((coins) => home.home = {...home.home, 'coins': coins});
+    ..balance = (() => (homeData.home['coins'] as num).toInt())
+    ..setBalance = ((coins) => homeData.home = {...homeData.home, 'coins': coins});
   final auth = FakeAuthRepository(signedIn: signedIn, profile: profile);
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
         authRepositoryProvider.overrideWithValue(auth),
         deviceTokenRepositoryProvider.overrideWithValue(FakeDeviceTokens()),
-        homeRepositoryProvider.overrideWithValue(home),
+        homeRepositoryProvider.overrideWithValue(homeData),
         notificationsRepositoryProvider.overrideWithValue(FakeNotificationsRepository()),
         moreRepositoryProvider.overrideWithValue(FakeMoreRepository()),
         shopRepositoryProvider.overrideWithValue(shop),
@@ -111,6 +119,8 @@ Future<FakeAuthRepository> pumpInMemory(
         examRepositoryProvider.overrideWithValue(exams ?? FakeExamRepository(FakeExamServer(now: DateTime.now), profile.id)),
         examAudioProvider.overrideWithValue(FakeExamAudio.new),
         offerRepositoryProvider.overrideWithValue(offers ?? FakeOfferRepository(now: clock ?? () => testNow)),
+        receiptRepositoryProvider.overrideWithValue(receipts ?? FakeReceiptRepository(now: clock ?? () => testNow)),
+        if (receiptPicker != null) receiptPickerProvider.overrideWithValue(receiptPicker),
         qrSecretStoreProvider.overrideWithValue(FakeQrSecretStore()),
         screenLightProvider.overrideWithValue(FakeScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
@@ -144,6 +154,7 @@ Future<void> pumpOnDevProject(WidgetTester tester) async {
         examRepositoryProvider.overrideWithValue(SupabaseExamRepository(client)),
         examAudioProvider.overrideWithValue(FakeExamAudio.new),
         offerRepositoryProvider.overrideWithValue(SupabaseOfferRepository(client)),
+        receiptRepositoryProvider.overrideWithValue(SupabaseReceiptRepository(client)),
         qrSecretStoreProvider.overrideWithValue(const SecureQrSecretStore()),
         screenLightProvider.overrideWithValue(const DeviceScreenLight()),
         sharedPreferencesProvider.overrideWithValue(await SharedPreferences.getInstance()),
@@ -353,8 +364,14 @@ void main() {
         continue;
       }
       final index = theirs.question!.index;
-      await tester.tap(find.byType(ChoiceTile).first, warnIfMissed: false);
-      await tester.pump(const Duration(milliseconds: 400));
+      // The student answers first. The app may still be showing the question
+      // before: the tap is repeated until the server has the student's answer.
+      for (var tries = 0; tries < 8; tries++) {
+        await tester.tap(find.byType(ChoiceTile).first, warnIfMissed: false);
+        await tester.pump(const Duration(milliseconds: 300));
+        final now = await guest.matchState(matchId);
+        if (now.opponentAnswered || now.question?.index != index) break;
+      }
       final answer = await guest.submit(matchId, index, theirs.question!.options.first.id);
       expect(answer.accepted || answer.reason == 'late', isTrue);
       played++;
@@ -623,5 +640,70 @@ void main() {
     await openRow(tester, uz.myVoucher);
     await until(find.byType(VoucherTicket));
     expect(find.text('KOR-7F3K9'), findsOneWidget);
+  });
+
+  // Card payments, from the app's side: a student who owes money opens Pay by
+  // card, chooses a receipt and sends it; the centre approves it; the receipt
+  // says so and the balance is paid. The centre's half (the content check on
+  // the server, Take payment, exactly one payment) is in
+  // src/lib/receipts/submit.test.ts, supabase/tests/receipts.test.ts and
+  // e2e/receipts.spec.ts.
+  testWidgets('a student uploads a receipt, the centre approves it, and the balance updates', (tester) async {
+    final home = FakeHomeRepository(
+      home: homeJson({
+        'balance': {'amount': -600000, 'oldest_unpaid_month': '2026-12-01', 'due_day': 5},
+      }),
+    );
+    final receipts = FakeReceiptRepository(now: () => testNow)
+      // An approved receipt is one payment of its amount.
+      ..onApproved = (amount) => home.home = {
+        ...home.home,
+        'balance': {'amount': -600000 + amount, 'oldest_unpaid_month': null, 'due_day': 5},
+      };
+    await pumpInMemory(tester, signedIn: true, home: home, receipts: receipts, receiptPicker: (_) async => sampleReceiptFile());
+
+    await tester.tap(find.bySemanticsLabel(uz.tabMore).last);
+    await tester.pumpAndSettle();
+    await openRow(tester, uz.payments);
+    expect(find.descendant(of: find.byType(BalanceCard), matching: find.text(uz.balanceDebt)), findsOneWidget);
+    await tester.tap(find.widgetWithText(PrimaryButton, uz.payByCard));
+    await tester.pumpAndSettle();
+
+    // What is owed is filled in; the card is there to copy.
+    expect(find.text('8600 1234 5678 9012'), findsOneWidget);
+    expect(tester.widget<TextField>(find.byType(TextField).first).controller!.text, '600 000');
+    await tester.scrollUntilVisible(
+      find.byType(UploadBox),
+      200,
+      scrollable: find.descendant(of: find.byType(PayByCardPage), matching: find.byType(Scrollable)).first,
+    );
+    await tester.ensureVisible(find.byType(UploadBox));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(UploadBox));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(uz.receiptFromGallery));
+    await tester.pumpAndSettle();
+    expect(find.text('chek_dekabr.jpg'), findsOneWidget);
+    await tester.tap(find.widgetWithText(PrimaryButton, uz.receiptSend));
+    await tester.pumpAndSettle();
+
+    // Sent: it waits in My receipts.
+    expect(find.byType(MyReceiptsPage), findsOneWidget);
+    expect(receipts.drafts.single.amount, 600000);
+    expect(find.widgetWithText(Pill, uz.receiptPending), findsOneWidget);
+
+    // A manager approves it in the CRM.
+    receipts.approve('receipt-1');
+    await tester.drag(find.byType(ReceiptCard), const Offset(0, 300));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(Pill, uz.receiptApproved), findsOneWidget);
+
+    // Back on Payments, read again: nothing is owed any more.
+    await tester.tap(find.bySemanticsLabel(uz.back).last);
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(BalanceCard), const Offset(0, 300));
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: find.byType(BalanceCard), matching: find.text(uz.balancePaid)), findsOneWidget);
+    expect(find.descendant(of: find.byType(BalanceCard), matching: find.text(uz.balanceDebt)), findsNothing);
   });
 }

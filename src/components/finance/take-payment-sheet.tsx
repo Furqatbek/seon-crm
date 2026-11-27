@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/sheet";
 import { Link } from "@/i18n/navigation";
 import { getPaymentContext, takePayment, type PaymentContext } from "@/lib/finance/actions";
+import { approveReceipt } from "@/lib/receipts/actions";
 import { formatMoneyInput } from "@/lib/format";
 import {
   PAYMENT_METHODS,
@@ -40,8 +41,11 @@ import {
 } from "@/lib/validation/finance";
 
 
-/** Lets any part of a screen open the Take payment sheet, optionally for one student. */
-export const TakePaymentContext = createContext<(studentId?: string) => void>(() => {});
+/** A receipt from the student app being approved: Take payment opens filled in from it. */
+export type ReceiptToApprove = { id: string; groupId: string; amount: number; /** "YYYY-MM-DD" */ paidOn: string };
+
+/** Lets any part of a screen open the Take payment sheet, optionally for one student, or to approve a receipt. */
+export const TakePaymentContext = createContext<(studentId?: string, receipt?: ReceiptToApprove) => void>(() => {});
 export const useTakePayment = () => use(TakePaymentContext);
 
 type Saved = { id: string; receiptNo: number; amount: number };
@@ -49,11 +53,13 @@ type Saved = { id: string; receiptNo: number; amount: number };
 function PaymentForm({
   context,
   today,
+  receipt,
   onCancel,
   onSaved,
 }: {
   context: PaymentContext;
   today: string;
+  receipt?: ReceiptToApprove;
   onCancel: () => void;
   onSaved: (saved: Saved) => void;
 }) {
@@ -75,7 +81,10 @@ function PaymentForm({
     formState: { errors },
   } = useForm<PaymentInput, unknown, PaymentValues>({
     resolver: zodResolver(paymentSchema),
-    defaultValues: {
+    defaultValues: receipt
+      ? // What the student said they paid: the group, the amount and the day, by transfer.
+        { student_id: context.student.id, group_id: receipt.groupId, amount: formatMoneyInput(receipt.amount), method: "transfer", paid_on: receipt.paidOn > today ? today : receipt.paidOn, note: "" }
+      : {
       student_id: context.student.id,
       group_id: onlyGroup?.id ?? "",
       // A debtor usually pays what is owed. The debt is only suggested when
@@ -93,7 +102,8 @@ function PaymentForm({
     setFormError(null);
     startTransition(async () => {
       // The server validates the same raw form again.
-      const result = await takePayment(getValues());
+      // Approving a receipt records the payment and links it, in one step in the database.
+      const result = receipt ? await approveReceipt({ ...getValues(), receipt_id: receipt.id }) : await takePayment(getValues());
       if (!result.ok) return setFormError(result.error);
       onSaved({ ...result.data, amount: values.amount });
     });
@@ -158,7 +168,12 @@ function PaymentForm({
           />
         </Field>
 
-        <Field label={t("fields.method")} htmlFor="payment-method">
+        {receipt ? (
+          <p className="rounded-control bg-bg-subtle px-3 py-2 text-footnote text-text-secondary" data-slot="payment-from-receipt">
+            {t("payment.fromReceipt")}
+          </p>
+        ) : null}
+        <Field label={t("fields.method")} htmlFor="payment-method" className={receipt ? "hidden" : undefined}>
           <Controller
             control={control}
             name="method"
@@ -209,8 +224,10 @@ function PaymentForm({
 function Content({
   studentId,
   today,
+  receipt,
   onClose,
 }: {
+  receipt?: ReceiptToApprove;
   studentId: string | undefined;
   today: string;
   onClose: () => void;
@@ -283,7 +300,7 @@ function Content({
         </div>
       )}
       {context ? (
-        <PaymentForm key={context.student.id} context={context} today={today} onCancel={onClose} onSaved={setSaved} />
+        <PaymentForm key={context.student.id} context={context} today={today} receipt={receipt} onCancel={onClose} onSaved={setSaved} />
       ) : (
         <>
           <SheetBody>
@@ -310,8 +327,11 @@ export function TakePaymentSheet({
   open,
   studentId,
   today,
+  receipt,
   onClose,
 }: {
+  /** Set when the sheet approves a receipt: saving records the payment and links it. */
+  receipt?: ReceiptToApprove;
   open: boolean;
   /** Fixed when opened from a student page or a debtor row. */
   studentId?: string;
@@ -327,7 +347,7 @@ export function TakePaymentSheet({
           <SheetTitle>{t("title")}</SheetTitle>
           <SheetDescription className="sr-only">{t("title")}</SheetDescription>
         </SheetHeader>
-        {open ? <Content key={studentId ?? "search"} studentId={studentId} today={today} onClose={onClose} /> : null}
+        {open ? <Content key={receipt?.id ?? studentId ?? "search"} studentId={studentId} today={today} receipt={receipt} onClose={onClose} /> : null}
       </SheetContent>
     </Sheet>
   );

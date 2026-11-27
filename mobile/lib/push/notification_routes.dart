@@ -35,6 +35,8 @@ abstract final class Routes {
   static const leaderboard = '/more/leaderboard';
   static const schedule = '/more/schedule';
   static const payments = '/more/payments';
+  static const payByCard = '/more/payments/card';
+  static const myReceipts = '/more/payments/receipts';
   static const coinHistory = '/more/coins';
   static const voucher = '/more/voucher';
   static const openLessons = '/more/open-lessons';

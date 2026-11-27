@@ -1332,4 +1332,103 @@ class AppLocalizationsKo extends AppLocalizations {
   String weekdayAndDate(String weekday, String date) {
     return '$date $weekday';
   }
+
+  @override
+  String get amountDue => '납부할 금액';
+
+  @override
+  String get nothingDue => '미납 금액이 없습니다';
+
+  @override
+  String get cardCopy => '복사';
+
+  @override
+  String get cardCopied => '카드 번호를 복사했습니다';
+
+  @override
+  String get payStep1 => '은행 앱에서 이 카드로 송금하세요.';
+
+  @override
+  String get payStep2 => '영수증을 올리세요.';
+
+  @override
+  String get receiptAmount => '금액';
+
+  @override
+  String get receiptDate => '날짜';
+
+  @override
+  String get receiptGroup => '그룹';
+
+  @override
+  String get receiptUpload => '영수증 올리기';
+
+  @override
+  String get receiptUploadHint => 'PNG, JPG 또는 PDF, 최대 5MB';
+
+  @override
+  String get receiptRemoveFile => '파일 삭제';
+
+  @override
+  String get receiptComment => '메모 (선택)';
+
+  @override
+  String get receiptSend => '보내기';
+
+  @override
+  String get receiptSent => '영수증을 보냈습니다. 확인되면 알려 드립니다.';
+
+  @override
+  String get receiptFromCamera => '카메라';
+
+  @override
+  String get receiptFromGallery => '갤러리';
+
+  @override
+  String get receiptFromFile => 'PDF 파일';
+
+  @override
+  String get receiptPending => '확인 중';
+
+  @override
+  String get receiptApproved => '승인됨';
+
+  @override
+  String receiptRejected(String reason) {
+    return '거절됨: $reason';
+  }
+
+  @override
+  String get receiptsEmpty => '아직 보낸 영수증이 없습니다';
+
+  @override
+  String get receiptErrorType => '파일은 PNG, JPG 또는 PDF여야 합니다';
+
+  @override
+  String get receiptErrorTooLarge => '파일이 5MB보다 큽니다';
+
+  @override
+  String get receiptErrorAmount => '금액을 입력하세요';
+
+  @override
+  String get receiptErrorDate => '날짜를 확인하세요';
+
+  @override
+  String get receiptErrorGroup => '그룹을 선택하세요';
+
+  @override
+  String get payByCardOff => '카드 결제는 아직 사용할 수 없습니다. 접수처에서 결제할 수 있습니다.';
+
+  @override
+  String fileSizeMb(String size) {
+    return '${size}MB';
+  }
+
+  @override
+  String fileSizeKb(String size) {
+    return '${size}KB';
+  }
+
+  @override
+  String get moneyUnit => '숨';
 }

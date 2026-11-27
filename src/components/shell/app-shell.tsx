@@ -4,6 +4,7 @@ import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+import { usePendingReceipts } from "@/components/finance/receipts-provider";
 import { useInbox } from "@/components/leads/inbox-provider";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
@@ -70,6 +71,8 @@ function SidebarContent({
   const pathname = usePathname();
   // Leads waiting in the shared inbox, kept live by the inbox provider.
   const waiting = useInbox().items.length;
+  // Receipts from the student app waiting for review, kept live by the receipts provider.
+  const receipts = usePendingReceipts();
   const blocks = user.role === "teacher" ? TEACHER_BLOCKS : BLOCKS;
   const matches = (block: Block) => pathname === block.href || pathname.startsWith(`${block.href}/`);
   // /my-groups/history is under /my-groups: only the longest match is lit.
@@ -96,8 +99,8 @@ function SidebarContent({
             key={block.key}
             block={block}
             active={isActive(block)}
-            count={block.key === "points" ? openRequests : block.key === "leads" ? waiting : undefined}
-            countLabel={block.key === "leads" ? t("nav.waitingLeads") : undefined}
+            count={block.key === "points" ? openRequests : block.key === "leads" ? waiting : block.key === "finance" ? receipts : undefined}
+            countLabel={block.key === "leads" ? t("nav.waitingLeads") : block.key === "finance" ? t("nav.waitingReceipts") : undefined}
             onNavigate={onNavigate}
           />
         ))}

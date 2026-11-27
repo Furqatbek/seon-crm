@@ -19,6 +19,7 @@ import 'package:student/features/more/more_tab.dart';
 import 'package:student/features/more/schedule.dart';
 import 'package:student/features/more/simple_pages.dart';
 import 'package:student/features/offers/offers.dart';
+import 'package:student/features/payments/receipts.dart';
 import 'package:student/features/more/sub_page.dart';
 import 'package:student/ui/tokens.dart';
 import 'package:student/ui/widgets.dart';
@@ -443,12 +444,17 @@ void main() {
       expect(find.text('−600 000 soʻm'), findsNWidgets(2));
     });
 
-    testWidgets('Pay by card and My receipts are there but not open yet', (tester) async {
+    testWidgets('Pay by card and My receipts open from Payments', (tester) async {
       await openMore(tester);
       await openRow(tester, l.payments);
-      expect(tester.widget<PrimaryButton>(find.widgetWithText(PrimaryButton, l.payByCard)).onPressed, isNull);
-      expect(tester.widget<LinkButton>(find.byType(LinkButton)).onPressed, isNull);
-      expect(find.textContaining(l.myReceipts), findsOneWidget);
+      await tester.tap(find.widgetWithText(PrimaryButton, l.payByCard));
+      await tester.pumpAndSettle();
+      expect(find.byType(PayByCardPage), findsOneWidget);
+      await tester.tap(find.bySemanticsLabel(l.back));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(LinkButton, l.myReceipts));
+      await tester.pumpAndSettle();
+      expect(find.byType(MyReceiptsPage), findsOneWidget);
     });
 
     testWidgets('a debt shows on the balance card', (tester) async {
