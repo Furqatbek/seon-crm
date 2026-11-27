@@ -1689,6 +1689,12 @@ isOneToOne: false
 "unpublish_exam":
 { Args: { "p_exam_id": string }; Returns: undefined
                            },
+"save_exam_settings":
+{ Args: { "p_exam_id": string,"p_title": string,"p_level": "topik1" | "topik2","p_audio_max_plays": number,"p_coins_per_correct": number | null,"p_thresholds": Json | null,"p_listening_questions": number,"p_listening_seconds": number,"p_reading_questions": number,"p_reading_seconds": number }; Returns: undefined
+                           },
+"import_exam":
+{ Args: { "p_exam_id": string,"p_passages": Json,"p_questions": Json }; Returns: number
+                           },
 "exam_stats":
 { Args: Record<PropertyKey, never>; Returns: { "exam_id": string,"attempts": number,"players": number,"average_correct": number | null }[]
                            },

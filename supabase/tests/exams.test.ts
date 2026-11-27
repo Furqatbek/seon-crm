@@ -280,6 +280,67 @@ describe.skipIf(!DB_URL)("Mock exams", () => {
     });
   });
 
+  describe("fixes after review", () => {
+    it("an exam stays published while someone is taking it; attempts out of time are closed first", async () => {
+      await exams(async (s) => {
+        const attempt = await start(s, STUDENT);
+        expect(await refused(s, OWNER_ID, `public.unpublish_exam($1)`, [exam])).toBe("EX004");
+        // Both sections' time has run out, and the player never came back.
+        await pass(s, 1501);
+        await call(s, OWNER_ID, `public.unpublish_exam($1)`, [exam]);
+        const view = await state(s, STUDENT, attempt);
+        expect(view.status).toBe("expired");
+      });
+    });
+
+    it("a question that was answered cannot be removed; its number is its place in the section", async () => {
+      await exams(async (s) => {
+        const attempt = await start(s, STUDENT);
+        await answer(s, STUDENT, attempt, q.l1, "a");
+        await call(s, STUDENT, `public.finish_exam($1)`, [attempt]);
+        await call(s, OWNER_ID, `public.unpublish_exam($1)`, [exam]);
+        await actAs(s, TEACHER_USER_ID);
+        expect(code(await s.attempt(`delete from exam_questions where id = $1`, [q.l1]))).toBe("23503");
+        // Nobody answered the second: it goes, and the third is now number 2.
+        expect(code(await s.attempt(`delete from exam_questions where id = $1`, [q.l2]))).toBe("allowed");
+        await s.rows(`update exam_sections set question_count = 2 where exam_id = $1 and kind = 'listening'`, [exam]);
+        await call(s, OWNER_ID, `public.publish_exam($1)`, [exam]);
+        const again = await start(s, STUDENT);
+        expect((await state(s, STUDENT, again)).questions?.map((question) => [question.id, question.position])).toEqual([[q.l1, 1], [q.l3, 2]]);
+      });
+    });
+
+    it("an import is saved whole or not at all; the settings and both sections are saved together", async () => {
+      await as({ userId: TEACHER_USER_ID }, async (s) => {
+        await s.rows(`reset role`);
+        const made = await writeExam(s, "Import");
+        await actAs(s, TEACHER_USER_ID);
+        const passages = JSON.stringify([{ key: "p1", section: "listening", kind: "audio", text: null, audio_path: `${made.id}/a.mp3` }, { key: "p2", section: "reading", kind: "text", text: "T", audio_path: null }]);
+        const row = (section: string, passage: string | null, correct: string) => ({ section, passage, prompt: "P", options: [{ id: "a", text: "A" }, { id: "b", text: "B" }], correct_option_id: correct, explanation: null });
+        // The last row's right answer is not one of its choices: nothing is added.
+        expect(code(await s.attempt(`select public.import_exam($1, $2, $3)`, [made.id, passages, JSON.stringify([row("listening", "p1", "a"), row("reading", "p2", "z")])]))).toBe("23514");
+        expect((await s.rows<{ n: number }>(`select count(*)::int as n from exam_passages where exam_id = $1`, [made.id]))[0].n).toBe(0);
+        expect((await s.rows<{ r: number }>(`select public.import_exam($1, $2, $3) as r`, [made.id, passages, JSON.stringify([row("listening", "p1", "a"), row("listening", "p1", "b"), row("reading", "p2", "a"), row("reading", null, "a")])]))[0].r).toBe(4);
+        expect(await s.rows(`select s.kind, q.position, q.passage_id is not null as linked from exam_questions q join exam_sections s on s.id = q.section_id where s.exam_id = $1 order by s.position, q.position`, [made.id])).toEqual([
+          { kind: "listening", position: 1, linked: true }, { kind: "listening", position: 2, linked: true }, { kind: "reading", position: 1, linked: true }, { kind: "reading", position: 2, linked: false },
+        ]);
+
+        // A section's minutes out of range: the title stays as it was.
+        expect(code(await s.attempt(`select public.save_exam_settings($1, 'New', 'topik1', 2, null, null, 30, 2400, 40, 5)`, [made.id]))).toBe("23514");
+        expect((await s.rows<{ title: string }>(`select title from exams where id = $1`, [made.id]))[0].title).toBe("Import");
+        await s.rows(`select public.save_exam_settings($1, 'New', 'topik1', 2, 3, null, 30, 2400, 40, 3600)`, [made.id]);
+        expect(await s.rows(`select e.title, e.audio_max_plays, e.coins_per_correct, s.kind, s.question_count, s.time_limit_sec from exams e join exam_sections s on s.exam_id = e.id where e.id = $1 order by s.position`, [made.id])).toEqual([
+          { title: "New", audio_max_plays: 2, coins_per_correct: 3, kind: "listening", question_count: 30, time_limit_sec: 2400 },
+          { title: "New", audio_max_plays: 2, coins_per_correct: 3, kind: "reading", question_count: 40, time_limit_sec: 3600 },
+        ]);
+        // Players have no part in either.
+        await actAs(s, STUDENT);
+        expect(code(await s.attempt(`select public.save_exam_settings($1, 'X', 'topik1', 1, null, null, 30, 2400, 40, 3600)`, [made.id]))).toBe("P0002");
+        expect(code(await s.attempt(`select public.import_exam($1, '[]', '[]')`, [made.id]))).toBe("P0002");
+      }, setup);
+    });
+  });
+
   describe("deadlines", () => {
     it("at listening's deadline reading is already running; listening can no longer be answered", async () => {
       await exams(async (s) => {

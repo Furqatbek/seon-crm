@@ -119,13 +119,15 @@ export function PassageSheet({ examId, target, onClose }: { examId: string; targ
   );
 }
 
-function QuestionForm({ examId, section, passages, question, onClose }: { examId: string; section: ExamSection; passages: ExamPassage[]; question: ExamQuestion | null; onClose: () => void }) {
+function QuestionForm({ examId, media, section, passages, question, onClose }: { examId: string; media: Record<string, string>; section: ExamSection; passages: ExamPassage[]; question: ExamQuestion | null; onClose: () => void }) {
   const t = useTranslations("exams");
   const tCommon = useTranslations("common");
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<ExamErrorKey | null>(null);
   // Pictures chosen for choices, by the choice's place; sent when the form is saved.
   const [pictures, setPictures] = useState<Record<number, File>>({});
+  // Bumped to empty a choice's file box when its picture is taken away.
+  const [boxes, setBoxes] = useState<Record<string, number>>({});
   const {
     register,
     control,
@@ -148,7 +150,7 @@ function QuestionForm({ examId, section, passages, question, onClose }: { examId
       : { exam_id: examId, section_id: section.id, passage_id: passages.at(-1)?.id ?? null, prompt: "", options: [1, 2, 3, 4].map(() => ({ text: "", image_path: null })), correct: "a", explanation: "" },
   });
   const options = useFieldArray({ control, name: "options" });
-  const [correct, passageId] = useWatch({ control, name: ["correct", "passage_id"] });
+  const [correct, passageId, current] = useWatch({ control, name: ["correct", "passage_id", "options"] });
   const firstError = errors.prompt?.message ?? errors.options?.root?.message ?? errors.options?.message ?? errors.correct?.message ?? errors.explanation?.message;
 
   const onSubmit = handleSubmit((values) => {
@@ -169,21 +171,25 @@ function QuestionForm({ examId, section, passages, question, onClose }: { examId
   });
 
   function choosePicture(index: number, file: File | null) {
-    setPictures((current) => {
-      const next = { ...current };
-      if (file) next[index] = file;
-      else delete next[index];
-      return next;
-    });
+    // Closing the file box without choosing leaves the choice as it was.
+    if (!file) return;
+    setPictures((chosen) => ({ ...chosen, [index]: file }));
     // Named now so the form knows the choice is not empty; the real path replaces it on save.
-    setValue(`options.${index}.image_path`, file ? "pending" : null);
+    setValue(`options.${index}.image_path`, "pending");
+  }
+
+  function removePicture(index: number, fieldId: string) {
+    setPictures((chosen) => Object.fromEntries(Object.entries(chosen).filter(([at]) => Number(at) !== index)));
+    setValue(`options.${index}.image_path`, null);
+    setBoxes((counts) => ({ ...counts, [fieldId]: (counts[fieldId] ?? 0) + 1 }));
   }
 
   function removeOption(index: number) {
     const at = EXAM_OPTION_IDS.indexOf(correct);
     setValue("correct", at === index ? "a" : EXAM_OPTION_IDS[at > index ? at - 1 : at]);
     options.remove(index);
-    setPictures({});
+    // The pictures waiting to be sent move up with their choices.
+    setPictures((chosen) => Object.fromEntries(Object.entries(chosen).flatMap(([place, file]) => (Number(place) === index ? [] : [[Number(place) > index ? Number(place) - 1 : Number(place), file]]))));
   }
 
   return (
@@ -221,7 +227,20 @@ function QuestionForm({ examId, section, passages, question, onClose }: { examId
                     <Trash2 aria-hidden />
                   </Button>
                 </div>
-                <Input type="file" accept="image/jpeg,image/png,image/webp" className="h-auto py-1.5" aria-label={t("choicePicture", { letter })} onChange={(event) => choosePicture(index, event.target.files?.[0] ?? null)} />
+                <Input key={boxes[option.id] ?? 0} type="file" accept="image/jpeg,image/png,image/webp" className="h-auto py-1.5" aria-label={t("choicePicture", { letter })} onChange={(event) => choosePicture(index, event.target.files?.[0] ?? null)} />
+                {current?.[index]?.image_path ? (
+                  <div className="flex items-center gap-2">
+                    {media[current[index].image_path] ? (
+                      // A short-lived signed link to a private file: not something to optimise or cache.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={media[current[index].image_path]} alt="" className="max-h-16 rounded-control object-contain" />
+                    ) : null}
+                    <Button variant="ghost" onClick={() => removePicture(index, option.id)}>
+                      <Trash2 aria-hidden />
+                      {t("removePicture")}
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             );
           })}
@@ -253,7 +272,7 @@ function QuestionForm({ examId, section, passages, question, onClose }: { examId
   );
 }
 
-export function ExamQuestionSheet({ examId, target, passages, onClose }: { examId: string; target: { section: ExamSection; question: ExamQuestion | null } | null; passages: ExamPassage[]; onClose: () => void }) {
+export function ExamQuestionSheet({ examId, media, target, passages, onClose }: { examId: string; media: Record<string, string>; target: { section: ExamSection; question: ExamQuestion | null } | null; passages: ExamPassage[]; onClose: () => void }) {
   const t = useTranslations("exams");
   return (
     <Sheet open={target !== null} onOpenChange={(open) => !open && onClose()}>
@@ -265,6 +284,7 @@ export function ExamQuestionSheet({ examId, target, passages, onClose }: { examI
           <QuestionForm
             key={target.question?.id ?? `new-${target.section.id}`}
             examId={examId}
+            media={media}
             section={target.section}
             passages={passages.filter((passage) => passage.section_id === target.section.id)}
             question={target.question}

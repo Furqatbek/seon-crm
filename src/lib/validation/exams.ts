@@ -17,6 +17,8 @@ export type ExamErrorKey =
   | "optionRequired"
   | "correctInvalid"
   | "published"
+  | "attemptsRunning"
+  | "questionAnswered"
   | "sectionIncomplete"
   | "audioMissingFile"
   | "mediaInvalid"

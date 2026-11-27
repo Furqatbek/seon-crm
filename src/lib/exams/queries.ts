@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { ExamLevel, SectionKind, Threshold } from "@/lib/domain/exams";
+import { allRows } from "@/lib/questions/queries";
 import { createClient } from "@/lib/supabase/server";
 
 export type ExamSection = { id: string; kind: SectionKind; question_count: number; time_limit_sec: number; written: number };
@@ -64,14 +65,15 @@ export async function getExams(): Promise<ExamSummary[]> {
   const [exams, sections, questions, stats] = await Promise.all([
     supabase.from("exams").select("id, title, level, status, created_at").is("archived_at", null).order("created_at", { ascending: false }),
     supabase.from("exam_sections").select("id, exam_id, kind, position, question_count, time_limit_sec").order("position"),
-    supabase.from("exam_questions").select("section_id"),
+    // Counted here, so read whole: a page of the API at a time.
+    allRows((from, to) => supabase.from("exam_questions").select("section_id").order("id").range(from, to)),
     supabase.rpc("exam_stats"),
   ]);
   // The exams' migration is not applied yet: there is nothing to list.
   if (missing(exams.error)) return [];
   if (exams.error || sections.error || questions.error) throw new Error((exams.error ?? sections.error ?? questions.error)!.message);
   const written = new Map<string, number>();
-  for (const row of questions.data) written.set(row.section_id, (written.get(row.section_id) ?? 0) + 1);
+  for (const row of questions.data ?? []) written.set(row.section_id, (written.get(row.section_id) ?? 0) + 1);
   const usage = new Map((stats.data ?? []).map((row) => [row.exam_id, row]));
   return exams.data.map((exam) => ({
     id: exam.id,

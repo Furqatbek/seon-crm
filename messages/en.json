@@ -2591,7 +2591,10 @@
       "tooManyRows": "One file can have 400 rows at most.",
       "levelInvalid": "The thresholds do not match this exam's levels.",
       "minInvalid": "A threshold must be a whole number from 1 to the number of questions.",
-      "order": "A higher level needs a higher threshold."
-    }
+      "order": "A higher level needs a higher threshold.",
+      "attemptsRunning": "Someone is taking this exam now. Unpublish it once they have finished.",
+      "questionAnswered": "This question has been answered, so it cannot be removed."
+    },
+    "removePicture": "Remove picture"
   }
 }

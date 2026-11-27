@@ -88,7 +88,7 @@ export function ExamPreview({ exam, open, onClose }: { exam: ExamDetail; open: b
                   </div>
                 ) : null}
                 <p className="text-body font-medium text-text">
-                  <span className="numeric">{question.position}.</span> {question.prompt}
+                  <span className="numeric">{index + 1}.</span> {question.prompt}
                 </p>
                 <ChoicesView question={question} media={exam.media} />
               </div>

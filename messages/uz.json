@@ -2591,7 +2591,10 @@
       "tooManyRows": "Bitta faylda koʻpi bilan 400 ta qator boʻlishi mumkin.",
       "levelInvalid": "Chegaralar shu imtihon darajalariga mos emas.",
       "minInvalid": "Chegara 1 dan savollar sonigacha boʻlgan butun son boʻlishi kerak.",
-      "order": "Yuqoriroq daraja chegarasi kattaroq boʻlishi kerak."
-    }
+      "order": "Yuqoriroq daraja chegarasi kattaroq boʻlishi kerak.",
+      "attemptsRunning": "Hozir kimdir bu imtihonni topshirmoqda. U tugagach qoralamaga qaytaring.",
+      "questionAnswered": "Bu savolga javob berilgan, uni olib tashlab boʻlmaydi."
+    },
+    "removePicture": "Rasmni olib tashlash"
   }
 }

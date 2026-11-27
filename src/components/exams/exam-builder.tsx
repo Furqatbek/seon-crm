@@ -173,13 +173,13 @@ function SettingsForm({ exam, locked }: { exam: ExamDetail; locked: boolean }) {
   );
 }
 
-function QuestionCard({ question, media, locked, onEdit, onRemove }: { question: ExamQuestion; media: Record<string, string>; locked: boolean; onEdit: () => void; onRemove: () => void }) {
+function QuestionCard({ question, number, media, locked, onEdit, onRemove }: { question: ExamQuestion; number: number; media: Record<string, string>; locked: boolean; onEdit: () => void; onRemove: () => void }) {
   const t = useTranslations("exams");
   return (
     <div className="flex flex-col gap-2 rounded-control border border-border p-3" data-question={question.id}>
       <div className="flex items-start justify-between gap-3">
         <p className="text-body font-medium text-text">
-          <span className="numeric">{question.position}.</span> {question.prompt}
+          <span className="numeric">{number}.</span> {question.prompt}
         </p>
         {locked ? null : (
           <span className="flex shrink-0 gap-1">
@@ -214,6 +214,8 @@ export function ExamBuilder({ exam, role, backHref }: { exam: ExamDetail; role: 
   const [questionTarget, setQuestionTarget] = useState<{ section: ExamSection; question: ExamQuestion | null } | null>(null);
   const locked = exam.status === "published";
   const staff = role !== "teacher";
+  // A question's number is its place in its section, whatever was removed before it.
+  const numberOf = new Map(exam.sections.flatMap((section) => exam.questions.filter((question) => question.section_id === section.id).map((question, index) => [question.id, index + 1] as const)));
 
   function status(action: "publish" | "unpublish" | "archive") {
     setError(null);
@@ -328,13 +330,13 @@ export function ExamBuilder({ exam, role, backHref }: { exam: ExamDetail; role: 
                   .filter((question) => question.passage_id === passage.id)
                   .map((question) => (
                     <div key={question.id} className="rounded-control bg-bg">
-                      <QuestionCard question={question} media={exam.media} locked={locked} onEdit={() => setQuestionTarget({ section, question })} onRemove={() => remove("question", question.id)} />
+                      <QuestionCard question={question} number={numberOf.get(question.id) ?? 0} media={exam.media} locked={locked} onEdit={() => setQuestionTarget({ section, question })} onRemove={() => remove("question", question.id)} />
                     </div>
                   ))}
               </div>
             ))}
             {alone.map((question) => (
-              <QuestionCard key={question.id} question={question} media={exam.media} locked={locked} onEdit={() => setQuestionTarget({ section, question })} onRemove={() => remove("question", question.id)} />
+              <QuestionCard key={question.id} question={question} number={numberOf.get(question.id) ?? 0} media={exam.media} locked={locked} onEdit={() => setQuestionTarget({ section, question })} onRemove={() => remove("question", question.id)} />
             ))}
           </section>
         );
@@ -343,7 +345,7 @@ export function ExamBuilder({ exam, role, backHref }: { exam: ExamDetail; role: 
       <ExamPreview exam={exam} open={preview} onClose={() => setPreview(false)} />
       <ExamImportSheet examId={exam.id} open={importing} onClose={() => setImporting(false)} />
       <PassageSheet examId={exam.id} target={passageTarget} onClose={() => setPassageTarget(null)} />
-      <ExamQuestionSheet examId={exam.id} target={questionTarget} passages={exam.passages} onClose={() => setQuestionTarget(null)} />
+      <ExamQuestionSheet examId={exam.id} media={exam.media} target={questionTarget} passages={exam.passages} onClose={() => setQuestionTarget(null)} />
     </div>
   );
 }
