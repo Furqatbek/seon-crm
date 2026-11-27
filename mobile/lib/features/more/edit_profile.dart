@@ -38,6 +38,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     final hasPhoto = ref.read(authProvider).profile?.avatarPath != null;
     final choice = await showModalBottomSheet<String>(
       context: context,
+      // Over the tab bar, as in the designs.
+      useRootNavigator: true,
       builder: (sheet) {
         final l = AppLocalizations.of(sheet);
         return SafeArea(

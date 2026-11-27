@@ -1,0 +1,4 @@
+"CFBundleDisplayName" = "Seon Topik";
+"CFBundleName" = "Seon Topik";
+"NSCameraUsageDescription" = "Камера нужна, чтобы снять фото профиля или чек об оплате.";
+"NSPhotoLibraryUsageDescription" = "Доступ к фото нужен, чтобы выбрать фото профиля или чек об оплате.";

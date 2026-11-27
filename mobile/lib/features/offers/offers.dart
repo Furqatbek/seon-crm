@@ -271,6 +271,8 @@ class _OpenLessonsPageState extends ConsumerState<OpenLessonsPage> {
       setState(() => _busy = null);
       await showModalBottomSheet<void>(
         context: context,
+        // Over the tab bar, as in the designs.
+        useRootNavigator: true,
         isScrollControlled: true,
         showDragHandle: true,
         builder: (_) => BookedSheet(session: session),

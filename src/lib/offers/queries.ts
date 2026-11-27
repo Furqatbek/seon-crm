@@ -138,6 +138,25 @@ export async function getOpenLessons(today: string): Promise<OpenLessonsData> {
   };
 }
 
+export type AppReport = {
+  /** Accounts made in the app, by the Monday of their week. */
+  signups: { week: string; count: number }[];
+  /** Attempts finished in the period, by exam. */
+  exams: { exam_id: string; title: string; attempts: number; players: number; average_correct: number; questions: number }[];
+};
+
+/** Sign-ups in the app per week and each exam's attempts, between two Tashkent days. */
+export async function getAppReport(from: string, to: string): Promise<AppReport> {
+  const supabase = await db();
+  const { data, error } = await supabase.rpc("app_report", { p_from: from, p_to: to });
+  if (error) {
+    if (missing(error)) return { signups: [], exams: [] };
+    throw new Error(error.message);
+  }
+  const report = (data ?? {}) as Partial<AppReport>;
+  return { signups: report.signups ?? [], exams: report.exams ?? [] };
+}
+
 export type VoucherReportRow = { type: VoucherType; issued: number; redeemed: number; expired: number };
 
 /** Vouchers issued between two Tashkent days, by type, with how many were used and how many expired. */

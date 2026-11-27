@@ -52,6 +52,17 @@ async function Preview({ searchParams, locale }: Pick<Props, "searchParams"> & {
           <PageHeader title="Reports → Vouchers" />
           <VouchersReport
             locale={locale}
+            app={{
+              signups: [
+                { week: "2026-11-09", count: 18 },
+                { week: "2026-11-16", count: 24 },
+                { week: "2026-11-23", count: 31 },
+              ],
+              exams: [
+                { exam_id: "e1", title: "TOPIK I — Mock 1", attempts: 42, players: 35, average_correct: 21.4, questions: 40 },
+                { exam_id: "e2", title: "TOPIK II — Mock 1", attempts: 17, players: 15, average_correct: 28.9, questions: 50 },
+              ],
+            }}
             rows={[
               { type: "percent", issued: 14, redeemed: 5, expired: 3 },
               { type: "fixed", issued: 11, redeemed: 2, expired: 4 },

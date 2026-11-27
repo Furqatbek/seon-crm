@@ -1634,6 +1634,9 @@ isOneToOne: false
 "mark_open_lesson":
 { Args: { "p_booking_id": string,"p_status": "booked" | "cancelled" | "came" | "no_show" }; Returns: undefined
                            },
+"app_report":
+{ Args: { "p_from": string,"p_to": string }; Returns: Json
+                           },
 "voucher_report":
 { Args: { "p_from": string,"p_to": string }; Returns: { "type": "percent" | "fixed" | "trial_week","issued": number,"redeemed": number,"expired": number }[]
                            },

@@ -523,6 +523,16 @@ void main() {
       expect(find.text(app.game.questions[1].text), findsOneWidget);
     });
 
+    testWidgets('a question with a picture asks for it and shows it above the words', (tester) async {
+      final (app, clock) = await open(tester);
+      final plain = app.game.questions[0];
+      app.game.questions[0] = FakeQuestion(plain.text, plain.options, plain.correct, null, 'q/picture.png');
+      await startMatch(tester, app, clock, opponent(app), l.gamePlayNow);
+      expect(app.gameRepository.images, contains('q/picture.png'));
+      expect(find.byType(QuestionImage), findsOneWidget);
+      expect(find.text(plain.text), findsOneWidget);
+    });
+
     testWidgets('Back does nothing during a match', (tester) async {
       final (app, clock) = await open(tester);
       await startMatch(tester, app, clock, opponent(app), l.gamePlayNow);

@@ -165,6 +165,8 @@ class MoreTab extends ConsumerWidget {
 Future<void> showDeleteAccountSheet(BuildContext context, {required bool student}) {
   return showModalBottomSheet<void>(
     context: context,
+    // Over the tab bar, as in the designs.
+    useRootNavigator: true,
     isScrollControlled: true,
     showDragHandle: true,
     builder: (_) => DeleteAccountSheet(student: student),

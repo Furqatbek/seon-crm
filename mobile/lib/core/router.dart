@@ -1,5 +1,5 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/auth/code_screen.dart';
@@ -174,7 +174,12 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'payments',
                     builder: (_, _) => const PaymentsPage(),
                     routes: [
-                      GoRoute(path: 'card', builder: (_, _) => const PayByCardPage()),
+                      // 25a: a page of its own, without the tab bar.
+                      GoRoute(
+                        path: 'card',
+                        parentNavigatorKey: root,
+                        builder: (_, _) => const Scaffold(body: SafeArea(top: false, child: PayByCardPage())),
+                      ),
                       GoRoute(path: 'receipts', builder: (_, _) => const MyReceiptsPage()),
                     ],
                   ),

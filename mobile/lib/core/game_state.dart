@@ -58,6 +58,12 @@ final gameLobbyProvider = FutureProvider.autoDispose.family<GameLobby, String?>(
   return repository.lobby(groupId);
 }, retry: (_, _) => null);
 
+/// A link to a question's picture; null when it cannot be had.
+final questionImageUrlProvider = FutureProvider.autoDispose.family<String?, String>(
+  (ref, path) => ref.watch(gameRepositoryProvider).imageUrl(path),
+  retry: (_, _) => null,
+);
+
 /// A finished match, for its review.
 final finishedMatchProvider = FutureProvider.autoDispose.family<MatchState, String>(
   (ref, matchId) => ref.watch(gameRepositoryProvider).matchState(matchId),

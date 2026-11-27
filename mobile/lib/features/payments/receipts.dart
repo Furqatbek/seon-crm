@@ -96,6 +96,8 @@ class _PayByCardPageState extends ConsumerState<PayByCardPage> {
     final l = AppLocalizations.of(context);
     final source = await showModalBottomSheet<ReceiptSource>(
       context: context,
+      // Over the tab bar, as in the designs.
+      useRootNavigator: true,
       showDragHandle: true,
       builder: (sheet) => SafeArea(
         child: Padding(

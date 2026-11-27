@@ -478,7 +478,7 @@ describe.skipIf(!DB_URL)("Mock exams", () => {
         const first = await sit(s, STUDENT, ["l1", "l2", "r1"]);
         expect(first.result).toMatchObject({ correct: 3, coins: 3, coins_locked: false, first_attempt: true });
         expect(await asDb(s, () => s.rows(`select delta, source, dedupe_key, group_id from points_ledger where student_id = $1 and source = 'exam'`, [student]))).toEqual([
-          { delta: 3, source: "exam", dedupe_key: `exam:${first.attempt_id}`, group_id: null },
+          { delta: 3, source: "exam", dedupe_key: `exam:${exam}:${student}`, group_id: null },
         ]);
         // An hour later, a better second attempt is practice: no coins.
         await asDb(s, () => s.rows(`update exam_attempts set started_at = started_at - interval '1 hour', submitted_at = submitted_at - interval '1 hour'`));
@@ -491,6 +491,35 @@ describe.skipIf(!DB_URL)("Mock exams", () => {
         expect(await call(s, STUDENT, `public.exam_list()`)).toEqual([
           expect.objectContaining({ id: exam, title: "TOPIK I practice 1", level: "topik1", coins_per_correct: 1, open_attempt_id: null, attempts: 2, last: expect.objectContaining({ attempt_id: second.attempt_id, correct: 5 }) }),
         ]);
+      });
+    });
+
+    it("a student whose attempts are gone (the account was deleted and made again) is not paid twice", async () => {
+      await exams(async (s) => {
+        expect((await sit(s, STUDENT, ["l1", "l2", "r1"])).result).toMatchObject({ coins: 3 });
+        // Deleting the account removes its attempts; the coins stay with the student.
+        await asDb(s, () => s.rows(`delete from exam_attempts where profile_id = $1`, [STUDENT]));
+        const again = await sit(s, STUDENT, ["l1", "l2", "l3", "r1", "r2"]);
+        expect(again.result).toMatchObject({ correct: 5, coins: 0, coins_locked: false });
+        expect(await examCoins(s, student)).toBe(3);
+      });
+    });
+
+    it("the report: sign-ups in the app by week, and each exam's finished attempts with their average, for staff only", async () => {
+      await exams(async (s) => {
+        await sit(s, STUDENT, ["l1", "l2", "r1"]);
+        await sit(s, APP_USER, ["l1"]);
+        const report = (await call(s, MANAGER_ID, `public.app_report(current_date - 7, current_date + 1)`)) as {
+          signups: { week: string; count: number }[];
+          exams: Record<string, unknown>[];
+        };
+        expect(report.exams).toEqual([{ exam_id: exam, title: "TOPIK I practice 1", attempts: 2, players: 2, average_correct: 2, questions: 5 }]);
+        const made = await asDb(s, () => s.rows<{ n: number }>(`select count(*)::int as n from profiles where role in ('student', 'app_user') and created_at > now() - interval '7 days'`));
+        expect(report.signups.reduce((sum, row) => sum + row.count, 0)).toBe(made[0].n);
+        // Outside the period there is nothing.
+        expect(await call(s, MANAGER_ID, `public.app_report(current_date - 60, current_date - 30)`)).toMatchObject({ exams: [] });
+        expect(await refused(s, TEACHER_USER_ID, `public.app_report(current_date - 7, current_date)`)).toBe(DENIED);
+        expect(await refused(s, STUDENT, `public.app_report(current_date - 7, current_date)`)).toBe(DENIED);
       });
     });
 

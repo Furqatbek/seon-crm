@@ -1,4 +1,4 @@
-# Seon Topik Student
+# Seon Topik — student app
 
 The student app for the Edu CRM (`uz.seon.student`), for iOS and Android.
 Rules for working on it are in `CLAUDE.md`; what it does is in
@@ -32,3 +32,7 @@ Push is off until the Firebase files are added; everything else works without th
   images in `test/goldens/` after a deliberate change of looks. They are drawn
   with Inter and a Korean test font, on Linux; another system may differ by a
   few pixels.
+
+## Release
+
+Store release, signing, Firebase keys, demo logins and submission: `../docs/MOBILE_RELEASE.md`.

@@ -10,9 +10,10 @@ import 'package:student/data/game.dart';
 // players use it at once, each through their own FakeGameRepository.
 
 class FakeQuestion {
-  const FakeQuestion(this.text, this.options, this.correct, [this.explanation]);
+  const FakeQuestion(this.text, this.options, this.correct, [this.explanation, this.imagePath]);
 
   final String text;
+  final String? imagePath;
   final List<String> options;
 
   /// 'a'…'d'
@@ -99,7 +100,7 @@ class _Invite {
 }
 
 class FakeGameServer {
-  FakeGameServer({required this.now, List<FakeQuestion>? questions}) : questions = questions ?? sampleQuestions;
+  FakeGameServer({required this.now, List<FakeQuestion>? questions}) : questions = [...(questions ?? sampleQuestions)];
 
   DateTime Function() now;
   final List<FakeQuestion> questions;
@@ -270,7 +271,7 @@ class FakeGameServer {
       serverNow: now(),
       questionStartedAt: match.startedAt,
       deadline: match.startedAt.add(const Duration(seconds: 10)),
-      question: shown ? MatchQuestion(index: match.index, text: question.text, options: question.choices) : null,
+      question: shown ? MatchQuestion(index: match.index, text: question.text, imagePath: question.imagePath, options: question.choices) : null,
       youAnswered: shown && mine != null,
       yourOption: shown ? mine?.option : null,
       opponentAnswered: shown && _answer(match, them, match.index) != null,
@@ -532,6 +533,15 @@ class FakeGameRepository implements GameRepository {
 
   @override
   Future<MatchState> matchState(String matchId) async => _call('matchState', () => server.matchState(playerId, matchId));
+
+  /// The pictures asked for.
+  final images = <String>[];
+
+  @override
+  Future<String?> imageUrl(String path) async {
+    images.add(path);
+    return null;
+  }
 
   @override
   Future<MatchState> heartbeat(String matchId) async => _call('heartbeat', () => server.heartbeat(playerId, matchId));

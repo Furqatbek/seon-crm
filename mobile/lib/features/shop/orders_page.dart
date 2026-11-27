@@ -103,14 +103,26 @@ class _OrderCardState extends ConsumerState<OrderCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(order.title(l.localeName), style: AppType.headline.copyWith(color: c.text)),
+                          // 11: a request still waiting has its status at the end of the title's line.
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(order.title(l.localeName), style: AppType.headline.copyWith(color: c.text)),
+                              ),
+                              if (order.status == OrderStatus.requested) ...[
+                                const SizedBox(width: AppSpacing.x2),
+                                Pill(label: l.orderRequested, tone: PillTone.warning),
+                              ],
+                            ],
+                          ),
                           Text(
                             '${formatCoins(order.cost, l)} · ${relativeDay(order.createdAt, widget.now, l)}',
                             style: AppType.tabular(AppType.footnote.copyWith(color: c.textSecondary)),
                           ),
                           const SizedBox(height: AppSpacing.x1),
                           switch (order.status) {
-                            OrderStatus.requested => Pill(label: l.orderRequested, tone: PillTone.warning),
+                            OrderStatus.requested => const SizedBox(),
                             OrderStatus.ready => const SizedBox(),
                             OrderStatus.given => _Closed(icon: Icons.check, color: c.success, text: closedOn == null ? l.orderGiven : l.givenOn(closedOn)),
                             OrderStatus.rejected => _Closed(icon: Icons.close, color: c.danger, text: l.orderRejected),

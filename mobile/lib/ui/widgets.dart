@@ -7,7 +7,7 @@ import 'tokens.dart';
 // The shared widgets every screen is built from. Colours, radii, sizes and
 // text styles come from tokens.dart only.
 
-/// A card: radius 20 with a 1 pt hairline on the surface colour.
+/// A card: radius 20 with a 1 pt hairline; white in light, the surface in dark.
 class AppCard extends StatelessWidget {
   const AppCard({super.key, required this.child, this.padding = const EdgeInsets.all(AppSpacing.x4), this.onTap, this.semanticLabel});
 
@@ -21,7 +21,7 @@ class AppCard extends StatelessWidget {
     final c = AppColors.of(context);
     final card = DecoratedBox(
       decoration: BoxDecoration(
-        color: c.surface,
+        color: c.groupedCard,
         borderRadius: BorderRadius.circular(AppRadii.card),
         border: Border.all(color: c.border, width: AppSizes.hairline),
       ),
@@ -95,12 +95,20 @@ class Pill extends StatelessWidget {
       PillTone.warning => c.warning,
       PillTone.danger => c.danger,
     };
+    // A status is tinted with its own colour; a plain label sits on the surface.
+    final toneFill = switch (tone) {
+      PillTone.neutral => c.surface,
+      PillTone.primary => c.primaryTint,
+      PillTone.success => c.successTint,
+      PillTone.warning => c.warningTint,
+      PillTone.danger => c.dangerTint,
+    };
     final choice = onTap != null;
     final pill = Container(
       constraints: BoxConstraints(minHeight: choice ? AppSizes.tapTarget : AppSpacing.x8),
       padding: EdgeInsets.symmetric(horizontal: choice ? AppSpacing.x4 : AppSpacing.x3, vertical: AppSpacing.x1),
       decoration: BoxDecoration(
-        color: selected ? c.primaryFill : (outlined ? c.bg : c.surface),
+        color: selected ? c.primaryFill : (outlined ? c.bg : toneFill),
         borderRadius: BorderRadius.circular(AppRadii.pill),
         border: outlined && !selected ? Border.all(color: c.border, width: AppSizes.hairline) : null,
       ),

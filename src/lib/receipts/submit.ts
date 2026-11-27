@@ -48,6 +48,7 @@ export async function submitReceipt(deps: SubmitDeps, input: SubmitInput): Promi
   }
   const saved = await deps.save({ ...input, type: checked.type, hash: await deps.sha256(bytes) });
   if ("id" in saved) return { ok: true, id: saved.id };
-  await deps.remove(input.path);
+  // ER005: this file already belongs to a receipt that was sent. It stays.
+  if (saved.code !== "ER005") await deps.remove(input.path);
   return { ok: false, error: (saved.code && CODES[saved.code]) || "generic" };
 }

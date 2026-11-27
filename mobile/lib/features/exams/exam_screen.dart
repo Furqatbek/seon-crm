@@ -148,6 +148,8 @@ class ExamPlayView extends StatelessWidget {
   Future<void> _openGrid(BuildContext context) async {
     final submit = await showModalBottomSheet<bool>(
       context: context,
+      // Over the tab bar, as in the designs.
+      useRootNavigator: true,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (_) => QuestionGridSheet(session: session),

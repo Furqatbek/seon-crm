@@ -46,6 +46,8 @@ class _ProductPageState extends ConsumerState<ProductPage> {
     final messenger = ScaffoldMessenger.of(context);
     final ordered = await showModalBottomSheet<bool>(
       context: context,
+      // Over the tab bar, as in the designs.
+      useRootNavigator: true,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (_) => ConfirmOrderSheet(item: item, variant: variant, balance: balance),

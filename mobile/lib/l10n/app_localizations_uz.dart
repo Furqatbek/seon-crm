@@ -10,7 +10,7 @@ class AppLocalizationsUz extends AppLocalizations {
   AppLocalizationsUz([String locale = 'uz']) : super(locale);
 
   @override
-  String get appName => 'Seon Topik Student';
+  String get appName => 'Seon Topik';
 
   @override
   String get welcomeHeadline => 'Koreys tilini mashq qiling, TOPIKka tayyorlaning';

@@ -317,6 +317,28 @@ describe.skipIf(!DB_URL)("Vouchers and open lessons", () => {
       }, people);
     });
 
+    it("a manager, too, enrols with a trial week that runs into the next month, and still writes no other fee for it", async () => {
+      await as("manager", async (s) => {
+        const group = await lessonGroup(s);
+        const who = await newStudent(s);
+        await give(s, "trial_week", 7);
+        await s.rows(`select public.enrol_student($1, $2, ${day(25)}, null, null, null, 'prorated', null, null, 'KOR-7F3K9')`, [who, group]);
+        expect((await charges(s, who)).map((row) => row.amount)).toEqual([0, 700_000]);
+        // Another student of the group, joined mid-month: no fee for the next month from a manager.
+        const other = (await s.rows<{ id: string }>(`insert into students (full_name, phone) values ('Second Student', '+998900000078') returning id`))[0].id;
+        await s.rows(`select public.enrol_student($1, $2, ${day(10)}, null, null, null, 'prorated', null, null, null)`, [other, group]);
+        expect(
+          code(
+            await s.attempt(
+              `insert into charges (student_id, enrollment_id, group_id, billing_month, type, base_amount, amount, is_prorated, created_by)
+               select student_id, id, group_id, (${monthStart} + interval '1 month')::date, 'monthly_fee', 700000, 1, true, auth.uid() from enrollments where student_id = $1`,
+              [other],
+            ),
+          ),
+        ).toBe(DENIED);
+      }, people);
+    });
+
     it("each code works once; unknown and expired codes, and a custom amount, are refused with nothing saved", async () => {
       await as("manager", async (s) => {
         const group = await lessonGroup(s);

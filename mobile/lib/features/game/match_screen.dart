@@ -270,10 +270,18 @@ class MatchPlayView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(AppRadii.card),
                         border: Border.all(color: c.border, width: AppSizes.hairline),
                       ),
-                      child: Text(
-                        question.text,
-                        textAlign: TextAlign.center,
-                        style: AppType.headline.copyWith(color: c.text),
+                      child: Column(
+                        children: [
+                          if (question.imagePath != null) ...[
+                            QuestionImage(path: question.imagePath!, height: AppSizes.logo),
+                            const SizedBox(height: AppSpacing.x3),
+                          ],
+                          Text(
+                            question.text,
+                            textAlign: TextAlign.center,
+                            style: AppType.headline.copyWith(color: c.text),
+                          ),
+                        ],
                       ),
                     ),
                   const SizedBox(height: AppSpacing.x3),
@@ -597,6 +605,10 @@ class MatchReviewScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            if (item.imagePath != null) ...[
+                              QuestionImage(path: item.imagePath!, height: AppSizes.avatar),
+                              const SizedBox(height: AppSpacing.x1),
+                            ],
                             Text(item.text, style: AppType.body.copyWith(color: c.text)),
                             const SizedBox(height: AppSpacing.x1),
                             Text.rich(
@@ -636,5 +648,28 @@ class MatchReviewScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+/// A question's picture, from the question-images bucket. While it loads, and
+/// when it cannot be had, an outline keeps its place.
+class QuestionImage extends ConsumerWidget {
+  const QuestionImage({super.key, required this.path, required this.height});
+
+  final String path;
+  final double height;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = AppColors.of(context);
+    final url = ref.watch(questionImageUrlProvider(path)).value;
+    final missing = SizedBox(
+      height: height,
+      child: Center(
+        child: Icon(Icons.image_outlined, color: c.textSecondary, size: AppSpacing.x8),
+      ),
+    );
+    if (url == null) return missing;
+    return Image.network(url, height: height, fit: BoxFit.contain, excludeFromSemantics: true, errorBuilder: (_, _, _) => missing);
   }
 }

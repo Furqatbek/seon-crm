@@ -108,7 +108,8 @@ describe("submitting a receipt", () => {
     for (const [code, error] of [["ER002", "group"], ["ER003", "amount"], ["ER004", "date"], ["ER005", "file"], ["XX000", "generic"]] as const) {
       const { deps, removed } = fakes({ [path]: bytes(PNG) }, { code });
       expect(await submitReceipt(deps, input(path))).toEqual({ ok: false, error });
-      expect(removed).toEqual([path]);
+      // A file that already belongs to a sent receipt is never removed.
+      expect(removed).toEqual(code === "ER005" ? [] : [path]);
     }
   });
 });

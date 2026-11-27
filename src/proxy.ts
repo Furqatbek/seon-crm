@@ -37,6 +37,9 @@ function onFormsHost(request: NextRequest): boolean {
   return host === formsHost || (!formsHost.includes(":") && host.split(":")[0] === formsHost);
 }
 
+/** Where the student app sends a payment receipt (src/app/api/v1/receipts). */
+const RECEIPTS_API = "/api/v1/receipts";
+
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -51,8 +54,9 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.rewrite(url);
   }
   // And a form page, the intake API and the Meta webhook are a 404 on the staff host.
+  // The student app's receipts come here: it knows this address, not the forms one.
   if (pathname === "/form" || pathname.startsWith("/form/")) return notFound();
-  if (/^\/api\/(v1|meta)(\/|$)/.test(pathname)) return notFound();
+  if (/^\/api\/(v1|meta)(\/|$)/.test(pathname) && pathname !== RECEIPTS_API) return notFound();
   // API routes and the auth callback look after themselves.
   if (pathname.startsWith("/api") || pathname.startsWith("/auth")) return NextResponse.next();
 

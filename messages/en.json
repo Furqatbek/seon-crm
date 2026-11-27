@@ -2758,7 +2758,19 @@
       "expired": "Expired",
       "byType": "By type",
       "type": "Type",
-      "hint": "Vouchers issued in the chosen period. Conversion is the share of them used to enrol a student."
+      "hint": "Vouchers issued in the chosen period. Conversion is the share of them used to enrol a student.",
+      "signups": "App sign-ups per week",
+      "signupsHint": "Accounts created in the student app, by week.",
+      "week": "Week of",
+      "accounts": "Accounts",
+      "noSignups": "No sign-ups in this period.",
+      "exams": "Mock exams",
+      "examsHint": "Attempts finished in the chosen period.",
+      "exam": "Exam",
+      "attempts": "Attempts",
+      "players": "People",
+      "average": "Average correct",
+      "noExams": "No finished attempts in this period."
     }
   },
   "receipts": {

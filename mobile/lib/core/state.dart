@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/widgets.dart' show AppLifecycleListener;
 import 'package:material_ui/material_ui.dart' show ThemeMode;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -135,9 +136,16 @@ class AuthController extends Notifier<AuthState> {
     final tokens = ref.watch(pushServiceProvider).tokenChanges.listen((token) {
       if (state.signedIn) unawaited(_saveToken(token));
     });
+    // Back at the front: staff may have linked (or unlinked) the account meanwhile.
+    final lifecycle = AppLifecycleListener(
+      onResume: () {
+        if (state.signedIn) unawaited(refreshProfile());
+      },
+    );
     ref.onDispose(() {
       changes.cancel();
       tokens.cancel();
+      lifecycle.dispose();
     });
     if (repository.isSignedIn) unawaited(Future.microtask(refreshProfile));
     return AuthState(signedIn: repository.isSignedIn);

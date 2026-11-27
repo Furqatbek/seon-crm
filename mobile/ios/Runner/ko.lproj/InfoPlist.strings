@@ -1,0 +1,4 @@
+"CFBundleDisplayName" = "Seon 토픽";
+"CFBundleName" = "Seon 토픽";
+"NSCameraUsageDescription" = "프로필 사진이나 결제 영수증을 촬영하려면 카메라가 필요합니다.";
+"NSPhotoLibraryUsageDescription" = "프로필 사진이나 결제 영수증을 선택하려면 사진 접근 권한이 필요합니다.";

@@ -1,0 +1,4 @@
+"CFBundleDisplayName" = "Seon Topik";
+"CFBundleName" = "Seon Topik";
+"NSCameraUsageDescription" = "The camera is used to take your profile photo or a photo of a payment receipt.";
+"NSPhotoLibraryUsageDescription" = "Your photos are used to choose a profile photo or a payment receipt.";

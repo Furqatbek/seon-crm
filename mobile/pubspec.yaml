@@ -40,6 +40,8 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   integration_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.8
 
 flutter:
   generate: true
@@ -58,3 +60,29 @@ flutter:
           weight: 600
         - asset: assets/fonts/Inter-Bold.ttf
           weight: 700
+
+# The app's icon, from the centre's logo: `dart run flutter_launcher_icons`.
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  min_sdk_android: 21
+
+# The screen shown while the app starts, light and dark:
+# `dart run flutter_native_splash:create`.
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: "assets/icon/splash.png"
+  color_dark: "#0B0B14"
+  image_dark: "assets/icon/splash.png"
+  android_12:
+    color: "#FFFFFF"
+    image: "assets/icon/splash_android12.png"
+    color_dark: "#0B0B14"
+    image_dark: "assets/icon/splash_android12.png"
+  ios: true
+  android: true
+  web: false

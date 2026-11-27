@@ -167,6 +167,8 @@ class GroupSwitcher extends StatelessWidget {
   Future<void> _choose(BuildContext context) async {
     final chosen = await showModalBottomSheet<String>(
       context: context,
+      // Over the tab bar, as in the designs.
+      useRootNavigator: true,
       builder: (sheet) {
         final c = AppColors.of(sheet);
         final l = AppLocalizations.of(sheet);

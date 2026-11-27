@@ -2758,7 +2758,19 @@
       "expired": "Muddati oʻtgan",
       "byType": "Turlar boʻyicha",
       "type": "Turi",
-      "hint": "Tanlangan davrda berilgan vaucherlar. Konversiya — ulardan nechtasi oʻquvchini guruhga yozishda ishlatilgani."
+      "hint": "Tanlangan davrda berilgan vaucherlar. Konversiya — ulardan nechtasi oʻquvchini guruhga yozishda ishlatilgani.",
+      "signups": "Ilovada roʻyxatdan oʻtganlar, haftalar boʻyicha",
+      "signupsHint": "Oʻquvchilar ilovasida ochilgan hisoblar, haftalar boʻyicha.",
+      "week": "Hafta boshi",
+      "accounts": "Hisoblar",
+      "noSignups": "Bu davrda roʻyxatdan oʻtganlar yoʻq.",
+      "exams": "Sinov imtihonlari",
+      "examsHint": "Tanlangan davrda yakunlangan urinishlar.",
+      "exam": "Imtihon",
+      "attempts": "Urinishlar",
+      "players": "Odamlar",
+      "average": "Oʻrtacha toʻgʻri javob",
+      "noExams": "Bu davrda yakunlangan urinishlar yoʻq."
     }
   },
   "receipts": {

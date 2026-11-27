@@ -48,6 +48,7 @@ final scenes = <String, Steps>{
       scrollable: find.descendant(of: find.byType(PayByCardPage), matching: find.byType(Scrollable)).first,
     );
     await tester.ensureVisible(find.byType(UploadBox));
+    await tester.pumpAndSettle();
     await tester.tap(find.byType(UploadBox));
     await tester.pumpAndSettle();
     await tester.tap(find.text(l.receiptFromGallery));

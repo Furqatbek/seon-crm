@@ -192,6 +192,7 @@ class ReviewItem {
     required this.text,
     required this.options,
     required this.correctOptionId,
+    this.imagePath,
     this.explanation,
     this.yourOption,
     this.opponentOption,
@@ -199,6 +200,9 @@ class ReviewItem {
 
   final int index;
   final String text;
+
+  /// The question's picture in the question-images bucket.
+  final String? imagePath;
   final List<QuestionOption> options;
   final String correctOptionId;
   final String? explanation;
@@ -332,6 +336,7 @@ class MatchState {
                   ReviewItem(
                     index: (item['index'] as num).toInt(),
                     text: '${item['text']}',
+                    imagePath: item['image_path'] as String?,
                     options: QuestionOption.listFrom(item['options']),
                     correctOptionId: '${item['correct_option_id']}',
                     explanation: item['explanation'] as String?,
@@ -410,6 +415,9 @@ abstract class GameRepository {
 
   Future<AnswerResult> submit(String matchId, int questionIndex, String optionId);
 
+  /// A link to a question's picture; null when it cannot be had.
+  Future<String?> imageUrl(String path);
+
   /// Fires when the match changes on the server.
   Stream<void> matchChanges(String matchId);
 
@@ -476,6 +484,15 @@ class SupabaseGameRepository implements GameRepository {
   @override
   Future<MatchState> matchState(String matchId) =>
       _ask(() async => MatchState.fromJson(_map(await _client.rpc('match_state', params: {'p_match_id': matchId}))));
+
+  @override
+  Future<String?> imageUrl(String path) async {
+    try {
+      return await _client.storage.from('question-images').createSignedUrl(path, 3600);
+    } catch (_) {
+      return null;
+    }
+  }
 
   @override
   Future<MatchState> heartbeat(String matchId) => _ask(() async => MatchState.fromJson(_map(await _client.rpc('heartbeat', params: {'p_match_id': matchId}))));

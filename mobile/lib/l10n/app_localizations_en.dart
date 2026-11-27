@@ -10,7 +10,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Seon Topik Student';
+  String get appName => 'Seon Topik';
 
   @override
   String get welcomeHeadline => 'Practise Korean and get ready for TOPIK';

@@ -10,7 +10,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appName => 'Seon Topik Student';
+  String get appName => 'Seon Topik';
 
   @override
   String get welcomeHeadline => 'Практикуйте корейский и готовьтесь к TOPIK';

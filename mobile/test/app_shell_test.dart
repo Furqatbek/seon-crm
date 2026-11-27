@@ -68,6 +68,29 @@ void main() {
       }
     });
 
+    testWidgets('an account linked by staff meanwhile shows the Student version when the app comes back to the front', (tester) async {
+      useScreen(tester, phone);
+      final auth = signedIn(appUserProfile);
+      await TestApp(auth: auth).pump(tester);
+      await tester.tap(find.bySemanticsLabel(l.tabQr).last);
+      await tester.pumpAndSettle();
+      expect(find.text(l.qrLockedTitle), findsOneWidget);
+      // Staff enrol the person; the phone was in a pocket.
+      auth.profile = studentProfile;
+      for (final state in [
+        AppLifecycleState.inactive,
+        AppLifecycleState.hidden,
+        AppLifecycleState.paused,
+        AppLifecycleState.hidden,
+        AppLifecycleState.inactive,
+        AppLifecycleState.resumed,
+      ]) {
+        tester.binding.handleAppLifecycleStateChanged(state);
+      }
+      await tester.pumpAndSettle();
+      expect(find.text(l.qrLockedTitle), findsNothing);
+    });
+
     testWidgets('signed out, every screen of the app leads to Welcome', (tester) async {
       useScreen(tester, phone);
       await TestApp().pump(tester);
@@ -402,7 +425,7 @@ void main() {
       final card =
           tester.widget<DecoratedBox>(find.descendant(of: find.byType(AppCard).first, matching: find.byType(DecoratedBox)).first).decoration as BoxDecoration;
       expect(card.borderRadius, BorderRadius.circular(AppRadii.card));
-      expect(card.color, AppColors.light.surface);
+      expect(card.color, AppColors.light.groupedCard);
       expect((card.border! as Border).top.width, AppSizes.hairline);
       expect(find.text('128 tanga'), findsOneWidget);
       expect(find.text('Tez orada'), findsOneWidget);
